@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Calendar, MessageSquare, User, Users, Home, ShoppingCart, Menu } from "lucide-react";
+import { Bell, Calendar, MessageSquare, User, Users, Home, ShoppingCart, Menu, Trophy } from "lucide-react";
 import WeightTracker from "@/components/WeightTracker";
 import SupplementReminder from "@/components/SupplementReminder";
 import AIChat from "@/components/AIChat";
@@ -11,6 +11,8 @@ import ProgressDashboard from "@/components/ProgressDashboard";
 import UserProfile from "@/components/UserProfile";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import DailyHabit from "@/components/DailyHabit";
+import GamificationSystem from "@/components/GamificationSystem";
+import { supabase } from "@/lib/supabase";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -26,6 +28,10 @@ const Index = () => {
     window.open(url, '_blank');
   };
 
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+  };
+
   if (showWelcome) {
     return <WelcomeScreen onContinue={() => setShowWelcome(false)} />;
   }
@@ -36,6 +42,7 @@ const Index = () => {
     { value: "weight", label: "Peso", icon: Calendar },
     { value: "supplement", label: "Suplemento", icon: Bell },
     { value: "chat", label: "AI Coach", icon: MessageSquare },
+    { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "profile", label: "Perfil", icon: User }
   ];
 
@@ -79,7 +86,6 @@ const Index = () => {
                 <User className="w-4 h-4 mr-2" />
                 Perfil
               </Button>
-              {/* Mobile menu button */}
               <Button
                 size="sm"
                 variant="outline"
@@ -87,6 +93,15 @@ const Index = () => {
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
               >
                 <Menu className="w-4 h-4" />
+              </Button>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="border-red-200 text-white hover:bg-red-700 bg-red-600/30 backdrop-blur-sm hidden sm:flex"
+                onClick={handleLogout}
+              >
+                <User className="w-4 h-4 mr-2" />
+                Sair
               </Button>
             </div>
           </div>
@@ -137,7 +152,7 @@ const Index = () => {
       <main className="max-w-6xl mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           {/* Desktop Tabs */}
-          <TabsList className="grid w-full grid-cols-6 mb-8 bg-gray-800 border-gray-700 hidden sm:grid">
+          <TabsList className="grid w-full grid-cols-7 mb-8 bg-gray-800 border-gray-700 hidden sm:grid">
             {tabItems.map((item) => (
               <TabsTrigger 
                 key={item.value}
@@ -150,7 +165,7 @@ const Index = () => {
             ))}
           </TabsList>
 
-          {/* Mobile Tabs - Melhorada com botões maiores e mais visíveis */}
+          {/* Mobile Tabs */}
           <div className="sm:hidden mb-8">
             <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl p-3 shadow-lg">
               <div className="grid grid-cols-3 gap-2">
@@ -168,6 +183,17 @@ const Index = () => {
                     <span className="text-xs font-medium text-center leading-tight">{item.label}</span>
                   </button>
                 ))}
+                <button
+                  onClick={() => setActiveTab("gamification")}
+                  className={`flex flex-col items-center space-y-2 p-4 rounded-xl transition-all duration-200 ${
+                    activeTab === "gamification" 
+                      ? 'bg-red-600 text-white shadow-lg transform scale-105' 
+                      : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white'
+                  }`}
+                >
+                  <Trophy className="w-6 h-6" />
+                  <span className="text-xs font-medium text-center leading-tight">Conquistas</span>
+                </button>
                 <button
                   onClick={() => setActiveTab("home")}
                   className={`flex flex-col items-center space-y-2 p-4 rounded-xl transition-all duration-200 ${
@@ -257,6 +283,10 @@ const Index = () => {
 
           <TabsContent value="chat">
             <AIChat />
+          </TabsContent>
+
+          <TabsContent value="gamification">
+            <GamificationSystem />
           </TabsContent>
 
           <TabsContent value="profile">
