@@ -53,9 +53,9 @@ const MotivationalGreeting = () => {
   if (!userName) return null;
 
   return (
-    <div className="bg-gradient-to-r from-red-500/20 to-red-600/20 backdrop-blur-sm border border-red-400/30 rounded-lg p-2 mb-4">
+    <div className="glass rounded-2xl p-4 mb-6 border-0 shadow-lg">
       <div className="text-center">
-        <span className="text-sm text-white">
+        <span className="text-sm text-foreground/80 font-medium">
           Olá, {userName}! 👋 {currentPhrase}
         </span>
       </div>

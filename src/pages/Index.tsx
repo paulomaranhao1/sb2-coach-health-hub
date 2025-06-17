@@ -91,14 +91,14 @@ const Index = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-indigo-100 dark:from-slate-900 dark:to-indigo-950 flex items-center justify-center">
         <Loading size="lg" text="Carregando SB2FIT..." />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 dark:from-gray-950 dark:via-gray-900 dark:to-red-950 transition-colors duration-300">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 transition-colors duration-500">
       <Header 
         theme={theme}
         toggleTheme={toggleTheme}
@@ -122,11 +122,17 @@ const Index = () => {
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
           <TabsContent value="home" className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <Card className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white border-red-400 dark:border-red-500 transform hover:scale-105 transition-all duration-300 hover:shadow-xl">
+            {/* Hábitos Diários - Prioridade no Topo */}
+            <DailyHabit />
+            
+            {/* Cards de Status */}
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Peso Atual</CardTitle>
-                  <CardDescription className="text-red-100 dark:text-red-200">
+                  <CardTitle className="text-lg bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                    Peso Atual
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
                     Último registro
                   </CardDescription>
                 </CardHeader>
@@ -134,16 +140,18 @@ const Index = () => {
                   <div className="text-3xl font-bold">
                     {userProfile?.weight ? `${userProfile.weight} kg` : '--'}
                   </div>
-                  <p className="text-sm text-red-100 dark:text-red-200 mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     {userProfile?.weight ? 'Registrado no perfil' : 'Adicione seu peso'}
                   </p>
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-gray-700 to-gray-600 dark:from-gray-800 dark:to-gray-700 text-white border-gray-500 dark:border-gray-600 transform hover:scale-105 transition-all duration-300 hover:shadow-xl">
+              <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Meta</CardTitle>
-                  <CardDescription className="text-gray-200 dark:text-gray-300">
+                  <CardTitle className="text-lg bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
+                    Meta
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
                     Objetivo de peso
                   </CardDescription>
                 </CardHeader>
@@ -151,7 +159,7 @@ const Index = () => {
                   <div className="text-3xl font-bold">
                     {userProfile?.goal_weight ? `${userProfile.goal_weight} kg` : '--'}
                   </div>
-                  <p className="text-sm text-gray-200 dark:text-gray-300 mt-1">
+                  <p className="text-sm text-muted-foreground mt-1">
                     {userProfile?.weight && userProfile?.goal_weight 
                       ? `Faltam ${(userProfile.weight - userProfile.goal_weight).toFixed(1)}kg` 
                       : 'Defina sua meta'
@@ -160,10 +168,12 @@ const Index = () => {
                 </CardContent>
               </Card>
 
-              <Card className="bg-gradient-to-r from-red-700 to-red-800 dark:from-red-800 dark:to-red-900 text-white border-red-600 dark:border-red-700 transform hover:scale-105 transition-all duration-300 hover:shadow-xl">
+              <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Sequência</CardTitle>
-                  <CardDescription className="text-red-100 dark:text-red-200">
+                  <CardTitle className="text-lg bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
+                    Sequência
+                  </CardTitle>
+                  <CardDescription className="text-muted-foreground">
                     Dias consecutivos
                   </CardDescription>
                 </CardHeader>
@@ -171,15 +181,15 @@ const Index = () => {
                   <div className="text-3xl font-bold animate-pulse">
                     {userStats?.streak || 0} dias
                   </div>
-                  <p className="text-sm text-red-100 dark:text-red-200 mt-1">Usando SB2FIT</p>
+                  <p className="text-sm text-muted-foreground mt-1">Usando SB2FIT</p>
                 </CardContent>
               </Card>
             </div>
             
             {/* Cards de Gamificação */}
             {userStats && (
-              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white border-yellow-400 transform hover:scale-105 transition-all duration-300">
+              <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+                <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center gap-2">
                       🏆 Nível
@@ -190,7 +200,7 @@ const Index = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-400 transform hover:scale-105 transition-all duration-300">
+                <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center gap-2">
                       ⭐ Pontos
@@ -201,7 +211,7 @@ const Index = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white border-green-400 transform hover:scale-105 transition-all duration-300">
+                <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center gap-2">
                       🛡️ Escudos
@@ -212,7 +222,7 @@ const Index = () => {
                   </CardContent>
                 </Card>
 
-                <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white border-purple-400 transform hover:scale-105 transition-all duration-300">
+                <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-lg flex items-center gap-2">
                       🎨 Figurinhas
@@ -224,8 +234,6 @@ const Index = () => {
                 </Card>
               </div>
             )}
-            
-            <DailyHabit />
           </TabsContent>
 
           <TabsContent value="dashboard" className="space-y-6">
