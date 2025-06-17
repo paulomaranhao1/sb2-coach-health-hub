@@ -244,47 +244,6 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="dashboard" className="space-y-6">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-              <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white border-red-400">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Peso Atual</CardTitle>
-                  <CardDescription className="text-red-100">
-                    Último registro
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">72.5 kg</div>
-                  <p className="text-sm text-red-100 mt-1">-2.3kg este mês</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-r from-gray-700 to-gray-600 text-white border-gray-500">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Meta</CardTitle>
-                  <CardDescription className="text-gray-200">
-                    Objetivo de peso
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">68.0 kg</div>
-                  <p className="text-sm text-gray-200 mt-1">Faltam 4.5kg</p>
-                </CardContent>
-              </Card>
-
-              <Card className="bg-gradient-to-r from-red-700 to-red-800 text-white border-red-600">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-lg">Sequência</CardTitle>
-                  <CardDescription className="text-red-100">
-                    Dias consecutivos
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="text-3xl font-bold">12 dias</div>
-                  <p className="text-sm text-red-100 mt-1">Usando SB2FIT</p>
-                </CardContent>
-              </Card>
-            </div>
-
             <ProgressDashboard />
           </TabsContent>
 
