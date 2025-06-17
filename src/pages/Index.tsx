@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -10,14 +11,43 @@ import AIChat from "@/components/AIChat";
 import ProgressDashboard from "@/components/ProgressDashboard";
 import UserProfile from "@/components/UserProfile";
 import WelcomeScreen from "@/components/WelcomeScreen";
+import OnboardingScreen from "@/components/OnboardingScreen";
 import DailyHabit from "@/components/DailyHabit";
 import GamificationSystem from "@/components/GamificationSystem";
 import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+
+  useEffect(() => {
+    checkUserProfile();
+  }, []);
+
+  const checkUserProfile = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      
+      if (user) {
+        const { data: profile } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        setUserProfile(profile);
+        
+        if (!profile || !profile.onboarding_completed) {
+          setShowOnboarding(true);
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao verificar perfil do usuário:', error);
+    }
+  };
 
   const handlePurchase = () => {
     // Detectar localização e redirecionar para loja apropriada
@@ -31,8 +61,17 @@ const Index = () => {
     await supabase.auth.signOut();
   };
 
+  const handleOnboardingComplete = () => {
+    setShowOnboarding(false);
+    checkUserProfile(); // Recarregar perfil após completar onboarding
+  };
+
   if (showWelcome) {
     return <WelcomeScreen onContinue={() => setShowWelcome(false)} />;
+  }
+
+  if (showOnboarding) {
+    return <OnboardingScreen onComplete={handleOnboardingComplete} />;
   }
 
   const tabItems = [
@@ -234,8 +273,12 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold">72.5 kg</div>
-                  <p className="text-sm text-red-100 mt-1">-2.3kg este mês</p>
+                  <div className="text-3xl font-bold">
+                    {userProfile?.weight ? `${userProfile.weight} kg` : '--'}
+                  </div>
+                  <p className="text-sm text-red-100 mt-1">
+                    {userProfile?.weight ? 'Registrado no perfil' : 'Adicione seu peso'}
+                  </p>
                 </CardContent>
               </Card>
 
@@ -248,7 +291,9 @@ const Index = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">68.0 kg</div>
-                  <p className="text-sm text-gray-200 mt-1">Faltam 4.5kg</p>
+                  <p className="text-sm text-gray-200 mt-1">
+                    {userProfile?.weight ? `Faltam ${(userProfile.weight - 68).toFixed(1)}kg` : 'Defina sua meta'}
+                  </p>
                 </CardContent>
               </Card>
 
