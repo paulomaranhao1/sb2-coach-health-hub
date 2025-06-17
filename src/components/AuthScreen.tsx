@@ -6,7 +6,7 @@ import ForgotPasswordForm from './auth/ForgotPasswordForm';
 import EmailVerificationScreen from './auth/EmailVerificationScreen';
 
 const AuthScreen = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [isLogin, setIsLogin] = useState(false); // Mudado para false para mostrar cadastro primeiro
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [email, setEmail] = useState('');

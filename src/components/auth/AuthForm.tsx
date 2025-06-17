@@ -34,7 +34,7 @@ const AuthForm = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-300 dark:from-gray-900 dark:via-gray-800 dark:to-red-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4">
       <Card className="w-full max-w-md bg-white dark:bg-card border border-slate-200 dark:border-border">
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
