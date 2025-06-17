@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,7 +48,7 @@ const Index = () => {
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1">
                 <img 
-                  src="/lovable-uploads/bf6fca4b-d2fa-4dfb-9422-75f0f01befa7.png" 
+                  src="/lovable-uploads/3497ffa0-ead8-4742-8fe6-37a983c9cc07.png" 
                   alt="SB2FIT Logo" 
                   className="w-full h-full object-contain"
                 />
@@ -75,7 +74,7 @@ const Index = () => {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="border-red-200 text-white hover:bg-red-700 bg-red-600/20 backdrop-blur-sm hidden sm:flex"
+                className="border-red-200 text-white hover:bg-red-700 bg-red-600/30 backdrop-blur-sm hidden sm:flex"
               >
                 <User className="w-4 h-4 mr-2" />
                 Perfil
@@ -84,7 +83,7 @@ const Index = () => {
               <Button
                 size="sm"
                 variant="outline"
-                className="border-red-200 text-white hover:bg-red-700 bg-red-600/20 backdrop-blur-sm sm:hidden"
+                className="border-red-200 text-white hover:bg-red-700 bg-red-600/30 backdrop-blur-sm sm:hidden"
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
               >
                 <Menu className="w-4 h-4" />
@@ -151,23 +150,51 @@ const Index = () => {
             ))}
           </TabsList>
 
-          {/* Mobile Tabs - Simplified horizontal scroll */}
+          {/* Mobile Tabs - Melhorada com botões maiores e mais visíveis */}
           <div className="sm:hidden mb-8">
-            <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
-              {tabItems.map((item) => (
+            <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl p-3 shadow-lg">
+              <div className="grid grid-cols-3 gap-2">
+                {tabItems.slice(1, 5).map((item) => (
+                  <button
+                    key={item.value}
+                    onClick={() => setActiveTab(item.value)}
+                    className={`flex flex-col items-center space-y-2 p-4 rounded-xl transition-all duration-200 ${
+                      activeTab === item.value 
+                        ? 'bg-red-600 text-white shadow-lg transform scale-105' 
+                        : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white'
+                    }`}
+                  >
+                    <item.icon className="w-6 h-6" />
+                    <span className="text-xs font-medium text-center leading-tight">{item.label}</span>
+                  </button>
+                ))}
                 <button
-                  key={item.value}
-                  onClick={() => setActiveTab(item.value)}
-                  className={`flex-shrink-0 flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors ${
-                    activeTab === item.value 
-                      ? 'bg-red-600 text-white' 
-                      : 'bg-gray-800 text-gray-300'
+                  onClick={() => setActiveTab("home")}
+                  className={`flex flex-col items-center space-y-2 p-4 rounded-xl transition-all duration-200 ${
+                    activeTab === "home" 
+                      ? 'bg-red-600 text-white shadow-lg transform scale-105' 
+                      : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white'
                   }`}
                 >
-                  <item.icon className="w-4 h-4" />
-                  <span className="text-sm font-medium">{item.label}</span>
+                  <Home className="w-6 h-6" />
+                  <span className="text-xs font-medium text-center leading-tight">Início</span>
                 </button>
-              ))}
+              </div>
+              
+              {/* Botão separado para Perfil */}
+              <div className="mt-3 pt-3 border-t border-gray-600">
+                <button
+                  onClick={() => setActiveTab("profile")}
+                  className={`w-full flex items-center justify-center space-x-3 p-3 rounded-xl transition-all duration-200 ${
+                    activeTab === "profile" 
+                      ? 'bg-red-600 text-white shadow-lg' 
+                      : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white'
+                  }`}
+                >
+                  <User className="w-5 h-5" />
+                  <span className="text-sm font-medium">Perfil</span>
+                </button>
+              </div>
             </div>
           </div>
 
