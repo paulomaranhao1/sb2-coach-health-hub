@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -180,8 +179,8 @@ const AuthScreen = () => {
 
   if (showEmailVerification) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-300 dark:from-gray-900 dark:via-gray-800 dark:to-red-900 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-white dark:bg-card border border-slate-200 dark:border-border">
           <CardHeader className="text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
               <img 
@@ -192,21 +191,21 @@ const AuthScreen = () => {
             </div>
             <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
             <CardTitle className="text-2xl font-bold text-green-600">Conta criada com sucesso!</CardTitle>
-            <CardDescription>
+            <CardDescription className="text-slate-700 dark:text-slate-300">
               Verifique seu email para confirmar sua conta
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Alert className="border-blue-200 bg-blue-50">
-              <Mail className="h-4 w-4 text-blue-600" />
-              <AlertDescription className="text-blue-800">
+            <Alert className="border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-900/20">
+              <Mail className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <AlertDescription className="text-blue-800 dark:text-blue-200">
                 <strong>Importante:</strong> Enviamos um email de confirmação para <strong>{email}</strong>. 
                 Clique no link do email para ativar sua conta e começar a usar o SB2FIT.
               </AlertDescription>
             </Alert>
 
             <div className="text-center space-y-3">
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
                 Não recebeu o email? Verifique sua pasta de spam ou lixo eletrônico.
               </p>
               
@@ -216,7 +215,7 @@ const AuthScreen = () => {
                   setShowEmailVerification(false);
                   setIsLogin(true);
                 }}
-                className="w-full"
+                className="w-full text-slate-700 dark:text-slate-200 border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Voltar ao login
@@ -230,8 +229,8 @@ const AuthScreen = () => {
 
   if (isForgotPassword) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-300 dark:from-gray-900 dark:via-gray-800 dark:to-red-900 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md bg-white dark:bg-card border border-slate-200 dark:border-border">
           <CardHeader className="text-center">
             <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
               <img 
@@ -240,30 +239,30 @@ const AuthScreen = () => {
                 className="w-full h-full object-contain"
               />
             </div>
-            <CardTitle className="text-2xl font-bold">Recuperar Senha</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-100">Recuperar Senha</CardTitle>
+            <CardDescription className="text-slate-700 dark:text-slate-300">
               Digite seu email para receber um link de redefinição
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <form onSubmit={handleForgotPassword} className="space-y-4">
               <div>
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-slate-700 dark:text-slate-200">Email</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-600 dark:text-slate-400" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="seu@email.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     required
                   />
                 </div>
               </div>
 
-              <Button type="submit" className="w-full bg-red-600 hover:bg-red-700" disabled={loading}>
+              <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white" disabled={loading}>
                 {loading ? 'Enviando...' : 'Enviar link de recuperação'}
               </Button>
             </form>
@@ -272,7 +271,7 @@ const AuthScreen = () => {
               <Button 
                 variant="link" 
                 onClick={() => setIsForgotPassword(false)}
-                className="text-sm flex items-center justify-center gap-2"
+                className="text-sm flex items-center justify-center gap-2 text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
               >
                 <ArrowLeft className="w-4 h-4" />
                 Voltar ao login
@@ -285,8 +284,8 @@ const AuthScreen = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-slate-100 to-slate-300 dark:from-gray-900 dark:via-gray-800 dark:to-red-900 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white dark:bg-card border border-slate-200 dark:border-border">
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
             <img 
@@ -295,8 +294,8 @@ const AuthScreen = () => {
               className="w-full h-full object-contain"
             />
           </div>
-          <CardTitle className="text-2xl font-bold">SB2FIT</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-100">SB2FIT</CardTitle>
+          <CardDescription className="text-slate-700 dark:text-slate-300">
             {isLogin ? 'Entre na sua conta' : 'Crie sua conta'}
           </CardDescription>
         </CardHeader>
@@ -304,7 +303,7 @@ const AuthScreen = () => {
           <Button 
             onClick={handleGoogleAuth} 
             disabled={loading}
-            className="w-full bg-white text-gray-900 hover:bg-gray-100 border"
+            className="w-full bg-white text-gray-900 hover:bg-gray-100 border border-gray-300 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 dark:border-gray-600"
           >
             <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
               <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -317,26 +316,26 @@ const AuthScreen = () => {
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t" />
+              <span className="w-full border-t border-slate-300 dark:border-slate-600" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-background px-2 text-muted-foreground">Ou</span>
+              <span className="bg-white dark:bg-card px-2 text-slate-600 dark:text-slate-400">Ou</span>
             </div>
           </div>
 
           <form onSubmit={handleEmailAuth} className="space-y-4">
             {!isLogin && (
               <div>
-                <Label htmlFor="name">Nome Completo</Label>
+                <Label htmlFor="name" className="text-slate-700 dark:text-slate-200">Nome Completo</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <User className="absolute left-3 top-3 h-4 w-4 text-slate-600 dark:text-slate-400" />
                   <Input
                     id="name"
                     type="text"
                     placeholder="Seu nome"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="pl-10"
+                    className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                     required={!isLogin}
                   />
                 </div>
@@ -344,38 +343,38 @@ const AuthScreen = () => {
             )}
             
             <div>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-slate-700 dark:text-slate-200">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-600 dark:text-slate-400" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                   required
                 />
               </div>
             </div>
             
             <div>
-              <Label htmlFor="password">Senha</Label>
+              <Label htmlFor="password" className="text-slate-700 dark:text-slate-200">Senha</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-600 dark:text-slate-400" />
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10"
+                  className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
                   required
                 />
               </div>
             </div>
 
-            <Button type="submit" className="w-full bg-red-600 hover:bg-red-700" disabled={loading}>
+            <Button type="submit" className="w-full bg-red-600 hover:bg-red-700 text-white" disabled={loading}>
               {loading ? 'Carregando...' : (isLogin ? 'Entrar' : 'Criar conta')}
             </Button>
           </form>
@@ -385,7 +384,7 @@ const AuthScreen = () => {
               <Button 
                 variant="link" 
                 onClick={() => setIsForgotPassword(true)}
-                className="text-sm text-gray-600 hover:text-gray-800"
+                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
               >
                 Esqueci minha senha
               </Button>
@@ -396,7 +395,7 @@ const AuthScreen = () => {
             <Button 
               variant="link" 
               onClick={() => setIsLogin(!isLogin)}
-              className="text-sm"
+              className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
             >
               {isLogin ? 'Não tem conta? Cadastre-se' : 'Já tem conta? Entre'}
             </Button>
