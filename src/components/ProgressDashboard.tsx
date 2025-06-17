@@ -32,22 +32,22 @@ const ProgressDashboard = () => {
               <span>Meta: 68.0kg</span>
             </div>
             <Progress value={goalProgress} className="h-3" />
-            <div className="text-center text-sm text-gray-600">
+            <div className="text-center text-sm text-gray-600 dark:text-gray-300">
               {goalProgress.toFixed(1)}% concluído
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
-              <p className="text-2xl font-bold text-blue-600">2.7kg</p>
-              <p className="text-xs text-gray-600">Perdidos</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">2.7kg</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">Perdidos</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-purple-600">4.5kg</p>
-              <p className="text-xs text-gray-600">Restantes</p>
+              <p className="text-2xl font-bold text-slate-600 dark:text-slate-300">4.5kg</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">Restantes</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-green-600">37%</p>
-              <p className="text-xs text-gray-600">Completo</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">37%</p>
+              <p className="text-xs text-gray-600 dark:text-gray-300">Completo</p>
             </div>
           </div>
         </CardContent>
@@ -73,7 +73,7 @@ const ProgressDashboard = () => {
                     name === 'taken' ? 'Cápsulas' : 'Peso'
                   ]}
                 />
-                <Bar dataKey="taken" fill="#8884d8" name="taken" />
+                <Bar dataKey="taken" fill="#dc2626" name="taken" />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -84,32 +84,32 @@ const ProgressDashboard = () => {
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-blue-600">93%</p>
-              <p className="text-sm text-gray-600">Aderência</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">93%</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Aderência</p>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-green-600">12</p>
-              <p className="text-sm text-gray-600">Dias seguidos</p>
+              <p className="text-2xl font-bold text-green-600 dark:text-green-400">12</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Dias seguidos</p>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-purple-600">0.4kg</p>
-              <p className="text-sm text-gray-600">Perda semanal</p>
+              <p className="text-2xl font-bold text-slate-600 dark:text-slate-300">0.4kg</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">Perda semanal</p>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-orange-600">24.1</p>
-              <p className="text-sm text-gray-600">IMC atual</p>
+              <p className="text-2xl font-bold text-red-600 dark:text-red-400">24.1</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">IMC atual</p>
             </div>
           </CardContent>
         </Card>

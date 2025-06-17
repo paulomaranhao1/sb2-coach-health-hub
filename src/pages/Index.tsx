@@ -129,7 +129,7 @@ const Index = () => {
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
               <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
+                  <CardTitle className="text-lg bg-gradient-to-r from-red-600 to-red-700 dark:from-red-400 dark:to-red-500 bg-clip-text text-transparent">
                     Peso Atual
                   </CardTitle>
                   <CardDescription className="text-muted-foreground">
@@ -148,7 +148,7 @@ const Index = () => {
 
               <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg bg-gradient-to-r from-emerald-600 to-teal-600 dark:from-emerald-400 dark:to-teal-400 bg-clip-text text-transparent">
+                  <CardTitle className="text-lg bg-gradient-to-r from-green-600 to-green-700 dark:from-green-400 dark:to-green-500 bg-clip-text text-transparent">
                     Meta
                   </CardTitle>
                   <CardDescription className="text-muted-foreground">
@@ -170,7 +170,7 @@ const Index = () => {
 
               <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
                 <CardHeader className="pb-3">
-                  <CardTitle className="text-lg bg-gradient-to-r from-orange-600 to-red-600 dark:from-orange-400 dark:to-red-400 bg-clip-text text-transparent">
+                  <CardTitle className="text-lg bg-gradient-to-r from-slate-600 to-slate-700 dark:from-slate-400 dark:to-slate-500 bg-clip-text text-transparent">
                     Sequência
                   </CardTitle>
                   <CardDescription className="text-muted-foreground">
