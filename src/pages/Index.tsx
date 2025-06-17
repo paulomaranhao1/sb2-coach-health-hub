@@ -1,10 +1,9 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Calendar, MessageSquare, User, Users, Home } from "lucide-react";
+import { Bell, Calendar, MessageSquare, User, Users, Home, ShoppingCart } from "lucide-react";
 import WeightTracker from "@/components/WeightTracker";
 import SupplementReminder from "@/components/SupplementReminder";
 import AIChat from "@/components/AIChat";
@@ -16,6 +15,15 @@ import DailyHabit from "@/components/DailyHabit";
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [activeTab, setActiveTab] = useState("home");
+
+  const handlePurchase = () => {
+    // Detectar localização e redirecionar para loja apropriada
+    const isInBrazil = navigator.language.includes('pt') || 
+                      Intl.DateTimeFormat().resolvedOptions().timeZone.includes('America/Sao_Paulo');
+    
+    const url = isInBrazil ? 'https://sb2turbo.com.br' : 'https://sb2turbo.com';
+    window.open(url, '_blank');
+  };
 
   if (showWelcome) {
     return <WelcomeScreen onContinue={() => setShowWelcome(false)} />;
@@ -30,17 +38,25 @@ const Index = () => {
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1">
                 <img 
-                  src="/lovable-uploads/3497ffa0-ead8-4742-8fe6-37a983c9cc07.png" 
-                  alt="SB2 Turbo Logo" 
+                  src="/lovable-uploads/fa5c92e9-ec69-4d8e-8e35-11ad0f882be3.png" 
+                  alt="SB2FIT Logo" 
                   className="w-full h-full object-contain"
                 />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-white">SB2 TURBO</h1>
+                <h1 className="text-2xl font-bold text-white">SB2FIT</h1>
                 <p className="text-sm text-red-100">Seu companheiro de emagrecimento</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">
+              <Button 
+                onClick={handlePurchase}
+                size="sm" 
+                className="bg-green-600 hover:bg-green-700 text-white border-0"
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Comprar SB2 Turbo
+              </Button>
               <Badge variant="secondary" className="bg-red-100 text-red-800 border-red-200">
                 <Bell className="w-3 h-3 mr-1" />
                 3 lembretes ativos
@@ -106,7 +122,7 @@ const Index = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">12 dias</div>
-                  <p className="text-sm text-red-100 mt-1">Tomando SB2 Turbo</p>
+                  <p className="text-sm text-red-100 mt-1">Usando SB2FIT</p>
                 </CardContent>
               </Card>
             </div>
@@ -151,7 +167,7 @@ const Index = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold">12 dias</div>
-                  <p className="text-sm text-red-100 mt-1">Tomando SB2 Turbo</p>
+                  <p className="text-sm text-red-100 mt-1">Usando SB2FIT</p>
                 </CardContent>
               </Card>
             </div>

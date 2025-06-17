@@ -20,22 +20,22 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
       <Card className="w-full max-w-md bg-gray-800/95 backdrop-blur-sm shadow-2xl border-red-500">
         <CardContent className="p-8 text-center space-y-6">
           <div className={`transition-all duration-1000 ${showAnimation ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
-            <div className="w-24 h-24 rounded-2xl overflow-hidden mx-auto mb-4 shadow-lg bg-white p-2">
+            <div className="w-32 h-32 rounded-2xl overflow-hidden mx-auto mb-4 shadow-lg bg-white p-3">
               <img 
-                src="/lovable-uploads/3497ffa0-ead8-4742-8fe6-37a983c9cc07.png" 
-                alt="SB2 Turbo Logo" 
+                src="/lovable-uploads/fa5c92e9-ec69-4d8e-8e35-11ad0f882be3.png" 
+                alt="SB2FIT Logo" 
                 className="w-full h-full object-contain"
               />
             </div>
           </div>
           
           <div className={`transition-all duration-1000 delay-300 ${showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <h1 className="text-3xl font-bold text-white mb-2">SB2 TURBO</h1>
+            <h1 className="text-3xl font-bold text-white mb-2">SB2FIT</h1>
             <p className="text-gray-300 mb-6">Seu companheiro de emagrecimento</p>
             
             <div className="flex items-center justify-center gap-2 text-red-400 mb-6">
               <Heart className="w-5 h-5" />
-              <span className="text-sm font-medium">Transforme sua vida com SB2 Turbo</span>
+              <span className="text-sm font-medium">Transforme sua vida com SB2FIT</span>
               <Zap className="w-5 h-5" />
             </div>
           </div>

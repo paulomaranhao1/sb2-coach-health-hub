@@ -12,7 +12,7 @@ const DailyHabit = () => {
 
   const motivationalQuotes = [
     "Cada cápsula é um passo mais perto do seu objetivo! 💪",
-    "Seu corpo está se transformando a cada dia com SB2 Turbo! ✨",
+    "Seu corpo está se transformando a cada dia com SB2FIT! ✨",
     "Consistência é a chave do sucesso. Continue assim! 🔥",
     "Você é mais forte do que imagina. Persist! 🌟",
     "Cada dia é uma nova oportunidade de cuidar de você! 💖",
@@ -50,7 +50,7 @@ const DailyHabit = () => {
       <Card className="bg-gray-800 border-gray-700">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center justify-between text-white">
-            <span>SB2 Turbo Hoje</span>
+            <span>SB2FIT Hoje</span>
             {capsuleTaken && (
               <Badge className="bg-red-100 text-red-800">
                 <CheckCircle className="w-3 h-3 mr-1" />
