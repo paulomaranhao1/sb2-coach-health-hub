@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -19,7 +20,8 @@ const UserProfile = () => {
     weight: '',
     height: '',
     age: '',
-    gender: ''
+    gender: '',
+    goal_weight: ''
   });
   const { toast } = useToast();
 
@@ -50,7 +52,8 @@ const UserProfile = () => {
             weight: profile.weight?.toString() || '',
             height: profile.height?.toString() || '',
             age: profile.age?.toString() || '',
-            gender: profile.gender || ''
+            gender: profile.gender || '',
+            goal_weight: profile.goal_weight?.toString() || ''
           });
         }
       }
@@ -88,6 +91,7 @@ const UserProfile = () => {
         age: parseInt(formData.age) || null,
         gender: formData.gender || null,
         name: formData.name || null,
+        goal_weight: parseFloat(formData.goal_weight) || null,
         onboarding_completed: true
       };
 
@@ -215,6 +219,18 @@ const UserProfile = () => {
                   />
                 </div>
                 <div>
+                  <Label htmlFor="goal_weight" className="text-gray-300">Peso Meta (kg)</Label>
+                  <Input
+                    id="goal_weight"
+                    type="number"
+                    step="0.1"
+                    value={formData.goal_weight}
+                    onChange={(e) => setFormData({ ...formData, goal_weight: e.target.value })}
+                    className="bg-gray-700 border-gray-600 text-white"
+                    placeholder="Ex: 65.0"
+                  />
+                </div>
+                <div>
                   <Label htmlFor="height" className="text-gray-300">Altura (cm)</Label>
                   <Input
                     id="height"
@@ -266,6 +282,12 @@ const UserProfile = () => {
                   <span className="text-gray-400">Peso:</span>
                   <span className="text-white font-medium">
                     {userProfile?.weight ? `${userProfile.weight} kg` : 'Não informado'}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Peso Meta:</span>
+                  <span className="text-white font-medium">
+                    {userProfile?.goal_weight ? `${userProfile.goal_weight} kg` : 'Não informado'}
                   </span>
                 </div>
                 <div className="flex justify-between">

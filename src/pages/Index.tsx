@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -25,6 +26,7 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState("home");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
+  const [userStats, setUserStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { theme, toggleTheme } = useTheme();
 
@@ -38,6 +40,7 @@ const Index = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
+        // Buscar perfil do usuário
         const { data: profile } = await supabase
           .from('user_profiles')
           .select('*')
@@ -45,6 +48,15 @@ const Index = () => {
           .maybeSingle();
         
         setUserProfile(profile);
+        
+        // Buscar estatísticas do usuário
+        const { data: stats } = await supabase
+          .from('user_stats')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        setUserStats(stats);
         
         if (!profile || !profile.onboarding_completed) {
           setShowOnboarding(true);
@@ -136,9 +148,14 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold">68.0 kg</div>
+                  <div className="text-3xl font-bold">
+                    {userProfile?.goal_weight ? `${userProfile.goal_weight} kg` : '--'}
+                  </div>
                   <p className="text-sm text-gray-200 dark:text-gray-300 mt-1">
-                    {userProfile?.weight ? `Faltam ${(userProfile.weight - 68).toFixed(1)}kg` : 'Defina sua meta'}
+                    {userProfile?.weight && userProfile?.goal_weight 
+                      ? `Faltam ${(userProfile.weight - userProfile.goal_weight).toFixed(1)}kg` 
+                      : 'Defina sua meta'
+                    }
                   </p>
                 </CardContent>
               </Card>
@@ -151,11 +168,63 @@ const Index = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold animate-pulse">12 dias</div>
+                  <div className="text-3xl font-bold animate-pulse">
+                    {userStats?.streak || 0} dias
+                  </div>
                   <p className="text-sm text-red-100 dark:text-red-200 mt-1">Usando SB2FIT</p>
                 </CardContent>
               </Card>
             </div>
+            
+            {/* Cards de Gamificação */}
+            {userStats && (
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <Card className="bg-gradient-to-r from-yellow-500 to-yellow-600 text-white border-yellow-400 transform hover:scale-105 transition-all duration-300">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      🏆 Nível
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{userStats.level}</div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white border-blue-400 transform hover:scale-105 transition-all duration-300">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      ⭐ Pontos
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{userStats.points}</div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white border-green-400 transform hover:scale-105 transition-all duration-300">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      🛡️ Escudos
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{userStats.shields?.length || 0}</div>
+                  </CardContent>
+                </Card>
+
+                <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white border-purple-400 transform hover:scale-105 transition-all duration-300">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-lg flex items-center gap-2">
+                      🎨 Figurinhas
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{userStats.stickers?.length || 0}</div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+            
             <DailyHabit />
           </TabsContent>
 

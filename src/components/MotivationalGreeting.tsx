@@ -54,13 +54,15 @@ const MotivationalGreeting = () => {
   if (!userName) return null;
 
   return (
-    <div className="bg-gradient-to-r from-red-500/20 to-red-600/20 backdrop-blur-sm border border-red-400/30 rounded-lg p-4 mb-6 text-center">
-      <h2 className="text-xl font-bold text-white mb-1">
-        Olá, {userName}! 👋
-      </h2>
-      <p className="text-red-100 animate-pulse">
-        {currentPhrase}
-      </p>
+    <div className="bg-gradient-to-r from-red-500/20 to-red-600/20 backdrop-blur-sm border border-red-400/30 rounded-lg p-3 mb-6">
+      <div className="flex items-center justify-center">
+        <h2 className="text-lg font-bold text-white mr-2">
+          Olá, {userName}! 👋
+        </h2>
+        <p className="text-red-100 animate-pulse text-sm">
+          {currentPhrase}
+        </p>
+      </div>
     </div>
   );
 };
