@@ -70,7 +70,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
               <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent">
                 SB2FIT
               </h1>
-              <p className="text-sm text-slate-700 dark:text-slate-300 font-medium">Transformação inteligente</p>
+              <p className="text-sm text-slate-800 dark:text-slate-200 font-medium">Transformação inteligente</p>
             </div>
           </div>
           
@@ -96,7 +96,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
                 onClick={handleRemindersClick}
                 size="sm"
                 variant="secondary"
-                className="glass border-0 hidden sm:flex animate-pulse shadow-lg hover:scale-105 transition-all duration-200"
+                className="glass border-0 hidden sm:flex animate-pulse shadow-lg hover:scale-105 transition-all duration-200 text-slate-800 dark:text-slate-200"
               >
                 <Bell className="w-3 h-3 mr-1" />
                 {pendingReminders} lembrete{pendingReminders > 1 ? 's' : ''}

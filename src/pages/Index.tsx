@@ -140,7 +140,7 @@ const Index = () => {
                   <div className="text-3xl font-bold text-slate-800 dark:text-slate-200">
                     {userProfile?.weight ? `${userProfile.weight} kg` : '--'}
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                  <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
                     {userProfile?.weight ? 'Registrado no perfil' : 'Adicione seu peso'}
                   </p>
                 </CardContent>
@@ -159,7 +159,7 @@ const Index = () => {
                   <div className="text-3xl font-bold text-slate-800 dark:text-slate-200">
                     {userProfile?.goal_weight ? `${userProfile.goal_weight} kg` : '--'}
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+                  <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
                     {userProfile?.weight && userProfile?.goal_weight 
                       ? `Faltam ${(userProfile.weight - userProfile.goal_weight).toFixed(1)}kg` 
                       : 'Defina sua meta'
@@ -181,7 +181,7 @@ const Index = () => {
                   <div className="text-3xl font-bold text-slate-800 dark:text-slate-200 animate-pulse">
                     {userStats?.streak || 0} dias
                   </div>
-                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Usando SB2FIT</p>
+                  <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Usando SB2FIT</p>
                 </CardContent>
               </Card>
             </div>
