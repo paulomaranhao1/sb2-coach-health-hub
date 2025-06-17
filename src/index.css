@@ -84,6 +84,28 @@
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
+  
+  /* Fix input styling to ensure white background */
+  input {
+    background-color: white !important;
+    color: #1e293b !important;
+  }
+  
+  .dark input {
+    background-color: hsl(var(--card)) !important;
+    color: hsl(var(--card-foreground)) !important;
+  }
+  
+  /* Ensure select components also have proper styling */
+  [role="combobox"] {
+    background-color: white !important;
+    color: #1e293b !important;
+  }
+  
+  .dark [role="combobox"] {
+    background-color: hsl(var(--card)) !important;
+    color: hsl(var(--card-foreground)) !important;
+  }
 }
 
 /* Custom scrollbar for mobile horizontal scroll */
