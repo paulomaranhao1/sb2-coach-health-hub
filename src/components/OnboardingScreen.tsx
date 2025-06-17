@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -43,17 +42,24 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
         throw new Error("Usuário não encontrado");
       }
 
+      // Create insert object with known fields
+      const insertData: any = {
+        user_id: user.id,
+        gender: formData.gender,
+        weight: parseFloat(formData.weight),
+        height: parseFloat(formData.height),
+        age: parseInt(formData.age),
+        onboarding_completed: true
+      };
+
+      // Only add name if provided (will work after migration)
+      if (formData.name) {
+        insertData.name = formData.name;
+      }
+
       const { error } = await supabase
         .from('user_profiles')
-        .insert({
-          user_id: user.id,
-          name: formData.name,
-          gender: formData.gender,
-          weight: parseFloat(formData.weight),
-          height: parseFloat(formData.height),
-          age: parseInt(formData.age),
-          onboarding_completed: true
-        });
+        .insert(insertData);
 
       if (error) throw error;
 

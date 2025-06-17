@@ -46,7 +46,7 @@ const UserProfile = () => {
         setUserProfile(profile);
         if (profile) {
           setFormData({
-            name: profile.name || '',
+            name: (profile as any).name || '',
             weight: profile.weight?.toString() || '',
             height: profile.height?.toString() || '',
             age: profile.age?.toString() || '',
@@ -81,17 +81,24 @@ const UserProfile = () => {
       
       if (!user) return;
 
+      // Create update object with only known fields
+      const updateData: any = {
+        user_id: user.id,
+        weight: parseFloat(formData.weight) || null,
+        height: parseFloat(formData.height) || null,
+        age: parseInt(formData.age) || null,
+        gender: formData.gender || null,
+        onboarding_completed: true
+      };
+
+      // Only add name if it's provided (will work after migration)
+      if (formData.name) {
+        updateData.name = formData.name;
+      }
+
       const { error } = await supabase
         .from('user_profiles')
-        .upsert({
-          user_id: user.id,
-          name: formData.name || null,
-          weight: parseFloat(formData.weight) || null,
-          height: parseFloat(formData.height) || null,
-          age: parseInt(formData.age) || null,
-          gender: formData.gender || null,
-          onboarding_completed: true
-        });
+        .upsert(updateData);
 
       if (error) throw error;
 
@@ -239,7 +246,7 @@ const UserProfile = () => {
                 <div className="flex justify-between">
                   <span className="text-gray-400">Nome:</span>
                   <span className="text-white font-medium">
-                    {userProfile?.name || 'Não informado'}
+                    {(userProfile as any)?.name || 'Não informado'}
                   </span>
                 </div>
                 <div className="flex justify-between">

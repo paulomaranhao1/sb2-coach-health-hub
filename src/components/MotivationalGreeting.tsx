@@ -32,12 +32,13 @@ const MotivationalGreeting = () => {
       if (user) {
         const { data: profile } = await supabase
           .from('user_profiles')
-          .select('name')
+          .select('*')
           .eq('user_id', user.id)
           .maybeSingle();
         
-        if (profile?.name) {
-          setUserName(profile.name);
+        // Handle the case where name field might not exist yet
+        if (profile && (profile as any).name) {
+          setUserName((profile as any).name);
         }
       }
     } catch (error) {
