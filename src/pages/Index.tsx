@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -55,7 +54,7 @@ const Index = () => {
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1">
                 <img 
-                  src="/lovable-uploads/a0b42d2b-0356-4195-9841-ba4b44a73c81.png" 
+                  src="/lovable-uploads/315c645a-f0c2-4b01-b17a-e2337aa7a0bd.png" 
                   alt="SB2FIT Logo" 
                   className="w-full h-full object-contain"
                 />
