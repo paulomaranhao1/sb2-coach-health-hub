@@ -248,7 +248,7 @@ const AuthScreen = () => {
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
             <img 
-              src="/lovable-uploads/3497ffa0-ead8-4742-8fe6-37a983c9cc07.png" 
+              src="/lovable-uploads/a0b42d2b-0356-4195-9841-ba4b44a73c81.png" 
               alt="SB2FIT Logo" 
               className="w-full h-full object-contain"
             />

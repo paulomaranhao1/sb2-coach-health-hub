@@ -22,7 +22,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
           <div className={`transition-all duration-1000 ${showAnimation ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
             <div className="w-48 h-48 mx-auto mb-4 flex items-center justify-center">
               <img 
-                src="/lovable-uploads/bf6fca4b-d2fa-4dfb-9422-75f0f01befa7.png" 
+                src="/lovable-uploads/a0b42d2b-0356-4195-9841-ba4b44a73c81.png" 
                 alt="SB2FIT Logo" 
                 className="w-full h-full object-contain"
               />
