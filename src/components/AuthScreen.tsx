@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,7 +18,9 @@ const AuthScreen = () => {
 
   const createUserStats = async (userId: string) => {
     try {
-      const { error } = await supabase
+      console.log('Criando estatísticas para usuário:', userId);
+      
+      const { data, error } = await supabase
         .from('user_stats')
         .insert({
           user_id: userId,
@@ -28,13 +29,20 @@ const AuthScreen = () => {
           shields: [],
           stickers: [],
           streak: 0
-        });
+        })
+        .select()
+        .single();
       
       if (error) {
         console.error('Erro ao criar estatísticas do usuário:', error);
+        throw error;
       }
+      
+      console.log('Estatísticas criadas com sucesso:', data);
+      return data;
     } catch (error) {
-      console.error('Erro ao criar estatísticas:', error);
+      console.error('Erro na função createUserStats:', error);
+      throw error;
     }
   };
 
@@ -65,12 +73,16 @@ const AuthScreen = () => {
 
     try {
       if (isLogin) {
+        console.log('Tentando fazer login...');
         const { error } = await supabase.auth.signInWithPassword({
           email,
           password
         });
         if (error) throw error;
+        
+        console.log('Login realizado com sucesso');
       } else {
+        console.log('Tentando criar nova conta...');
         const { data, error } = await supabase.auth.signUp({
           email,
           password,
@@ -84,17 +96,38 @@ const AuthScreen = () => {
         
         if (error) throw error;
         
+        console.log('Conta criada, dados:', data);
+        
         // Criar estatísticas do usuário após signup bem-sucedido
         if (data.user) {
-          await createUserStats(data.user.id);
+          console.log('Usuário criado, ID:', data.user.id);
+          
+          // Aguardar um pouco para garantir que o usuário está completamente criado
+          setTimeout(async () => {
+            try {
+              await createUserStats(data.user.id);
+              toast({
+                title: "Conta criada com sucesso!",
+                description: "Bem-vindo ao SB2FIT! Sua conta foi configurada."
+              });
+            } catch (statsError) {
+              console.error('Erro ao criar estatísticas:', statsError);
+              // Não mostrar erro para o usuário sobre estatísticas, pois a conta foi criada
+              toast({
+                title: "Conta criada!",
+                description: "Bem-vindo ao SB2FIT!"
+              });
+            }
+          }, 1000);
+        } else {
+          toast({
+            title: "Conta criada!",
+            description: "Verifique seu email para confirmar a conta."
+          });
         }
-        
-        toast({
-          title: "Conta criada!",
-          description: "Verifique seu email para confirmar a conta."
-        });
       }
     } catch (error: any) {
+      console.error('Erro na autenticação:', error);
       let errorMessage = error.message;
       
       // Traduzir erros comuns para português
@@ -104,6 +137,10 @@ const AuthScreen = () => {
         errorMessage = 'Email ou senha incorretos.';
       } else if (error.message.includes('Password should be')) {
         errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
+      } else if (error.message.includes('Invalid email')) {
+        errorMessage = 'Email inválido. Verifique o formato.';
+      } else if (error.message.includes('weak password')) {
+        errorMessage = 'Senha muito fraca. Use pelo menos 6 caracteres.';
       }
       
       toast({
