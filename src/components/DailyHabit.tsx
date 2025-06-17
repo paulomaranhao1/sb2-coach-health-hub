@@ -46,8 +46,8 @@ const DailyHabit = () => {
               variant={capsuleTaken ? "default" : "outline"}
               className={`w-full h-16 text-sm font-semibold transition-all duration-300 ${
                 capsuleTaken 
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0 shadow-lg" 
-                  : "border-2 border-emerald-300 dark:border-emerald-600 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 bg-transparent"
+                  ? "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white border-0 shadow-lg" 
+                  : "border-2 border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 bg-transparent"
               }`}
             >
               <div className="flex flex-col items-center gap-1">
@@ -66,7 +66,7 @@ const DailyHabit = () => {
             </Button>
             {capsuleTaken && (
               <div className="text-center mt-2">
-                <Badge className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 text-xs">
+                <Badge className="bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200 text-xs">
                   <Sparkles className="w-3 h-3 mr-1" />
                   Ótimo!
                 </Badge>
@@ -101,10 +101,10 @@ const DailyHabit = () => {
       <Card className="glass border-0 shadow-lg overflow-hidden">
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg">
+            <div className="p-2 rounded-full bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg">
               <Quote className="w-4 h-4" />
             </div>
-            <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed flex-1">{dailyQuote}</p>
+            <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed flex-1 font-medium">{dailyQuote}</p>
           </div>
         </CardContent>
       </Card>
@@ -114,8 +114,8 @@ const DailyHabit = () => {
         <Card className="glass border-0 shadow-sm">
           <CardContent className="p-3">
             <div className="text-center">
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">Dosagem SB2 TURBO</p>
-              <p className="text-xs font-medium text-slate-700 dark:text-slate-300">2 cápsulas/dia</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mb-1 font-medium">Dosagem SB2 TURBO</p>
+              <p className="text-xs font-bold text-slate-900 dark:text-slate-100">2 cápsulas/dia</p>
             </div>
           </CardContent>
         </Card>
@@ -123,8 +123,8 @@ const DailyHabit = () => {
         <Card className="glass border-0 shadow-sm">
           <CardContent className="p-3">
             <div className="text-center">
-              <p className="text-xs text-slate-500 dark:text-slate-400 mb-1">Meta de Água</p>
-              <p className="text-xs font-medium text-slate-700 dark:text-slate-300">8 copos/dia 💧</p>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mb-1 font-medium">Meta de Água</p>
+              <p className="text-xs font-bold text-slate-900 dark:text-slate-100">8 copos/dia 💧</p>
             </div>
           </CardContent>
         </Card>
