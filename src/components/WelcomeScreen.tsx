@@ -16,25 +16,26 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      {/* Imagem de fundo que cobre toda a tela */}
+      {/* Imagem de fundo que cobre toda a tela - agora estática */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
-          backgroundImage: `url('/lovable-uploads/49b74c82-5fef-43c9-b904-b846db8b49f8.png')`
+          backgroundImage: `url('/lovable-uploads/69ce517f-1986-416d-b790-52e63fa8ec70.png')`,
+          backgroundSize: 'cover',
+          backgroundAttachment: 'fixed'
         }}
       />
       
       {/* Overlay sutil para melhor legibilidade do botão */}
-      <div className="absolute inset-0 bg-black/10" />
+      <div className="absolute inset-0 bg-black/5" />
       
       {/* Conteúdo sobreposto */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
-        {/* Logo SB2FIT centralizado - removida pois já está no background */}
         <div className={`transition-all duration-1000 ${
           showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
           <div className="flex flex-col items-center space-y-8">
-            {/* Espaço reservado para manter o layout */}
+            {/* Espaço no topo para deixar o logo do SB2FIT visível */}
             <div className="w-80 h-80" />
           </div>
         </div>
