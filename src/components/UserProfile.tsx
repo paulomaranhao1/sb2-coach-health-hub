@@ -81,24 +81,37 @@ const UserProfile = () => {
       
       if (!user) return;
 
-      // Create update object with only known fields
+      // Preparar dados para atualização
       const updateData: any = {
-        user_id: user.id,
         weight: parseFloat(formData.weight) || null,
         height: parseFloat(formData.height) || null,
         age: parseInt(formData.age) || null,
         gender: formData.gender || null,
+        name: formData.name || null,
         onboarding_completed: true
       };
 
-      // Only add name if it's provided (will work after migration)
-      if (formData.name) {
-        updateData.name = formData.name;
-      }
+      let error;
 
-      const { error } = await supabase
-        .from('user_profiles')
-        .upsert(updateData);
+      if (userProfile) {
+        // Se o perfil já existe, fazer UPDATE
+        const { error: updateError } = await supabase
+          .from('user_profiles')
+          .update(updateData)
+          .eq('user_id', user.id);
+        
+        error = updateError;
+      } else {
+        // Se não existe, fazer INSERT
+        const { error: insertError } = await supabase
+          .from('user_profiles')
+          .insert({
+            user_id: user.id,
+            ...updateData
+          });
+        
+        error = insertError;
+      }
 
       if (error) throw error;
 
