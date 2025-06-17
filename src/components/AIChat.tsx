@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -88,7 +87,7 @@ const AIChat = () => {
                       : 'bg-gray-100 text-gray-800'
                   }`}
                 >
-                  <p className="text-sm">{msg.text}</p>
+                  <p className="text-sm text-white">{msg.text}</p>
                   <p className="text-xs opacity-70 mt-1">{msg.time}</p>
                 </div>
               </div>
