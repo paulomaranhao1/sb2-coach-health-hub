@@ -28,26 +28,26 @@ const ProgressDashboard = () => {
         <CardContent className="space-y-4">
           <div className="space-y-2">
             <div className="flex justify-between text-sm">
-              <span>Peso inicial: 75.2kg</span>
-              <span>Meta: 68.0kg</span>
+              <span className="text-slate-800 dark:text-slate-100">Peso inicial: 75.2kg</span>
+              <span className="text-slate-800 dark:text-slate-100">Meta: 68.0kg</span>
             </div>
             <Progress value={goalProgress} className="h-3" />
-            <div className="text-center text-sm text-gray-700 dark:text-gray-200">
+            <div className="text-center text-sm text-slate-700 dark:text-slate-300">
               {goalProgress.toFixed(1)}% concluído
             </div>
           </div>
           <div className="grid grid-cols-3 gap-4 text-center">
             <div>
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">2.7kg</p>
-              <p className="text-xs text-gray-700 dark:text-gray-200">Perdidos</p>
+              <p className="text-xs text-slate-700 dark:text-slate-300">Perdidos</p>
             </div>
             <div>
-              <p className="text-2xl font-bold text-slate-700 dark:text-slate-200">4.5kg</p>
-              <p className="text-xs text-gray-700 dark:text-gray-200">Restantes</p>
+              <p className="text-2xl font-bold text-slate-700 dark:text-slate-300">4.5kg</p>
+              <p className="text-xs text-slate-700 dark:text-slate-300">Restantes</p>
             </div>
             <div>
               <p className="text-2xl font-bold text-green-600 dark:text-green-400">37%</p>
-              <p className="text-xs text-gray-700 dark:text-gray-200">Completo</p>
+              <p className="text-xs text-slate-700 dark:text-slate-300">Completo</p>
             </div>
           </div>
         </CardContent>
@@ -85,7 +85,7 @@ const ProgressDashboard = () => {
           <CardContent className="p-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">93%</p>
-              <p className="text-sm text-gray-700 dark:text-gray-200">Aderência</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">Aderência</p>
             </div>
           </CardContent>
         </Card>
@@ -93,15 +93,15 @@ const ProgressDashboard = () => {
           <CardContent className="p-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-green-600 dark:text-green-400">12</p>
-              <p className="text-sm text-gray-700 dark:text-gray-200">Dias seguidos</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">Dias seguidos</p>
             </div>
           </CardContent>
         </Card>
         <Card>
           <CardContent className="p-4">
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-700 dark:text-slate-200">0.4kg</p>
-              <p className="text-sm text-gray-700 dark:text-gray-200">Perda semanal</p>
+              <p className="text-2xl font-bold text-slate-700 dark:text-slate-300">0.4kg</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">Perda semanal</p>
             </div>
           </CardContent>
         </Card>
@@ -109,7 +109,7 @@ const ProgressDashboard = () => {
           <CardContent className="p-4">
             <div className="text-center">
               <p className="text-2xl font-bold text-red-600 dark:text-red-400">24.1</p>
-              <p className="text-sm text-gray-700 dark:text-gray-200">IMC atual</p>
+              <p className="text-sm text-slate-700 dark:text-slate-300">IMC atual</p>
             </div>
           </CardContent>
         </Card>
