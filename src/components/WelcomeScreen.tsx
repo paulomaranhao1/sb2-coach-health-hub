@@ -20,9 +20,9 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
       <Card className="w-full max-w-md bg-gray-800/95 backdrop-blur-sm shadow-2xl border-red-500">
         <CardContent className="p-8 text-center space-y-6">
           <div className={`transition-all duration-1000 ${showAnimation ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
-            <div className="w-32 h-32 rounded-2xl overflow-hidden mx-auto mb-4 shadow-lg bg-white p-3">
+            <div className="w-48 h-48 mx-auto mb-4 flex items-center justify-center">
               <img 
-                src="/lovable-uploads/fa5c92e9-ec69-4d8e-8e35-11ad0f882be3.png" 
+                src="/lovable-uploads/56b2f2a3-31ca-4b1d-a48b-64b4b54b99f5.png" 
                 alt="SB2FIT Logo" 
                 className="w-full h-full object-contain"
               />
