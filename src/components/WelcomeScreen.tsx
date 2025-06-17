@@ -16,13 +16,14 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      {/* Imagem de fundo que cobre toda a tela - agora estática */}
+      {/* Imagem de fundo otimizada para diferentes tamanhos de tela */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{
           backgroundImage: `url('/lovable-uploads/69ce517f-1986-416d-b790-52e63fa8ec70.png')`,
-          backgroundSize: 'cover',
-          backgroundAttachment: 'fixed'
+          backgroundSize: 'contain',
+          backgroundPosition: 'center center',
+          backgroundRepeat: 'no-repeat'
         }}
       />
       
