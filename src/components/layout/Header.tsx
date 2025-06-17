@@ -37,7 +37,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
               <h1 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400 bg-clip-text text-transparent">
                 SB2FIT
               </h1>
-              <p className="text-sm text-muted-foreground">Transformação inteligente</p>
+              <p className="text-sm text-slate-600 dark:text-slate-300">Transformação inteligente</p>
             </div>
           </div>
           
