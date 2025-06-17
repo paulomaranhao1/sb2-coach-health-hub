@@ -85,26 +85,64 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   
-  /* Fix input styling to ensure white background */
-  input {
+  /* Fix input styling to ensure proper background and text colors */
+  input, textarea, select {
+    background-color: white !important;
+    color: #1e293b !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+  
+  .dark input, .dark textarea, .dark select {
+    background-color: hsl(var(--card)) !important;
+    color: hsl(var(--card-foreground)) !important;
+    border: 1px solid hsl(var(--border)) !important;
+  }
+  
+  /* Ensure select components and comboboxes have proper styling */
+  [role="combobox"], [role="listbox"], [role="textbox"] {
     background-color: white !important;
     color: #1e293b !important;
   }
   
-  .dark input {
+  .dark [role="combobox"], .dark [role="listbox"], .dark [role="textbox"] {
     background-color: hsl(var(--card)) !important;
     color: hsl(var(--card-foreground)) !important;
   }
   
-  /* Ensure select components also have proper styling */
-  [role="combobox"] {
+  /* Fix form controls specifically */
+  .form-control, [class*="form-"] input, [class*="Form"] input {
     background-color: white !important;
     color: #1e293b !important;
   }
   
-  .dark [role="combobox"] {
+  .dark .form-control, .dark [class*="form-"] input, .dark [class*="Form"] input {
     background-color: hsl(var(--card)) !important;
     color: hsl(var(--card-foreground)) !important;
+  }
+  
+  /* Fix button text colors in light mode */
+  button {
+    color: inherit;
+  }
+  
+  /* Ensure card content has proper text colors */
+  .card, [class*="Card"] {
+    background-color: white;
+    color: #1e293b;
+  }
+  
+  .dark .card, .dark [class*="Card"] {
+    background-color: hsl(var(--card));
+    color: hsl(var(--card-foreground));
+  }
+  
+  /* Override any yellow backgrounds */
+  *[style*="background-color: yellow"], *[style*="background: yellow"] {
+    background-color: white !important;
+  }
+  
+  .dark *[style*="background-color: yellow"], .dark *[style*="background: yellow"] {
+    background-color: hsl(var(--card)) !important;
   }
 }
 
