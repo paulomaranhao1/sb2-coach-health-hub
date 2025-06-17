@@ -27,7 +27,7 @@ export const toastFeedback = {
   warning: (message: string, options?: ToastFeedbackOptions) => {
     toast.warning(message, {
       icon: <AlertCircle className="w-4 h-4" />,
-      className: "bg-yellow-50 border-yellow-200 text-yellow-800 dark:bg-yellow-900/20 dark:border-yellow-800 dark:text-yellow-200",
+      className: "bg-blue-50 border-blue-200 text-blue-800 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-200",
       ...options
     });
   },
