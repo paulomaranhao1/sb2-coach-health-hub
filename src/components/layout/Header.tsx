@@ -26,7 +26,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-indigo-500 to-purple-600 p-1 transform hover:scale-105 transition-transform duration-300">
+            <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-transparent to-transparent border-0 p-0.5 transform hover:scale-105 transition-transform duration-300">
               <img 
                 src="/lovable-uploads/315c645a-f0c2-4b01-b17a-e2337aa7a0bd.png" 
                 alt="SB2FIT Logo" 
