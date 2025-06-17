@@ -6,11 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, Lock, User, ArrowLeft } from 'lucide-react';
+import { Mail, Lock, User, ArrowLeft, CheckCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const AuthScreen = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
+  const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
@@ -99,32 +101,21 @@ const AuthScreen = () => {
         
         console.log('Conta criada, dados:', data);
         
+        // Mostrar tela de verificação de email
+        setShowEmailVerification(true);
+        
         // Criar estatísticas do usuário após signup bem-sucedido
-        if (data.user) {
+        if (data.user && data.user.email_confirmed_at) {
           console.log('Usuário criado, ID:', data.user.id);
           
           // Aguardar um pouco para garantir que o usuário está completamente criado
           setTimeout(async () => {
             try {
               await createUserStats(data.user.id);
-              toast({
-                title: "Conta criada com sucesso!",
-                description: "Bem-vindo ao SB2FIT! Sua conta foi configurada."
-              });
             } catch (statsError) {
               console.error('Erro ao criar estatísticas:', statsError);
-              // Não mostrar erro para o usuário sobre estatísticas, pois a conta foi criada
-              toast({
-                title: "Conta criada!",
-                description: "Bem-vindo ao SB2FIT!"
-              });
             }
           }, 1000);
-        } else {
-          toast({
-            title: "Conta criada!",
-            description: "Verifique seu email para confirmar a conta."
-          });
         }
       }
     } catch (error: any) {
@@ -186,6 +177,56 @@ const AuthScreen = () => {
     }
     setLoading(false);
   };
+
+  if (showEmailVerification) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
+              <img 
+                src="/lovable-uploads/315c645a-f0c2-4b01-b17a-e2337aa7a0bd.png" 
+                alt="SB2FIT Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <CardTitle className="text-2xl font-bold text-green-600">Conta criada com sucesso!</CardTitle>
+            <CardDescription>
+              Verifique seu email para confirmar sua conta
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Alert className="border-blue-200 bg-blue-50">
+              <Mail className="h-4 w-4 text-blue-600" />
+              <AlertDescription className="text-blue-800">
+                <strong>Importante:</strong> Enviamos um email de confirmação para <strong>{email}</strong>. 
+                Clique no link do email para ativar sua conta e começar a usar o SB2FIT.
+              </AlertDescription>
+            </Alert>
+
+            <div className="text-center space-y-3">
+              <p className="text-sm text-gray-600">
+                Não recebeu o email? Verifique sua pasta de spam ou lixo eletrônico.
+              </p>
+              
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setShowEmailVerification(false);
+                  setIsLogin(true);
+                }}
+                className="w-full"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                Voltar ao login
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (isForgotPassword) {
     return (
