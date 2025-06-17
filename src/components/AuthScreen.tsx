@@ -6,15 +6,37 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Mail, Lock, User } from 'lucide-react';
+import { Mail, Lock, User, ArrowLeft } from 'lucide-react';
 
 const AuthScreen = () => {
   const [isLogin, setIsLogin] = useState(true);
+  const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+
+  const createUserStats = async (userId: string) => {
+    try {
+      const { error } = await supabase
+        .from('user_stats')
+        .insert({
+          user_id: userId,
+          points: 0,
+          level: 1,
+          shields: [],
+          stickers: [],
+          streak: 0
+        });
+      
+      if (error) {
+        console.error('Erro ao criar estatísticas do usuário:', error);
+      }
+    } catch (error) {
+      console.error('Erro ao criar estatísticas:', error);
+    }
+  };
 
   const handleGoogleAuth = async () => {
     setLoading(true);
@@ -49,30 +71,139 @@ const AuthScreen = () => {
         });
         if (error) throw error;
       } else {
-        const { error } = await supabase.auth.signUp({
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
             data: {
               name: name
-            }
+            },
+            emailRedirectTo: window.location.origin
           }
         });
+        
         if (error) throw error;
+        
+        // Criar estatísticas do usuário após signup bem-sucedido
+        if (data.user) {
+          await createUserStats(data.user.id);
+        }
+        
         toast({
           title: "Conta criada!",
           description: "Verifique seu email para confirmar a conta."
         });
       }
     } catch (error: any) {
+      let errorMessage = error.message;
+      
+      // Traduzir erros comuns para português
+      if (error.message.includes('User already registered')) {
+        errorMessage = 'Este email já está cadastrado. Tente fazer login.';
+      } else if (error.message.includes('Invalid login credentials')) {
+        errorMessage = 'Email ou senha incorretos.';
+      } else if (error.message.includes('Password should be')) {
+        errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
+      }
+      
       toast({
         title: "Erro na autenticação",
+        description: errorMessage,
+        variant: "destructive"
+      });
+    }
+    setLoading(false);
+  };
+
+  const handleForgotPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) {
+      toast({
+        title: "Email necessário",
+        description: "Por favor, insira seu email para recuperar a senha.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reset-password`
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Email enviado!",
+        description: "Verifique seu email para redefinir sua senha."
+      });
+      setIsForgotPassword(false);
+    } catch (error: any) {
+      toast({
+        title: "Erro ao enviar email",
         description: error.message,
         variant: "destructive"
       });
     }
     setLoading(false);
   };
+
+  if (isForgotPassword) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
+          <CardHeader className="text-center">
+            <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
+              <img 
+                src="/lovable-uploads/3497ffa0-ead8-4742-8fe6-37a983c9cc07.png" 
+                alt="SB2FIT Logo" 
+                className="w-full h-full object-contain"
+              />
+            </div>
+            <CardTitle className="text-2xl font-bold">Recuperar Senha</CardTitle>
+            <CardDescription>
+              Digite seu email para receber um link de redefinição
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <form onSubmit={handleForgotPassword} className="space-y-4">
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="seu@email.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
+              </div>
+
+              <Button type="submit" className="w-full bg-red-600 hover:bg-red-700" disabled={loading}>
+                {loading ? 'Enviando...' : 'Enviar link de recuperação'}
+              </Button>
+            </form>
+
+            <div className="text-center">
+              <Button 
+                variant="link" 
+                onClick={() => setIsForgotPassword(false)}
+                className="text-sm flex items-center justify-center gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Voltar ao login
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center p-4">
@@ -169,6 +300,18 @@ const AuthScreen = () => {
               {loading ? 'Carregando...' : (isLogin ? 'Entrar' : 'Criar conta')}
             </Button>
           </form>
+
+          {isLogin && (
+            <div className="text-center">
+              <Button 
+                variant="link" 
+                onClick={() => setIsForgotPassword(true)}
+                className="text-sm text-gray-600 hover:text-gray-800"
+              >
+                Esqueci minha senha
+              </Button>
+            </div>
+          )}
 
           <div className="text-center">
             <Button 
