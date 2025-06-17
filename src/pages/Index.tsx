@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Calendar, MessageSquare, User, Users, Home, ShoppingCart, Menu, Trophy } from "lucide-react";
+import { Bell, Calendar, MessageSquare, User, Users, Home, ShoppingCart, Menu, Trophy, LogOut } from "lucide-react";
 import WeightTracker from "@/components/WeightTracker";
 import SupplementReminder from "@/components/SupplementReminder";
 import AIChat from "@/components/AIChat";
@@ -135,11 +135,11 @@ const Index = () => {
               <Button 
                 size="sm" 
                 variant="outline" 
-                className="border-red-200 text-white hover:bg-red-700 bg-red-600/30 backdrop-blur-sm hidden sm:flex"
+                className="border-red-200 text-white hover:bg-red-700 bg-red-600/30 backdrop-blur-sm"
                 onClick={handleLogout}
               >
-                <User className="w-4 h-4 mr-2" />
-                Sair
+                <LogOut className="w-4 h-4 mr-2" />
+                <span className="hidden sm:inline">Sair</span>
               </Button>
             </div>
           </div>
@@ -179,6 +179,15 @@ const Index = () => {
                 >
                   <ShoppingCart className="w-4 h-4 mr-2" />
                   Comprar SB2 Turbo
+                </Button>
+                <Button 
+                  onClick={handleLogout}
+                  size="sm" 
+                  variant="outline" 
+                  className="w-full border-red-500 text-red-500 hover:bg-red-500 hover:text-white"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sair
                 </Button>
               </div>
             </div>
