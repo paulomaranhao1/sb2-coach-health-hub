@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,7 +15,7 @@
     --secondary: 241 245 249;
     --secondary-foreground: 51 65 85;
     --muted: 248 250 252;
-    --muted-foreground: 100 116 139;
+    --muted-foreground: 71 85 105;
     --accent: 241 245 249;
     --accent-foreground: 51 65 85;
     --destructive: 239 68 68;
@@ -143,6 +142,15 @@
   
   .dark *[style*="background-color: yellow"], .dark *[style*="background: yellow"] {
     background-color: hsl(var(--card)) !important;
+  }
+  
+  /* Fix text colors specifically for descriptions and muted text */
+  .text-gray-600, .text-muted-foreground, p:not(.text-destructive):not(.font-semibold) {
+    color: #475569 !important;
+  }
+  
+  .dark .text-gray-600, .dark .text-muted-foreground, .dark p:not(.text-destructive):not(.font-semibold) {
+    color: hsl(var(--muted-foreground)) !important;
   }
 }
 
