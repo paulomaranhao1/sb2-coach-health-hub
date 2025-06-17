@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -131,15 +130,6 @@ const Index = () => {
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
               >
                 <Menu className="w-4 h-4" />
-              </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="border-red-200 text-white hover:bg-red-700 bg-red-600/30 backdrop-blur-sm"
-                onClick={handleLogout}
-              >
-                <LogOut className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Sair</span>
               </Button>
             </div>
           </div>
