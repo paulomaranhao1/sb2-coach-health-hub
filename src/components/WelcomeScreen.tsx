@@ -15,7 +15,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col relative overflow-hidden">
+    <div className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-red-500 to-red-700">
       {/* Imagem de fundo otimizada para diferentes tamanhos de tela */}
       <div 
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
@@ -28,7 +28,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
       />
       
       {/* Overlay sutil para melhor legibilidade do botão */}
-      <div className="absolute inset-0 bg-black/5" />
+      <div className="absolute inset-0 bg-black/10" />
       
       {/* Conteúdo sobreposto */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
