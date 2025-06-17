@@ -12,7 +12,7 @@ import UserProfile from "@/components/UserProfile";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import DailyHabit from "@/components/DailyHabit";
 import GamificationSystem from "@/components/GamificationSystem";
-import { supabase } from "@/lib/supabase";
+import { supabase } from "@/integrations/supabase/client";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -23,7 +23,6 @@ const Index = () => {
     // Detectar localização e redirecionar para loja apropriada
     const isInBrazil = navigator.language.includes('pt') || 
                       Intl.DateTimeFormat().resolvedOptions().timeZone.includes('America/Sao_Paulo');
-    
     const url = isInBrazil ? 'https://sb2turbo.com.br' : 'https://sb2turbo.com';
     window.open(url, '_blank');
   };
@@ -207,7 +206,6 @@ const Index = () => {
                 </button>
               </div>
               
-              {/* Botão separado para Perfil */}
               <div className="mt-3 pt-3 border-t border-gray-600">
                 <button
                   onClick={() => setActiveTab("profile")}
@@ -224,7 +222,9 @@ const Index = () => {
             </div>
           </div>
 
+          {/* Tabs Content */}
           <TabsContent value="home" className="space-y-6">
+            {/* Content of 'Início' tab */}
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white border-red-400">
                 <CardHeader className="pb-3">
@@ -265,7 +265,6 @@ const Index = () => {
                 </CardContent>
               </Card>
             </div>
-
             <DailyHabit />
           </TabsContent>
 
