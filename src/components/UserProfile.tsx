@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -178,14 +179,14 @@ const UserProfile = () => {
         </div>
         <div className="grid gap-2">
           <Label htmlFor="gender">Gênero</Label>
-          <Select onValueChange={(value) => setProfile({ ...profile, gender: value })}>
+          <Select onValueChange={(value) => setProfile({ ...profile, gender: value })} value={profile?.gender || ''}>
             <SelectTrigger id="gender">
-              <SelectValue placeholder="Selecione o gênero" defaultValue={profile?.gender || ''} />
+              <SelectValue placeholder="Selecione o gênero" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="male">Masculino</SelectItem>
-              <SelectItem value="female">Feminino</SelectItem>
-              <SelectItem value="other">Outro</SelectItem>
+              <SelectItem value="masculino">Masculino</SelectItem>
+              <SelectItem value="feminino">Feminino</SelectItem>
+              <SelectItem value="outro">Outro</SelectItem>
             </SelectContent>
           </Select>
         </div>
