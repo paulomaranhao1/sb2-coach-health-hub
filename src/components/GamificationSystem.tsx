@@ -23,6 +23,7 @@ const GamificationSystem = () => {
     stickers: [],
     streak: 0
   });
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   const shields = [
@@ -60,10 +61,18 @@ const GamificationSystem = () => {
       }
 
       if (data) {
-        setUserStats(data);
+        setUserStats({
+          points: data.points || 0,
+          level: data.level || 1,
+          shields: data.shields || [],
+          stickers: data.stickers || [],
+          streak: data.streak || 0
+        });
       }
     } catch (error) {
       console.error('Error:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -96,6 +105,11 @@ const GamificationSystem = () => {
       });
     } catch (error) {
       console.error('Error adding points:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível adicionar pontos",
+        variant: "destructive"
+      });
     }
   };
 
@@ -130,6 +144,50 @@ const GamificationSystem = () => {
       });
     } catch (error) {
       console.error('Error unlocking shield:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível desbloquear o escudo",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const collectSticker = async (stickerId: string) => {
+    if (userStats.stickers.includes(stickerId)) return;
+
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const newStickers = [...userStats.stickers, stickerId];
+      
+      const { error } = await supabase
+        .from('user_stats')
+        .upsert({
+          user_id: user.id,
+          points: userStats.points,
+          level: userStats.level,
+          shields: userStats.shields,
+          stickers: newStickers,
+          streak: userStats.streak
+        });
+
+      if (error) throw error;
+
+      setUserStats(prev => ({ ...prev, stickers: newStickers }));
+      
+      const sticker = stickers.find(s => s.id === stickerId);
+      toast({
+        title: "⭐ Nova Figurinha Coletada!",
+        description: `${sticker?.emoji} ${sticker?.name}`
+      });
+    } catch (error) {
+      console.error('Error collecting sticker:', error);
+      toast({
+        title: "Erro",
+        description: "Não foi possível coletar a figurinha",
+        variant: "destructive"
+      });
     }
   };
 
@@ -166,6 +224,14 @@ const GamificationSystem = () => {
       default: return 'bg-gray-100 text-gray-800';
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -268,7 +334,7 @@ const GamificationSystem = () => {
                   <Badge className={`w-full mb-2 justify-center ${getRarityColor(sticker.rarity)}`}>
                     {sticker.rarity}
                   </Badge>
-                  {isCollected && (
+                  {isCollected ? (
                     <Button 
                       size="sm" 
                       variant="outline" 
@@ -277,6 +343,15 @@ const GamificationSystem = () => {
                     >
                       <Share2 className="w-3 h-3 mr-1" />
                       Compartilhar
+                    </Button>
+                  ) : (
+                    <Button 
+                      size="sm" 
+                      variant="outline" 
+                      className="w-full opacity-50"
+                      disabled
+                    >
+                      Não coletada
                     </Button>
                   )}
                 </div>
@@ -298,6 +373,9 @@ const GamificationSystem = () => {
           </Button>
           <Button onClick={() => unlockShield('first_weight')} variant="outline" className="w-full">
             Desbloquear Escudo "Primeira Pesagem"
+          </Button>
+          <Button onClick={() => collectSticker('motivated')} variant="outline" className="w-full">
+            Coletar Figurinha "Motivado"
           </Button>
         </CardContent>
       </Card>
