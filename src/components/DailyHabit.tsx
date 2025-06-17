@@ -38,7 +38,7 @@ const DailyHabit = () => {
     <div className="space-y-4">
       {/* Botões Principais no Topo */}
       <div className="grid grid-cols-2 gap-3">
-        {/* Botão SB2FIT */}
+        {/* Botão SB2 TURBO */}
         <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
           <CardContent className="p-4">
             <Button
@@ -46,20 +46,20 @@ const DailyHabit = () => {
               variant={capsuleTaken ? "default" : "outline"}
               className={`w-full h-16 text-sm font-semibold transition-all duration-300 ${
                 capsuleTaken 
-                  ? "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white border-0 shadow-lg" 
-                  : "border-2 border-indigo-300 dark:border-indigo-600 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 bg-transparent"
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white border-0 shadow-lg" 
+                  : "border-2 border-emerald-300 dark:border-emerald-600 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 bg-transparent"
               }`}
             >
               <div className="flex flex-col items-center gap-1">
                 {capsuleTaken ? (
                   <>
                     <CheckCircle className="w-5 h-5" />
-                    <span className="text-xs">Tomada!</span>
+                    <span className="text-xs">Tomei!</span>
                   </>
                 ) : (
                   <>
                     <Circle className="w-5 h-5" />
-                    <span className="text-xs">SB2FIT</span>
+                    <span className="text-xs text-center leading-tight">TOMEI MEU<br />SB2 TURBO</span>
                   </>
                 )}
               </div>
@@ -85,7 +85,7 @@ const DailyHabit = () => {
             >
               <div className="flex flex-col items-center gap-1">
                 <Droplets className="w-5 h-5" />
-                <span className="text-xs">Água</span>
+                <span className="text-xs text-center leading-tight">BEBI UM COPO<br />DE ÁGUA</span>
               </div>
             </Button>
             <div className="text-center mt-2">
@@ -101,7 +101,7 @@ const DailyHabit = () => {
       <Card className="glass border-0 shadow-lg overflow-hidden">
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg">
+            <div className="p-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg">
               <Quote className="w-4 h-4" />
             </div>
             <p className="text-sm text-foreground/80 leading-relaxed flex-1">{dailyQuote}</p>
@@ -114,7 +114,7 @@ const DailyHabit = () => {
         <Card className="glass border-0 shadow-sm">
           <CardContent className="p-3">
             <div className="text-center">
-              <p className="text-xs text-muted-foreground mb-1">Dosagem SB2FIT</p>
+              <p className="text-xs text-muted-foreground mb-1">Dosagem SB2 TURBO</p>
               <p className="text-xs font-medium">2 cápsulas/dia</p>
             </div>
           </CardContent>
