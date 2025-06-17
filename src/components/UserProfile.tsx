@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -16,6 +15,7 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [formData, setFormData] = useState({
+    name: '',
     weight: '',
     height: '',
     age: '',
@@ -46,6 +46,7 @@ const UserProfile = () => {
         setUserProfile(profile);
         if (profile) {
           setFormData({
+            name: profile.name || '',
             weight: profile.weight?.toString() || '',
             height: profile.height?.toString() || '',
             age: profile.age?.toString() || '',
@@ -84,6 +85,7 @@ const UserProfile = () => {
         .from('user_profiles')
         .upsert({
           user_id: user.id,
+          name: formData.name || null,
           weight: parseFloat(formData.weight) || null,
           height: parseFloat(formData.height) || null,
           age: parseInt(formData.age) || null,
@@ -170,6 +172,17 @@ const UserProfile = () => {
             {isEditing ? (
               <div className="space-y-4">
                 <div>
+                  <Label htmlFor="name" className="text-gray-300">Nome</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="bg-gray-700 border-gray-600 text-white"
+                    placeholder="Como gostaria de ser chamado(a)?"
+                  />
+                </div>
+                <div>
                   <Label htmlFor="weight" className="text-gray-300">Peso (kg)</Label>
                   <Input
                     id="weight"
@@ -223,6 +236,12 @@ const UserProfile = () => {
               </div>
             ) : (
               <div className="space-y-3">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Nome:</span>
+                  <span className="text-white font-medium">
+                    {userProfile?.name || 'Não informado'}
+                  </span>
+                </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">Peso:</span>
                   <span className="text-white font-medium">

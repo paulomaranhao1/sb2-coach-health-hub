@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -18,6 +17,7 @@ import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
 import MobileMenu from "@/components/layout/MobileMenu";
 import TabNavigation from "@/components/layout/TabNavigation";
+import MotivationalGreeting from "@/components/MotivationalGreeting";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -104,6 +104,8 @@ const Index = () => {
       />
 
       <main className="max-w-6xl mx-auto px-4 py-8">
+        <MotivationalGreeting />
+        
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 

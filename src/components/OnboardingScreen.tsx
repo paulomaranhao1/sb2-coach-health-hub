@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Heart, Scale, Ruler, Calendar, ArrowRight } from "lucide-react";
+import { Heart, Scale, Ruler, Calendar, User, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -16,6 +16,7 @@ interface OnboardingScreenProps {
 const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
+    name: "",
     gender: "",
     weight: "",
     height: "",
@@ -25,7 +26,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
   const { toast } = useToast();
 
   const handleNext = () => {
-    if (currentStep < 4) {
+    if (currentStep < 5) {
       setCurrentStep(currentStep + 1);
     } else {
       handleSubmit();
@@ -46,6 +47,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
         .from('user_profiles')
         .insert({
           user_id: user.id,
+          name: formData.name,
           gender: formData.gender,
           weight: parseFloat(formData.weight),
           height: parseFloat(formData.height),
@@ -75,10 +77,11 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
 
   const isStepValid = () => {
     switch (currentStep) {
-      case 1: return formData.gender !== "";
-      case 2: return formData.weight !== "" && parseFloat(formData.weight) > 0;
-      case 3: return formData.height !== "" && parseFloat(formData.height) > 0;
-      case 4: return formData.age !== "" && parseInt(formData.age) > 0;
+      case 1: return formData.name.trim() !== "";
+      case 2: return formData.gender !== "";
+      case 3: return formData.weight !== "" && parseFloat(formData.weight) > 0;
+      case 4: return formData.height !== "" && parseFloat(formData.height) > 0;
+      case 5: return formData.age !== "" && parseInt(formData.age) > 0;
       default: return false;
     }
   };
@@ -86,6 +89,29 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
   const renderStep = () => {
     switch (currentStep) {
       case 1:
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <User className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-2">Como gostaria de ser chamado(a)?</h2>
+              <p className="text-gray-300">Queremos personalizar sua experiência</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-white">Seu nome</Label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Ex: Paulo, Maria, João..."
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="bg-gray-700 border-gray-600 text-white text-center text-2xl py-6"
+              />
+            </div>
+          </div>
+        );
+
+      case 2:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -115,7 +141,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
           </div>
         );
       
-      case 2:
+      case 3:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -139,7 +165,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
           </div>
         );
       
-      case 3:
+      case 4:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -163,7 +189,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
           </div>
         );
       
-      case 4:
+      case 5:
         return (
           <div className="space-y-6">
             <div className="text-center">
@@ -206,7 +232,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
             Vamos conhecer você melhor
           </CardTitle>
           <div className="flex justify-center space-x-2 mt-4">
-            {[1, 2, 3, 4].map((step) => (
+            {[1, 2, 3, 4, 5].map((step) => (
               <div
                 key={step}
                 className={`w-3 h-3 rounded-full transition-colors ${
@@ -238,7 +264,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
             >
               {isLoading ? (
                 "Salvando..."
-              ) : currentStep === 4 ? (
+              ) : currentStep === 5 ? (
                 "Finalizar"
               ) : (
                 <>
