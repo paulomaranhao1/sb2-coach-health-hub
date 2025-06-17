@@ -16,21 +16,26 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
-      {/* Fundo gradiente vermelho */}
-      <div className="absolute inset-0 bg-gradient-to-br from-red-700 via-red-600 to-red-800" />
+      {/* Imagem de fundo que cobre toda a tela */}
+      <div 
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url('/lovable-uploads/49b74c82-5fef-43c9-b904-b846db8b49f8.png')`
+        }}
+      />
+      
+      {/* Overlay sutil para melhor legibilidade do botão */}
+      <div className="absolute inset-0 bg-black/10" />
       
       {/* Conteúdo sobreposto */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
-        {/* Logo SB2FIT centralizado */}
+        {/* Logo SB2FIT centralizado - removida pois já está no background */}
         <div className={`transition-all duration-1000 ${
           showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
           <div className="flex flex-col items-center space-y-8">
-            <img 
-              src="/lovable-uploads/49b74c82-5fef-43c9-b904-b846db8b49f8.png" 
-              alt="SB2FIT Logo" 
-              className="w-80 h-80 object-contain"
-            />
+            {/* Espaço reservado para manter o layout */}
+            <div className="w-80 h-80" />
           </div>
         </div>
 
@@ -41,7 +46,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
           }`}>
             <Button 
               onClick={onContinue}
-              className="w-full bg-white hover:bg-gray-100 text-red-600 font-semibold py-4 px-8 rounded-xl shadow-lg border-0 transform transition-all duration-300 hover:scale-105 hover:shadow-xl relative overflow-hidden group text-lg"
+              className="w-full bg-white/95 hover:bg-white text-red-600 font-semibold py-4 px-8 rounded-xl shadow-2xl border-0 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl backdrop-blur-sm relative overflow-hidden group text-lg"
             >
               <span className="relative z-10">Começar Jornada</span>
             </Button>
