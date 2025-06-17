@@ -37,7 +37,7 @@ const DailyHabit = () => {
   return (
     <div className="space-y-4">
       {/* Frase Motivacional */}
-      <Card className="bg-gradient-to-r from-purple-500 to-pink-500 text-white">
+      <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white border-red-400">
         <CardContent className="p-4">
           <div className="flex items-center gap-3">
             <Quote className="w-6 h-6 flex-shrink-0" />
@@ -47,12 +47,12 @@ const DailyHabit = () => {
       </Card>
 
       {/* Controle de Cápsula */}
-      <Card>
+      <Card className="bg-gray-800 border-gray-700">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center justify-between">
+          <CardTitle className="flex items-center justify-between text-white">
             <span>SB2 Turbo Hoje</span>
             {capsuleTaken && (
-              <Badge className="bg-green-100 text-green-800">
+              <Badge className="bg-red-100 text-red-800">
                 <CheckCircle className="w-3 h-3 mr-1" />
                 Tomado
               </Badge>
@@ -65,8 +65,8 @@ const DailyHabit = () => {
             variant={capsuleTaken ? "default" : "outline"}
             className={`w-full py-6 text-lg font-semibold transition-all ${
               capsuleTaken 
-                ? "bg-green-600 hover:bg-green-700 text-white" 
-                : "border-2 border-blue-600 text-blue-600 hover:bg-blue-50"
+                ? "bg-red-600 hover:bg-red-700 text-white border-0" 
+                : "border-2 border-red-600 text-red-600 hover:bg-red-50 bg-transparent"
             }`}
           >
             {capsuleTaken ? (
@@ -81,35 +81,35 @@ const DailyHabit = () => {
               </div>
             )}
           </Button>
-          <p className="text-xs text-gray-500 text-center mt-2">
+          <p className="text-xs text-gray-400 text-center mt-2">
             {capsuleTaken ? "Ótimo! Continue assim!" : "2 cápsulas por dia - conforme orientação"}
           </p>
         </CardContent>
       </Card>
 
       {/* Lembrete de Água */}
-      <Card>
+      <Card className="bg-gray-800 border-gray-700">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2">
-            <Droplets className="w-5 h-5 text-blue-500" />
+          <CardTitle className="flex items-center gap-2 text-white">
+            <Droplets className="w-5 h-5 text-blue-400" />
             Hidratação
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm text-gray-600">Copos de água hoje:</span>
-            <Badge variant="outline" className="text-blue-600 border-blue-600">
+            <span className="text-sm text-gray-300">Copos de água hoje:</span>
+            <Badge variant="outline" className="text-blue-400 border-blue-400">
               {waterCount} copos
             </Badge>
           </div>
           <Button 
             onClick={addWater}
             variant="outline" 
-            className="w-full border-blue-500 text-blue-600 hover:bg-blue-50"
+            className="w-full border-blue-400 text-blue-400 hover:bg-blue-50 bg-transparent"
           >
             + Bebi um copo d'água
           </Button>
-          <p className="text-xs text-gray-500 text-center mt-2">
+          <p className="text-xs text-gray-400 text-center mt-2">
             Meta: 8 copos por dia 💧
           </p>
         </CardContent>

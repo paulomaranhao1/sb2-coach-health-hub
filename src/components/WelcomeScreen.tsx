@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,24 +16,24 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-red-900 to-black flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-gray-800/95 backdrop-blur-sm shadow-2xl border-red-500">
         <CardContent className="p-8 text-center space-y-6">
           <div className={`transition-all duration-1000 ${showAnimation ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
-            <div className="w-20 h-20 rounded-2xl overflow-hidden mx-auto mb-4 shadow-lg">
+            <div className="w-24 h-24 rounded-2xl overflow-hidden mx-auto mb-4 shadow-lg bg-white p-2">
               <img 
-                src="/lovable-uploads/bf6fca4b-d2fa-4dfb-9422-75f0f01befa7.png" 
-                alt="SB2fit Logo" 
-                className="w-full h-full object-cover"
+                src="/lovable-uploads/3497ffa0-ead8-4742-8fe6-37a983c9cc07.png" 
+                alt="SB2 Turbo Logo" 
+                className="w-full h-full object-contain"
               />
             </div>
           </div>
           
           <div className={`transition-all duration-1000 delay-300 ${showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">SB2fit</h1>
-            <p className="text-gray-600 mb-6">Seu companheiro de emagrecimento</p>
+            <h1 className="text-3xl font-bold text-white mb-2">SB2 TURBO</h1>
+            <p className="text-gray-300 mb-6">Seu companheiro de emagrecimento</p>
             
-            <div className="flex items-center justify-center gap-2 text-purple-600 mb-6">
+            <div className="flex items-center justify-center gap-2 text-red-400 mb-6">
               <Heart className="w-5 h-5" />
               <span className="text-sm font-medium">Transforme sua vida com SB2 Turbo</span>
               <Zap className="w-5 h-5" />
@@ -42,7 +43,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
           <div className={`transition-all duration-1000 delay-500 ${showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
             <Button 
               onClick={onContinue}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-lg shadow-lg"
+              className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-semibold py-3 rounded-lg shadow-lg border-0"
             >
               Começar Jornada
             </Button>
