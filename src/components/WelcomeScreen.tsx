@@ -1,0 +1,53 @@
+
+import { useState, useEffect } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Heart, Zap } from "lucide-react";
+
+interface WelcomeScreenProps {
+  onContinue: () => void;
+}
+
+const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
+  const [showAnimation, setShowAnimation] = useState(false);
+
+  useEffect(() => {
+    setShowAnimation(true);
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-white/95 backdrop-blur-sm shadow-2xl">
+        <CardContent className="p-8 text-center space-y-6">
+          <div className={`transition-all duration-1000 ${showAnimation ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
+            <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
+              <span className="text-white font-bold text-3xl">S2</span>
+            </div>
+          </div>
+          
+          <div className={`transition-all duration-1000 delay-300 ${showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">SB2fit</h1>
+            <p className="text-gray-600 mb-6">Seu companheiro de emagrecimento</p>
+            
+            <div className="flex items-center justify-center gap-2 text-purple-600 mb-6">
+              <Heart className="w-5 h-5" />
+              <span className="text-sm font-medium">Transforme sua vida com SB2 Turbo</span>
+              <Zap className="w-5 h-5" />
+            </div>
+          </div>
+          
+          <div className={`transition-all duration-1000 delay-500 ${showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'}`}>
+            <Button 
+              onClick={onContinue}
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-3 rounded-lg shadow-lg"
+            >
+              Começar Jornada
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default WelcomeScreen;
