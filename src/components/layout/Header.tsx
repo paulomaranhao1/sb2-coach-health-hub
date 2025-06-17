@@ -70,7 +70,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
               <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent">
                 SB2FIT
               </h1>
-              <p className="text-sm text-slate-800 dark:text-slate-200 font-medium">Transformação inteligente</p>
+              <p className="text-sm text-slate-700 dark:text-slate-200 font-medium">Transformação inteligente</p>
             </div>
           </div>
           

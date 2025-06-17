@@ -40,13 +40,13 @@ const SupplementReminder = () => {
           <div className="grid gap-4 md:grid-cols-2">
             <div className="bg-white/20 rounded-lg p-4">
               <h4 className="font-semibold mb-2">Manhã</h4>
-              <p className="text-sm text-red-100">1 cápsula antes do café</p>
-              <p className="text-xs text-red-200 mt-1">Horário recomendado: 08:00</p>
+              <p className="text-sm text-red-50">1 cápsula antes do café</p>
+              <p className="text-xs text-red-100 mt-1">Horário recomendado: 08:00</p>
             </div>
             <div className="bg-white/20 rounded-lg p-4">
               <h4 className="font-semibold mb-2">Noite</h4>
-              <p className="text-sm text-red-100">1 cápsula antes do jantar</p>
-              <p className="text-xs text-red-200 mt-1">Horário recomendado: 20:00</p>
+              <p className="text-sm text-red-50">1 cápsula antes do jantar</p>
+              <p className="text-xs text-red-100 mt-1">Horário recomendado: 20:00</p>
             </div>
           </div>
         </CardContent>
@@ -66,7 +66,7 @@ const SupplementReminder = () => {
                 <Clock className="w-5 h-5 text-gray-500" />
                 <div>
                   <p className="font-medium">{reminder.time}</p>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                  <p className="text-sm text-gray-700 dark:text-gray-200">
                     {reminder.id === 1 ? "Manhã - 1 cápsula" : "Noite - 1 cápsula"}
                   </p>
                 </div>
@@ -104,22 +104,22 @@ const SupplementReminder = () => {
           <div className="flex items-start gap-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
             <div className="text-red-600 dark:text-red-400 text-lg">💧</div>
             <div>
-              <p className="font-medium text-red-900 dark:text-red-100">Hidratação</p>
-              <p className="text-sm text-red-700 dark:text-red-200">Tome sempre com água e mantenha-se hidratado</p>
+              <p className="font-medium text-red-900 dark:text-red-200">Hidratação</p>
+              <p className="text-sm text-red-800 dark:text-red-100">Tome sempre com água e mantenha-se hidratado</p>
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
             <div className="text-green-600 dark:text-green-400 text-lg">🥗</div>
             <div>
-              <p className="font-medium text-green-900 dark:text-green-100">Alimentação</p>
-              <p className="text-sm text-green-700 dark:text-green-200">Combine com alimentação balanceada para melhores resultados</p>
+              <p className="font-medium text-green-900 dark:text-green-200">Alimentação</p>
+              <p className="text-sm text-green-800 dark:text-green-100">Combine com alimentação balanceada para melhores resultados</p>
             </div>
           </div>
           <div className="flex items-start gap-3 p-3 bg-slate-50 dark:bg-slate-900/20 rounded-lg">
             <div className="text-slate-600 dark:text-slate-400 text-lg">🏃‍♀️</div>
             <div>
-              <p className="font-medium text-slate-900 dark:text-slate-100">Exercícios</p>
-              <p className="text-sm text-slate-700 dark:text-slate-200">Pratique atividades físicas regulares</p>
+              <p className="font-medium text-slate-900 dark:text-slate-200">Exercícios</p>
+              <p className="text-sm text-slate-800 dark:text-slate-100">Pratique atividades físicas regulares</p>
             </div>
           </div>
         </CardContent>

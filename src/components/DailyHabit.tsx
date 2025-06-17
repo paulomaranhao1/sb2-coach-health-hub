@@ -104,7 +104,7 @@ const DailyHabit = () => {
             <div className="p-2 rounded-full bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg">
               <Quote className="w-4 h-4" />
             </div>
-            <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed flex-1 font-medium">{dailyQuote}</p>
+            <p className="text-sm text-slate-800 dark:text-slate-100 leading-relaxed flex-1 font-medium">{dailyQuote}</p>
           </div>
         </CardContent>
       </Card>
@@ -114,8 +114,8 @@ const DailyHabit = () => {
         <Card className="glass border-0 shadow-sm">
           <CardContent className="p-3">
             <div className="text-center">
-              <p className="text-xs text-slate-600 dark:text-slate-300 mb-1 font-medium">Dosagem SB2 TURBO</p>
-              <p className="text-xs font-bold text-slate-900 dark:text-slate-100">2 cápsulas/dia</p>
+              <p className="text-xs text-slate-700 dark:text-slate-200 mb-1 font-medium">Dosagem SB2 TURBO</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-100">2 cápsulas/dia</p>
             </div>
           </CardContent>
         </Card>
@@ -123,8 +123,8 @@ const DailyHabit = () => {
         <Card className="glass border-0 shadow-sm">
           <CardContent className="p-3">
             <div className="text-center">
-              <p className="text-xs text-slate-600 dark:text-slate-300 mb-1 font-medium">Meta de Água</p>
-              <p className="text-xs font-bold text-slate-900 dark:text-slate-100">8 copos/dia 💧</p>
+              <p className="text-xs text-slate-700 dark:text-slate-200 mb-1 font-medium">Meta de Água</p>
+              <p className="text-xs font-bold text-slate-800 dark:text-slate-100">8 copos/dia 💧</p>
             </div>
           </CardContent>
         </Card>
