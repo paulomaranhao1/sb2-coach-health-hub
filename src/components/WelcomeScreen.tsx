@@ -36,7 +36,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
           showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
           <div className="flex flex-col items-center space-y-8">
-            {/* Espaço no topo para deixar o logo do SB2FIT visível */}
+            {/* Espaço no topo para deixar o logo do SB2 Coach visível */}
             <div className="w-80 h-80" />
           </div>
         </div>
