@@ -5,8 +5,8 @@ export const useTheme = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     if (typeof window !== 'undefined') {
       const savedTheme = localStorage.getItem('sb2fit-theme');
-      if (savedTheme) return savedTheme as 'light' | 'dark';
-      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      // Se tem tema salvo, usa ele. Senão, usa 'light' como padrão
+      return savedTheme ? (savedTheme as 'light' | 'dark') : 'light';
     }
     return 'light';
   });
