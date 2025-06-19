@@ -34,7 +34,7 @@ const TutorialScreen = ({ onComplete, onSkip }: TutorialScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-purple-50 dark:from-slate-900 dark:via-indigo-950 dark:to-purple-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center p-4">
       <Card className="w-full max-w-lg bg-white/95 backdrop-blur-sm shadow-2xl border-0 animate-fade-in">
         <CardHeader className="text-center pb-4">
           <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
