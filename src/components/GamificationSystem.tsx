@@ -12,6 +12,7 @@ interface UserStats {
   shields: string[];
   stickers: string[];
   streak: number;
+  last_activity_date?: string;
 }
 
 const GamificationSystem = () => {
@@ -23,6 +24,7 @@ const GamificationSystem = () => {
     streak: 0
   });
   const [loading, setLoading] = useState(true);
+  const [dailyPointsClaimed, setDailyPointsClaimed] = useState(false);
   const { toast } = useToast();
 
   const shields = [
@@ -87,8 +89,14 @@ const GamificationSystem = () => {
           level: data.level || 1,
           shields: data.shields || [],
           stickers: data.stickers || [],
-          streak: data.streak || 0
+          streak: data.streak || 0,
+          last_activity_date: data.last_activity_date
         });
+
+        // Verificar se já coletou pontos hoje
+        const today = new Date().toISOString().split('T')[0];
+        const lastActivityDate = data.last_activity_date;
+        setDailyPointsClaimed(lastActivityDate === today);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -102,8 +110,19 @@ const GamificationSystem = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
+      // Verificar se já coletou pontos hoje
+      if (dailyPointsClaimed) {
+        toast({
+          title: "Você já coletou seus pontos hoje! 🎯",
+          description: "Volte amanhã para coletar mais pontos e continuar sua jornada!",
+          variant: "default"
+        });
+        return;
+      }
+
       const newPoints = userStats.points + points;
       const newLevel = Math.floor(newPoints / 100) + 1;
+      const today = new Date().toISOString().split('T')[0];
 
       const { error } = await supabase
         .from('user_stats')
@@ -113,23 +132,33 @@ const GamificationSystem = () => {
           level: newLevel,
           shields: userStats.shields,
           stickers: userStats.stickers,
-          streak: userStats.streak
+          streak: userStats.streak,
+          last_activity_date: today
         });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error adding points:', error);
+        toast({
+          title: "Você já coletou seus pontos hoje! 🎯",
+          description: "Volte amanhã para coletar mais pontos e continuar sua jornada!",
+          variant: "default"
+        });
+        return;
+      }
 
-      setUserStats(prev => ({ ...prev, points: newPoints, level: newLevel }));
+      setUserStats(prev => ({ ...prev, points: newPoints, level: newLevel, last_activity_date: today }));
+      setDailyPointsClaimed(true);
       
       toast({
-        title: `+${points} pontos!`,
+        title: `+${points} pontos! 🎉`,
         description: reason
       });
     } catch (error) {
       console.error('Error adding points:', error);
       toast({
-        title: "Erro",
-        description: "Não foi possível adicionar pontos",
-        variant: "destructive"
+        title: "Você já coletou seus pontos hoje! 🎯",
+        description: "Volte amanhã para coletar mais pontos e continuar sua jornada!",
+        variant: "default"
       });
     }
   };
@@ -240,9 +269,9 @@ const GamificationSystem = () => {
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
       case 'comum': return 'bg-gray-100 text-gray-800';
-      case 'raro': return 'bg-blue-100 text-blue-800';
+      case 'raro': return 'bg-blue-100 text-blue-800';  
       case 'épico': return 'bg-purple-100 text-purple-800';
-      case 'lendário': return 'bg-yellow-100 text-yellow-800';
+      case 'lendário': return 'bg-red-100 text-red-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -384,10 +413,10 @@ const GamificationSystem = () => {
       </Card>
 
       {/* Laboratório de Conquistas */}
-      <Card className="border-2 border-dashed border-yellow-400">
+      <Card className="border-2 border-dashed border-red-400">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Zap className="w-5 h-5 text-yellow-600" />
+            <Zap className="w-5 h-5 text-red-600" />
             Laboratório de Conquistas
           </CardTitle>
           <CardDescription>
@@ -395,9 +424,13 @@ const GamificationSystem = () => {
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
-          <Button onClick={() => addPoints(10, "Peso registrado!")} className="w-full">
+          <Button 
+            onClick={() => addPoints(10, "Peso registrado!")} 
+            className="w-full"
+            disabled={dailyPointsClaimed}
+          >
             <Gift className="w-4 h-4 mr-2" />
-            Ganhar 10 pontos
+            {dailyPointsClaimed ? "Pontos já coletados hoje" : "Ganhar 10 pontos"}
           </Button>
           <Button onClick={() => unlockShield('first_weight')} variant="outline" className="w-full">
             Desbloquear Escudo "Primeira Pesagem"

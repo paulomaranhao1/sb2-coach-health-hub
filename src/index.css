@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -133,15 +134,6 @@
   .dark .card, .dark [class*="Card"] {
     background-color: hsl(var(--card));
     color: hsl(var(--card-foreground));
-  }
-  
-  /* Override any yellow backgrounds */
-  *[style*="background-color: yellow"], *[style*="background: yellow"] {
-    background-color: white !important;
-  }
-  
-  .dark *[style*="background-color: yellow"], .dark *[style*="background: yellow"] {
-    background-color: hsl(var(--card)) !important;
   }
   
   /* Fix text colors specifically for descriptions and muted text */
