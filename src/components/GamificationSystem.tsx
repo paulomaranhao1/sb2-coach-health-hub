@@ -18,7 +18,7 @@ const GamificationSystem = () => {
   const { toast } = useToast();
 
   const shields = [
-    { id: 'first_weight', name: 'Primeira Pesagem', emoji: '⚖️', description: 'Registrou seu primeiro peso' },
+    { id: 'first_weight', name: 'Primeira Pesagem', emoji: '🏋️', description: 'Registrou seu primeiro peso' },
     { id: 'week_streak', name: 'Semana Consistente', emoji: '🔥', description: '7 dias seguidos de uso' },
     { id: 'goal_achiever', name: 'Conquistador', emoji: '🎯', description: 'Atingiu uma meta de peso' },
     { id: 'supplement_master', name: 'Mestre dos Suplementos', emoji: '💊', description: '30 dias tomando suplemento' },

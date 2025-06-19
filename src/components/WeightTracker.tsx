@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Scale, Plus, Trophy, Target, Share2 } from "lucide-react";
+import { Weight, Plus, Trophy, Target, Share2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -243,7 +243,7 @@ const WeightTracker = () => {
       <Card className="border-2 border-red-500 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950 dark:to-orange-950 shadow-xl">
         <CardHeader className="text-center pb-4">
           <CardTitle className="flex items-center justify-center gap-3 text-2xl text-red-600 dark:text-red-400">
-            <Scale className="w-8 h-8" />
+            <Weight className="w-8 h-8" />
             Registrar Peso Hoje
           </CardTitle>
           <CardDescription className="text-lg">
