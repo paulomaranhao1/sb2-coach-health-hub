@@ -7,6 +7,7 @@ import ProgressDashboard from "@/components/ProgressDashboard";
 import UserProfile from "@/components/UserProfile";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import OnboardingScreen from "@/components/OnboardingScreen";
+import TutorialScreen from "@/components/TutorialScreen";
 import DailyHabit from "@/components/DailyHabit";
 import GamificationSystem from "@/components/GamificationSystem";
 import { Loading } from "@/components/ui/loading";
@@ -24,6 +25,7 @@ import GamificationCards from "@/components/home/GamificationCards";
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
@@ -69,6 +71,12 @@ const Index = () => {
         
         if (!profile || !profile.onboarding_completed) {
           setShowOnboarding(true);
+        } else {
+          // Verificar se o usuário já viu o tutorial
+          const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed');
+          if (!hasSeenTutorial) {
+            setShowTutorial(true);
+          }
         }
       }
     } catch (error) {
@@ -82,7 +90,21 @@ const Index = () => {
   const handleOnboardingComplete = () => {
     setShowOnboarding(false);
     checkUserProfile();
+    // Mostrar tutorial após onboarding
+    setShowTutorial(true);
     toastFeedback.success('Onboarding concluído! Bem-vindo ao SB2 Coach!');
+  };
+
+  const handleTutorialComplete = () => {
+    setShowTutorial(false);
+    localStorage.setItem('sb2_tutorial_completed', 'true');
+    toastFeedback.success('Tutorial concluído! Agora você está pronto para começar sua jornada!');
+  };
+
+  const handleTutorialSkip = () => {
+    setShowTutorial(false);
+    localStorage.setItem('sb2_tutorial_completed', 'true');
+    toastFeedback.info('Tutorial pulado. Você pode acessar a ajuda no seu perfil a qualquer momento.');
   };
 
   const handleTabChange = (value: string) => {
@@ -100,6 +122,15 @@ const Index = () => {
 
   if (showOnboarding) {
     return <OnboardingScreen onComplete={handleOnboardingComplete} />;
+  }
+
+  if (showTutorial) {
+    return (
+      <TutorialScreen 
+        onComplete={handleTutorialComplete}
+        onSkip={handleTutorialSkip}
+      />
+    );
   }
 
   if (isLoading) {
