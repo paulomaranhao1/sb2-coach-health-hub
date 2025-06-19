@@ -43,14 +43,23 @@ export const useAuthOperations = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: `${window.location.origin}`,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          },
         }
       });
       
       if (error) throw error;
+      
+      toast({
+        title: "Redirecionando...",
+        description: "Você será redirecionado para fazer login com Google.",
+      });
     } catch (error: any) {
       toast({
-        title: "Erro na autenticação",
+        title: "Erro na autenticação com Google",
         description: error.message,
         variant: "destructive"
       });
@@ -64,7 +73,10 @@ export const useAuthOperations = () => {
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: window.location.origin
+          emailRedirectTo: `${window.location.origin}`,
+          data: {
+            auth_method: 'magic_link'
+          }
         }
       });
       
@@ -80,6 +92,8 @@ export const useAuthOperations = () => {
       
       if (error.message.includes('Invalid email')) {
         errorMessage = 'Email inválido. Verifique o formato.';
+      } else if (error.message.includes('Email rate limit exceeded')) {
+        errorMessage = 'Muitas tentativas. Tente novamente em alguns minutos.';
       }
       
       toast({
@@ -119,9 +133,10 @@ export const useAuthOperations = () => {
           password,
           options: {
             data: {
-              name: name
+              name: name,
+              auth_method: 'email_password'
             },
-            emailRedirectTo: window.location.origin
+            emailRedirectTo: `${window.location.origin}`
           }
         });
         
@@ -132,11 +147,10 @@ export const useAuthOperations = () => {
         // Mostrar tela de verificação de email
         onEmailVerification();
         
-        // Criar estatísticas do usuário após signup bem-sucedido
+        // Criar estatísticas do usuário se o email já estiver confirmado
         if (data.user && data.user.email_confirmed_at) {
           console.log('Usuário criado, ID:', data.user.id);
           
-          // Aguardar um pouco para garantir que o usuário está completamente criado
           setTimeout(async () => {
             try {
               await createUserStats(data.user.id);
@@ -161,6 +175,8 @@ export const useAuthOperations = () => {
         errorMessage = 'Email inválido. Verifique o formato.';
       } else if (error.message.includes('weak password')) {
         errorMessage = 'Senha muito fraca. Use pelo menos 6 caracteres.';
+      } else if (error.message.includes('Email rate limit exceeded')) {
+        errorMessage = 'Muitas tentativas. Tente novamente em alguns minutos.';
       }
       
       toast({
@@ -196,9 +212,15 @@ export const useAuthOperations = () => {
       });
       return true;
     } catch (error: any) {
+      let errorMessage = error.message;
+      
+      if (error.message.includes('Email rate limit exceeded')) {
+        errorMessage = 'Muitas tentativas. Tente novamente em alguns minutos.';
+      }
+      
       toast({
         title: "Erro ao enviar email",
-        description: error.message,
+        description: errorMessage,
         variant: "destructive"
       });
       return false;

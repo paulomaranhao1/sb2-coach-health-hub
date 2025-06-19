@@ -12,7 +12,9 @@ export type Database = {
       user_profiles: {
         Row: {
           age: number | null
+          auth_provider: string | null
           created_at: string
+          email_verified_at: string | null
           gender: string | null
           goal_weight: number | null
           height: number | null
@@ -26,7 +28,9 @@ export type Database = {
         }
         Insert: {
           age?: number | null
+          auth_provider?: string | null
           created_at?: string
+          email_verified_at?: string | null
           gender?: string | null
           goal_weight?: number | null
           height?: number | null
@@ -40,7 +44,9 @@ export type Database = {
         }
         Update: {
           age?: number | null
+          auth_provider?: string | null
           created_at?: string
+          email_verified_at?: string | null
           gender?: string | null
           goal_weight?: number | null
           height?: number | null
