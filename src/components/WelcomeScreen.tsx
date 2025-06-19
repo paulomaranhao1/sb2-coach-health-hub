@@ -17,19 +17,17 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-red-600 to-red-800">
       {/* Conteúdo sobreposto */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen p-4">
-        <div className={`transition-all duration-1000 ${
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen">
+        <div className={`transition-all duration-1000 w-full h-full flex items-center justify-center ${
           showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
-          <div className="flex flex-col items-center space-y-8">
-            {/* Nova imagem SB2 Coach que preenche toda a tela no mobile */}
-            <div className="w-full h-full flex items-center justify-center">
-              <img 
-                src="/lovable-uploads/76d301a9-2e26-42af-9cd0-84ce609153ca.png"
-                alt="SB2 Coach - Seu companheiro de emagrecimento"
-                className="w-full h-screen object-cover sm:object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl sm:h-auto sm:max-h-[70vh]"
-              />
-            </div>
+          {/* Nova imagem SB2 Coach que preenche toda a tela */}
+          <div className="w-full h-full flex items-center justify-center">
+            <img 
+              src="/lovable-uploads/f8f1e84e-87a5-402c-b38e-56ddaf65fcc8.png"
+              alt="SB2 Coach - Seu companheiro de emagrecimento"
+              className="w-full h-screen object-cover sm:object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl sm:h-auto sm:max-h-[70vh]"
+            />
           </div>
         </div>
 
