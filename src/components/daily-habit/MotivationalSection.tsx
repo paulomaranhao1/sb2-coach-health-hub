@@ -25,15 +25,8 @@ const MotivationalSection = () => {
   return (
     <Card className="glass border-0 shadow-lg overflow-hidden">
       <CardContent className="p-5">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0">
-            <img 
-              src="/lovable-uploads/a525ce97-c7e6-461b-a78a-f7d3756a07ff.png" 
-              alt="SB2 Coach Logo" 
-              className="w-full h-full object-contain"
-            />
-          </div>
-          <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed flex-1 font-medium">{dailyQuote}</p>
+        <div className="flex items-center justify-center">
+          <p className="text-sm text-slate-800 dark:text-slate-200 leading-relaxed font-medium text-center">{dailyQuote}</p>
         </div>
       </CardContent>
     </Card>
