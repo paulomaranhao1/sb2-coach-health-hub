@@ -18,12 +18,12 @@ const WaterTracker = () => {
   const waterPercentage = Math.min((waterConsumedMl / recommendedWaterMl) * 100, 100);
 
   return (
-    <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+    <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30">
       <CardContent className="p-5">
         <Button 
           onClick={addWater}
           variant="outline" 
-          className="w-full h-20 border-2 border-blue-300 dark:border-blue-600 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 bg-transparent transition-all duration-300 flex flex-col items-center justify-center gap-2"
+          className="w-full h-20 border-2 border-blue-400 dark:border-blue-500 text-blue-700 dark:text-blue-300 hover:bg-blue-200/50 dark:hover:bg-blue-800/50 bg-white/70 dark:bg-blue-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-2"
         >
           <Droplets className="w-6 h-6 flex-shrink-0" />
           <div className="text-center leading-tight">

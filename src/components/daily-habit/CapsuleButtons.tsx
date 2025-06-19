@@ -24,7 +24,7 @@ const CapsuleButtons = () => {
       {/* Botões SB2 TURBO - Manhã e Noite */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Botão SB2 TURBO Manhã */}
-        <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+        <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-orange-100 to-orange-200 dark:from-orange-900/30 dark:to-orange-800/30">
           <CardContent className="p-4">
             <Button
               onClick={handleMorningCapsuleClick}
@@ -32,7 +32,7 @@ const CapsuleButtons = () => {
               className={`w-full h-24 text-sm font-semibold transition-all duration-300 flex flex-col items-center justify-center gap-2 ${
                 morningCapsule 
                   ? "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white border-0 shadow-lg" 
-                  : "border-2 border-orange-300 dark:border-orange-600 text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 bg-transparent"
+                  : "border-2 border-orange-400 dark:border-orange-500 text-orange-700 dark:text-orange-300 hover:bg-orange-200/50 dark:hover:bg-orange-800/50 bg-white/70 dark:bg-orange-900/20"
               }`}
             >
               <Sun className="w-6 h-6 flex-shrink-0" />
@@ -50,7 +50,7 @@ const CapsuleButtons = () => {
             </Button>
             {morningCapsule && (
               <div className="text-center mt-3">
-                <Badge className="bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 text-sm">
+                <Badge className="bg-orange-200 dark:bg-orange-800 text-orange-800 dark:text-orange-200 text-sm border-orange-300 dark:border-orange-600">
                   <Sparkles className="w-4 h-4 mr-1" />
                   Manhã OK!
                 </Badge>
@@ -60,7 +60,7 @@ const CapsuleButtons = () => {
         </Card>
 
         {/* Botão SB2 TURBO Noite */}
-        <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
+        <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-purple-100 to-purple-200 dark:from-purple-900/30 dark:to-purple-800/30">
           <CardContent className="p-4">
             <Button
               onClick={handleEveningCapsuleClick}
@@ -68,7 +68,7 @@ const CapsuleButtons = () => {
               className={`w-full h-24 text-sm font-semibold transition-all duration-300 flex flex-col items-center justify-center gap-2 ${
                 eveningCapsule 
                   ? "bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-0 shadow-lg" 
-                  : "border-2 border-purple-300 dark:border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20 bg-transparent"
+                  : "border-2 border-purple-400 dark:border-purple-500 text-purple-700 dark:text-purple-300 hover:bg-purple-200/50 dark:hover:bg-purple-800/50 bg-white/70 dark:bg-purple-900/20"
               }`}
             >
               <Moon className="w-6 h-6 flex-shrink-0" />
@@ -86,7 +86,7 @@ const CapsuleButtons = () => {
             </Button>
             {eveningCapsule && (
               <div className="text-center mt-3">
-                <Badge className="bg-purple-100 dark:bg-purple-900 text-purple-800 dark:text-purple-200 text-sm">
+                <Badge className="bg-purple-200 dark:bg-purple-800 text-purple-800 dark:text-purple-200 text-sm border-purple-300 dark:border-purple-600">
                   <Sparkles className="w-4 h-4 mr-1" />
                   Noite OK!
                 </Badge>
@@ -98,11 +98,11 @@ const CapsuleButtons = () => {
 
       {/* Feedback quando ambas as cápsulas foram tomadas */}
       {bothCapsulesTaken && (
-        <Card className="glass border-0 shadow-lg overflow-hidden bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800">
+        <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-r from-green-100 to-emerald-100 dark:from-green-900/30 dark:to-emerald-900/30 border-green-300 dark:border-green-700">
           <CardContent className="p-5">
             <div className="flex items-center gap-4 text-green-800 dark:text-green-200">
-              <div className="p-3 rounded-full bg-green-100 dark:bg-green-900/50">
-                <CheckCircle className="w-6 h-6 text-green-600 dark:text-green-400" />
+              <div className="p-3 rounded-full bg-green-200 dark:bg-green-800/50">
+                <CheckCircle className="w-6 h-6 text-green-700 dark:text-green-300" />
               </div>
               <div>
                 <p className="font-semibold text-lg">Parabéns! Rotina completa!</p>
