@@ -19,6 +19,7 @@ export type Database = {
           id: string
           name: string | null
           onboarding_completed: boolean | null
+          phone_number: string | null
           updated_at: string
           user_id: string | null
           weight: number | null
@@ -32,6 +33,7 @@ export type Database = {
           id?: string
           name?: string | null
           onboarding_completed?: boolean | null
+          phone_number?: string | null
           updated_at?: string
           user_id?: string | null
           weight?: number | null
@@ -45,6 +47,7 @@ export type Database = {
           id?: string
           name?: string | null
           onboarding_completed?: boolean | null
+          phone_number?: string | null
           updated_at?: string
           user_id?: string | null
           weight?: number | null
@@ -90,6 +93,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_subscriptions: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          subscription_type: string
+          updated_at: string
+          user_id: string
+          verification_data: Json | null
+          verification_method: string | null
+          verification_status: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          subscription_type?: string
+          updated_at?: string
+          user_id: string
+          verification_data?: Json | null
+          verification_method?: string | null
+          verification_status?: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          subscription_type?: string
+          updated_at?: string
+          user_id?: string
+          verification_data?: Json | null
+          verification_method?: string | null
+          verification_status?: string
+        }
+        Relationships: []
+      }
       weight_entries: {
         Row: {
           created_at: string
@@ -122,7 +164,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_premium_access: {
+        Args: { user_id_param: string }
+        Returns: boolean
+      }
     }
     Enums: {
       [_ in never]: never

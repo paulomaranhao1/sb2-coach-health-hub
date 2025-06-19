@@ -1,10 +1,11 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Heart, Scale, Ruler, Calendar, User, ArrowRight } from "lucide-react";
+import { Heart, Scale, Ruler, Calendar, User, ArrowRight, Target, Phone } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -19,13 +20,15 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
     gender: "",
     weight: "",
     height: "",
-    age: ""
+    age: "",
+    goalWeight: "",
+    phoneNumber: ""
   });
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
   const handleNext = () => {
-    if (currentStep < 5) {
+    if (currentStep < 7) {
       setCurrentStep(currentStep + 1);
     } else {
       handleSubmit();
@@ -42,20 +45,17 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
         throw new Error("Usuário não encontrado");
       }
 
-      // Create insert object with known fields
       const insertData: any = {
         user_id: user.id,
+        name: formData.name,
         gender: formData.gender,
         weight: parseFloat(formData.weight),
         height: parseFloat(formData.height),
         age: parseInt(formData.age),
+        goal_weight: parseFloat(formData.goalWeight),
+        phone_number: formData.phoneNumber,
         onboarding_completed: true
       };
-
-      // Only add name if provided (will work after migration)
-      if (formData.name) {
-        insertData.name = formData.name;
-      }
 
       const { error } = await supabase
         .from('user_profiles')
@@ -88,6 +88,8 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
       case 3: return formData.weight !== "" && parseFloat(formData.weight) > 0;
       case 4: return formData.height !== "" && parseFloat(formData.height) > 0;
       case 5: return formData.age !== "" && parseInt(formData.age) > 0;
+      case 6: return formData.goalWeight !== "" && parseFloat(formData.goalWeight) > 0;
+      case 7: return formData.phoneNumber.trim() !== "";
       default: return false;
     }
   };
@@ -217,6 +219,53 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
             </div>
           </div>
         );
+
+      case 6:
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <Target className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-2">Qual é seu peso desejado?</h2>
+              <p className="text-gray-300">Digite o peso que você quer alcançar</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="goalWeight" className="text-white">Meta de Peso (kg)</Label>
+              <Input
+                id="goalWeight"
+                type="number"
+                step="0.1"
+                placeholder="Ex: 65.0"
+                value={formData.goalWeight}
+                onChange={(e) => setFormData({ ...formData, goalWeight: e.target.value })}
+                className="bg-gray-700 border-gray-600 text-white text-center text-2xl py-6"
+              />
+            </div>
+          </div>
+        );
+
+      case 7:
+        return (
+          <div className="space-y-6">
+            <div className="text-center">
+              <Phone className="w-16 h-16 text-red-500 mx-auto mb-4" />
+              <h2 className="text-2xl font-bold text-white mb-2">Qual é seu telefone?</h2>
+              <p className="text-gray-300">Para entrarmos em contato sobre ofertas especiais</p>
+            </div>
+            
+            <div className="space-y-2">
+              <Label htmlFor="phoneNumber" className="text-white">Número do WhatsApp</Label>
+              <Input
+                id="phoneNumber"
+                type="tel"
+                placeholder="Ex: (11) 99999-9999"
+                value={formData.phoneNumber}
+                onChange={(e) => setFormData({ ...formData, phoneNumber: e.target.value })}
+                className="bg-gray-700 border-gray-600 text-white text-center text-2xl py-6"
+              />
+            </div>
+          </div>
+        );
       
       default:
         return null;
@@ -230,7 +279,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
           <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
             <img 
               src="/lovable-uploads/315c645a-f0c2-4b01-b17a-e2337aa7a0bd.png" 
-              alt="SB2FIT Logo" 
+              alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
             />
           </div>
@@ -238,10 +287,10 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
             Vamos conhecer você melhor
           </CardTitle>
           <div className="flex justify-center space-x-2 mt-4">
-            {[1, 2, 3, 4, 5].map((step) => (
+            {[1, 2, 3, 4, 5, 6, 7].map((step) => (
               <div
                 key={step}
-                className={`w-3 h-3 rounded-full transition-colors ${
+                className={`w-2 h-2 rounded-full transition-colors ${
                   step <= currentStep ? 'bg-red-500' : 'bg-gray-600'
                 }`}
               />
@@ -270,7 +319,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
             >
               {isLoading ? (
                 "Salvando..."
-              ) : currentStep === 5 ? (
+              ) : currentStep === 7 ? (
                 "Finalizar"
               ) : (
                 <>

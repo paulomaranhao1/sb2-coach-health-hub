@@ -9,9 +9,7 @@ import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 
-type UserProfile = Database['public']['Tables']['user_profiles']['Row'] & {
-  goal_weight?: number;
-};
+type UserProfile = Database['public']['Tables']['user_profiles']['Row'];
 
 const UserProfile = () => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -61,7 +59,6 @@ const UserProfile = () => {
         return;
       }
 
-      // Check if profile already exists
       const { data: existingProfile } = await supabase
         .from('user_profiles')
         .select('id')
@@ -69,7 +66,6 @@ const UserProfile = () => {
         .maybeSingle();
 
       if (existingProfile) {
-        // Update existing profile
         const { error } = await supabase
           .from('user_profiles')
           .update({
@@ -79,6 +75,7 @@ const UserProfile = () => {
             weight: profile.weight,
             goal_weight: profile.goal_weight,
             gender: profile.gender,
+            phone_number: profile.phone_number,
             updated_at: new Date().toISOString()
           })
           .eq('user_id', user.id);
@@ -89,7 +86,6 @@ const UserProfile = () => {
           return;
         }
       } else {
-        // Insert new profile
         const { error } = await supabase
           .from('user_profiles')
           .insert({
@@ -99,7 +95,8 @@ const UserProfile = () => {
             height: profile.height,
             weight: profile.weight,
             goal_weight: profile.goal_weight,
-            gender: profile.gender
+            gender: profile.gender,
+            phone_number: profile.phone_number
           });
 
         if (error) {
@@ -175,6 +172,16 @@ const UserProfile = () => {
             placeholder="Seu peso desejado em kg"
             value={profile?.goal_weight?.toString() || ''}
             onChange={(e) => setProfile({ ...profile, goal_weight: parseFloat(e.target.value) })}
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="phone_number">Telefone/WhatsApp</Label>
+          <Input
+            type="tel"
+            id="phone_number"
+            placeholder="Seu número de telefone"
+            value={profile?.phone_number || ''}
+            onChange={(e) => setProfile({ ...profile, phone_number: e.target.value })}
           />
         </div>
         <div className="grid gap-2">

@@ -1,10 +1,12 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, ShoppingCart, Menu, Sun, Moon } from "lucide-react";
+import { Bell, ShoppingCart, Menu, Sun, Moon, Crown } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { useState, useEffect } from "react";
+import { useSubscription } from "@/hooks/useSubscription";
+import OffersScreen from "../OffersScreen";
 
 interface HeaderProps {
   theme: 'light' | 'dark';
@@ -15,6 +17,8 @@ interface HeaderProps {
 
 const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: HeaderProps) => {
   const [pendingReminders, setPendingReminders] = useState(0);
+  const [showOffers, setShowOffers] = useState(false);
+  const { hasPremiumAccess, subscription } = useSubscription();
 
   useEffect(() => {
     // Calcular lembretes pendentes baseado no horário atual
@@ -42,17 +46,17 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
   }, []);
 
   const handlePurchase = () => {
-    const isInBrazil = navigator.language.includes('pt') || 
-                      Intl.DateTimeFormat().resolvedOptions().timeZone.includes('America/Sao_Paulo');
-    const url = isInBrazil ? 'https://sb2turbo.com.br' : 'https://sb2turbo.com';
-    window.open(url, '_blank');
-    toastFeedback.info('Redirecionando para a loja...');
+    setShowOffers(true);
   };
 
   const handleRemindersClick = () => {
     // Scroll para a seção de lembretes ou mostrar um toast
     toastFeedback.info('Verifique seus lembretes de SB2 TURBO na aba Suplementos');
   };
+
+  if (showOffers) {
+    return <OffersScreen onBack={() => setShowOffers(false)} />;
+  }
 
   return (
     <header className="glass border-b border-border/50 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40">
@@ -70,7 +74,16 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
               <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent">
                 SB2 Coach
               </h1>
-              <p className="text-sm text-slate-800 dark:text-slate-200 font-medium">Transformação inteligente</p>
+              <p className="text-sm text-slate-800 dark:text-slate-200 font-medium flex items-center gap-1">
+                {hasPremiumAccess ? (
+                  <>
+                    <Crown className="w-3 h-3 text-yellow-500" />
+                    Premium Ativo
+                  </>
+                ) : (
+                  "Transformação inteligente"
+                )}
+              </p>
             </div>
           </div>
           
@@ -83,14 +96,24 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
             >
               {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
             </Button>
-            <AnimatedButton 
-              onClick={handlePurchase}
-              size="sm" 
-              className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white border-0 hidden sm:flex shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <ShoppingCart className="w-4 h-4 mr-2" />
-              Comprar SB2 Turbo
-            </AnimatedButton>
+            
+            {!hasPremiumAccess && (
+              <AnimatedButton 
+                onClick={handlePurchase}
+                size="sm" 
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white border-0 hidden sm:flex shadow-lg hover:shadow-xl transition-all duration-300"
+              >
+                <ShoppingCart className="w-4 h-4 mr-2" />
+                Comprar SB2 Turbo
+              </AnimatedButton>
+            )}
+            
+            {subscription?.verification_status === 'pending' && (
+              <Badge variant="secondary" className="hidden sm:flex animate-pulse">
+                Verificando...
+              </Badge>
+            )}
+            
             {pendingReminders > 0 && (
               <Button
                 onClick={handleRemindersClick}
