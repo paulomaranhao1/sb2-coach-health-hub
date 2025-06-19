@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Trophy, Star, Gift, Share2 } from 'lucide-react';
+import { Trophy, Star, Gift, Share2, Zap } from 'lucide-react';
 
 interface UserStats {
   points: number;
@@ -30,14 +29,36 @@ const GamificationSystem = () => {
     { id: 'first_weight', name: 'Primeira Pesagem', emoji: '⚖️', description: 'Registrou seu primeiro peso' },
     { id: 'week_streak', name: 'Semana Consistente', emoji: '🔥', description: '7 dias seguidos de uso' },
     { id: 'goal_achiever', name: 'Conquistador', emoji: '🎯', description: 'Atingiu uma meta de peso' },
-    { id: 'supplement_master', name: 'Mestre dos Suplementos', emoji: '💊', description: '30 dias tomando suplemento' }
+    { id: 'supplement_master', name: 'Mestre dos Suplementos', emoji: '💊', description: '30 dias tomando suplemento' },
+    { id: 'warrior', name: 'Guerreiro', emoji: '⚔️', description: 'Perdeu 5kg do peso inicial' },
+    { id: 'persistent', name: 'Persistente', emoji: '📈', description: '15 dias seguidos de registro' },
+    { id: 'transformer', name: 'Transformador', emoji: '🦋', description: 'Perdeu 10kg do peso inicial' },
+    { id: 'disciplined', name: 'Disciplinado', emoji: '🎖️', description: 'Atingiu 500 pontos' },
+    { id: 'champion', name: 'Campeão', emoji: '🏆', description: '30 dias seguidos de registro' },
+    { id: 'legend', name: 'Lenda', emoji: '👑', description: '100 dias seguidos de registro' },
+    { id: 'master', name: 'Mestre', emoji: '🧙‍♂️', description: 'Atingiu 1000 pontos' },
+    { id: 'phoenix', name: 'Fênix', emoji: '🔥', description: 'Perdeu 15kg do peso inicial' },
+    { id: 'titan', name: 'Titã', emoji: '⚡', description: 'Perdeu 20kg do peso inicial' },
+    { id: 'immortal', name: 'Imortal', emoji: '💎', description: '365 dias seguidos de registro' }
   ];
 
   const stickers = [
     { id: 'motivated', name: 'Motivado', emoji: '💪', rarity: 'comum' },
     { id: 'focused', name: 'Focado', emoji: '🎯', rarity: 'comum' },
+    { id: 'energetic', name: 'Energético', emoji: '⚡', rarity: 'comum' },
+    { id: 'determined', name: 'Determinado', emoji: '🔥', rarity: 'comum' },
+    { id: 'strong', name: 'Forte', emoji: '💥', rarity: 'comum' },
     { id: 'champion', name: 'Campeão', emoji: '🏆', rarity: 'raro' },
-    { id: 'legend', name: 'Lenda', emoji: '👑', rarity: 'épico' }
+    { id: 'warrior', name: 'Guerreiro', emoji: '⚔️', rarity: 'raro' },
+    { id: 'beast', name: 'Fera', emoji: '🦁', rarity: 'raro' },
+    { id: 'machine', name: 'Máquina', emoji: '🤖', rarity: 'raro' },
+    { id: 'unstoppable', name: 'Imparável', emoji: '🚀', rarity: 'raro' },
+    { id: 'legend', name: 'Lenda', emoji: '👑', rarity: 'épico' },
+    { id: 'godlike', name: 'Divino', emoji: '✨', rarity: 'épico' },
+    { id: 'mythical', name: 'Mítico', emoji: '🌟', rarity: 'épico' },
+    { id: 'immortal', name: 'Imortal', emoji: '💎', rarity: 'épico' },
+    { id: 'transcendent', name: 'Transcendente', emoji: '🌈', rarity: 'lendário' },
+    { id: 'ultimate', name: 'Supremo', emoji: '🔮', rarity: 'lendário' }
   ];
 
   useEffect(() => {
@@ -221,6 +242,7 @@ const GamificationSystem = () => {
       case 'comum': return 'bg-gray-100 text-gray-800';
       case 'raro': return 'bg-blue-100 text-blue-800';
       case 'épico': return 'bg-purple-100 text-purple-800';
+      case 'lendário': return 'bg-yellow-100 text-yellow-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
@@ -271,10 +293,10 @@ const GamificationSystem = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            🛡️ Escudos de Conquista
+            🛡️ Coleção de Escudos
           </CardTitle>
           <CardDescription>
-            Desbloqueie escudos completando desafios
+            Desbloqueie escudos completando desafios especiais
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -310,10 +332,10 @@ const GamificationSystem = () => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Star className="w-5 h-5" />
-            Coleção de Figurinhas
+            Álbum de Figurinhas
           </CardTitle>
           <CardDescription>
-            Colecione e compartilhe suas conquistas
+            Colecione figurinhas épicas e compartilhe suas conquistas
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -361,10 +383,16 @@ const GamificationSystem = () => {
         </CardContent>
       </Card>
 
-      {/* Botões de Teste */}
-      <Card>
+      {/* Laboratório de Conquistas */}
+      <Card className="border-2 border-dashed border-yellow-400">
         <CardHeader>
-          <CardTitle>🎮 Ações de Teste</CardTitle>
+          <CardTitle className="flex items-center gap-2">
+            <Zap className="w-5 h-5 text-yellow-600" />
+            Laboratório de Conquistas
+          </CardTitle>
+          <CardDescription>
+            Experimente desbloquear conquistas para testar o sistema
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <Button onClick={() => addPoints(10, "Peso registrado!")} className="w-full">
