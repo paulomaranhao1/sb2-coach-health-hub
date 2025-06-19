@@ -43,7 +43,7 @@ const UserProfile = ({ onNavigateToHome }: UserProfileProps) => {
         profile={profile}
         setProfile={setProfile}
         isSaving={isSaving}
-        handleSave={handleSave}
+        onSave={handleSave}
       />
 
       {/* Configurações de Notificação */}
