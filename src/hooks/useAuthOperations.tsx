@@ -58,6 +58,41 @@ export const useAuthOperations = () => {
     setLoading(false);
   };
 
+  const handleMagicLink = async (email: string) => {
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email,
+        options: {
+          emailRedirectTo: window.location.origin
+        }
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Link mágico enviado!",
+        description: "Verifique seu email e clique no link para entrar.",
+      });
+      return true;
+    } catch (error: any) {
+      let errorMessage = error.message;
+      
+      if (error.message.includes('Invalid email')) {
+        errorMessage = 'Email inválido. Verifique o formato.';
+      }
+      
+      toast({
+        title: "Erro ao enviar link mágico",
+        description: errorMessage,
+        variant: "destructive"
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleEmailAuth = async (
     email: string, 
     password: string, 
@@ -176,6 +211,7 @@ export const useAuthOperations = () => {
     loading,
     handleGoogleAuth,
     handleEmailAuth,
-    handleForgotPassword
+    handleForgotPassword,
+    handleMagicLink
   };
 };

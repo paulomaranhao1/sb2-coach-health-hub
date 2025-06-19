@@ -4,14 +4,16 @@ import { useAuthOperations } from '@/hooks/useAuthOperations';
 import AuthForm from './auth/AuthForm';
 import ForgotPasswordForm from './auth/ForgotPasswordForm';
 import EmailVerificationScreen from './auth/EmailVerificationScreen';
+import MagicLinkForm from './auth/MagicLinkForm';
 
 const AuthScreen = () => {
-  const [isLogin, setIsLogin] = useState(false); // Mudado para false para mostrar cadastro primeiro
+  const [isLogin, setIsLogin] = useState(false);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
+  const [showMagicLink, setShowMagicLink] = useState(false);
   const [email, setEmail] = useState('');
   
-  const { loading, handleGoogleAuth, handleEmailAuth, handleForgotPassword } = useAuthOperations();
+  const { loading, handleGoogleAuth, handleEmailAuth, handleForgotPassword, handleMagicLink } = useAuthOperations();
 
   const onEmailAuth = (emailValue: string, password: string, name: string) => {
     setEmail(emailValue);
@@ -22,9 +24,15 @@ const AuthScreen = () => {
     return handleForgotPassword(emailValue);
   };
 
+  const onMagicLink = (emailValue: string) => {
+    setEmail(emailValue);
+    return handleMagicLink(emailValue);
+  };
+
   const resetToLogin = () => {
     setShowEmailVerification(false);
     setIsForgotPassword(false);
+    setShowMagicLink(false);
     setIsLogin(true);
   };
 
@@ -47,6 +55,16 @@ const AuthScreen = () => {
     );
   }
 
+  if (showMagicLink) {
+    return (
+      <MagicLinkForm
+        onSubmit={onMagicLink}
+        onBackToLogin={() => setShowMagicLink(false)}
+        loading={loading}
+      />
+    );
+  }
+
   return (
     <AuthForm
       isLogin={isLogin}
@@ -54,6 +72,7 @@ const AuthScreen = () => {
       onGoogleAuth={handleGoogleAuth}
       onEmailAuth={onEmailAuth}
       onForgotPassword={() => setIsForgotPassword(true)}
+      onMagicLink={() => setShowMagicLink(true)}
       loading={loading}
     />
   );

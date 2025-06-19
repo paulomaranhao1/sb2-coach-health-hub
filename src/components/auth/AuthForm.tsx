@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Mail, Lock, User } from 'lucide-react';
+import { Mail, Lock, User, Sparkles } from 'lucide-react';
 import GoogleAuthButton from './GoogleAuthButton';
 
 interface AuthFormProps {
@@ -13,6 +13,7 @@ interface AuthFormProps {
   onGoogleAuth: () => void;
   onEmailAuth: (email: string, password: string, name: string) => void;
   onForgotPassword: () => void;
+  onMagicLink: () => void;
   loading: boolean;
 }
 
@@ -22,6 +23,7 @@ const AuthForm = ({
   onGoogleAuth, 
   onEmailAuth, 
   onForgotPassword, 
+  onMagicLink,
   loading 
 }: AuthFormProps) => {
   const [email, setEmail] = useState('');
@@ -51,6 +53,15 @@ const AuthForm = ({
         </CardHeader>
         <CardContent className="space-y-4">
           <GoogleAuthButton onClick={onGoogleAuth} disabled={loading} />
+
+          <Button 
+            onClick={onMagicLink} 
+            disabled={loading}
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
+          >
+            <Sparkles className="w-4 h-4 mr-2" />
+            Entrar com Link Mágico
+          </Button>
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
