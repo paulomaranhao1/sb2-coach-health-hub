@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, Bell, MessageSquare, User, Trophy, ShoppingCart, LogOut, Sun, Moon } from "lucide-react";
+import { Home, Calendar, Bell, MessageSquare, User, Trophy, ShoppingCart, LogOut, Sun, Moon, BookOpen } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
@@ -28,6 +28,14 @@ const MobileMenu = ({
     const url = isInBrazil ? 'https://sb2turbo.com.br' : 'https://sb2turbo.com';
     window.open(url, '_blank');
     toastFeedback.info('Redirecionando para a loja...');
+  };
+
+  const handleTutorial = () => {
+    // Remover a flag do tutorial para que ele apareça novamente
+    localStorage.removeItem('sb2_tutorial_completed');
+    // Recarregar a página para mostrar o tutorial
+    window.location.reload();
+    toastFeedback.info('Reiniciando tutorial...');
   };
 
   const handleLogout = async () => {
@@ -88,7 +96,18 @@ const MobileMenu = ({
               <span>{item.label}</span>
             </button>
           ))}
+          
           <div className="pt-4 border-t border-gray-700 dark:border-gray-600 space-y-2">
+            <Button 
+              onClick={handleTutorial}
+              size="sm" 
+              variant="outline" 
+              className="w-full border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white transition-all duration-200"
+            >
+              <BookOpen className="w-4 h-4 mr-2" />
+              Tutorial & Ajuda
+            </Button>
+            
             <AnimatedButton 
               onClick={handlePurchase}
               size="sm" 
@@ -97,6 +116,7 @@ const MobileMenu = ({
               <ShoppingCart className="w-4 h-4 mr-2" />
               Comprar SB2 Turbo
             </AnimatedButton>
+            
             <Button 
               onClick={handleLogout}
               size="sm" 
