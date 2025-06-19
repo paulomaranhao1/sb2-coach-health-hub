@@ -74,7 +74,7 @@ const MotivationalGreeting = () => {
 
   return (
     <div className="glass rounded-2xl p-3 mb-6 border-0 shadow-lg">
-      <div className="text-center">
+      <div className="text-left">
         <span className="text-xs text-foreground/80 font-medium leading-tight">
           Olá, {userName}! 👋 {currentPhrase}
         </span>
