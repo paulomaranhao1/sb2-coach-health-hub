@@ -22,10 +22,10 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
           showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
           <div className="flex flex-col items-center space-y-8">
-            {/* Imagem estática com tamanho fixo */}
+            {/* Nova logomarca SB2 Coach com tamanho fixo */}
             <div className="w-80 h-80 flex items-center justify-center">
               <img 
-                src="/lovable-uploads/f8d3446f-c476-4047-b787-bbb8dbeaa75a.png"
+                src="/lovable-uploads/ef8e546e-0fa7-4351-b912-84d69bd9b051.png"
                 alt="SB2 Coach"
                 className="w-80 h-80 object-contain"
               />
