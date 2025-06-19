@@ -7,7 +7,7 @@ import { Database } from '@/integrations/supabase/types';
 type UserProfile = Database['public']['Tables']['user_profiles']['Row'];
 type UserStats = Database['public']['Tables']['user_stats']['Row'];
 
-export const useUserProfile = () => {
+export const useUserProfile = (onSaveSuccess?: () => void) => {
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -128,6 +128,9 @@ export const useUserProfile = () => {
       }
 
       toast.success('Perfil salvo com sucesso!');
+      if (onSaveSuccess) {
+        setTimeout(onSaveSuccess, 1000); // Aguarda 1 segundo para mostrar o toast
+      }
     } catch (error) {
       console.error('Erro ao salvar perfil:', error);
       toast.error('Erro ao salvar perfil');

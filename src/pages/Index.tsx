@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
@@ -79,6 +78,10 @@ const Index = () => {
   const handleTabChange = (value: string) => {
     setActiveTab(value);
     setShowMobileMenu(false);
+  };
+
+  const handleNavigateToHome = () => {
+    setActiveTab('home');
   };
 
   if (showWelcome) {
@@ -257,7 +260,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="profile">
-            <UserProfile />
+            <UserProfile onNavigateToHome={handleNavigateToHome} />
           </TabsContent>
         </Tabs>
       </main>

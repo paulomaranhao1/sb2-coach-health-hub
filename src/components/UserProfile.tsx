@@ -3,7 +3,11 @@ import ShieldsDisplay from './profile/ShieldsDisplay';
 import ProfileForm from './profile/ProfileForm';
 import { useUserProfile } from '@/hooks/useUserProfile';
 
-const UserProfile = () => {
+interface UserProfileProps {
+  onNavigateToHome?: () => void;
+}
+
+const UserProfile = ({ onNavigateToHome }: UserProfileProps) => {
   const {
     profile,
     setProfile,
@@ -11,7 +15,7 @@ const UserProfile = () => {
     isLoading,
     isSaving,
     handleSave
-  } = useUserProfile();
+  } = useUserProfile(onNavigateToHome);
 
   if (isLoading) {
     return <div>Carregando perfil...</div>;
