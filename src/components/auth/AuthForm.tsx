@@ -41,12 +41,12 @@ const AuthForm = ({
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
             <img 
-              src="/lovable-uploads/315c645a-f0c2-4b01-b17a-e2337aa7a0bd.png" 
-              alt="SB2FIT Logo" 
+              src="/lovable-uploads/a525ce97-c7e6-461b-a78a-f7d3756a07ff.png" 
+              alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
             />
           </div>
-          <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-100">SB2FIT</CardTitle>
+          <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-100">SB2 Coach</CardTitle>
           <CardDescription className="text-slate-700 dark:text-slate-300">
             {isLogin ? 'Entre na sua conta' : 'Crie sua conta'}
           </CardDescription>
