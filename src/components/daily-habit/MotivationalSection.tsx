@@ -8,7 +8,7 @@ const MotivationalSection = () => {
 
   const motivationalQuotes = [
     "Cada cápsula é um passo mais perto do seu objetivo! 💪",
-    "Seu corpo está se transformando a cada dia com SB2FIT! ✨",
+    "Seu corpo está se transformando a cada dia com SB2 Coach! ✨",
     "Consistência é a chave do sucesso. Continue assim! 🔥",
     "Você é mais forte do que imagina. Persist! 🌟",
     "Cada dia é uma nova oportunidade de cuidar de você! 💖",
