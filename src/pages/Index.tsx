@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import WeightTracker from "@/components/WeightTracker";
@@ -13,6 +12,7 @@ import GamificationSystem from "@/components/GamificationSystem";
 import { Loading } from "@/components/ui/loading";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { useTheme } from "@/hooks/useTheme";
+import { useNotifications } from "@/hooks/useNotifications";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
 import MobileMenu from "@/components/layout/MobileMenu";
@@ -30,10 +30,18 @@ const Index = () => {
   const [userStats, setUserStats] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { theme, toggleTheme } = useTheme();
+  const { permission, startNotificationSchedule } = useNotifications();
 
   useEffect(() => {
     checkUserProfile();
   }, []);
+
+  // Iniciar notificações quando o usuário concluir o onboarding
+  useEffect(() => {
+    if (userProfile?.onboarding_completed && permission === 'granted') {
+      startNotificationSchedule();
+    }
+  }, [userProfile, permission, startNotificationSchedule]);
 
   const checkUserProfile = async () => {
     try {
