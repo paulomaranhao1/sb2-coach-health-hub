@@ -22,25 +22,25 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
           showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
           <div className="flex flex-col items-center space-y-8">
-            {/* Nova logomarca SB2 Coach com tamanho fixo */}
-            <div className="w-80 h-80 flex items-center justify-center">
+            {/* Nova imagem SB2 Coach estática e responsiva */}
+            <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl flex items-center justify-center">
               <img 
-                src="/lovable-uploads/ef8e546e-0fa7-4351-b912-84d69bd9b051.png"
-                alt="SB2 Coach"
-                className="w-80 h-80 object-contain"
+                src="/lovable-uploads/f5b349d6-fd30-4802-8786-6097793a0967.png"
+                alt="SB2 Coach - Seu companheiro de emagrecimento"
+                className="w-full h-auto object-contain max-h-[60vh] sm:max-h-[50vh] md:max-h-[55vh] lg:max-h-[60vh]"
               />
             </div>
           </div>
         </div>
 
         {/* Área do botão na parte inferior */}
-        <div className="absolute bottom-20 left-4 right-4">
+        <div className="absolute bottom-8 sm:bottom-12 md:bottom-16 lg:bottom-20 left-4 right-4 max-w-md mx-auto">
           <div className={`transition-all duration-1000 delay-500 ${
             showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
             <Button 
               onClick={onContinue}
-              className="w-full bg-white/95 hover:bg-white text-red-600 font-semibold py-4 px-8 rounded-xl shadow-2xl border-0 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl backdrop-blur-sm relative overflow-hidden group text-lg"
+              className="w-full bg-white/95 hover:bg-white text-red-600 font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-2xl border-0 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl backdrop-blur-sm relative overflow-hidden group text-base sm:text-lg"
             >
               <span className="relative z-10">Começar Jornada</span>
             </Button>
