@@ -63,7 +63,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
       <div className="max-w-6xl mx-auto px-4 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-2xl overflow-hidden shadow-xl bg-transparent border-0 p-0 transform hover:scale-105 transition-transform duration-300">
+            <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0">
               <img 
                 src="/lovable-uploads/6d214ba3-79e5-454c-a90a-dd8c85f58fd3.png" 
                 alt="SB2 Coach Logo" 
