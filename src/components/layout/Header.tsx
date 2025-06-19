@@ -128,7 +128,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
             <Button
               size="sm"
               variant="outline"
-              className="glass border-0 hover:scale-105 transition-all duration-200 sm:hidden"
+              className="glass border-0 hover:scale-105 transition-all duration-200"
               onClick={() => setShowMobileMenu(!showMobileMenu)}
             >
               <Menu className="w-4 h-4" />

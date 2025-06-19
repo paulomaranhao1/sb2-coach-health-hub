@@ -53,7 +53,7 @@ const MobileMenu = ({
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 z-50 sm:hidden animate-fade-in" 
+      className="fixed inset-0 bg-black/50 z-50 animate-fade-in" 
       onClick={() => setShowMobileMenu(false)}
     >
       <div 
