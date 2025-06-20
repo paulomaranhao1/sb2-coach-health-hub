@@ -1,10 +1,13 @@
+
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Droplets } from "lucide-react";
+
 const WaterTracker = () => {
   const [waterCount, setWaterCount] = useState(0);
+
   const addWater = () => {
     setWaterCount(prev => prev + 1);
   };
@@ -13,9 +16,15 @@ const WaterTracker = () => {
   const waterConsumedMl = waterCount * 200; // 200ml por copo
   const recommendedWaterMl = 2000; // 2000ml fixo (10 copos)
   const waterPercentage = Math.min(waterConsumedMl / recommendedWaterMl * 100, 100);
-  return <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30">
+
+  return (
+    <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30">
       <CardContent className="p-5">
-        <Button onClick={addWater} variant="outline" className="w-full h-20 border-2 border-blue-400 dark:border-blue-500 text-blue-700 dark:text-blue-300 hover:bg-blue-200/50 dark:hover:bg-blue-800/50 bg-white/70 dark:bg-blue-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-2">
+        <Button 
+          onClick={addWater} 
+          variant="outline" 
+          className="w-full h-20 border-2 border-blue-400 dark:border-blue-500 text-slate-800 dark:text-blue-300 hover:bg-blue-200/50 dark:hover:bg-blue-800/50 bg-white/70 dark:bg-blue-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-2"
+        >
           <Droplets className="w-6 h-6 flex-shrink-0" />
           <div className="text-center leading-tight">
             <div className="font-semibold text-base">BEBI UM COPO</div>
@@ -41,21 +50,33 @@ const WaterTracker = () => {
           
           {/* Barra de progresso */}
           <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mt-3">
-            <div className="bg-blue-500 h-3 rounded-full transition-all duration-300" style={{
-            width: `${waterPercentage}%`
-          }}></div>
+            <div 
+              className="bg-blue-500 h-3 rounded-full transition-all duration-300" 
+              style={{ width: `${waterPercentage}%` }}
+            ></div>
           </div>
           
           <div className="text-center">
-            <Badge variant="outline" className={`text-sm ${waterPercentage >= 100 ? 'text-green-600 dark:text-green-400 border-green-300 dark:border-green-600' : 'text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-600'}`}>
+            <Badge 
+              variant="outline" 
+              className={`text-sm ${
+                waterPercentage >= 100 
+                  ? 'text-green-600 dark:text-green-400 border-green-300 dark:border-green-600' 
+                  : 'text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-600'
+              }`}
+            >
               {waterPercentage.toFixed(0)}% da meta diária
               {waterPercentage >= 100 && ' 🎉'}
             </Badge>
           </div>
           
-          <div className="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">Meta padrão: 2000ml (10 copos) por dia de acordo com a OMS</div>
+          <div className="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">
+            Meta padrão: 2000ml (10 copos) por dia de acordo com a OMS
+          </div>
         </div>
       </CardContent>
-    </Card>;
+    </Card>
+  );
 };
+
 export default WaterTracker;
