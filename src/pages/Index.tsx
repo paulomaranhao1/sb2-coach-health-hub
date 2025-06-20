@@ -19,9 +19,8 @@ import Header from "@/components/layout/Header";
 import MobileMenu from "@/components/layout/MobileMenu";
 import TabNavigation from "@/components/layout/TabNavigation";
 import MotivationalGreeting from "@/components/MotivationalGreeting";
-import StatusCards from "@/components/home/StatusCards";
-import GamificationCards from "@/components/home/GamificationCards";
 import ComingSoonFeatures from "@/components/ComingSoonFeatures";
+import StatisticsOverview from "@/components/statistics/StatisticsOverview";
 import { Camera, Clock, BarChart3 } from "lucide-react";
 
 const Index = () => {
@@ -209,9 +208,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="statistics" className="space-y-6">
-            <StatusCards userProfile={userProfile} userStats={userStats} />
-            <GamificationCards userStats={userStats} />
-            <ProgressDashboard />
+            <StatisticsOverview userProfile={userProfile} userStats={userStats} />
           </TabsContent>
 
           <TabsContent value="profile">
