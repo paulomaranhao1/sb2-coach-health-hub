@@ -6,31 +6,11 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Flame, Droplets, Wheat, Beef, Share2, BookOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-interface FoodItem {
-  name: string;
-  quantity: string;
-  calories: number;
-  protein: number;
-  carbs: number;
-  fat: number;
-  fiber?: number;
-  sugar?: number;
-}
-
-interface NutritionalInfo {
-  totalCalories: number;
-  totalProtein: number;
-  totalCarbs: number;
-  totalFat: number;
-  foods: FoodItem[];
-  healthScore: number;
-  tips: string[];
-}
+import { FoodAnalysis } from "@/lib/foodAnalysis";
 
 interface FoodAnalysisResultProps {
-  analysis: NutritionalInfo;
-  onSave?: (analysis: NutritionalInfo) => void;
+  analysis: FoodAnalysis;
+  onSave?: (analysis: FoodAnalysis) => void;
 }
 
 const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
@@ -38,7 +18,7 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
 
   const handleShare = async () => {
     try {
-      const shareText = `Análise SB2FIT:\n🔥 ${analysis.totalCalories} calorias\n💪 ${analysis.totalProtein}g proteína\n🌾 ${analysis.totalCarbs}g carboidrato\n🥑 ${analysis.totalFat}g gordura\n\nPontuação: ${analysis.healthScore}/100`;
+      const shareText = `Análise SB2FIT:\n🔥 ${analysis.totalCalories} calorias\n💪 ${analysis.macros.protein}g proteína\n🌾 ${analysis.macros.carbs}g carboidrato\n🥑 ${analysis.macros.fat}g gordura`;
       
       if (navigator.share) {
         await navigator.share({
@@ -67,19 +47,10 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
     }
   };
 
-  const getHealthScoreColor = (score: number) => {
-    if (score >= 80) return "text-green-600 dark:text-green-400";
-    if (score >= 60) return "text-blue-600 dark:text-blue-400";
-    if (score >= 40) return "text-orange-600 dark:text-orange-400";
-    return "text-red-600 dark:text-red-400";
-  };
-
-  const getHealthScoreBg = (score: number) => {
-    if (score >= 80) return "bg-green-100 dark:bg-green-900";
-    if (score >= 60) return "bg-blue-100 dark:bg-blue-900";
-    if (score >= 40) return "bg-orange-100 dark:bg-orange-900";
-    return "bg-red-100 dark:bg-red-900";
-  };
+  // Calcular porcentagens dos macros
+  const proteinPercent = Math.round((analysis.macros.protein * 4 / analysis.totalCalories) * 100);
+  const carbsPercent = Math.round((analysis.macros.carbs * 4 / analysis.totalCalories) * 100);
+  const fatPercent = Math.round((analysis.macros.fat * 9 / analysis.totalCalories) * 100);
 
   return (
     <div className="space-y-6">
@@ -89,13 +60,13 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
           <CardTitle className="text-2xl text-gray-800 dark:text-gray-200">
             📊 Análise Nutricional
           </CardTitle>
-          <div className={`inline-flex items-center justify-center w-20 h-20 rounded-full ${getHealthScoreBg(analysis.healthScore)} mx-auto`}>
-            <span className={`text-2xl font-bold ${getHealthScoreColor(analysis.healthScore)}`}>
-              {analysis.healthScore}
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-green-100 dark:bg-green-900 mx-auto">
+            <span className="text-2xl font-bold text-green-600 dark:text-green-400">
+              ✓
             </span>
           </div>
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            Pontuação de Saúde
+            Análise Concluída
           </p>
         </CardHeader>
       </Card>
@@ -127,10 +98,10 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
                 Proteína
               </Badge>
               <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                {analysis.totalProtein}g
+                {analysis.macros.protein}g
               </p>
               <p className="text-xs text-gray-500">
-                {Math.round((analysis.totalProtein * 4 / analysis.totalCalories) * 100)}%
+                {proteinPercent}%
               </p>
             </div>
             
@@ -140,10 +111,10 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
                 Carboidrato
               </Badge>
               <p className="text-2xl font-bold text-green-600 dark:text-green-400">
-                {analysis.totalCarbs}g
+                {analysis.macros.carbs}g
               </p>
               <p className="text-xs text-gray-500">
-                {Math.round((analysis.totalCarbs * 4 / analysis.totalCalories) * 100)}%
+                {carbsPercent}%
               </p>
             </div>
             
@@ -153,10 +124,10 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
                 Gordura
               </Badge>
               <p className="text-2xl font-bold text-purple-600 dark:text-purple-400">
-                {analysis.totalFat}g
+                {analysis.macros.fat}g
               </p>
               <p className="text-xs text-gray-500">
-                {Math.round((analysis.totalFat * 9 / analysis.totalCalories) * 100)}%
+                {fatPercent}%
               </p>
             </div>
           </div>
@@ -166,10 +137,10 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-blue-600 dark:text-blue-400">Proteína</span>
-                <span>{Math.round((analysis.totalProtein * 4 / analysis.totalCalories) * 100)}%</span>
+                <span>{proteinPercent}%</span>
               </div>
               <Progress 
-                value={(analysis.totalProtein * 4 / analysis.totalCalories) * 100} 
+                value={proteinPercent} 
                 className="h-2 bg-blue-100 dark:bg-blue-900"
               />
             </div>
@@ -177,10 +148,10 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-green-600 dark:text-green-400">Carboidrato</span>
-                <span>{Math.round((analysis.totalCarbs * 4 / analysis.totalCalories) * 100)}%</span>
+                <span>{carbsPercent}%</span>
               </div>
               <Progress 
-                value={(analysis.totalCarbs * 4 / analysis.totalCalories) * 100} 
+                value={carbsPercent} 
                 className="h-2 bg-green-100 dark:bg-green-900"
               />
             </div>
@@ -188,10 +159,10 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
             <div>
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-purple-600 dark:text-purple-400">Gordura</span>
-                <span>{Math.round((analysis.totalFat * 9 / analysis.totalCalories) * 100)}%</span>
+                <span>{fatPercent}%</span>
               </div>
               <Progress 
-                value={(analysis.totalFat * 9 / analysis.totalCalories) * 100} 
+                value={fatPercent} 
                 className="h-2 bg-purple-100 dark:bg-purple-900"
               />
             </div>
@@ -220,7 +191,7 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
                   </Badge>
                 </div>
                 
-                <div className="grid grid-cols-4 gap-2 text-xs">
+                <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="text-center">
                     <span className="text-red-600 dark:text-red-400 font-medium">
                       {food.calories}
@@ -229,21 +200,9 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
                   </div>
                   <div className="text-center">
                     <span className="text-blue-600 dark:text-blue-400 font-medium">
-                      {food.protein}g
+                      {Math.round(food.confidence * 100)}%
                     </span>
-                    <p className="text-gray-500">prot</p>
-                  </div>
-                  <div className="text-center">
-                    <span className="text-green-600 dark:text-green-400 font-medium">
-                      {food.carbs}g
-                    </span>
-                    <p className="text-gray-500">carb</p>
-                  </div>
-                  <div className="text-center">
-                    <span className="text-purple-600 dark:text-purple-400 font-medium">
-                      {food.fat}g
-                    </span>
-                    <p className="text-gray-500">gord</p>
+                    <p className="text-gray-500">conf</p>
                   </div>
                 </div>
               </div>
@@ -253,7 +212,7 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
       </Card>
 
       {/* Dicas e Recomendações */}
-      {analysis.tips.length > 0 && (
+      {analysis.recommendations && analysis.recommendations.length > 0 && (
         <Card className="border-red-200 dark:border-red-800">
           <CardHeader>
             <CardTitle className="text-red-700 dark:text-red-300">
@@ -262,7 +221,7 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
           </CardHeader>
           <CardContent>
             <ul className="space-y-2">
-              {analysis.tips.map((tip, index) => (
+              {analysis.recommendations.map((tip, index) => (
                 <li key={index} className="flex items-start gap-2 text-sm">
                   <span className="text-red-500 mt-1">•</span>
                   <span className="text-gray-700 dark:text-gray-300">{tip}</span>

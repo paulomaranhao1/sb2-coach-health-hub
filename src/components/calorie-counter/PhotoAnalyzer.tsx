@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Camera, Upload, Loader2, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import FoodAnalysisResult from './FoodAnalysisResult';
-import { analyzeFoodImage, saveFoodAnalysis } from '@/lib/foodAnalysis';
+import { analyzeFoodImage, saveFoodAnalysis, FoodAnalysis } from '@/lib/foodAnalysis';
 
 interface PhotoAnalyzerProps {
   onAnalysisComplete?: (analysis: any) => void;
@@ -14,7 +14,7 @@ interface PhotoAnalyzerProps {
 const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
-  const [analysis, setAnalysis] = useState<any>(null);
+  const [analysis, setAnalysis] = useState<FoodAnalysis | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -67,6 +67,9 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       
       setAnalysis(result);
       
+      // Salvar automaticamente
+      await saveFoodAnalysis(result, selectedImage);
+      
       if (onAnalysisComplete) {
         onAnalysisComplete(result);
       }
@@ -95,7 +98,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     if (cameraInputRef.current) cameraInputRef.current.value = '';
   };
 
-  const handleSaveAnalysis = async (analysisData: any) => {
+  const handleSaveAnalysis = async (analysisData: FoodAnalysis) => {
     console.log('Salvando análise:', analysisData);
     
     try {
