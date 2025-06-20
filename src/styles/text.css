@@ -4,97 +4,103 @@
   
   /* Headings - Strong hierarchy */
   h1, h2, h3, h4, h5, h6 {
-    @apply text-foreground font-bold tracking-tight transition-colors duration-300;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+    transition: color 0.3s ease;
     color: rgb(26 26 26) !important;
   }
   
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    @apply text-foreground font-bold;
     color: rgb(234 234 234) !important;
   }
   
   /* Body text with excellent readability */
   p, span, div {
-    @apply text-foreground font-medium leading-relaxed transition-colors duration-300;
+    font-weight: 500;
+    line-height: 1.625;
+    transition: color 0.3s ease;
     color: rgb(26 26 26) !important;
   }
   
   .dark p, .dark span, .dark div {
-    @apply text-foreground font-medium;
     color: rgb(234 234 234) !important;
   }
   
   /* Muted text - still readable */
   .text-muted-foreground {
-    @apply font-medium transition-colors duration-300 !important;
+    font-weight: 500 !important;
+    transition: color 0.3s ease !important;
     color: rgb(122 122 122) !important;
   }
   
   .dark .text-muted-foreground {
-    @apply font-medium transition-colors duration-300 !important;
     color: rgb(163 163 163) !important;
   }
 
   /* Links - Theme accent colors */
   a {
-    @apply text-primary hover:text-primary/90 transition-colors duration-200 font-semibold;
+    font-weight: 600;
+    transition: color 0.2s ease;
     color: rgb(149 6 6) !important;
   }
   
+  a:hover {
+    opacity: 0.9;
+  }
+  
   .dark a {
-    @apply text-primary hover:text-primary/90 font-semibold;
     color: rgb(185 28 28) !important;
   }
 
   /* Small text - optimized sizes */
   .text-sm {
-    @apply font-semibold text-muted-foreground transition-colors duration-300;
+    font-weight: 600;
     color: rgb(122 122 122) !important;
+    transition: color 0.3s ease;
   }
   
   .dark .text-sm {
-    @apply text-muted-foreground font-semibold;
     color: rgb(163 163 163) !important;
   }
 
   .text-xs {
-    @apply font-semibold text-muted-foreground transition-colors duration-300;
+    font-weight: 600;
     color: rgb(122 122 122) !important;
+    transition: color 0.3s ease;
   }
   
   .dark .text-xs {
-    @apply text-muted-foreground font-semibold;
     color: rgb(163 163 163) !important;
   }
   
   /* Special text variants */
   .text-success {
-    @apply text-success font-semibold transition-colors duration-300;
+    font-weight: 600;
     color: rgb(34 197 94) !important;
+    transition: color 0.3s ease;
   }
   
   .dark .text-success {
-    @apply text-success font-semibold;
     color: rgb(34 197 94) !important;
   }
   
   .text-warning {
-    @apply text-secondary font-semibold transition-colors duration-300;
+    font-weight: 600;
     color: rgb(122 122 122) !important;
+    transition: color 0.3s ease;
   }
   
   .dark .text-warning {
-    @apply text-secondary font-semibold;
     color: rgb(163 163 163) !important;
   }
   
   .text-error {
-    @apply text-primary font-semibold transition-colors duration-300;
+    font-weight: 600;
     color: rgb(149 6 6) !important;
+    transition: color 0.3s ease;
   }
   
   .dark .text-error {
-    @apply text-primary font-semibold;
     color: rgb(185 28 28) !important;
   }
 }
