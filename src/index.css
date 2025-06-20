@@ -1,197 +1,31 @@
 
-/* Elegant Custom Theme - Complete Color System */
-@import './styles/base.css';
-@import './styles/anti-yellow.css';
-@import './styles/force-no-yellow.css';
-@import './styles/debug-yellow.css';
-@import './styles/buttons.css';
-@import './styles/text.css';
-@import './styles/utilities.css';
+/* SB2 Coach - Importação do Sistema de Cores Definitivo */
+@import './styles/theme.css';
 
-/* GLOBAL THEME ENFORCEMENT */
+/* Reset Global Minimalista */
 * {
-  /* Ensure no yellow backgrounds anywhere */
-  --tw-bg-opacity: 1;
+  box-sizing: border-box;
 }
 
-/* Global yellow/amber/purple elimination */
-*[style*="yellow"], 
-*[style*="amber"],
-*[style*="purple"],
-*[style*="rgb(255, 255, 0)"],
-*[style*="rgb(255, 193, 7)"],
-*[style*="rgb(255, 235, 59)"],
-*[style*="rgb(147, 51, 234)"],
-*[style*="#ffff00"],
-*[style*="#ffc107"],
-*[style*="#ffeb3b"],
-*[style*="#9333ea"],
-*[class*="yellow"],
-*[class*="amber"],
-*[class*="purple"],
-.bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500,
-.bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500,
-.bg-purple-50, .bg-purple-100, .bg-purple-200, .bg-purple-300, .bg-purple-400, .bg-purple-500, .bg-purple-600 {
-  background-color: rgb(122 122 122) !important;
-  color: rgb(255 255 255) !important;
-  border-color: rgb(122 122 122) !important;
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
 }
 
-.dark *[style*="yellow"], 
-.dark *[style*="amber"],
-.dark *[style*="purple"],
-.dark *[class*="yellow"],
-.dark *[class*="amber"],
-.dark *[class*="purple"],
-.dark .bg-yellow-50, .dark .bg-yellow-100, .dark .bg-yellow-200, .dark .bg-yellow-300, .dark .bg-yellow-400, .dark .bg-yellow-500,
-.dark .bg-amber-50, .dark .bg-amber-100, .dark .bg-amber-200, .dark .bg-amber-300, .dark .bg-amber-400, .dark .bg-amber-500,
-.dark .bg-purple-50, .dark .bg-purple-100, .dark .bg-purple-200, .dark .bg-purple-300, .dark .bg-purple-400, .dark .bg-purple-500, .dark .bg-purple-600 {
-  background-color: rgb(163 163 163) !important;
-  color: rgb(18 18 18) !important;
-  border-color: rgb(163 163 163) !important;
-}
-
-/* Force theme colors for specific elements */
-body, html, #root {
-  background-color: rgb(255 255 255) !important;
-  color: rgb(26 26 26) !important;
-}
-
-.dark body, .dark html, .dark #root {
-  background-color: rgb(18 18 18) !important;
-  color: rgb(234 234 234) !important;
-}
-
-/* App container backgrounds */
+/* Container Principal */
 .min-h-screen {
-  background-color: rgb(255 255 255) !important;
+  min-height: 100vh;
+  background-color: rgb(var(--color-bg-light)) !important;
+  transition: background-color 0.3s ease;
 }
 
 .dark .min-h-screen {
-  background-color: rgb(18 18 18) !important;
+  background-color: rgb(var(--color-bg-dark)) !important;
 }
 
-/* Button color corrections */
-button {
-  transition: all 0.2s ease-in-out;
-}
-
-button:not(.variant-ghost):not(.variant-outline):not(.variant-link) {
-  background-color: rgb(149 6 6) !important;
-  color: rgb(255 255 255) !important;
-}
-
-button:not(.variant-ghost):not(.variant-outline):not(.variant-link):hover {
-  background-color: rgb(127 5 5) !important;
-}
-
-.dark button:not(.variant-ghost):not(.variant-outline):not(.variant-link) {
-  background-color: rgb(185 28 28) !important;
-}
-
-.dark button:not(.variant-ghost):not(.variant-outline):not(.variant-link):hover {
-  background-color: rgb(157 23 23) !important;
-}
-
-/* Secondary buttons */
-button[class*="secondary"] {
-  background-color: rgb(122 122 122) !important;
-  color: rgb(255 255 255) !important;
-}
-
-.dark button[class*="secondary"] {
-  background-color: rgb(163 163 163) !important;
-  color: rgb(18 18 18) !important;
-}
-
-/* Outline buttons */
-button[class*="outline"] {
-  background-color: transparent !important;
-  color: rgb(149 6 6) !important;
-  border: 1px solid rgb(149 6 6) !important;
-}
-
-button[class*="outline"]:hover {
-  background-color: rgb(149 6 6) !important;
-  color: rgb(255 255 255) !important;
-}
-
-.dark button[class*="outline"] {
-  color: rgb(185 28 28) !important;
-  border-color: rgb(185 28 28) !important;
-}
-
-.dark button[class*="outline"]:hover {
-  background-color: rgb(185 28 28) !important;
-  color: rgb(255 255 255) !important;
-}
-
-/* Ghost buttons */
-button[class*="ghost"] {
-  background-color: transparent !important;
-  color: rgb(149 6 6) !important;
-}
-
-button[class*="ghost"]:hover {
-  background-color: rgba(149, 6, 6, 0.1) !important;
-}
-
-.dark button[class*="ghost"] {
-  color: rgb(185 28 28) !important;
-}
-
-.dark button[class*="ghost"]:hover {
-  background-color: rgba(185, 28, 28, 0.1) !important;
-}
-
-/* Transparent PNG background fallback */
-img[src$=".png"] {
-  background-color: transparent !important;
-}
-
-/* Glass effect elements */
-.glass {
-  background: rgba(255, 255, 255, 0.1) !important;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.dark .glass {
-  background: rgba(18, 18, 18, 0.1) !important;
-  border: 1px solid rgba(234, 234, 234, 0.2);
-}
-
-/* Override any gradient with yellow or purple */
-*[style*="linear-gradient"] {
-  background-image: none !important;
-  background-color: rgb(255 255 255) !important;
-}
-
-.dark *[style*="linear-gradient"] {
-  background-image: none !important;
-  background-color: rgb(18 18 18) !important;
-}
-
-/* Input field styling */
-input, textarea, select {
-  background-color: rgb(255 255 255) !important;
-  color: rgb(26 26 26) !important;
-  border-color: rgb(229 231 235) !important;
-}
-
-.dark input, .dark textarea, .dark select {
-  background-color: rgb(39 39 42) !important;
-  color: rgb(234 234 234) !important;
-  border-color: rgb(63 63 70) !important;
-}
-
-/* Card styling */
-.bg-card {
-  background-color: rgb(255 255 255) !important;
-  color: rgb(26 26 26) !important;
-}
-
-.dark .bg-card {
-  background-color: rgb(28 28 28) !important;
-  color: rgb(234 234 234) !important;
+/* Transições Suaves */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

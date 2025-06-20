@@ -24,67 +24,38 @@ const ForgotPasswordForm = ({ onSubmit, onBackToLogin, loading }: ForgotPassword
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center p-4"
-      style={{ backgroundColor: 'rgb(255, 255, 255)' }}
-    >
-      <Card 
-        className="w-full max-w-md border"
-        style={{ 
-          backgroundColor: 'rgb(255, 255, 255)', 
-          borderColor: 'rgb(229, 231, 235)' 
-        }}
-      >
+    <div className="min-h-screen flex items-center justify-center p-4 bg-background">
+      <Card className="w-full max-w-md bg-card border">
         <CardHeader className="text-center">
-          <div 
-            className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg p-2"
-            style={{ backgroundColor: 'rgb(255, 255, 255)' }}
-          >
+          <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg p-2 bg-white">
             <img 
               src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
               alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
-              style={{ backgroundColor: 'transparent' }}
             />
           </div>
-          <CardTitle 
-            className="text-2xl font-bold"
-            style={{ color: 'rgb(26, 26, 26)', fontWeight: '700' }}
-          >
+          <CardTitle className="text-2xl font-bold text-foreground">
             Recuperar Senha
           </CardTitle>
-          <CardDescription 
-            className="font-semibold"
-            style={{ color: 'rgb(122, 122, 122)', fontWeight: '600' }}
-          >
+          <CardDescription className="font-semibold text-muted-foreground">
             Digite seu email para receber um link de redefinição
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label 
-                htmlFor="email" 
-                className="font-bold"
-                style={{ color: 'rgb(26, 26, 26)', fontWeight: '700' }}
-              >
+              <Label htmlFor="email" className="font-bold text-foreground">
                 Email
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4" style={{ color: 'rgb(122, 122, 122)' }} />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10"
-                  style={{ 
-                    backgroundColor: 'rgb(255, 255, 255)',
-                    color: 'rgb(26, 26, 26)', 
-                    borderColor: 'rgb(229, 231, 235)',
-                    fontWeight: '600' 
-                  }}
+                  className="pl-10 bg-background border-border text-foreground font-semibold"
                   required
                 />
               </div>
@@ -92,13 +63,8 @@ const ForgotPasswordForm = ({ onSubmit, onBackToLogin, loading }: ForgotPassword
 
             <Button 
               type="submit" 
-              className="w-full font-bold" 
+              className="w-full font-bold bg-primary hover:bg-primary/90 text-primary-foreground" 
               disabled={loading}
-              style={{ 
-                backgroundColor: 'rgb(149, 6, 6)', 
-                color: 'rgb(255, 255, 255)', 
-                fontWeight: '700' 
-              }}
             >
               {loading ? 'Enviando...' : 'Enviar link de recuperação'}
             </Button>
@@ -108,8 +74,7 @@ const ForgotPasswordForm = ({ onSubmit, onBackToLogin, loading }: ForgotPassword
             <Button 
               variant="ghost" 
               onClick={onBackToLogin}
-              className="text-sm flex items-center justify-center gap-2 font-bold"
-              style={{ color: 'rgb(149, 6, 6)', fontWeight: '700' }}
+              className="text-sm flex items-center justify-center gap-2 font-bold text-primary hover:text-primary/90 hover:bg-primary/10"
             >
               <ArrowLeft className="w-4 h-4" />
               Voltar ao login
