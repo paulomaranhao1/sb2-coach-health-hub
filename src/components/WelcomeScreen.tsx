@@ -21,11 +21,11 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
         <div className={`transition-all duration-1000 w-full h-full flex items-center justify-center ${
           showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
         }`}>
-          {/* Nova imagem SB2 Coach que preenche toda a tela */}
+          {/* Nova imagem SB2coach.ai que preenche toda a tela */}
           <div className="w-full h-full flex items-center justify-center">
             <img 
               src="/lovable-uploads/f8f1e84e-87a5-402c-b38e-56ddaf65fcc8.png"
-              alt="SB2 Coach - Seu companheiro de emagrecimento"
+              alt="SB2coach.ai - Seu companheiro de emagrecimento"
               className="w-full h-screen object-cover sm:object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl sm:h-auto sm:max-h-[70vh]"
             />
           </div>

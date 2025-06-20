@@ -227,7 +227,7 @@ const RoadmapSection = () => {
           <div className="flex items-center justify-center mb-4">
             <Target className="w-8 h-8 text-red-500 mr-2" />
             <CardTitle className="text-3xl font-bold text-red-600 dark:text-red-400">
-              Roadmap SB2 Coach
+              Roadmap SB2coach.ai
             </CardTitle>
           </div>
           <CardDescription className="text-lg text-gray-700 dark:text-gray-300">
@@ -345,13 +345,13 @@ const RoadmapSection = () => {
             Sugestões de Funcionalidades
           </h3>
           <p className="text-gray-700 dark:text-gray-300 mb-4">
-            Tem alguma ideia para o SB2 Coach? Sua opinião é muito importante!
+            Tem alguma ideia para o SB2coach.ai? Sua opinião é muito importante!
           </p>
           <Button 
             className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white"
             onClick={() => toast({
               title: "💡 Feedback Registrado!",
-              description: "Obrigado por contribuir com o desenvolvimento do SB2 Coach!",
+              description: "Obrigado por contribuir com o desenvolvimento do SB2coach.ai!",
               duration: 3000,
             })}
           >

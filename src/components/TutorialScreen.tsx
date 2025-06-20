@@ -40,7 +40,7 @@ const TutorialScreen = ({ onComplete, onSkip }: TutorialScreenProps) => {
           <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
             <img 
               src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
-              alt="SB2 Coach Logo" 
+              alt="SB2coach.ai Logo" 
               className="w-full h-full object-contain"
             />
           </div>

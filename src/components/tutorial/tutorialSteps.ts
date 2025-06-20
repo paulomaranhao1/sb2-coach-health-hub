@@ -11,7 +11,7 @@ import {
 export const tutorialSteps = [
   {
     icon: Home,
-    title: "Bem-vindo ao SB2 Coach! 🎉",
+    title: "Bem-vindo ao SB2coach.ai! 🎉",
     description: "Seu companheiro inteligente para emagrecimento saudável",
     content: "Aqui você vai acompanhar sua jornada de transformação com o SB2 TURBO. Vamos te mostrar como usar todas as funcionalidades!",
     highlight: "Tela Inicial",

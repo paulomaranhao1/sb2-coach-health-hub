@@ -66,13 +66,13 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
             <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0">
               <img 
                 src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
-                alt="SB2 Coach Logo" 
+                alt="SB2coach.ai Logo" 
                 className="w-full h-full object-contain"
               />
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent">
-                SB2 Coach
+                SB2coach.ai
               </h1>
               <p className="text-sm text-slate-800 dark:text-slate-200 font-medium flex items-center gap-1">
                 {hasPremiumAccess ? (

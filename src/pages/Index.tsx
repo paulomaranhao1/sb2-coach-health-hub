@@ -102,7 +102,7 @@ const Index = () => {
     checkUserProfile();
     // Mostrar tutorial após onboarding
     setShowTutorial(true);
-    toastFeedback.success('Onboarding concluído! Bem-vindo ao SB2 Coach!');
+    toastFeedback.success('Onboarding concluído! Bem-vindo ao SB2coach.ai!');
   };
 
   const handleTutorialComplete = () => {
@@ -154,7 +154,7 @@ const Index = () => {
   if (isLoading || subscriptionLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
-        <Loading size="lg" text="Carregando SB2 Coach..." />
+        <Loading size="lg" text="Carregando SB2coach.ai..." />
       </div>
     );
   }

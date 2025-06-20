@@ -4,8 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Play, Zap } from "lucide-react";
 
+interface FastingPlan {
+  name: string;
+  description: string;
+  calories: string;
+  difficulty: string;
+  color: string;
+  benefits: string[];
+}
+
 interface FastingPlansGridProps {
-  fastingPlans: any;
+  fastingPlans: { [key: string]: FastingPlan };
   selectedPlan: string;
   setSelectedPlan: (plan: string) => void;
   onStartFast: () => void;
