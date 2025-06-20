@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -229,23 +228,23 @@ const ProgressDashboard = () => {
       {/* Cards de Recompensas e Estatísticas */}
       {userStats && (
         <div className="grid gap-4 md:grid-cols-3">
-          <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
+          <Card className="bg-gradient-to-r from-gray-50 to-gray-100 border-gray-200">
             <CardHeader className="pb-3">
-              <CardTitle className="flex items-center gap-2 text-yellow-700">
+              <CardTitle className="flex items-center gap-2 text-gray-700">
                 <Trophy className="w-5 h-5" />
                 Nível {userStats.level}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                <p className="text-2xl font-bold text-yellow-800">{userStats.points} pontos</p>
-                <div className="bg-yellow-200 rounded-full h-2">
+                <p className="text-2xl font-bold text-gray-800">{userStats.points} pontos</p>
+                <div className="bg-gray-200 rounded-full h-2">
                   <div 
-                    className="bg-yellow-500 rounded-full h-2 transition-all"
+                    className="bg-gray-500 rounded-full h-2 transition-all"
                     style={{ width: `${(userStats.points % 100)}%` }}
                   />
                 </div>
-                <p className="text-sm text-yellow-600">{100 - (userStats.points % 100)} pontos para próximo nível</p>
+                <p className="text-sm text-gray-600">{100 - (userStats.points % 100)} pontos para próximo nível</p>
               </div>
             </CardContent>
           </Card>

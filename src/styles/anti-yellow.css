@@ -49,4 +49,67 @@
     color: rgb(243 244 246) !important;
     border-color: rgb(107 114 128) !important;
   }
+
+  /* Force specific yellow classes to gray */
+  .text-yellow-500,
+  .text-amber-500,
+  .bg-yellow-50,
+  .bg-yellow-100,
+  .bg-yellow-200,
+  .bg-yellow-400,
+  .bg-yellow-500,
+  .bg-amber-50,
+  .bg-amber-100,
+  .bg-amber-200,
+  .bg-amber-400,
+  .bg-amber-500,
+  .border-yellow-200,
+  .border-yellow-400,
+  .border-amber-200,
+  .border-amber-400 {
+    background-color: rgb(156 163 175) !important;
+    color: rgb(17 24 39) !important;
+    border-color: rgb(156 163 175) !important;
+  }
+
+  /* Dark mode specific overrides */
+  .dark .text-yellow-500,
+  .dark .text-amber-500,
+  .dark .bg-yellow-50,
+  .dark .bg-yellow-100,
+  .dark .bg-yellow-200,
+  .dark .bg-yellow-400,
+  .dark .bg-yellow-500,
+  .dark .bg-amber-50,
+  .dark .bg-amber-100,
+  .dark .bg-amber-200,
+  .dark .bg-amber-400,
+  .dark .bg-amber-500,
+  .dark .border-yellow-200,
+  .dark .border-yellow-400,
+  .dark .border-amber-200,
+  .dark .border-amber-400 {
+    background-color: rgb(107 114 128) !important;
+    color: rgb(243 244 246) !important;
+    border-color: rgb(107 114 128) !important;
+  }
+
+  /* Global override for any element with yellow in its class or style */
+  *[class*="yellow"],
+  *[class*="amber"],
+  *[style*="yellow"],
+  *[style*="amber"] {
+    background-color: rgb(156 163 175) !important;
+    color: rgb(17 24 39) !important;
+    border-color: rgb(156 163 175) !important;
+  }
+
+  .dark *[class*="yellow"],
+  .dark *[class*="amber"],
+  .dark *[style*="yellow"],
+  .dark *[style*="amber"] {
+    background-color: rgb(107 114 128) !important;
+    color: rgb(243 244 246) !important;
+    border-color: rgb(107 114 128) !important;
+  }
 }
