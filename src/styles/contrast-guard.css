@@ -1,0 +1,83 @@
+
+
+/* GUARDA DE CONTRASTE - Previne texto ilegível definitivamente */
+@layer utilities {
+  /* Classe utilitária para forçar contraste adequado */
+  .force-readable {
+    color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
+  }
+
+  .dark .force-readable {
+    color: rgb(248 250 252) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Interceptador universal para botões problemáticos */
+  .contrast-safe {
+    background-color: rgb(255 255 255) !important;
+    color: rgb(31 41 55) !important;
+    border: 1px solid rgb(209 213 219) !important;
+    font-weight: 700 !important;
+  }
+
+  .dark .contrast-safe {
+    background-color: rgb(31 41 55) !important;
+    color: rgb(248 250 252) !important;
+    border: 1px solid rgb(75 85 99) !important;
+    font-weight: 700 !important;
+  }
+
+  /* Interceptador para elementos com fundo branco */
+  .white-bg-safe * {
+    color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
+  }
+
+  .dark .white-bg-safe * {
+    color: rgb(248 250 252) !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* REGRAS ESPECÍFICAS PARA PREVENIR PROBLEMAS CONHECIDOS */
+
+/* Interceptar qualquer botão que possa ter texto branco em fundo branco */
+@supports (color: white) {
+  button:not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-green"]):not([class*="bg-purple"]) {
+    color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
+  }
+  
+  .dark button:not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-green"]):not([class*="bg-purple"]) {
+    color: rgb(248 250 252) !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* Interceptar estilos inline problemáticos */
+*[style*="color: white"] {
+  color: rgb(31 41 55) !important;
+  font-weight: 700 !important;
+}
+
+.dark *[style*="color: white"] {
+  color: rgb(248 250 252) !important;
+  font-weight: 700 !important;
+}
+
+/* Interceptar qualquer elemento que possa estar invisível */
+*[style*="color: #ffffff"],
+*[style*="color: #fff"],
+*[style*="color: rgb(255, 255, 255)"] {
+  color: rgb(31 41 55) !important;
+  font-weight: 700 !important;
+}
+
+.dark *[style*="color: #ffffff"],
+.dark *[style*="color: #fff"],
+.dark *[style*="color: rgb(255, 255, 255)"] {
+  color: rgb(248 250 252) !important;
+  font-weight: 700 !important;
+}
+

@@ -1,4 +1,5 @@
 
+
 @layer base {
   /* Improved input styling with better readability */
   input, textarea, select {
@@ -54,23 +55,78 @@
     @apply bg-slate-800 text-slate-100 border-slate-700;
   }
   
-  /* Button text improvements with better contrast */
+  /* BOTÕES - CONTRASTE FORÇADO DEFINITIVO */
   button {
-    @apply transition-colors duration-200 font-medium;
+    @apply transition-colors duration-200 font-bold;
   }
 
-  /* Ensure button text is always readable */
-  button:not(.bg-transparent):not([class*="variant-ghost"]):not([class*="variant-outline"]) {
-    @apply text-white font-medium;
+  /* ESTRATÉGIA DEFINITIVA: Forçar cores específicas por tipo de botão */
+  
+  /* Botão Google - SEMPRE texto escuro em fundo claro */
+  button[class*="bg-white"], 
+  .google-auth-button,
+  button:has(svg[viewBox="0 0 24 24"]) {
+    @apply bg-white text-gray-900 border-gray-300 font-bold !important;
+    color: rgb(31 41 55) !important;
+    background-color: rgb(255 255 255) !important;
+    border-color: rgb(209 213 219) !important;
   }
   
-  /* Botões outline e ghost com texto escuro */
-  button[class*="variant-ghost"], button[class*="variant-outline"] {
-    @apply text-gray-700 font-medium;
+  button[class*="bg-white"]:hover,
+  .google-auth-button:hover,
+  button:has(svg[viewBox="0 0 24 24"]):hover {
+    @apply bg-gray-100 text-gray-900 font-bold !important;
+    color: rgb(31 41 55) !important;
+    background-color: rgb(249 250 251) !important;
   }
   
-  .dark button[class*="variant-ghost"], .dark button[class*="variant-outline"] {
-    @apply text-slate-300 font-medium;
+  .dark button[class*="bg-white"], 
+  .dark .google-auth-button,
+  .dark button:has(svg[viewBox="0 0 24 24"]) {
+    @apply bg-gray-800 text-gray-100 border-gray-600 font-bold !important;
+    color: rgb(243 244 246) !important;
+    background-color: rgb(31 41 55) !important;
+    border-color: rgb(75 85 99) !important;
+  }
+  
+  .dark button[class*="bg-white"]:hover,
+  .dark .google-auth-button:hover,
+  .dark button:has(svg[viewBox="0 0 24 24"]):hover {
+    @apply bg-gray-700 text-gray-100 font-bold !important;
+    color: rgb(243 244 246) !important;
+    background-color: rgb(55 65 81) !important;
+  }
+
+  /* Botões primários (vermelhos) - SEMPRE texto branco */
+  button[class*="bg-red"], 
+  button[class*="bg-primary"],
+  .primary-button {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+  }
+  
+  /* Botões secundários e outline - texto contrastante */
+  button[class*="variant-outline"], 
+  button[class*="variant-ghost"] {
+    @apply text-gray-900 font-bold !important;
+    color: rgb(31 41 55) !important;
+  }
+  
+  .dark button[class*="variant-outline"], 
+  .dark button[class*="variant-ghost"] {
+    @apply text-slate-100 font-bold !important;
+    color: rgb(248 250 252) !important;
+  }
+
+  /* Botões de link - cores específicas */
+  button[class*="variant-link"] {
+    @apply text-blue-600 hover:text-blue-700 font-bold !important;
+    color: rgb(37 99 235) !important;
+  }
+  
+  .dark button[class*="variant-link"] {
+    @apply text-blue-400 hover:text-blue-300 font-bold !important;
+    color: rgb(96 165 250) !important;
   }
   
   /* Focus states for better accessibility */
@@ -80,40 +136,48 @@
   
   /* Improved link styling with better readability */
   a {
-    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-medium;
+    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-bold;
+    color: rgb(220 38 38) !important;
   }
   
   .dark a {
-    @apply text-red-400 hover:text-red-300 font-medium;
+    @apply text-red-400 hover:text-red-300 font-bold;
+    color: rgb(248 113 113) !important;
   }
 
   /* Label improvements for better readability */
   label {
-    @apply text-gray-800 font-medium;
+    @apply text-gray-800 font-bold;
+    color: rgb(31 41 55) !important;
   }
 
   .dark label {
-    @apply text-slate-200 font-medium;
+    @apply text-slate-200 font-bold;
+    color: rgb(226 232 240) !important;
   }
 
   /* Small text improvements */
   .text-sm {
-    @apply font-medium text-gray-700;
+    @apply font-bold text-gray-700;
+    color: rgb(55 65 81) !important;
   }
   
   .dark .text-sm {
-    @apply text-slate-300;
+    @apply text-slate-300 font-bold;
+    color: rgb(203 213 225) !important;
   }
 
   .text-xs {
-    @apply font-medium text-gray-600;
+    @apply font-bold text-gray-600;
+    color: rgb(75 85 99) !important;
   }
   
   .dark .text-xs {
-    @apply text-slate-400;
+    @apply text-slate-400 font-bold;
+    color: rgb(148 163 184) !important;
   }
 
-  /* Force readable text on colored backgrounds */
+  /* ESTRATÉGIA ANTI-CONTRASTE RUIM: Force readable text on colored backgrounds */
   .bg-red-500, .bg-red-600, .bg-red-700, .bg-red-800, .bg-red-900,
   .bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
   .bg-green-500, .bg-green-600, .bg-green-700, .bg-green-800, .bg-green-900,
@@ -123,7 +187,8 @@
   .bg-gray-700, .bg-gray-800, .bg-gray-900,
   .bg-slate-700, .bg-slate-800, .bg-slate-900,
   .bg-orange-500, .bg-orange-600, .bg-orange-700, .bg-orange-800, .bg-orange-900 {
-    @apply text-white font-medium;
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
   }
 
   /* Fundos claros devem ter texto escuro */
@@ -133,13 +198,15 @@
   .bg-blue-50, .bg-blue-100, .bg-blue-200,
   .bg-green-50, .bg-green-100, .bg-green-200,
   .bg-purple-50, .bg-purple-100, .bg-purple-200,
-  .bg-orange-50, .bg-orange-100, .bg-orange-200 {
-    @apply text-gray-900 font-medium;
+  .bg-orange-50, .bg-orange-100, .bg-orange-200,
+  .bg-white {
+    @apply text-gray-900 font-bold !important;
+    color: rgb(31 41 55) !important;
   }
 
   /* Ensure proper contrast on gradient backgrounds */
   [class*="bg-gradient"] {
-    @apply font-medium;
+    @apply font-bold;
   }
   
   /* Gradientes escuros = texto branco */
@@ -147,7 +214,8 @@
   .bg-gradient-to-r.from-purple-500, .bg-gradient-to-r.from-green-500,
   .bg-gradient-to-br.from-red-500, .bg-gradient-to-br.from-blue-500,
   .bg-gradient-to-br.from-purple-500, .bg-gradient-to-br.from-green-500 {
-    @apply text-white;
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
   }
   
   /* Gradientes claros = texto escuro */
@@ -157,6 +225,38 @@
   .bg-gradient-to-br.from-red-50, .bg-gradient-to-br.from-blue-50,
   .bg-gradient-to-br.from-purple-50, .bg-gradient-to-br.from-green-50,
   .bg-gradient-to-br.from-orange-50 {
-    @apply text-gray-900;
+    @apply text-gray-900 font-bold !important;
+    color: rgb(31 41 55) !important;
+  }
+
+  /* ESTRATÉGIA FINAL: Interceptador universal para qualquer elemento que possa ter problema */
+  * {
+    /* Garantir que não há texto invisível */
+  }
+  
+  /* Botões específicos por contexto */
+  .auth-form button, 
+  .login-form button,
+  .signup-form button {
+    font-weight: 700 !important;
+  }
+  
+  /* Interceptar botões brancos em fundos brancos */
+  .bg-white button,
+  button.bg-white,
+  [style*="background-color: white"] button,
+  [style*="background: white"] button {
+    color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
+  }
+
+  .dark .bg-white button,
+  .dark button.bg-white,
+  .dark [style*="background-color: white"] button,
+  .dark [style*="background: white"] button {
+    color: rgb(248 250 252) !important;
+    background-color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
   }
 }
+
