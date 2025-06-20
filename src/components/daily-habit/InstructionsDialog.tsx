@@ -26,6 +26,10 @@ const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => 
     onOpenChange(false);
   };
 
+  const handleCheckboxChange = (checked: boolean | "indeterminate") => {
+    setDontShowAgain(checked === true);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md mx-auto">
@@ -90,7 +94,7 @@ const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => 
             <Checkbox
               id="dont-show-again"
               checked={dontShowAgain}
-              onCheckedChange={setDontShowAgain}
+              onCheckedChange={handleCheckboxChange}
             />
             <label
               htmlFor="dont-show-again"
