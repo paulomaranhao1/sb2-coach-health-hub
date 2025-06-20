@@ -21,8 +21,8 @@ const ComingSoonFeatures = () => {
       {/* Header */}
       <div className="text-center space-y-2">
         <div className="flex items-center justify-center gap-2 mb-4">
-          <Sparkles className="w-8 h-8 text-yellow-500 animate-pulse" />
-          <Sparkles className="w-8 h-8 text-yellow-500 animate-pulse" />
+          <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
+          <Sparkles className="w-8 h-8 text-red-500 animate-pulse" />
         </div>
       </div>
     </div>

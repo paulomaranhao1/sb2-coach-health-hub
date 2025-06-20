@@ -170,7 +170,7 @@ const RoadmapSection = () => {
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'completed': return 'bg-green-500';
-      case 'in-progress': return 'bg-yellow-500';
+      case 'in-progress': return 'bg-red-500';
       case 'planned': return 'bg-gray-400';
       default: return 'bg-gray-400';
     }
@@ -188,10 +188,10 @@ const RoadmapSection = () => {
   const getCategoryColor = (category: string) => {
     switch (category) {
       case 'core': return 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200';
-      case 'premium': return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200';
+      case 'premium': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
       case 'ai': return 'bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200';
       case 'social': return 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200';
-      case 'analytics': return 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200';
+      case 'analytics': return 'bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200';
       default: return 'bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200';
     }
   };
@@ -259,7 +259,7 @@ const RoadmapSection = () => {
                 item.status === 'completed' 
                   ? 'border-green-200 dark:border-green-800 bg-green-50/50 dark:bg-green-950/20' 
                   : item.status === 'in-progress'
-                  ? 'border-yellow-200 dark:border-yellow-800 bg-yellow-50/50 dark:bg-yellow-950/20'
+                  ? 'border-red-200 dark:border-red-800 bg-red-50/50 dark:bg-red-950/20'
                   : 'border-gray-200 dark:border-gray-700 hover:border-red-300 dark:hover:border-red-600'
               }`}
             >
@@ -268,12 +268,12 @@ const RoadmapSection = () => {
                   <div className="flex items-center space-x-3">
                     <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
                       item.status === 'completed' ? 'bg-green-100 dark:bg-green-900' :
-                      item.status === 'in-progress' ? 'bg-yellow-100 dark:bg-yellow-900' :
+                      item.status === 'in-progress' ? 'bg-red-100 dark:bg-red-900' :
                       'bg-gray-100 dark:bg-gray-800'
                     }`}>
                       <IconComponent className={`w-5 h-5 ${
                         item.status === 'completed' ? 'text-green-600 dark:text-green-400' :
-                        item.status === 'in-progress' ? 'text-yellow-600 dark:text-yellow-400' :
+                        item.status === 'in-progress' ? 'text-red-600 dark:text-red-400' :
                         'text-gray-600 dark:text-gray-400'
                       }`} />
                     </div>

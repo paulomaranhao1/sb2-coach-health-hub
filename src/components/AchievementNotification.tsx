@@ -61,21 +61,21 @@ const AchievementNotification = ({ achievements, onClose }: AchievementNotificat
 
   const getRarityColor = (rarity?: string) => {
     switch (rarity) {
-      case 'comum': return 'bg-gray-100 text-gray-800';
-      case 'raro': return 'bg-blue-100 text-blue-800';
-      case 'épico': return 'bg-purple-100 text-purple-800';
-      default: return 'bg-green-100 text-green-800';
+      case 'comum': return 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-200';
+      case 'raro': return 'bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200';
+      case 'épico': return 'bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200';
+      default: return 'bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200';
     }
   };
 
   return (
     <div className="fixed top-4 right-4 z-50 max-w-sm">
-      <Card className="border-2 border-yellow-400 bg-gradient-to-br from-yellow-50 to-orange-50 shadow-2xl animate-scale-in">
+      <Card className="border-2 border-red-400 bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-950 dark:to-orange-950 shadow-2xl animate-scale-in">
         <CardContent className="p-4">
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-yellow-600" />
-              <span className="font-bold text-yellow-800">
+              <Trophy className="w-5 h-5 text-red-600 dark:text-red-400" />
+              <span className="font-bold text-red-800 dark:text-red-200">
                 {current.type === 'shield' ? 'Novo Escudo!' : 'Nova Figurinha!'}
               </span>
             </div>
@@ -83,7 +83,7 @@ const AchievementNotification = ({ achievements, onClose }: AchievementNotificat
               variant="ghost" 
               size="sm" 
               onClick={onClose}
-              className="h-6 w-6 p-0 text-gray-500 hover:text-gray-700"
+              className="h-6 w-6 p-0 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -92,8 +92,8 @@ const AchievementNotification = ({ achievements, onClose }: AchievementNotificat
           <div className="text-center space-y-3">
             <div className="text-4xl">{current.emoji}</div>
             <div>
-              <h3 className="font-bold text-lg text-gray-800">{current.name}</h3>
-              <p className="text-sm text-gray-600 mt-1">{current.description}</p>
+              <h3 className="font-bold text-lg text-gray-800 dark:text-gray-200">{current.name}</h3>
+              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{current.description}</p>
               {current.rarity && (
                 <Badge className={`mt-2 ${getRarityColor(current.rarity)}`}>
                   {current.rarity}
@@ -117,7 +117,7 @@ const AchievementNotification = ({ achievements, onClose }: AchievementNotificat
                 <div
                   key={index}
                   className={`w-2 h-2 rounded-full transition-all ${
-                    index === currentIndex ? 'bg-yellow-600' : 'bg-yellow-300'
+                    index === currentIndex ? 'bg-red-600 dark:bg-red-400' : 'bg-red-300 dark:bg-red-600'
                   }`}
                 />
               ))}

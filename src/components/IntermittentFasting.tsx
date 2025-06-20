@@ -83,7 +83,7 @@ const IntermittentFasting = () => {
       description: "18h jejum, 6h janela alimentar",
       difficulty: "Intermediário",
       benefits: ["Autofagia aumentada", "Maior queima de gordura", "Disciplina mental"],
-      color: "bg-yellow-500",
+      color: "bg-red-500",
       calories: "Queima ~500 calorias extra"
     },
     "20:4": {

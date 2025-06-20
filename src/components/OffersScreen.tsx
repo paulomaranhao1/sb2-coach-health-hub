@@ -141,9 +141,9 @@ const OffersScreen = ({ onBack }: OffersScreenProps) => {
 
         <div className="grid gap-6 md:grid-cols-3 mb-8">
           {offers.map((offer) => (
-            <Card key={offer.id} className={`relative ${offer.popular ? 'border-yellow-400 border-2' : ''}`}>
+            <Card key={offer.id} className={`relative ${offer.popular ? 'border-red-400 border-2' : ''}`}>
               {offer.popular && (
-                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-yellow-400 text-black">
+                <Badge className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-red-400 text-white">
                   <Star className="w-3 h-3 mr-1" />
                   MAIS POPULAR
                 </Badge>
