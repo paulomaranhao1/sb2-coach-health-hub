@@ -12,7 +12,7 @@ const GoogleAuthButton = ({ onClick, disabled }: GoogleAuthButtonProps) => {
       onClick={onClick} 
       disabled={disabled}
       variant="outline"
-      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground border-primary hover:border-primary/90"
+      className="w-full bg-primary hover:bg-primary/90 text-primary-foreground border-primary hover:border-primary/90 transition-all duration-200"
       style={{ 
         backgroundColor: 'rgb(149, 6, 6)', 
         color: 'rgb(255, 255, 255)', 

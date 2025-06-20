@@ -33,15 +33,15 @@
     --destructive: 149 6 6;
     --destructive-foreground: 255 255 255;
     
-    /* Success Colors - Keep green but muted */
+    /* Success Colors */
     --success: 34 197 94;
     --success-foreground: 255 255 255;
     
-    /* Warning Colors - Use gray instead of yellow */
+    /* Warning Colors - Gray instead of yellow */
     --warning: 122 122 122;
     --warning-foreground: 255 255 255;
     
-    /* Info Colors - Muted blue */
+    /* Info Colors */
     --info: 59 130 246;
     --info-foreground: 255 255 255;
     
@@ -133,43 +133,19 @@
     --sidebar-border: 63 63 70;
     --sidebar-ring: 185 28 28;
   }
-
-  /* ABSOLUTE ANTI-YELLOW OVERRIDE - Force all yellow/amber to gray */
-  * {
-    --yellow-50: 248 250 252 !important;
-    --yellow-100: 241 245 249 !important;
-    --yellow-200: 226 232 240 !important;
-    --yellow-300: 203 213 225 !important;
-    --yellow-400: 122 122 122 !important;
-    --yellow-500: 122 122 122 !important;
-    --yellow-600: 122 122 122 !important;
-    --yellow-700: 122 122 122 !important;
-    --yellow-800: 122 122 122 !important;
-    --yellow-900: 122 122 122 !important;
-    
-    --amber-50: 248 250 252 !important;
-    --amber-100: 241 245 249 !important;
-    --amber-200: 226 232 240 !important;
-    --amber-300: 203 213 225 !important;
-    --amber-400: 122 122 122 !important;
-    --amber-500: 122 122 122 !important;
-    --amber-600: 122 122 122 !important;
-    --amber-700: 122 122 122 !important;
-    --amber-800: 122 122 122 !important;
-    --amber-900: 122 122 122 !important;
-  }
 }
 
 @layer base {
   * {
     @apply border-border;
+    /* Force all elements to inherit background properly */
+    background-color: inherit;
   }
   
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: Inter, system-ui, sans-serif;
-    /* Force white background for light mode, dark background for dark mode */
     background-color: rgb(255 255 255) !important;
   }
 
@@ -177,7 +153,7 @@
     background-color: rgb(18 18 18) !important;
   }
 
-  /* Remove ALL yellow classes and force them to gray */
+  /* Force all yellow/amber to gray - Complete override */
   .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500, 
   .bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500,
   .text-yellow-50, .text-yellow-100, .text-yellow-200, .text-yellow-300, .text-yellow-400, .text-yellow-500,
@@ -198,5 +174,19 @@
     background-color: rgb(163 163 163) !important;
     color: rgb(18 18 18) !important;
     border-color: rgb(163 163 163) !important;
+  }
+
+  /* Ensure proper image backgrounds */
+  img, svg {
+    background-color: transparent !important;
+  }
+
+  /* Force card backgrounds */
+  .bg-card {
+    background-color: rgb(255 255 255) !important;
+  }
+
+  .dark .bg-card {
+    background-color: rgb(28 28 28) !important;
   }
 }

@@ -12,7 +12,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <div 
-    className="min-h-screen bg-background text-foreground"
+    className="min-h-screen bg-background text-foreground transition-colors duration-300"
     style={{ 
       backgroundColor: 'rgb(255, 255, 255)', 
       color: 'rgb(26, 26, 26)',

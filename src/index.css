@@ -1,5 +1,5 @@
 
-/* Elegant Custom Theme - NO YELLOW ANYWHERE */
+/* Elegant Custom Theme - Complete Color System */
 @import './styles/base.css';
 @import './styles/anti-yellow.css';
 @import './styles/force-no-yellow.css';
@@ -8,13 +8,13 @@
 @import './styles/text.css';
 @import './styles/utilities.css';
 
-/* ABSOLUTE GLOBAL OVERRIDE - Force theme colors everywhere */
+/* GLOBAL THEME ENFORCEMENT */
 * {
-  /* Remove ANY possibility of yellow backgrounds */
-  background-color: inherit !important;
+  /* Ensure no yellow backgrounds anywhere */
+  --tw-bg-opacity: 1;
 }
 
-/* Force all elements with yellow/amber to use theme colors */
+/* Global yellow/amber elimination */
 *[style*="yellow"], 
 *[style*="amber"],
 *[style*="rgb(255, 255, 0)"],
@@ -43,25 +43,18 @@
   border-color: rgb(163 163 163) !important;
 }
 
-/* Force specific overrides for buttons and Google auth */
-button[style*="yellow"],
-button[class*="yellow"],
-.google-btn,
-*[class*="google"] {
-  background-color: rgb(149 6 6) !important;
-  color: white !important;
-}
-
-/* Force theme background everywhere */
+/* Force theme colors for specific elements */
 body, html, #root {
   background-color: rgb(255 255 255) !important;
+  color: rgb(26 26 26) !important;
 }
 
 .dark body, .dark html, .dark #root {
   background-color: rgb(18 18 18) !important;
+  color: rgb(234 234 234) !important;
 }
 
-/* Force app container backgrounds */
+/* App container backgrounds */
 .min-h-screen {
   background-color: rgb(255 255 255) !important;
 }
@@ -70,7 +63,57 @@ body, html, #root {
   background-color: rgb(18 18 18) !important;
 }
 
-/* Override any gradients that might contain yellow */
+/* Button color corrections */
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+button:not(.variant-ghost):not(.variant-outline) {
+  background-color: rgb(149 6 6) !important;
+  color: rgb(255 255 255) !important;
+}
+
+button:not(.variant-ghost):not(.variant-outline):hover {
+  background-color: rgb(127 5 5) !important;
+}
+
+.dark button:not(.variant-ghost):not(.variant-outline) {
+  background-color: rgb(185 28 28) !important;
+}
+
+.dark button:not(.variant-ghost):not(.variant-outline):hover {
+  background-color: rgb(157 23 23) !important;
+}
+
+/* Secondary buttons */
+button.variant-secondary {
+  background-color: rgb(122 122 122) !important;
+  color: rgb(255 255 255) !important;
+}
+
+.dark button.variant-secondary {
+  background-color: rgb(163 163 163) !important;
+  color: rgb(18 18 18) !important;
+}
+
+/* Transparent PNG background fallback */
+img[src$=".png"] {
+  background-color: transparent !important;
+}
+
+/* Glass effect elements */
+.glass {
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+  background: rgba(18, 18, 18, 0.1) !important;
+  border: 1px solid rgba(234, 234, 234, 0.2);
+}
+
+/* Override any gradient with yellow */
 *[style*="linear-gradient"] {
   background-image: none !important;
   background-color: rgb(255 255 255) !important;
@@ -79,18 +122,4 @@ body, html, #root {
 .dark *[style*="linear-gradient"] {
   background-image: none !important;
   background-color: rgb(18 18 18) !important;
-}
-
-/* Ensure transparent PNG backgrounds don't show yellow */
-img, svg {
-  background-color: transparent !important;
-}
-
-/* Force card backgrounds */
-.bg-card {
-  background-color: rgb(255 255 255) !important;
-}
-
-.dark .bg-card {
-  background-color: rgb(28 28 28) !important;
 }

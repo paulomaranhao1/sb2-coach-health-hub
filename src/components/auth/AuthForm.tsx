@@ -28,8 +28,11 @@ const AuthForm = ({
   loading 
 }: AuthFormProps) => {
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-card border border-border shadow-lg">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4 transition-colors duration-300">
+      <Card 
+        className="w-full max-w-md bg-card border border-border shadow-lg transition-colors duration-300"
+        style={{ backgroundColor: 'rgb(255, 255, 255)', borderColor: 'rgb(229, 231, 235)' }}
+      >
         <AuthHeader isLogin={isLogin} />
         <CardContent className="space-y-4">
           <GoogleAuthButton onClick={onGoogleAuth} disabled={loading} />
@@ -37,7 +40,7 @@ const AuthForm = ({
           <Button 
             onClick={onMagicLink} 
             disabled={loading}
-            className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold"
+            className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold transition-all duration-200"
             style={{ 
               backgroundColor: 'rgb(122, 122, 122)', 
               color: 'rgb(255, 255, 255)', 

@@ -15,7 +15,7 @@ const AuthToggleButtons = ({ isLogin, onToggleMode, onForgotPassword }: AuthTogg
           type="button"
           variant="ghost"
           onClick={onForgotPassword}
-          className="text-primary hover:text-primary/90 hover:bg-primary/10"
+          className="text-primary hover:text-primary/90 hover:bg-primary/10 transition-all duration-200"
           style={{ color: 'rgb(149, 6, 6)' }}
         >
           Esqueceu sua senha?
@@ -28,7 +28,7 @@ const AuthToggleButtons = ({ isLogin, onToggleMode, onForgotPassword }: AuthTogg
           type="button"
           variant="ghost"
           onClick={onToggleMode}
-          className="ml-1 text-primary hover:text-primary/90 hover:bg-primary/10 p-0 h-auto font-semibold"
+          className="ml-1 text-primary hover:text-primary/90 hover:bg-primary/10 p-0 h-auto font-semibold transition-all duration-200"
           style={{ color: 'rgb(149, 6, 6)', padding: '0', height: 'auto' }}
         >
           {isLogin ? 'Crie uma conta' : 'Faça login'}

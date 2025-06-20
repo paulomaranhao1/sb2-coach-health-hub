@@ -4,97 +4,97 @@
   
   /* Headings - Strong hierarchy */
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-900 font-bold tracking-tight;
-    color: rgb(15 23 42) !important;
+    @apply text-foreground font-bold tracking-tight transition-colors duration-300;
+    color: rgb(26 26 26) !important;
   }
   
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    @apply text-slate-50 font-bold;
-    color: rgb(248 250 252) !important;
+    @apply text-foreground font-bold;
+    color: rgb(234 234 234) !important;
   }
   
   /* Body text with excellent readability */
   p, span, div {
-    @apply text-slate-700 font-medium leading-relaxed;
-    color: rgb(51 65 85) !important;
+    @apply text-foreground font-medium leading-relaxed transition-colors duration-300;
+    color: rgb(26 26 26) !important;
   }
   
   .dark p, .dark span, .dark div {
-    @apply text-slate-200 font-medium;
-    color: rgb(226 232 240) !important;
+    @apply text-foreground font-medium;
+    color: rgb(234 234 234) !important;
   }
   
   /* Muted text - still readable */
   .text-muted-foreground {
-    @apply text-slate-600 font-medium !important;
-    color: rgb(71 85 105) !important;
+    @apply font-medium transition-colors duration-300 !important;
+    color: rgb(122 122 122) !important;
   }
   
   .dark .text-muted-foreground {
-    @apply text-slate-400 font-medium !important;
-    color: rgb(148 163 184) !important;
+    @apply font-medium transition-colors duration-300 !important;
+    color: rgb(163 163 163) !important;
   }
 
-  /* Links - Modern accent colors */
+  /* Links - Theme accent colors */
   a {
-    @apply text-blue-600 hover:text-blue-700 transition-colors duration-200 font-semibold;
-    color: rgb(37 99 235) !important;
+    @apply text-primary hover:text-primary/90 transition-colors duration-200 font-semibold;
+    color: rgb(149 6 6) !important;
   }
   
   .dark a {
-    @apply text-blue-400 hover:text-blue-300 font-semibold;
-    color: rgb(96 165 250) !important;
+    @apply text-primary hover:text-primary/90 font-semibold;
+    color: rgb(185 28 28) !important;
   }
 
   /* Small text - optimized sizes */
   .text-sm {
-    @apply font-semibold text-slate-600;
-    color: rgb(71 85 105) !important;
+    @apply font-semibold text-muted-foreground transition-colors duration-300;
+    color: rgb(122 122 122) !important;
   }
   
   .dark .text-sm {
-    @apply text-slate-300 font-semibold;
-    color: rgb(203 213 225) !important;
+    @apply text-muted-foreground font-semibold;
+    color: rgb(163 163 163) !important;
   }
 
   .text-xs {
-    @apply font-semibold text-slate-500;
-    color: rgb(100 116 139) !important;
+    @apply font-semibold text-muted-foreground transition-colors duration-300;
+    color: rgb(122 122 122) !important;
   }
   
   .dark .text-xs {
-    @apply text-slate-400 font-semibold;
-    color: rgb(148 163 184) !important;
+    @apply text-muted-foreground font-semibold;
+    color: rgb(163 163 163) !important;
   }
   
   /* Special text variants */
   .text-success {
-    @apply text-green-600 font-semibold;
-    color: rgb(22 163 74) !important;
+    @apply text-success font-semibold transition-colors duration-300;
+    color: rgb(34 197 94) !important;
   }
   
   .dark .text-success {
-    @apply text-green-400 font-semibold;
-    color: rgb(74 222 128) !important;
+    @apply text-success font-semibold;
+    color: rgb(34 197 94) !important;
   }
   
   .text-warning {
-    @apply text-orange-600 font-semibold;
-    color: rgb(234 88 12) !important;
+    @apply text-secondary font-semibold transition-colors duration-300;
+    color: rgb(122 122 122) !important;
   }
   
   .dark .text-warning {
-    @apply text-orange-400 font-semibold;
-    color: rgb(251 146 60) !important;
+    @apply text-secondary font-semibold;
+    color: rgb(163 163 163) !important;
   }
   
   .text-error {
-    @apply text-red-600 font-semibold;
-    color: rgb(220 38 38) !important;
+    @apply text-primary font-semibold transition-colors duration-300;
+    color: rgb(149 6 6) !important;
   }
   
   .dark .text-error {
-    @apply text-red-400 font-semibold;
-    color: rgb(248 113 113) !important;
+    @apply text-primary font-semibold;
+    color: rgb(185 28 28) !important;
   }
 }
