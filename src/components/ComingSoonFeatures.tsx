@@ -24,9 +24,6 @@ const ComingSoonFeatures = () => {
           <Sparkles className="w-8 h-8 text-yellow-500 animate-pulse" />
           <Sparkles className="w-8 h-8 text-yellow-500 animate-pulse" />
         </div>
-        <p className="text-gray-600 dark:text-gray-400">
-          Funcionalidades revolucionárias que estão chegando no SB2 Coach
-        </p>
       </div>
     </div>
   );
