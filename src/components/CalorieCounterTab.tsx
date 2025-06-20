@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,24 +5,15 @@ import { Camera, History, BarChart3 } from "lucide-react";
 import PhotoAnalyzer from './calorie-counter/PhotoAnalyzer';
 import AnalysisHistory from './calorie-counter/AnalysisHistory';
 import CalorieStats from './calorie-counter/CalorieStats';
-
 const CalorieCounterTab = () => {
   const [refreshHistoryTrigger, setRefreshHistoryTrigger] = useState(0);
-
   const handleAnalysisComplete = (analysis: any) => {
     // Atualizar histórico quando uma nova análise for concluída
     setRefreshHistoryTrigger(prev => prev + 1);
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Hero Section */}
-      <div className="text-center py-8">
-        <Camera className="w-20 h-20 mx-auto mb-4 text-blue-600" />
-        <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-          Tire uma foto da sua refeição e nossa IA calculará automaticamente as calorias e macronutrientes!
-        </p>
-      </div>
+      
 
       {/* Abas principais */}
       <Tabs defaultValue="analyze" className="w-full">
@@ -94,8 +84,6 @@ const CalorieCounterTab = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default CalorieCounterTab;
