@@ -1,5 +1,4 @@
 
-
 import { Button } from '@/components/ui/button';
 
 interface GoogleAuthButtonProps {
@@ -12,13 +11,8 @@ const GoogleAuthButton = ({ onClick, disabled }: GoogleAuthButtonProps) => {
     <Button 
       onClick={onClick} 
       disabled={disabled}
-      className="w-full contrast-safe google-auth-button bg-white text-gray-900 hover:bg-gray-100 border border-gray-300 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-700 dark:border-gray-600 font-bold"
-      style={{
-        backgroundColor: 'rgb(255, 255, 255)',
-        color: 'rgb(31, 41, 55)',
-        borderColor: 'rgb(209, 213, 219)',
-        fontWeight: '700'
-      }}
+      variant="outline"
+      className="w-full"
     >
       <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -32,4 +26,3 @@ const GoogleAuthButton = ({ onClick, disabled }: GoogleAuthButtonProps) => {
 };
 
 export default GoogleAuthButton;
-

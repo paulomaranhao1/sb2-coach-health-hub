@@ -1,13 +1,26 @@
 
-/* Import modular CSS files */
+/* Clean and Modern CSS System */
 @import './styles/base.css';
-@import './styles/form.css';
 @import './styles/buttons.css';
-@import './styles/text.css';
-@import './styles/cards.css';
-@import './styles/backgrounds.css';
-@import './styles/components.css';
 @import './styles/utilities.css';
-@import './styles/overrides.css';
-@import './styles/no-yellow-guard.css';
-@import './styles/contrast-guard.css';
+
+/* Tailwind utilities that ensure proper contrast */
+@layer utilities {
+  .text-contrast {
+    color: hsl(var(--foreground));
+  }
+  
+  .bg-contrast {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+  }
+  
+  /* Modern shadow utilities */
+  .shadow-modern {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  }
+  
+  .shadow-modern-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+}

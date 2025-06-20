@@ -1,6 +1,28 @@
 
-/* Import all button-related styles */
+/* Modern Button System - Clean and Simple */
 @import './buttons/base.css';
-@import './buttons/variants.css';
-@import './buttons/styles.css';
-@import './buttons/sizes.css';
+
+@layer components {
+  /* Additional button utilities */
+  .btn-gradient {
+    background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary)) 70%);
+    color: hsl(var(--primary-foreground));
+  }
+  
+  .btn-gradient:hover {
+    background: linear-gradient(135deg, hsl(var(--primary)/0.9), hsl(var(--primary)/0.9) 70%);
+  }
+  
+  /* Button group styles */
+  .btn-group {
+    @apply flex rounded-md shadow-sm;
+  }
+  
+  .btn-group > .btn:not(:first-child) {
+    @apply -ml-px rounded-l-none;
+  }
+  
+  .btn-group > .btn:not(:last-child) {
+    @apply rounded-r-none;
+  }
+}

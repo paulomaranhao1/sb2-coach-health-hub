@@ -1,6 +1,6 @@
 
 @layer base {
-  /* Base Button Styles - Modern & Accessible */
+  /* Clean Button Base Styles */
   
   button {
     @apply transition-all duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 rounded-lg;
@@ -16,6 +16,11 @@
   
   /* Focus States */
   button:focus-visible {
-    @apply ring-2 ring-offset-2;
+    @apply ring-2 ring-offset-2 ring-ring;
+  }
+
+  /* Remove all custom color overrides - let Shadcn handle colors */
+  button * {
+    color: inherit;
   }
 }
