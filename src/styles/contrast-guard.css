@@ -55,6 +55,48 @@
   }
 }
 
+/* REGRAS ESPECIAIS PARA BOTÕES ROXOS */
+button[class*="bg-purple"],
+.magic-link-button,
+.purple-button {
+  color: rgb(255 255 255) !important;
+  background-color: rgb(147 51 234) !important;
+  font-weight: 700 !important;
+}
+
+button[class*="bg-purple"]:hover,
+.magic-link-button:hover,
+.purple-button:hover {
+  color: rgb(255 255 255) !important;
+  background-color: rgb(126 34 206) !important;
+  font-weight: 700 !important;
+}
+
+button[class*="bg-purple"]:active,
+.magic-link-button:active,
+.purple-button:active {
+  color: rgb(255 255 255) !important;
+  background-color: rgb(107 33 168) !important;
+  font-weight: 700 !important;
+}
+
+button[class*="bg-purple"]:focus,
+.magic-link-button:focus,
+.purple-button:focus {
+  color: rgb(255 255 255) !important;
+  background-color: rgb(147 51 234) !important;
+  font-weight: 700 !important;
+}
+
+button[class*="bg-purple"]:disabled,
+.magic-link-button:disabled,
+.purple-button:disabled {
+  color: rgb(255 255 255) !important;
+  background-color: rgb(147 51 234) !important;
+  font-weight: 700 !important;
+  opacity: 0.6 !important;
+}
+
 /* Interceptar estilos inline problemáticos */
 *[style*="color: white"] {
   color: rgb(31 41 55) !important;
@@ -81,3 +123,34 @@
   font-weight: 700 !important;
 }
 
+/* INTERCEPTADOR ESPECIAL PARA BOTÕES EM BACKGROUNDS ESPECÍFICOS */
+button[style*="background-color: rgb(147, 51, 234)"],
+button[style*="background-color: rgb(126, 34, 206)"],
+button[style*="background-color: rgb(107, 33, 168)"] {
+  color: rgb(255 255 255) !important;
+  font-weight: 700 !important;
+}
+
+/* REGRAS UNIVERSAIS PARA PREVENIR INVISIBILIDADE */
+button:not([class*="variant-link"]):not([class*="variant-ghost"]):not([class*="variant-outline"]) {
+  font-weight: 700 !important;
+}
+
+/* Garantir que nenhum botão tenha texto da mesma cor que o fundo */
+button {
+  text-shadow: none !important;
+}
+
+/* INTERCEPTADOR FINAL - qualquer coisa que possa estar invisível */
+*:not(svg):not(path):not(g) {
+  /* Aplicar apenas se não for um elemento SVG */
+}
+
+/* Regra específica para garantir que botões nunca sejam invisíveis */
+button[disabled] {
+  opacity: 0.6 !important;
+}
+
+button[disabled]:not([class*="variant-link"]) {
+  font-weight: 700 !important;
+}

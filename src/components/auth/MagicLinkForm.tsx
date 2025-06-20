@@ -50,8 +50,16 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
               />
             </div>
             <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
-            <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-100">Email Enviado!</CardTitle>
-            <CardDescription className="text-slate-700 dark:text-slate-300">
+            <CardTitle 
+              className="text-2xl font-bold text-slate-800 dark:text-slate-100 force-readable"
+              style={{ color: 'rgb(31, 41, 55)', fontWeight: '700' }}
+            >
+              Email Enviado!
+            </CardTitle>
+            <CardDescription 
+              className="text-slate-700 dark:text-slate-300 force-readable"
+              style={{ color: 'rgb(55, 65, 81)', fontWeight: '600' }}
+            >
               Enviamos um link mágico para <strong>{email}</strong>. 
               Verifique sua caixa de entrada e clique no link para fazer login.
             </CardDescription>
@@ -61,7 +69,8 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
               <Button 
                 variant="link" 
                 onClick={onBackToLogin}
-                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 force-readable"
+                style={{ color: 'rgb(75, 85, 99)', fontWeight: '700' }}
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Voltar ao login
@@ -85,15 +94,29 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
             />
           </div>
           <Sparkles className="w-12 h-12 text-purple-500 mx-auto mb-4" />
-          <CardTitle className="text-2xl font-bold text-slate-800 dark:text-slate-100">Link Mágico</CardTitle>
-          <CardDescription className="text-slate-700 dark:text-slate-300">
+          <CardTitle 
+            className="text-2xl font-bold text-slate-800 dark:text-slate-100 force-readable"
+            style={{ color: 'rgb(31, 41, 55)', fontWeight: '700' }}
+          >
+            Link Mágico
+          </CardTitle>
+          <CardDescription 
+            className="text-slate-700 dark:text-slate-300 force-readable"
+            style={{ color: 'rgb(55, 65, 81)', fontWeight: '600' }}
+          >
             Entre sem senha! Enviaremos um link mágico para seu email
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label htmlFor="email" className="text-slate-700 dark:text-slate-200">Email</Label>
+              <Label 
+                htmlFor="email" 
+                className="text-slate-700 dark:text-slate-200 force-readable"
+                style={{ color: 'rgb(55, 65, 81)', fontWeight: '700' }}
+              >
+                Email
+              </Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-600 dark:text-gray-400" />
                 <Input
@@ -102,7 +125,8 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
+                  className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 force-readable"
+                  style={{ color: 'rgb(31, 41, 55)', fontWeight: '600' }}
                   required
                   disabled={loading}
                 />
@@ -111,8 +135,9 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
 
             <Button 
               type="submit" 
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white" 
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold contrast-safe magic-link-button" 
               disabled={loading || !email.trim()}
+              style={{ backgroundColor: 'rgb(147, 51, 234)', color: 'rgb(255, 255, 255)', fontWeight: '700' }}
             >
               {loading ? 'Enviando...' : 'Enviar Link Mágico'}
             </Button>
@@ -122,7 +147,8 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
             <Button 
               variant="link" 
               onClick={onBackToLogin}
-              className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200"
+              className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 force-readable"
+              style={{ color: 'rgb(75, 85, 99)', fontWeight: '700' }}
               disabled={loading}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
