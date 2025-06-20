@@ -169,8 +169,6 @@ const Index = () => {
 
           <TabsContent value="home" className="space-y-6">
             <DailyHabit />
-            <StatusCards userProfile={userProfile} userStats={userStats} />
-            <GamificationCards userStats={userStats} />
             <ComingSoonFeatures />
           </TabsContent>
 
@@ -211,15 +209,9 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="statistics" className="space-y-6">
-            <div className="text-center py-12">
-              <BarChart3 className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                Estatísticas
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300">
-                Em breve! Visualize seu progresso com gráficos detalhados e relatórios.
-              </p>
-            </div>
+            <StatusCards userProfile={userProfile} userStats={userStats} />
+            <GamificationCards userStats={userStats} />
+            <ProgressDashboard />
           </TabsContent>
 
           <TabsContent value="profile">
