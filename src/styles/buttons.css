@@ -1,0 +1,229 @@
+
+@layer base {
+  /* BOTÕES - CONTRASTE FORÇADO DEFINITIVO */
+  button {
+    @apply transition-colors duration-200 font-bold;
+  }
+
+  /* ESTRATÉGIA DEFINITIVA: Forçar cores específicas por tipo de botão */
+  
+  /* Botão Google - SEMPRE texto escuro em fundo claro */
+  button[class*="bg-white"], 
+  .google-auth-button,
+  button:has(svg[viewBox="0 0 24 24"]) {
+    @apply bg-white text-gray-900 border-gray-300 font-bold !important;
+    color: rgb(31 41 55) !important;
+    background-color: rgb(255 255 255) !important;
+    border-color: rgb(209 213 219) !important;
+  }
+  
+  button[class*="bg-white"]:hover,
+  .google-auth-button:hover,
+  button:has(svg[viewBox="0 0 24 24"]):hover {
+    @apply bg-gray-100 text-gray-900 font-bold !important;
+    color: rgb(31 41 55) !important;
+    background-color: rgb(249 250 251) !important;
+  }
+  
+  button[class*="bg-white"]:active,
+  .google-auth-button:active,
+  button:has(svg[viewBox="0 0 24 24"]):active {
+    @apply bg-gray-200 text-gray-900 font-bold !important;
+    color: rgb(31 41 55) !important;
+    background-color: rgb(229 231 235) !important;
+  }
+  
+  .dark button[class*="bg-white"], 
+  .dark .google-auth-button,
+  .dark button:has(svg[viewBox="0 0 24 24"]) {
+    @apply bg-gray-800 text-gray-100 border-gray-600 font-bold !important;
+    color: rgb(243 244 246) !important;
+    background-color: rgb(31 41 55) !important;
+    border-color: rgb(75 85 99) !important;
+  }
+  
+  .dark button[class*="bg-white"]:hover,
+  .dark .google-auth-button:hover,
+  .dark button:has(svg[viewBox="0 0 24 24"]):hover {
+    @apply bg-gray-700 text-gray-100 font-bold !important;
+    color: rgb(243 244 246) !important;
+    background-color: rgb(55 65 81) !important;
+  }
+
+  .dark button[class*="bg-white"]:active,
+  .dark .google-auth-button:active,
+  .dark button:has(svg[viewBox="0 0 24 24"]):active {
+    @apply bg-gray-600 text-gray-100 font-bold !important;
+    color: rgb(243 244 246) !important;
+    background-color: rgb(75 85 99) !important;
+  }
+
+  /* Botões primários (vermelhos) - SEMPRE texto branco */
+  button[class*="bg-red"], 
+  button[class*="bg-primary"],
+  .primary-button {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+  }
+  
+  button[class*="bg-red"]:hover, 
+  button[class*="bg-primary"]:hover,
+  .primary-button:hover {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+  }
+
+  button[class*="bg-red"]:active, 
+  button[class*="bg-primary"]:active,
+  .primary-button:active {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+  }
+
+  /* BOTÕES ROXOS/PURPLE - SEMPRE texto branco visível */
+  button[class*="bg-purple"],
+  .magic-link-button,
+  .purple-button {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+    background-color: rgb(147 51 234) !important;
+  }
+  
+  button[class*="bg-purple"]:hover,
+  .magic-link-button:hover,
+  .purple-button:hover {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+    background-color: rgb(126 34 206) !important;
+  }
+
+  button[class*="bg-purple"]:active,
+  .magic-link-button:active,
+  .purple-button:active {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+    background-color: rgb(107 33 168) !important;
+  }
+
+  button[class*="bg-purple"]:focus,
+  .magic-link-button:focus,
+  .purple-button:focus {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+    background-color: rgb(147 51 234) !important;
+  }
+
+  button[class*="bg-purple"]:disabled,
+  .magic-link-button:disabled,
+  .purple-button:disabled {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+    background-color: rgb(147 51 234) !important;
+    opacity: 0.5;
+  }
+  
+  /* Botões secundários e outline - texto contrastante */
+  button[class*="variant-outline"], 
+  button[class*="variant-ghost"] {
+    @apply text-gray-900 font-bold !important;
+    color: rgb(31 41 55) !important;
+  }
+  
+  .dark button[class*="variant-outline"], 
+  .dark button[class*="variant-ghost"] {
+    @apply text-slate-100 font-bold !important;
+    color: rgb(248 250 252) !important;
+  }
+
+  /* Botões de link - cores específicas */
+  button[class*="variant-link"] {
+    @apply text-blue-600 hover:text-blue-700 font-bold !important;
+    color: rgb(37 99 235) !important;
+  }
+  
+  button[class*="variant-link"]:hover {
+    @apply text-blue-700 font-bold !important;
+    color: rgb(29 78 216) !important;
+  }
+
+  button[class*="variant-link"]:active {
+    @apply text-blue-800 font-bold !important;
+    color: rgb(30 64 175) !important;
+  }
+  
+  .dark button[class*="variant-link"] {
+    @apply text-blue-400 hover:text-blue-300 font-bold !important;
+    color: rgb(96 165 250) !important;
+  }
+
+  .dark button[class*="variant-link"]:hover {
+    @apply text-blue-300 font-bold !important;
+    color: rgb(147 197 253) !important;
+  }
+
+  .dark button[class*="variant-link"]:active {
+    @apply text-blue-200 font-bold !important;
+    color: rgb(191 219 254) !important;
+  }
+
+  /* Focus states for buttons */
+  button:focus {
+    @apply ring-2 ring-red-500 ring-opacity-50 outline-none;
+  }
+
+  /* Botões específicos por contexto */
+  .auth-form button, 
+  .login-form button,
+  .signup-form button {
+    font-weight: 700 !important;
+  }
+  
+  /* Interceptar botões brancos em fundos brancos */
+  .bg-white button,
+  button.bg-white,
+  [style*="background-color: white"] button,
+  [style*="background: white"] button {
+    color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
+  }
+
+  .dark .bg-white button,
+  .dark button.bg-white,
+  .dark [style*="background-color: white"] button,
+  .dark [style*="background: white"] button {
+    color: rgb(248 250 252) !important;
+    background-color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
+  }
+
+  /* INTERCEPTADOR ESPECIAL PARA BOTÕES DESABILITADOS */
+  button:disabled {
+    opacity: 0.6 !important;
+  }
+
+  button[class*="bg-purple"]:disabled,
+  .magic-link-button:disabled {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+    background-color: rgb(147 51 234) !important;
+    opacity: 0.6 !important;
+  }
+
+  button[class*="bg-red"]:disabled,
+  .primary-button:disabled {
+    @apply text-white font-bold !important;
+    color: rgb(255 255 255) !important;
+    opacity: 0.6 !important;
+  }
+
+  /* INTERCEPTADOR PARA BOTÕES EM ESTADOS ATIVOS/FOCUS */
+  button:active,
+  button:focus {
+    outline: none !important;
+  }
+
+  /* Garantir que botões nunca tenham texto invisível */
+  button * {
+    color: inherit !important;
+  }
+}

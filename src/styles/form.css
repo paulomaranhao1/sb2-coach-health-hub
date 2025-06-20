@@ -1,0 +1,36 @@
+
+@layer base {
+  /* Improved input styling with better readability */
+  input, textarea, select {
+    @apply bg-white text-gray-900 border-gray-300 font-medium;
+  }
+  
+  .dark input, .dark textarea, .dark select {
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
+  }
+  
+  /* Better contrast for form controls */
+  .form-control, [class*="form-"] input, [class*="Form"] input {
+    @apply bg-white text-gray-900 border-gray-300 font-medium;
+  }
+  
+  .dark .form-control, .dark [class*="form-"] input, .dark [class*="Form"] input {
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
+  }
+
+  /* Focus states for better accessibility */
+  input:focus, textarea:focus, select:focus {
+    @apply ring-2 ring-red-500 ring-opacity-50 outline-none;
+  }
+
+  /* Label improvements for better readability */
+  label {
+    @apply text-gray-800 font-bold;
+    color: rgb(31 41 55) !important;
+  }
+
+  .dark label {
+    @apply text-slate-200 font-bold;
+    color: rgb(226 232 240) !important;
+  }
+}

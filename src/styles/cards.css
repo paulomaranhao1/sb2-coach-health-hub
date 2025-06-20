@@ -1,0 +1,11 @@
+
+@layer base {
+  /* Card styling improvements with better text readability */
+  .card, [class*="Card"] {
+    @apply bg-white text-gray-900 border-gray-200;
+  }
+  
+  .dark .card, .dark [class*="Card"] {
+    @apply bg-slate-800 text-slate-100 border-slate-700;
+  }
+}

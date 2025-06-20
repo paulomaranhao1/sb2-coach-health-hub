@@ -1,0 +1,61 @@
+
+@layer base {
+  /* Improved text contrast and readability */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-gray-900 font-bold;
+  }
+  
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    @apply text-slate-100 font-bold;
+  }
+  
+  /* Textos normais com melhor contraste */
+  p, span, div {
+    @apply text-gray-800 font-medium;
+  }
+  
+  .dark p, .dark span, .dark div {
+    @apply text-slate-200 font-medium;
+  }
+  
+  /* Muted text with better contrast */
+  .text-muted-foreground {
+    @apply text-gray-600 font-medium !important;
+  }
+  
+  .dark .text-muted-foreground {
+    @apply text-slate-400 font-medium !important;
+  }
+
+  /* Improved link styling with better readability */
+  a {
+    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-bold;
+    color: rgb(220 38 38) !important;
+  }
+  
+  .dark a {
+    @apply text-red-400 hover:text-red-300 font-bold;
+    color: rgb(248 113 113) !important;
+  }
+
+  /* Small text improvements */
+  .text-sm {
+    @apply font-bold text-gray-700;
+    color: rgb(55 65 81) !important;
+  }
+  
+  .dark .text-sm {
+    @apply text-slate-300 font-bold;
+    color: rgb(203 213 225) !important;
+  }
+
+  .text-xs {
+    @apply font-bold text-gray-600;
+    color: rgb(75 85 99) !important;
+  }
+  
+  .dark .text-xs {
+    @apply text-slate-400 font-bold;
+    color: rgb(148 163 184) !important;
+  }
+}
