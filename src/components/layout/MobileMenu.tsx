@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Home, Calendar, Bell, MessageSquare, User, Trophy, ShoppingCart, LogOut, Sun, Moon, BookOpen } from "lucide-react";
+import { Home, MessageSquare, Camera, Clock, Trophy, Pill, ShoppingCart, LogOut, Sun, Moon, BookOpen } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
@@ -49,12 +49,11 @@ const MobileMenu = ({
 
   const tabItems = [
     { value: "home", label: "Início", icon: Home },
-    { value: "dashboard", label: "Dashboard", icon: Calendar },
-    { value: "weight", label: "Peso", icon: Calendar },
-    { value: "supplement", label: "Suplemento", icon: Bell },
     { value: "chat", label: "AI Coach", icon: MessageSquare },
+    { value: "calorie-counter", label: "Contador de Calorias por Foto", icon: Camera },
+    { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "gamification", label: "Conquistas", icon: Trophy },
-    { value: "profile", label: "Perfil", icon: User }
+    { value: "supplement", label: "Minha Suplementação", icon: Pill }
   ];
 
   if (!showMobileMenu) return null;

@@ -22,6 +22,7 @@ import MotivationalGreeting from "@/components/MotivationalGreeting";
 import StatusCards from "@/components/home/StatusCards";
 import GamificationCards from "@/components/home/GamificationCards";
 import ComingSoonFeatures from "@/components/ComingSoonFeatures";
+import { Camera, Clock } from "lucide-react";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -173,24 +174,40 @@ const Index = () => {
             <ComingSoonFeatures />
           </TabsContent>
 
-          <TabsContent value="dashboard" className="space-y-6">
-            <ProgressDashboard />
-          </TabsContent>
-
-          <TabsContent value="weight">
-            <WeightTracker />
-          </TabsContent>
-
-          <TabsContent value="supplement">
-            <SupplementReminder />
-          </TabsContent>
-
           <TabsContent value="chat">
             <AIChat />
           </TabsContent>
 
+          <TabsContent value="calorie-counter" className="space-y-6">
+            <div className="text-center py-12">
+              <Camera className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                Contador de Calorias por Foto
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                Em breve! Tire uma foto da sua refeição e descubra as calorias instantaneamente.
+              </p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="intermittent-fasting" className="space-y-6">
+            <div className="text-center py-12">
+              <Clock className="w-16 h-16 mx-auto mb-4 text-gray-400" />
+              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+                Jejum Intermitente
+              </h2>
+              <p className="text-gray-600 dark:text-gray-300">
+                Em breve! Acompanhe seus períodos de jejum e alimentação de forma inteligente.
+              </p>
+            </div>
+          </TabsContent>
+
           <TabsContent value="gamification">
             <GamificationSystem />
+          </TabsContent>
+
+          <TabsContent value="supplement">
+            <SupplementReminder />
           </TabsContent>
 
           <TabsContent value="profile">
