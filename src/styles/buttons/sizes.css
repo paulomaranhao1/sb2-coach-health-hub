@@ -1,16 +1,41 @@
 
 @layer base {
-  /* Button Size Variants */
+  /* Modern Button Sizes */
+  
+  .btn-xs {
+    @apply px-2 py-1 text-xs font-medium;
+    min-height: 24px;
+  }
   
   .btn-sm {
-    @apply px-3 py-1.5 text-sm;
+    @apply px-3 py-1.5 text-sm font-medium;
+    min-height: 32px;
+  }
+  
+  .btn-md {
+    @apply px-4 py-2 text-sm font-medium;
+    min-height: 40px;
   }
   
   .btn-lg {
-    @apply px-6 py-3 text-lg;
+    @apply px-6 py-3 text-base font-medium;
+    min-height: 48px;
   }
   
   .btn-xl {
-    @apply px-8 py-4 text-xl;
+    @apply px-8 py-4 text-lg font-medium;
+    min-height: 56px;
   }
-}
+
+  /* Icon buttons */
+  .btn-icon-sm {
+    @apply w-8 h-8 p-0 flex items-center justify-center;
+  }
+
+  .btn-icon-md {
+    @apply w-10 h-10 p-0 flex items-center justify-center;
+  }
+
+  .btn-icon-lg {
+    @apply w-12 h-12 p-0 flex items-center justify-center;
+  }
