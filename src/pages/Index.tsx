@@ -10,10 +10,12 @@ import OnboardingScreen from "@/components/OnboardingScreen";
 import TutorialScreen from "@/components/TutorialScreen";
 import DailyHabit from "@/components/DailyHabit";
 import GamificationSystem from "@/components/GamificationSystem";
+import IntermittentFasting from "@/components/IntermittentFasting";
 import { Loading } from "@/components/ui/loading";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { useTheme } from "@/hooks/useTheme";
 import { useNotifications } from "@/hooks/useNotifications";
+import { useSubscription } from "@/hooks/useSubscription";
 import { supabase } from "@/integrations/supabase/client";
 import Header from "@/components/layout/Header";
 import MobileMenu from "@/components/layout/MobileMenu";
@@ -23,6 +25,9 @@ import ComingSoonFeatures from "@/components/ComingSoonFeatures";
 import StatisticsOverview from "@/components/statistics/StatisticsOverview";
 import { Camera, Clock, BarChart3 } from "lucide-react";
 import CalorieCounterTab from "@/components/CalorieCounterTab";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Lock, Crown } from "lucide-react";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -35,6 +40,7 @@ const Index = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { theme, toggleTheme } = useTheme();
   const { permission, startNotificationSchedule } = useNotifications();
+  const { hasPremiumAccess, isLoading: subscriptionLoading } = useSubscription();
 
   useEffect(() => {
     checkUserProfile();
@@ -118,6 +124,14 @@ const Index = () => {
     setActiveTab('home');
   };
 
+  const handlePurchase = () => {
+    const isInBrazil = navigator.language.includes('pt') || 
+                      Intl.DateTimeFormat().resolvedOptions().timeZone.includes('America/Sao_Paulo');
+    const url = isInBrazil ? 'https://sb2turbo.com.br' : 'https://sb2turbo.com';
+    window.open(url, '_blank');
+    toastFeedback.info('Redirecionando para a loja...');
+  };
+
   if (showWelcome) {
     return <WelcomeScreen onContinue={() => setShowWelcome(false)} />;
   }
@@ -135,7 +149,7 @@ const Index = () => {
     );
   }
 
-  if (isLoading) {
+  if (isLoading || subscriptionLoading) {
     return (
       <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
         <Loading size="lg" text="Carregando SB2 Coach..." />
@@ -181,15 +195,64 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="intermittent-fasting" className="space-y-6">
-            <div className="text-center py-12">
-              <Clock className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                Jejum Intermitente
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300">
-                Em breve! Acompanhe seus períodos de jejum e alimentação de forma inteligente.
-              </p>
-            </div>
+            {hasPremiumAccess ? (
+              <IntermittentFasting />
+            ) : (
+              <div className="space-y-6">
+                {/* Preview do conteúdo com blur */}
+                <div className="relative">
+                  <div className="filter blur-sm pointer-events-none">
+                    <IntermittentFasting />
+                  </div>
+                  
+                  {/* Overlay de pagamento */}
+                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10">
+                    <Card className="max-w-md mx-auto border-2 border-yellow-500 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950">
+                      <CardHeader className="text-center">
+                        <div className="flex items-center justify-center mb-4">
+                          <Crown className="w-12 h-12 text-yellow-500" />
+                        </div>
+                        <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+                          🔒 Funcionalidade Premium
+                        </CardTitle>
+                        <CardDescription className="text-lg">
+                          O Jejum Intermitente é uma funcionalidade exclusiva do SB2 Turbo
+                        </CardDescription>
+                      </CardHeader>
+                      <CardContent className="space-y-4 text-center">
+                        <div className="space-y-2">
+                          <p className="text-gray-700 dark:text-gray-300">
+                            ⏰ Timer inteligente de jejum
+                          </p>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            📊 Múltiplos planos de jejum (16:8, 18:6, 20:4, OMAD)
+                          </p>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            🏆 Sistema de conquistas e estatísticas
+                          </p>
+                          <p className="text-gray-700 dark:text-gray-300">
+                            💡 Dicas científicas e orientações
+                          </p>
+                        </div>
+                        
+                        <div className="pt-4 border-t border-yellow-200">
+                          <Button
+                            onClick={handlePurchase}
+                            className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 px-6 text-lg shadow-lg transform hover:scale-105 transition-all duration-200"
+                          >
+                            <Crown className="w-5 h-5 mr-2" />
+                            Desbloquear SB2 Turbo
+                          </Button>
+                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                            Acesso completo a todas as funcionalidades premium
+                          </p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+            )}
           </TabsContent>
 
           <TabsContent value="gamification">
