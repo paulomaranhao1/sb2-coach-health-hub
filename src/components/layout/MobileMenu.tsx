@@ -47,6 +47,11 @@ const MobileMenu = ({
     }
   };
 
+  const handleProfileClick = () => {
+    handleTabChange('profile');
+    setShowMobileMenu(false);
+  };
+
   const tabItems = [
     { value: "home", label: "Início", icon: Home },
     { value: "chat", label: "AI Coach", icon: MessageSquare, featured: true },
@@ -54,8 +59,7 @@ const MobileMenu = ({
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
-    { value: "statistics", label: "Estatísticas", icon: BarChart3 },
-    { value: "profile", label: "Perfil", icon: User }
+    { value: "statistics", label: "Estatísticas", icon: BarChart3 }
   ];
 
   if (!showMobileMenu) return null;
@@ -99,6 +103,19 @@ const MobileMenu = ({
               <span className={item.featured ? 'font-bold' : ''}>{item.label}</span>
             </button>
           ))}
+          
+          {/* Perfil - Movido para o menu lateral */}
+          <button
+            onClick={handleProfileClick}
+            className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-all duration-200 transform hover:scale-105 ${
+              activeTab === 'profile' 
+                ? 'bg-red-600 text-white shadow-lg' 
+                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+            }`}
+          >
+            <User className="w-5 h-5" />
+            <span>Perfil</span>
+          </button>
           
           <div className="pt-4 border-t border-gray-700 dark:border-gray-600 space-y-2">
             <Button 

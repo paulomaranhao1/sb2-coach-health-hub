@@ -1,6 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3, User } from "lucide-react";
+import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3 } from "lucide-react";
 
 interface TabNavigationProps {
   activeTab: string;
@@ -14,15 +14,13 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
-    { value: "statistics", label: "Estatísticas", icon: BarChart3 },
-    { value: "profile", label: "Perfil", icon: User },
-    { value: "chat", label: "AI Coach", icon: MessageSquare }
+    { value: "statistics", label: "Estatísticas", icon: BarChart3 }
   ];
 
   return (
     <>
       {/* Desktop Tabs */}
-      <TabsList className="grid w-full grid-cols-8 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-colors duration-300">
+      <TabsList className="grid w-full grid-cols-6 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-colors duration-300">
         {tabItems.map((item) => (
           <TabsTrigger 
             key={item.value}
@@ -53,6 +51,21 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
                 <span className="text-xs font-medium text-center leading-tight">{item.label}</span>
               </button>
             ))}
+          </div>
+          
+          {/* AI Coach Button - Destacado na parte inferior */}
+          <div className="mt-4 pt-3 border-t border-gray-700/50">
+            <button
+              onClick={() => setActiveTab('chat')}
+              className={`w-full flex items-center justify-center space-x-2 p-4 rounded-xl transition-all duration-200 transform hover:scale-105 ${
+                activeTab === 'chat' 
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg animate-pulse' 
+                  : 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:from-purple-700 hover:to-pink-700'
+              }`}
+            >
+              <MessageSquare className="w-6 h-6" />
+              <span className="font-bold text-lg">AI Coach</span>
+            </button>
           </div>
         </div>
       </div>
