@@ -2,20 +2,20 @@
 @layer base {
   /* Improved input styling with better readability */
   input, textarea, select {
-    @apply bg-white text-slate-900 border-slate-300 font-medium;
+    @apply bg-white text-slate-900 border-slate-300 font-semibold;
   }
   
   .dark input, .dark textarea, .dark select {
-    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-semibold;
   }
   
   /* Better contrast for form controls */
   .form-control, [class*="form-"] input, [class*="Form"] input {
-    @apply bg-white text-slate-900 border-slate-300 font-medium;
+    @apply bg-white text-slate-900 border-slate-300 font-semibold;
   }
   
   .dark .form-control, .dark [class*="form-"] input, .dark [class*="Form"] input {
-    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-semibold;
   }
   
   /* Improved text contrast and readability */
@@ -28,20 +28,20 @@
   }
   
   p, span, div {
-    @apply text-slate-800 font-medium;
+    @apply text-slate-800 font-semibold;
   }
   
   .dark p, .dark span, .dark div {
-    @apply text-slate-200 font-medium;
+    @apply text-slate-200 font-semibold;
   }
   
   /* Muted text with better contrast */
   .text-muted-foreground {
-    @apply text-slate-700 font-medium;
+    @apply text-slate-700 font-semibold;
   }
   
   .dark .text-muted-foreground {
-    @apply text-slate-300 font-medium;
+    @apply text-slate-300 font-semibold;
   }
   
   /* Card styling improvements with better text readability */
@@ -55,12 +55,12 @@
   
   /* Button text improvements with better contrast */
   button {
-    @apply transition-colors duration-200 font-semibold;
+    @apply transition-colors duration-200 font-bold;
   }
 
   /* Ensure button text is always readable */
   button:not(.bg-transparent):not([class*="variant-ghost"]):not([class*="variant-outline"]) {
-    @apply text-white;
+    @apply text-white font-bold;
   }
   
   /* Focus states for better accessibility */
@@ -70,28 +70,45 @@
   
   /* Improved link styling with better readability */
   a {
-    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-medium;
+    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-bold;
   }
   
   .dark a {
-    @apply text-red-400 hover:text-red-300 font-medium;
+    @apply text-red-400 hover:text-red-300 font-bold;
   }
 
   /* Label improvements for better readability */
   label {
-    @apply text-slate-800 font-semibold;
+    @apply text-slate-800 font-bold;
   }
 
   .dark label {
-    @apply text-slate-200 font-semibold;
+    @apply text-slate-200 font-bold;
   }
 
   /* Small text improvements */
   .text-sm {
-    @apply font-medium;
+    @apply font-semibold;
   }
 
   .text-xs {
-    @apply font-medium;
+    @apply font-semibold;
+  }
+
+  /* Force white text on colored backgrounds for better readability */
+  .bg-red-500, .bg-red-600, .bg-red-700, .bg-red-800, .bg-red-900,
+  .bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
+  .bg-green-500, .bg-green-600, .bg-green-700, .bg-green-800, .bg-green-900,
+  .bg-purple-500, .bg-purple-600, .bg-purple-700, .bg-purple-800, .bg-purple-900,
+  .bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900,
+  .bg-pink-500, .bg-pink-600, .bg-pink-700, .bg-pink-800, .bg-pink-900,
+  .bg-gray-700, .bg-gray-800, .bg-gray-900,
+  .bg-slate-700, .bg-slate-800, .bg-slate-900 {
+    @apply text-white font-bold;
+  }
+
+  /* Ensure proper contrast on gradient backgrounds */
+  [class*="bg-gradient"] {
+    @apply text-white font-bold;
   }
 }
