@@ -107,6 +107,33 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
   };
 
   const handleSubmit = async () => {
+    // Validar todos os campos antes de enviar
+    const fieldsToValidate = {
+      name: formData.name,
+      gender: formData.gender,
+      weight: formData.weight,
+      height: formData.height,
+      age: formData.age,
+      goalWeight: formData.goalWeight,
+      phoneNumber: formData.phoneNumber
+    };
+
+    let hasErrors = false;
+    Object.entries(fieldsToValidate).forEach(([field, value]) => {
+      if (!validateField(field, value)) {
+        hasErrors = true;
+      }
+    });
+
+    if (hasErrors) {
+      toast({
+        title: "❌ Dados inválidos",
+        description: "Por favor, verifique os campos e tente novamente.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsLoading(true);
     
     try {
@@ -116,7 +143,20 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
         throw new Error("Usuário não encontrado");
       }
 
-      const insertData: any = {
+      console.log('=== ONBOARDING DEBUG ===');
+      console.log('User ID:', user.id);
+      console.log('Form data:', formData);
+
+      // Verificar se já existe um perfil
+      const { data: existingProfile, error: checkError } = await supabase
+        .from('user_profiles')
+        .select('id, user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+      console.log('Existing profile:', existingProfile);
+
+      const profileData = {
         user_id: user.id,
         name: formData.name,
         gender: formData.gender,
@@ -128,11 +168,30 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
         onboarding_completed: true
       };
 
-      const { error } = await supabase
-        .from('user_profiles')
-        .insert(insertData);
+      console.log('Profile data to save:', profileData);
 
-      if (error) throw error;
+      if (existingProfile) {
+        // Atualizar perfil existente
+        const { error } = await supabase
+          .from('user_profiles')
+          .update(profileData)
+          .eq('user_id', user.id);
+
+        if (error) {
+          console.error('Erro ao atualizar perfil:', error);
+          throw error;
+        }
+      } else {
+        // Criar novo perfil
+        const { error } = await supabase
+          .from('user_profiles')
+          .insert(profileData);
+
+        if (error) {
+          console.error('Erro ao criar perfil:', error);
+          throw error;
+        }
+      }
 
       toast({
         title: "✅ Perfil criado com sucesso!",
@@ -144,7 +203,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
       console.error('Erro ao salvar perfil:', error);
       toast({
         title: "❌ Erro ao salvar perfil",
-        description: "Tente novamente em alguns instantes.",
+        description: error.message || "Tente novamente em alguns instantes.",
         variant: "destructive",
       });
     } finally {
