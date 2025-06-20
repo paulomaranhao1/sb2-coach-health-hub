@@ -5,9 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { ShoppingCart, Star, Gift, Check, Upload, ArrowLeft } from "lucide-react";
+import { ShoppingCart, Star, Gift, Check, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useSubscription } from "@/hooks/useSubscription";
 
@@ -18,7 +17,6 @@ interface OffersScreenProps {
 const OffersScreen = ({ onBack }: OffersScreenProps) => {
   const [showClientForm, setShowClientForm] = useState(false);
   const [clientCode, setClientCode] = useState("");
-  const [purchaseProof, setPurchaseProof] = useState("");
   const { updateSubscription } = useSubscription();
 
   const offers = [
@@ -81,28 +79,34 @@ const OffersScreen = ({ onBack }: OffersScreenProps) => {
   };
 
   const handleClientVerification = async () => {
-    if (!clientCode && !purchaseProof) {
-      toast.error('Preencha ao menos um campo para verificação');
+    if (!clientCode) {
+      toast.error('Digite o código do cliente');
       return;
     }
 
-    try {
-      await updateSubscription({
-        subscription_type: 'client',
-        verification_status: 'pending',
-        verification_method: clientCode ? 'client_code' : 'purchase_proof',
-        verification_data: {
-          client_code: clientCode,
-          purchase_proof: purchaseProof
-        }
-      });
+    if (clientCode.toUpperCase() === 'CLIENTESB2') {
+      try {
+        await updateSubscription({
+          subscription_type: 'client',
+          verification_status: 'verified',
+          verification_method: 'client_code',
+          verification_data: {
+            client_code: clientCode
+          },
+          is_active: true
+        });
 
-      toast.success('Verificação enviada! Analisaremos em até 24h e liberaremos seu acesso premium.');
-      setShowClientForm(false);
-      setClientCode("");
-      setPurchaseProof("");
-    } catch (error) {
-      toast.error('Erro ao enviar verificação. Tente novamente.');
+        toast.success('Acesso premium liberado com sucesso!');
+        setShowClientForm(false);
+        setClientCode("");
+        setTimeout(() => {
+          onBack();
+        }, 1500);
+      } catch (error) {
+        toast.error('Erro ao liberar acesso. Tente novamente.');
+      }
+    } else {
+      toast.error('Código inválido. Em breve teremos mais códigos disponíveis.');
     }
   };
 
@@ -210,27 +214,12 @@ const OffersScreen = ({ onBack }: OffersScreenProps) => {
                   
                   <div className="space-y-4">
                     <div>
-                      <Label htmlFor="clientCode">Código do Cliente (se tiver)</Label>
+                      <Label htmlFor="clientCode">Código do Cliente</Label>
                       <Input
                         id="clientCode"
-                        placeholder="Ex: SB2-123456"
+                        placeholder="Digite seu código de cliente"
                         value={clientCode}
                         onChange={(e) => setClientCode(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="text-center text-sm text-gray-500">
-                      - OU -
-                    </div>
-                    
-                    <div>
-                      <Label htmlFor="purchaseProof">Comprovante de Compra</Label>
-                      <Textarea
-                        id="purchaseProof"
-                        placeholder="Cole aqui o número do pedido, e-mail de confirmação ou descreva onde/quando comprou"
-                        value={purchaseProof}
-                        onChange={(e) => setPurchaseProof(e.target.value)}
-                        rows={3}
                       />
                     </div>
                     
@@ -238,12 +227,17 @@ const OffersScreen = ({ onBack }: OffersScreenProps) => {
                       onClick={handleClientVerification}
                       className="w-full bg-gradient-to-r from-red-500 to-red-600"
                     >
-                      Enviar Verificação
+                      Verificar Código
                     </Button>
                     
-                    <p className="text-xs text-gray-500 text-center">
-                      Analisaremos sua solicitação em até 24h úteis
-                    </p>
+                    <div className="text-center">
+                      <p className="text-sm text-gray-500 mb-2">
+                        🔜 Em breve: Mais opções de verificação
+                      </p>
+                      <p className="text-xs text-gray-400">
+                        Sistema de verificação automática em desenvolvimento
+                      </p>
+                    </div>
                   </div>
                 </DialogContent>
               </Dialog>
