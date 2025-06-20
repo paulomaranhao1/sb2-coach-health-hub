@@ -238,8 +238,7 @@ const AppSettings = () => {
           </div>
           <div className="flex justify-between">
             <span className="text-sm text-muted-foreground">Desenvolvido por:</span>
-            <span className="text-sm font-medium">Natuu Nutrition International Inc.
-natuu.ai</span>
+            <span className="text-sm font-medium">Natuu Nutrition International Inc.</span>
           </div>
         </CardContent>
       </Card>
