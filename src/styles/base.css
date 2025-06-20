@@ -5,74 +5,133 @@
 
 @layer base {
   :root {
+    /* Background & Surface Colors */
     --background: 255 255 255;
-    --foreground: 31 41 55;
+    --foreground: 15 23 42;
     --card: 255 255 255;
-    --card-foreground: 31 41 55;
+    --card-foreground: 15 23 42;
     --popover: 255 255 255;
-    --popover-foreground: 31 41 55;
-    --primary: 220 38 38;
+    --popover-foreground: 15 23 42;
+    
+    /* Primary Colors - Modern Red */
+    --primary: 239 68 68;
     --primary-foreground: 255 255 255;
+    
+    /* Secondary Colors - Cool Gray */
     --secondary: 248 250 252;
     --secondary-foreground: 51 65 85;
-    --muted: 248 250 252;
-    --muted-foreground: 75 85 99;
-    --accent: 248 250 252;
-    --accent-foreground: 51 65 85;
-    --destructive: 239 68 68;
+    
+    /* Muted Colors */
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    
+    /* Accent Colors - Subtle Blue */
+    --accent: 240 249 255;
+    --accent-foreground: 30 64 175;
+    
+    /* Destructive Colors */
+    --destructive: 220 38 38;
     --destructive-foreground: 255 255 255;
+    
+    /* Success Colors */
+    --success: 34 197 94;
+    --success-foreground: 255 255 255;
+    
+    /* Warning Colors - Orange instead of yellow */
+    --warning: 249 115 22;
+    --warning-foreground: 255 255 255;
+    
+    /* Info Colors */
+    --info: 59 130 246;
+    --info-foreground: 255 255 255;
+    
+    /* Border & Input */
     --border: 226 232 240;
     --input: 255 255 255;
-    --ring: 220 38 38;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 214 59% 52%;
-    --chart-5: 27 87% 67%;
+    --ring: 239 68 68;
+    
+    /* Chart Colors - Modern palette without yellow */
+    --chart-1: 239 68 68;
+    --chart-2: 34 197 94;
+    --chart-3: 59 130 246;
+    --chart-4: 168 85 247;
+    --chart-5: 249 115 22;
+    
     --radius: 0.75rem;
+    
+    /* Sidebar Colors */
     --sidebar-background: 255 255 255;
-    --sidebar-foreground: 31 41 55;
-    --sidebar-primary: 220 38 38;
+    --sidebar-foreground: 15 23 42;
+    --sidebar-primary: 239 68 68;
     --sidebar-primary-foreground: 255 255 255;
     --sidebar-accent: 248 250 252;
     --sidebar-accent-foreground: 51 65 85;
     --sidebar-border: 226 232 240;
-    --sidebar-ring: 220 38 38;
+    --sidebar-ring: 239 68 68;
   }
 
   .dark {
+    /* Background & Surface Colors */
     --background: 2 6 23;
     --foreground: 248 250 252;
     --card: 15 23 42;
     --card-foreground: 248 250 252;
     --popover: 15 23 42;
     --popover-foreground: 248 250 252;
-    --primary: 239 68 68;
+    
+    /* Primary Colors */
+    --primary: 248 113 113;
     --primary-foreground: 2 6 23;
+    
+    /* Secondary Colors */
     --secondary: 30 41 59;
     --secondary-foreground: 203 213 225;
+    
+    /* Muted Colors */
     --muted: 30 41 59;
     --muted-foreground: 148 163 184;
-    --accent: 30 41 59;
-    --accent-foreground: 203 213 225;
+    
+    /* Accent Colors */
+    --accent: 30 58 138;
+    --accent-foreground: 147 197 253;
+    
+    /* Destructive Colors */
     --destructive: 248 113 113;
     --destructive-foreground: 2 6 23;
+    
+    /* Success Colors */
+    --success: 74 222 128;
+    --success-foreground: 2 6 23;
+    
+    /* Warning Colors */
+    --warning: 251 146 60;
+    --warning-foreground: 2 6 23;
+    
+    /* Info Colors */
+    --info: 96 165 250;
+    --info-foreground: 2 6 23;
+    
+    /* Border & Input */
     --border: 51 65 85;
     --input: 30 41 59;
-    --ring: 239 68 68;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 214 59% 52%;
-    --chart-5: 340 75% 55%;
+    --ring: 248 113 113;
+    
+    /* Chart Colors - Dark mode variants */
+    --chart-1: 248 113 113;
+    --chart-2: 74 222 128;
+    --chart-3: 96 165 250;
+    --chart-4: 196 181 253;
+    --chart-5: 251 146 60;
+    
+    /* Sidebar Colors */
     --sidebar-background: 15 23 42;
     --sidebar-foreground: 248 250 252;
-    --sidebar-primary: 239 68 68;
+    --sidebar-primary: 248 113 113;
     --sidebar-primary-foreground: 2 6 23;
     --sidebar-accent: 30 41 59;
     --sidebar-accent-foreground: 203 213 225;
-    --sidebar-border: 51 85 105;
-    --sidebar-ring: 239 68 68;
+    --sidebar-border: 51 65 85;
+    --sidebar-ring: 248 113 113;
   }
 }
 
@@ -82,13 +141,17 @@
   }
   
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: Inter, system-ui, sans-serif;
-    color: rgb(31 41 55);
   }
   
-  .dark body {
+  /* High contrast text for better readability */
+  .text-high-contrast {
+    color: rgb(15 23 42);
+  }
+  
+  .dark .text-high-contrast {
     color: rgb(248 250 252);
   }
 }

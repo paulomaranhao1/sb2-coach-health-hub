@@ -1,156 +1,141 @@
 
-
-/* GUARDA DE CONTRASTE - Previne texto ilegível definitivamente */
 @layer utilities {
-  /* Classe utilitária para forçar contraste adequado */
+  /* Advanced Contrast Protection System */
+  
+  /* High Contrast Text Utilities */
   .force-readable {
-    color: rgb(31 41 55) !important;
-    font-weight: 700 !important;
+    color: rgb(15 23 42) !important;
+    font-weight: 600 !important;
+    text-shadow: none !important;
   }
 
   .dark .force-readable {
     color: rgb(248 250 252) !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
   }
 
-  /* Interceptador universal para botões problemáticos */
+  /* Safe Contrast Classes */
   .contrast-safe {
     background-color: rgb(255 255 255) !important;
-    color: rgb(31 41 55) !important;
-    border: 1px solid rgb(209 213 219) !important;
-    font-weight: 700 !important;
+    color: rgb(15 23 42) !important;
+    border: 1px solid rgb(226 232 240) !important;
+    font-weight: 600 !important;
   }
 
   .dark .contrast-safe {
-    background-color: rgb(31 41 55) !important;
+    background-color: rgb(15 23 42) !important;
     color: rgb(248 250 252) !important;
-    border: 1px solid rgb(75 85 99) !important;
-    font-weight: 700 !important;
+    border: 1px solid rgb(51 65 85) !important;
+    font-weight: 600 !important;
   }
 
-  /* Interceptador para elementos com fundo branco */
+  /* White Background Safety */
   .white-bg-safe * {
-    color: rgb(31 41 55) !important;
-    font-weight: 700 !important;
+    color: rgb(15 23 42) !important;
+    font-weight: 600 !important;
   }
 
   .dark .white-bg-safe * {
     color: rgb(248 250 252) !important;
-    font-weight: 700 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Button Contrast Guards */
+  .btn-contrast-safe {
+    background-color: rgb(59 130 246) !important;
+    color: rgb(255 255 255) !important;
+    border: none !important;
+    font-weight: 600 !important;
+  }
+
+  .btn-contrast-safe:hover {
+    background-color: rgb(37 99 235) !important;
+    color: rgb(255 255 255) !important;
+  }
+
+  .dark .btn-contrast-safe {
+    background-color: rgb(96 165 250) !important;
+    color: rgb(15 23 42) !important;
+  }
+
+  .dark .btn-contrast-safe:hover {
+    background-color: rgb(147 197 253) !important;
+    color: rgb(15 23 42) !important;
   }
 }
 
-/* REGRAS ESPECÍFICAS PARA PREVENIR PROBLEMAS CONHECIDOS */
-
-/* Interceptar qualquer botão que possa ter texto branco em fundo branco */
+/* Emergency Contrast Fixes */
 @supports (color: white) {
-  button:not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-green"]):not([class*="bg-purple"]) {
-    color: rgb(31 41 55) !important;
-    font-weight: 700 !important;
+  /* Prevent white text on white backgrounds */
+  button:not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-green"]):not([class*="bg-purple"]):not([class*="bg-orange"]) {
+    color: rgb(15 23 42) !important;
+    font-weight: 600 !important;
   }
   
-  .dark button:not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-green"]):not([class*="bg-purple"]) {
+  .dark button:not([class*="bg-red"]):not([class*="bg-blue"]):not([class*="bg-green"]):not([class*="bg-purple"]):not([class*="bg-orange"]) {
     color: rgb(248 250 252) !important;
-    font-weight: 700 !important;
   }
 }
 
-/* REGRAS ESPECIAIS PARA BOTÕES ROXOS */
+/* Specific Button Color Guards */
 button[class*="bg-purple"],
 .magic-link-button,
 .purple-button {
   color: rgb(255 255 255) !important;
-  background-color: rgb(147 51 234) !important;
-  font-weight: 700 !important;
+  background-color: rgb(168 85 247) !important;
+  font-weight: 600 !important;
 }
 
-button[class*="bg-purple"]:hover,
-.magic-link-button:hover,
-.purple-button:hover {
+button[class*="bg-red"],
+.primary-button {
   color: rgb(255 255 255) !important;
-  background-color: rgb(126 34 206) !important;
-  font-weight: 700 !important;
+  background-color: rgb(239 68 68) !important;
+  font-weight: 600 !important;
 }
 
-button[class*="bg-purple"]:active,
-.magic-link-button:active,
-.purple-button:active {
+button[class*="bg-green"],
+.success-button {
   color: rgb(255 255 255) !important;
-  background-color: rgb(107 33 168) !important;
-  font-weight: 700 !important;
+  background-color: rgb(34 197 94) !important;
+  font-weight: 600 !important;
 }
 
-button[class*="bg-purple"]:focus,
-.magic-link-button:focus,
-.purple-button:focus {
+button[class*="bg-blue"],
+.info-button {
   color: rgb(255 255 255) !important;
-  background-color: rgb(147 51 234) !important;
-  font-weight: 700 !important;
+  background-color: rgb(59 130 246) !important;
+  font-weight: 600 !important;
 }
 
-button[class*="bg-purple"]:disabled,
-.magic-link-button:disabled,
-.purple-button:disabled {
+button[class*="bg-orange"],
+.warning-button {
   color: rgb(255 255 255) !important;
-  background-color: rgb(147 51 234) !important;
-  font-weight: 700 !important;
-  opacity: 0.6 !important;
+  background-color: rgb(249 115 22) !important;
+  font-weight: 600 !important;
 }
 
-/* Interceptar estilos inline problemáticos */
-*[style*="color: white"] {
-  color: rgb(31 41 55) !important;
-  font-weight: 700 !important;
+/* Intercept problematic inline styles */
+*[style*="color: white"]:not([style*="background"]) {
+  color: rgb(15 23 42) !important;
+  font-weight: 600 !important;
 }
 
-.dark *[style*="color: white"] {
+.dark *[style*="color: white"]:not([style*="background"]) {
   color: rgb(248 250 252) !important;
-  font-weight: 700 !important;
 }
 
-/* Interceptar qualquer elemento que possa estar invisível */
-*[style*="color: #ffffff"],
-*[style*="color: #fff"],
-*[style*="color: rgb(255, 255, 255)"] {
-  color: rgb(31 41 55) !important;
-  font-weight: 700 !important;
+/* Universal invisibility prevention */
+*:not(svg):not(path):not(g):not(circle):not(rect):not(line) {
+  /* Ensure minimum contrast ratio */
 }
 
-.dark *[style*="color: #ffffff"],
-.dark *[style*="color: #fff"],
-.dark *[style*="color: rgb(255, 255, 255)"] {
-  color: rgb(248 250 252) !important;
-  font-weight: 700 !important;
-}
-
-/* INTERCEPTADOR ESPECIAL PARA BOTÕES EM BACKGROUNDS ESPECÍFICOS */
-button[style*="background-color: rgb(147, 51, 234)"],
-button[style*="background-color: rgb(126, 34, 206)"],
-button[style*="background-color: rgb(107, 33, 168)"] {
-  color: rgb(255 255 255) !important;
-  font-weight: 700 !important;
-}
-
-/* REGRAS UNIVERSAIS PARA PREVENIR INVISIBILIDADE */
-button:not([class*="variant-link"]):not([class*="variant-ghost"]):not([class*="variant-outline"]) {
-  font-weight: 700 !important;
-}
-
-/* Garantir que nenhum botão tenha texto da mesma cor que o fundo */
-button {
-  text-shadow: none !important;
-}
-
-/* INTERCEPTADOR FINAL - qualquer coisa que possa estar invisível */
-*:not(svg):not(path):not(g) {
-  /* Aplicar apenas se não for um elemento SVG */
-}
-
-/* Regra específica para garantir que botões nunca sejam invisíveis */
+/* Disabled state contrast */
+button:disabled,
 button[disabled] {
   opacity: 0.6 !important;
+  cursor: not-allowed !important;
 }
 
-button[disabled]:not([class*="variant-link"]) {
-  font-weight: 700 !important;
+button:disabled:not([class*="variant-link"]) {
+  font-weight: 600 !important;
 }

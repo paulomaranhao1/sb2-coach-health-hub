@@ -1,11 +1,116 @@
 
 @layer base {
-  /* Card styling improvements with better text readability */
-  .card, [class*="Card"] {
-    @apply bg-white text-gray-900 border-gray-200;
+  /* Modern Card System with Perfect Contrast */
+  
+  .card, 
+  [class*="Card"],
+  .card-container {
+    @apply bg-white border border-slate-200 rounded-xl shadow-sm backdrop-blur-sm;
+    background-color: rgb(255 255 255) !important;
+    border-color: rgb(226 232 240) !important;
+    color: rgb(15 23 42) !important;
   }
   
-  .dark .card, .dark [class*="Card"] {
-    @apply bg-slate-800 text-slate-100 border-slate-700;
+  .dark .card, 
+  .dark [class*="Card"],
+  .dark .card-container {
+    @apply bg-slate-900 border-slate-800;
+    background-color: rgb(15 23 42) !important;
+    border-color: rgb(30 41 59) !important;
+    color: rgb(248 250 252) !important;
+  }
+  
+  /* Card Headers */
+  .card-header,
+  [class*="CardHeader"] {
+    @apply border-b border-slate-200 p-6;
+    border-color: rgb(226 232 240) !important;
+  }
+  
+  .dark .card-header,
+  .dark [class*="CardHeader"] {
+    @apply border-slate-800;
+    border-color: rgb(30 41 59) !important;
+  }
+  
+  /* Card Content */
+  .card-content,
+  [class*="CardContent"] {
+    @apply p-6;
+  }
+  
+  /* Card Titles */
+  .card-title,
+  [class*="CardTitle"] {
+    @apply text-slate-900 font-bold text-lg;
+    color: rgb(15 23 42) !important;
+  }
+  
+  .dark .card-title,
+  .dark [class*="CardTitle"] {
+    @apply text-slate-50 font-bold;
+    color: rgb(248 250 252) !important;
+  }
+  
+  /* Card Descriptions */
+  .card-description,
+  [class*="CardDescription"] {
+    @apply text-slate-600 font-medium;
+    color: rgb(71 85 105) !important;
+  }
+  
+  .dark .card-description,
+  .dark [class*="CardDescription"] {
+    @apply text-slate-400 font-medium;
+    color: rgb(148 163 184) !important;
+  }
+  
+  /* Special Card Variants */
+  .card-success {
+    @apply border-green-200 bg-green-50;
+    background-color: rgb(240 253 244) !important;
+    border-color: rgb(187 247 208) !important;
+  }
+  
+  .dark .card-success {
+    @apply border-green-800 bg-green-950;
+    background-color: rgb(5 46 22) !important;
+    border-color: rgb(22 101 52) !important;
+  }
+  
+  .card-warning {
+    @apply border-orange-200 bg-orange-50;
+    background-color: rgb(255 247 237) !important;
+    border-color: rgb(254 215 170) !important;
+  }
+  
+  .dark .card-warning {
+    @apply border-orange-800 bg-orange-950;
+    background-color: rgb(67 20 7) !important;
+    border-color: rgb(154 52 18) !important;
+  }
+  
+  .card-error {
+    @apply border-red-200 bg-red-50;
+    background-color: rgb(254 242 242) !important;
+    border-color: rgb(254 202 202) !important;
+  }
+  
+  .dark .card-error {
+    @apply border-red-800 bg-red-950;
+    background-color: rgb(69 10 10) !important;
+    border-color: rgb(153 27 27) !important;
+  }
+  
+  .card-info {
+    @apply border-blue-200 bg-blue-50;
+    background-color: rgb(239 246 255) !important;
+    border-color: rgb(191 219 254) !important;
+  }
+  
+  .dark .card-info {
+    @apply border-blue-800 bg-blue-950;
+    background-color: rgb(23 37 84) !important;
+    border-color: rgb(30 58 138) !important;
   }
 }

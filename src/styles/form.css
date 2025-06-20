@@ -1,36 +1,124 @@
 
 @layer base {
-  /* Improved input styling with better readability */
-  input, textarea, select {
-    @apply bg-white text-gray-900 border-gray-300 font-medium;
+  /* Modern Form System with Excellent Contrast */
+  
+  /* Input Elements */
+  input, 
+  textarea, 
+  select {
+    @apply bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 font-medium placeholder:text-slate-500 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-all duration-200;
+    background-color: rgb(255 255 255) !important;
+    color: rgb(15 23 42) !important;
+    border-color: rgb(203 213 219) !important;
   }
   
-  .dark input, .dark textarea, .dark select {
-    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
+  .dark input, 
+  .dark textarea, 
+  .dark select {
+    @apply bg-slate-800 text-slate-100 border-slate-600 placeholder:text-slate-400 focus:border-blue-400 focus:ring-blue-400/20;
+    background-color: rgb(30 41 59) !important;
+    color: rgb(248 250 252) !important;
+    border-color: rgb(71 85 105) !important;
   }
   
-  /* Better contrast for form controls */
-  .form-control, [class*="form-"] input, [class*="Form"] input {
-    @apply bg-white text-gray-900 border-gray-300 font-medium;
+  /* Input Focus States */
+  input:focus, 
+  textarea:focus, 
+  select:focus {
+    @apply outline-none ring-2 ring-blue-500/20 border-blue-500;
+    border-color: rgb(59 130 246) !important;
   }
   
-  .dark .form-control, .dark [class*="form-"] input, .dark [class*="Form"] input {
-    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
+  .dark input:focus, 
+  .dark textarea:focus, 
+  .dark select:focus {
+    @apply ring-blue-400/20 border-blue-400;
+    border-color: rgb(96 165 250) !important;
+  }
+  
+  /* Form Controls */
+  .form-control, 
+  [class*="form-"] input, 
+  [class*="Form"] input {
+    @apply bg-white text-slate-900 border-slate-300;
+    background-color: rgb(255 255 255) !important;
+    color: rgb(15 23 42) !important;
+    border-color: rgb(203 213 219) !important;
+  }
+  
+  .dark .form-control, 
+  .dark [class*="form-"] input, 
+  .dark [class*="Form"] input {
+    @apply bg-slate-800 text-slate-100 border-slate-600;
+    background-color: rgb(30 41 59) !important;
+    color: rgb(248 250 252) !important;
+    border-color: rgb(71 85 105) !important;
   }
 
-  /* Focus states for better accessibility */
-  input:focus, textarea:focus, select:focus {
-    @apply ring-2 ring-red-500 ring-opacity-50 outline-none;
-  }
-
-  /* Label improvements for better readability */
+  /* Labels */
   label {
-    @apply text-gray-800 font-bold;
-    color: rgb(31 41 55) !important;
+    @apply text-slate-800 font-semibold text-sm mb-1 block;
+    color: rgb(30 41 59) !important;
   }
 
   .dark label {
-    @apply text-slate-200 font-bold;
+    @apply text-slate-200 font-semibold;
     color: rgb(226 232 240) !important;
+  }
+  
+  /* Error States */
+  input.error,
+  textarea.error,
+  select.error {
+    @apply border-red-500 focus:border-red-500 focus:ring-red-500/20;
+    border-color: rgb(239 68 68) !important;
+  }
+  
+  .dark input.error,
+  .dark textarea.error,
+  .dark select.error {
+    @apply border-red-400 focus:border-red-400 focus:ring-red-400/20;
+    border-color: rgb(248 113 113) !important;
+  }
+  
+  /* Success States */
+  input.success,
+  textarea.success,
+  select.success {
+    @apply border-green-500 focus:border-green-500 focus:ring-green-500/20;
+    border-color: rgb(34 197 94) !important;
+  }
+  
+  .dark input.success,
+  .dark textarea.success,
+  .dark select.success {
+    @apply border-green-400 focus:border-green-400 focus:ring-green-400/20;
+    border-color: rgb(74 222 128) !important;
+  }
+  
+  /* Disabled States */
+  input:disabled,
+  textarea:disabled,
+  select:disabled {
+    @apply opacity-50 cursor-not-allowed bg-slate-100;
+    background-color: rgb(248 250 252) !important;
+  }
+  
+  .dark input:disabled,
+  .dark textarea:disabled,
+  .dark select:disabled {
+    @apply bg-slate-900;
+    background-color: rgb(15 23 42) !important;
+  }
+  
+  /* Checkbox and Radio */
+  input[type="checkbox"],
+  input[type="radio"] {
+    @apply accent-blue-500;
+  }
+  
+  .dark input[type="checkbox"],
+  .dark input[type="radio"] {
+    @apply accent-blue-400;
   }
 }
