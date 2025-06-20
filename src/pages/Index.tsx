@@ -198,64 +198,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="intermittent-fasting" className="space-y-6">
-            {hasPremiumAccess ? (
-              <IntermittentFasting />
-            ) : (
-              <div className="space-y-6">
-                {/* Preview do conteúdo com blur */}
-                <div className="relative">
-                  <div className="filter blur-sm pointer-events-none">
-                    <IntermittentFasting />
-                  </div>
-                  
-                  {/* Overlay de pagamento */}
-                  <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10">
-                    <Card className="max-w-md mx-auto border-2 border-yellow-500 bg-gradient-to-br from-yellow-50 to-orange-50 dark:from-yellow-950 dark:to-orange-950">
-                      <CardHeader className="text-center">
-                        <div className="flex items-center justify-center mb-4">
-                          <Crown className="w-12 h-12 text-yellow-500" />
-                        </div>
-                        <CardTitle className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-                          🔒 Funcionalidade Premium
-                        </CardTitle>
-                        <CardDescription className="text-lg">
-                          O Jejum Intermitente é uma funcionalidade exclusiva do SB2 Turbo
-                        </CardDescription>
-                      </CardHeader>
-                      <CardContent className="space-y-4 text-center">
-                        <div className="space-y-2">
-                          <p className="text-gray-700 dark:text-gray-300">
-                            ⏰ Timer inteligente de jejum
-                          </p>
-                          <p className="text-gray-700 dark:text-gray-300">
-                            📊 Múltiplos planos de jejum (16:8, 18:6, 20:4, OMAD)
-                          </p>
-                          <p className="text-gray-700 dark:text-gray-300">
-                            🏆 Sistema de conquistas e estatísticas
-                          </p>
-                          <p className="text-gray-700 dark:text-gray-300">
-                            💡 Dicas científicas e orientações
-                          </p>
-                        </div>
-                        
-                        <div className="pt-4 border-t border-yellow-200">
-                          <Button
-                            onClick={handlePurchase}
-                            className="w-full bg-gradient-to-r from-yellow-500 to-orange-500 hover:from-yellow-600 hover:to-orange-600 text-white font-bold py-3 px-6 text-lg shadow-lg transform hover:scale-105 transition-all duration-200"
-                          >
-                            <Crown className="w-5 h-5 mr-2" />
-                            Desbloquear SB2 Turbo
-                          </Button>
-                          <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                            Acesso completo a todas as funcionalidades premium
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </div>
-                </div>
-              </div>
-            )}
+            <IntermittentFasting />
           </TabsContent>
 
           <TabsContent value="gamification">
