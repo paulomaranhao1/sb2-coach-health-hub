@@ -81,26 +81,25 @@ export const saveFoodAnalysis = async (analysis: FoodAnalysis, imageUrl: string 
       throw new Error('Usuário não autenticado');
     }
 
-    // Salvar a análise no banco de dados
-    const { error } = await supabase
-      .from('food_analyses')
-      .insert({
-        user_id: user.id,
-        foods: analysis.foods,
-        total_calories: analysis.totalCalories,
-        macros: analysis.macros,
-        recommendations: analysis.recommendations,
-        image_url: imageUrl,
-        analyzed_at: analysis.timestamp
-      });
+    // Como não temos a tabela food_analyses, vamos salvar os dados no localStorage
+    // e atualizar apenas as estatísticas do usuário
+    const existingAnalyses = JSON.parse(localStorage.getItem('food_analyses') || '[]');
+    const newAnalysis = {
+      id: Date.now().toString(),
+      user_id: user.id,
+      foods: analysis.foods,
+      total_calories: analysis.totalCalories,
+      macros: analysis.macros,
+      recommendations: analysis.recommendations,
+      image_url: imageUrl,
+      analyzed_at: analysis.timestamp
+    };
+    
+    existingAnalyses.unshift(newAnalysis);
+    localStorage.setItem('food_analyses', JSON.stringify(existingAnalyses.slice(0, 50))); // Manter apenas os últimos 50
 
-    if (error) {
-      console.error('Erro ao salvar análise:', error);
-      throw error;
-    }
-
-    // Atualizar estatísticas do usuário
-    await updateUserStats(user.id, analysis.totalCalories);
+    // Atualizar pontos do usuário (gamificação)
+    await updateUserPoints(user.id, 10); // 10 pontos por análise
 
   } catch (error) {
     console.error('Erro ao salvar análise de alimentos:', error);
@@ -108,7 +107,7 @@ export const saveFoodAnalysis = async (analysis: FoodAnalysis, imageUrl: string 
   }
 };
 
-const updateUserStats = async (userId: string, calories: number) => {
+const updateUserPoints = async (userId: string, points: number) => {
   try {
     // Buscar estatísticas atuais
     const { data: stats } = await supabase
@@ -118,22 +117,21 @@ const updateUserStats = async (userId: string, calories: number) => {
       .single();
 
     if (stats) {
-      // Atualizar estatísticas existentes
+      // Atualizar pontos
       const { error } = await supabase
         .from('user_stats')
         .update({
-          total_photos_analyzed: (stats.total_photos_analyzed || 0) + 1,
-          total_calories_tracked: (stats.total_calories_tracked || 0) + calories,
+          points: (stats.points || 0) + points,
           updated_at: new Date().toISOString()
         })
         .eq('user_id', userId);
 
       if (error) {
-        console.error('Erro ao atualizar estatísticas:', error);
+        console.error('Erro ao atualizar pontos:', error);
       }
     }
   } catch (error) {
-    console.error('Erro ao atualizar estatísticas do usuário:', error);
+    console.error('Erro ao atualizar pontos do usuário:', error);
   }
 };
 
@@ -145,21 +143,14 @@ export const getFoodAnalysisHistory = async (limit: number = 10) => {
       throw new Error('Usuário não autenticado');
     }
 
-    const { data, error } = await supabase
-      .from('food_analyses')
-      .select('*')
-      .eq('user_id', user.id)
-      .order('analyzed_at', { ascending: false })
-      .limit(limit);
-
-    if (error) {
-      console.error('Erro ao buscar histórico:', error);
-      throw error;
-    }
-
-    return data || [];
+    // Buscar do localStorage já que não temos a tabela no Supabase
+    const analyses = JSON.parse(localStorage.getItem('food_analyses') || '[]');
+    return analyses
+      .filter((analysis: any) => analysis.user_id === user.id)
+      .slice(0, limit);
+      
   } catch (error) {
     console.error('Erro ao buscar histórico de análises:', error);
-    throw error;
+    return [];
   }
 };

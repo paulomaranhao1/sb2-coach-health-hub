@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Home, MessageSquare, Camera, Clock, Trophy, Pill, ShoppingCart, LogOut, Sun, Moon, BookOpen, BarChart3, User } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
@@ -33,9 +32,11 @@ const MobileMenu = ({
   const handleTutorial = () => {
     // Remover a flag do tutorial para que ele apareça novamente
     localStorage.removeItem('sb2_tutorial_completed');
-    // Recarregar a página para mostrar o tutorial
-    window.location.reload();
-    toastFeedback.info('Reiniciando tutorial...');
+    // Não recarregar a página, apenas mostrar o tutorial diretamente
+    setShowMobileMenu(false);
+    // Disparar evento personalizado para mostrar o tutorial
+    window.dispatchEvent(new CustomEvent('showTutorial'));
+    toastFeedback.info('Iniciando tutorial...');
   };
 
   const handleLogout = async () => {

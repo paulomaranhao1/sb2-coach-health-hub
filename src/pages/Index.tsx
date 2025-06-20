@@ -46,6 +46,14 @@ const Index = () => {
 
   useEffect(() => {
     checkUserProfile();
+    
+    // Listener para mostrar tutorial quando solicitado
+    const handleShowTutorial = () => {
+      setShowTutorial(true);
+    };
+    
+    window.addEventListener('showTutorial', handleShowTutorial);
+    return () => window.removeEventListener('showTutorial', handleShowTutorial);
   }, []);
 
   // Iniciar notificações quando o usuário concluir o onboarding

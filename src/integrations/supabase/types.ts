@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      food_analyses: {
+        Row: {
+          analyzed_at: string
+          created_at: string
+          foods: Json
+          id: string
+          image_url: string | null
+          macros: Json
+          recommendations: string[] | null
+          total_calories: number
+          user_id: string
+        }
+        Insert: {
+          analyzed_at?: string
+          created_at?: string
+          foods: Json
+          id?: string
+          image_url?: string | null
+          macros: Json
+          recommendations?: string[] | null
+          total_calories: number
+          user_id: string
+        }
+        Update: {
+          analyzed_at?: string
+          created_at?: string
+          foods?: Json
+          id?: string
+          image_url?: string | null
+          macros?: Json
+          recommendations?: string[] | null
+          total_calories?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_profiles: {
         Row: {
           age: number | null
@@ -73,6 +109,8 @@ export type Database = {
           shields: string[] | null
           stickers: string[] | null
           streak: number | null
+          total_calories_tracked: number | null
+          total_photos_analyzed: number | null
           updated_at: string
           user_id: string | null
         }
@@ -85,6 +123,8 @@ export type Database = {
           shields?: string[] | null
           stickers?: string[] | null
           streak?: number | null
+          total_calories_tracked?: number | null
+          total_photos_analyzed?: number | null
           updated_at?: string
           user_id?: string | null
         }
@@ -97,6 +137,8 @@ export type Database = {
           shields?: string[] | null
           stickers?: string[] | null
           streak?: number | null
+          total_calories_tracked?: number | null
+          total_photos_analyzed?: number | null
           updated_at?: string
           user_id?: string | null
         }
