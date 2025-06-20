@@ -1,12 +1,26 @@
 
 @layer base {
-  /* Remove all yellow/amber backgrounds and replace with neutral colors */
+  /* ESTRATÉGIA ANTI-AMARELO: Forçar override de todas as possíveis classes amarelas */
+  
+  /* Remove TODAS as classes de background amarelo/amber */
   .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, 
   .bg-yellow-400, .bg-yellow-500, .bg-yellow-600, .bg-yellow-700,
   .bg-yellow-800, .bg-yellow-900, .bg-amber-50, .bg-amber-100, 
   .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500,
-  .bg-amber-600, .bg-amber-700, .bg-amber-800, .bg-amber-900 {
-    @apply bg-white border border-gray-200 text-gray-900;
+  .bg-amber-600, .bg-amber-700, .bg-amber-800, .bg-amber-900,
+  /* Adicionar variações com hover, focus, active */
+  .hover\:bg-yellow-50:hover, .hover\:bg-yellow-100:hover, 
+  .hover\:bg-yellow-200:hover, .hover\:bg-yellow-300:hover,
+  .hover\:bg-yellow-400:hover, .hover\:bg-yellow-500:hover,
+  .hover\:bg-amber-50:hover, .hover\:bg-amber-100:hover,
+  .hover\:bg-amber-200:hover, .hover\:bg-amber-300:hover,
+  .hover\:bg-amber-400:hover, .hover\:bg-amber-500:hover,
+  .focus\:bg-yellow-50:focus, .focus\:bg-yellow-100:focus,
+  .focus\:bg-amber-50:focus, .focus\:bg-amber-100:focus,
+  .active\:bg-yellow-50:active, .active\:bg-amber-50:active {
+    background-color: rgb(255 255 255) !important;
+    border-color: rgb(209 213 219) !important;
+    color: rgb(31 41 55) !important;
   }
   
   .dark .bg-yellow-50, .dark .bg-yellow-100, .dark .bg-yellow-200, 
@@ -15,17 +29,26 @@
   .dark .bg-yellow-900, .dark .bg-amber-50, .dark .bg-amber-100, 
   .dark .bg-amber-200, .dark .bg-amber-300, .dark .bg-amber-400, 
   .dark .bg-amber-500, .dark .bg-amber-600, .dark .bg-amber-700,
-  .dark .bg-amber-800, .dark .bg-amber-900 {
-    @apply bg-slate-800 border border-slate-700 text-slate-100;
+  .dark .bg-amber-800, .dark .bg-amber-900,
+  .dark .hover\:bg-yellow-50:hover, .dark .hover\:bg-yellow-100:hover,
+  .dark .hover\:bg-amber-50:hover, .dark .hover\:bg-amber-100:hover,
+  .dark .focus\:bg-yellow-50:focus, .dark .focus\:bg-amber-50:focus,
+  .dark .active\:bg-yellow-50:active, .dark .active\:bg-amber-50:active {
+    background-color: rgb(30 41 59) !important;
+    border-color: rgb(71 85 105) !important;
+    color: rgb(203 213 225) !important;
   }
 
-  /* Remove yellow/amber text colors */
+  /* Remove TODAS as cores de texto amarelo/amber */
   .text-yellow-50, .text-yellow-100, .text-yellow-200, .text-yellow-300,
   .text-yellow-400, .text-yellow-500, .text-yellow-600, .text-yellow-700,
   .text-yellow-800, .text-yellow-900, .text-amber-50, .text-amber-100,
   .text-amber-200, .text-amber-300, .text-amber-400, .text-amber-500,
-  .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900 {
-    @apply text-gray-700 font-semibold;
+  .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900,
+  .hover\:text-yellow-500:hover, .hover\:text-amber-500:hover,
+  .focus\:text-yellow-500:focus, .focus\:text-amber-500:focus {
+    color: rgb(31 41 55) !important;
+    font-weight: 700 !important;
   }
 
   .dark .text-yellow-50, .dark .text-yellow-100, .dark .text-yellow-200,
@@ -34,17 +57,22 @@
   .dark .text-yellow-900, .dark .text-amber-50, .dark .text-amber-100,
   .dark .text-amber-200, .dark .text-amber-300, .dark .text-amber-400,
   .dark .text-amber-500, .dark .text-amber-600, .dark .text-amber-700,
-  .dark .text-amber-800, .dark .text-amber-900 {
-    @apply text-gray-300 font-semibold;
+  .dark .text-amber-800, .dark .text-amber-900,
+  .dark .hover\:text-yellow-500:hover, .dark .hover\:text-amber-500:hover,
+  .dark .focus\:text-yellow-500:focus, .dark .focus\:text-amber-500:focus {
+    color: rgb(203 213 225) !important;
+    font-weight: 700 !important;
   }
 
-  /* Remove yellow/amber border colors */
+  /* Remove TODAS as bordas amarelo/amber */
   .border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300,
   .border-yellow-400, .border-yellow-500, .border-yellow-600, .border-yellow-700,
   .border-yellow-800, .border-yellow-900, .border-amber-50, .border-amber-100,
   .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500,
-  .border-amber-600, .border-amber-700, .border-amber-800, .border-amber-900 {
-    @apply border-gray-300;
+  .border-amber-600, .border-amber-700, .border-amber-800, .border-amber-900,
+  .hover\:border-yellow-500:hover, .hover\:border-amber-500:hover,
+  .focus\:border-yellow-500:focus, .focus\:border-amber-500:focus {
+    border-color: rgb(209 213 219) !important;
   }
 
   .dark .border-yellow-50, .dark .border-yellow-100, .dark .border-yellow-200,
@@ -53,14 +81,19 @@
   .dark .border-yellow-900, .dark .border-amber-50, .dark .border-amber-100,
   .dark .border-amber-200, .dark .border-amber-300, .dark .border-amber-400,
   .dark .border-amber-500, .dark .border-amber-600, .dark .border-amber-700,
-  .dark .border-amber-800, .dark .border-amber-900 {
-    @apply border-gray-600;
+  .dark .border-amber-800, .dark .border-amber-900,
+  .dark .hover\:border-yellow-500:hover, .dark .hover\:border-amber-500:hover,
+  .dark .focus\:border-yellow-500:focus, .dark .focus\:border-amber-500:focus {
+    border-color: rgb(71 85 105) !important;
   }
 
-  /* Override any gradient backgrounds that might contain yellow */
+  /* ESTRATÉGIA ANTI-GRADIENT: Remove todos os gradientes que contenham amarelo */
   .bg-gradient-to-r.from-yellow-100, .bg-gradient-to-r.from-yellow-200,
   .bg-gradient-to-r.from-amber-100, .bg-gradient-to-r.from-amber-200,
+  .bg-gradient-to-r.to-yellow-100, .bg-gradient-to-r.to-yellow-200,
+  .bg-gradient-to-r.to-amber-100, .bg-gradient-to-r.to-amber-200,
   .bg-gradient-to-br.from-yellow-100, .bg-gradient-to-br.from-amber-100,
+  .bg-gradient-to-br.to-yellow-100, .bg-gradient-to-br.to-amber-100,
   .bg-gradient-to-l.from-yellow-100, .bg-gradient-to-l.from-amber-100,
   .bg-gradient-to-t.from-yellow-100, .bg-gradient-to-t.from-amber-100,
   .bg-gradient-to-b.from-yellow-100, .bg-gradient-to-b.from-amber-100 {
@@ -69,44 +102,97 @@
 
   .dark .bg-gradient-to-r.from-yellow-100, .dark .bg-gradient-to-r.from-yellow-200,
   .dark .bg-gradient-to-r.from-amber-100, .dark .bg-gradient-to-r.from-amber-200,
+  .dark .bg-gradient-to-r.to-yellow-100, .dark .bg-gradient-to-r.to-yellow-200,
+  .dark .bg-gradient-to-r.to-amber-100, .dark .bg-gradient-to-r.to-amber-200,
   .dark .bg-gradient-to-br.from-yellow-100, .dark .bg-gradient-to-br.from-amber-100,
+  .dark .bg-gradient-to-br.to-yellow-100, .dark .bg-gradient-to-br.to-amber-100,
   .dark .bg-gradient-to-l.from-yellow-100, .dark .bg-gradient-to-l.from-amber-100,
   .dark .bg-gradient-to-t.from-yellow-100, .dark .bg-gradient-to-t.from-amber-100,
   .dark .bg-gradient-to-b.from-yellow-100, .dark .bg-gradient-to-b.from-amber-100 {
     background: linear-gradient(to right, rgb(30 41 59), rgb(51 65 85)) !important;
   }
 
-  /* Force override any yellow/amber colors that might be applied inline or through other classes */
-  [style*="yellow"], [style*="amber"] {
-    background-color: rgb(249 250 251) !important;
+  /* ESTRATÉGIA ANTI-INLINE: Remove qualquer estilo inline que contenha amarelo */
+  [style*="yellow"], [style*="amber"], [style*="#fef3c7"], [style*="#fde68a"],
+  [style*="#fcd34d"], [style*="#f59e0b"], [style*="#d97706"], [style*="#92400e"],
+  [style*="rgb(254, 243, 199)"], [style*="rgb(253, 230, 138)"], 
+  [style*="rgb(252, 211, 77)"], [style*="rgb(245, 158, 11)"] {
+    background-color: rgb(255 255 255) !important;
     color: rgb(31 41 55) !important;
     border-color: rgb(209 213 219) !important;
   }
 
-  .dark [style*="yellow"], .dark [style*="amber"] {
+  .dark [style*="yellow"], .dark [style*="amber"], .dark [style*="#fef3c7"], 
+  .dark [style*="#fde68a"], .dark [style*="#fcd34d"], .dark [style*="#f59e0b"], 
+  .dark [style*="#d97706"], .dark [style*="#92400e"],
+  .dark [style*="rgb(254, 243, 199)"], .dark [style*="rgb(253, 230, 138)"], 
+  .dark [style*="rgb(252, 211, 77)"], .dark [style*="rgb(245, 158, 11)"] {
     background-color: rgb(30 41 59) !important;
     color: rgb(203 213 225) !important;
-    border-color: rgb(75 85 99) !important;
+    border-color: rgb(71 85 105) !important;
   }
 
-  /* Override any hover states with yellow/amber */
-  .hover\:bg-yellow-50:hover, .hover\:bg-yellow-100:hover, .hover\:bg-yellow-200:hover,
-  .hover\:bg-amber-50:hover, .hover\:bg-amber-100:hover, .hover\:bg-amber-200:hover {
-    @apply bg-gray-100;
+  /* ESTRATÉGIA ANTI-RING: Remove rings amarelos */
+  .ring-yellow-100, .ring-yellow-200, .ring-yellow-300, .ring-yellow-400,
+  .ring-yellow-500, .ring-amber-100, .ring-amber-200, .ring-amber-300,
+  .ring-amber-400, .ring-amber-500,
+  .focus\:ring-yellow-500:focus, .focus\:ring-amber-500:focus {
+    --tw-ring-color: rgb(239 68 68) !important;
   }
 
-  .dark .hover\:bg-yellow-50:hover, .dark .hover\:bg-yellow-100:hover, .dark .hover\:bg-yellow-200:hover,
-  .dark .hover\:bg-amber-50:hover, .dark .hover\:bg-amber-100:hover, .dark .hover\:bg-amber-200:hover {
-    @apply bg-slate-700;
+  /* ESTRATÉGIA ANTI-SHADOW: Remove sombras amarelas */
+  .shadow-yellow-100, .shadow-yellow-200, .shadow-amber-100, .shadow-amber-200 {
+    --tw-shadow-color: rgb(209 213 219) !important;
   }
 
-  /* Override focus states */
-  .focus\:border-yellow-500:focus, .focus\:border-amber-500:focus {
-    @apply focus:border-red-500;
+  /* FORÇAR OVERRIDE DE QUALQUER COISA QUE TENHA COR AMARELA */
+  * {
+    /* Se algum elemento ainda tiver amarelo, forçar branco */
+  }
+  
+  /* INTERCEPTAR CLASSES DINAMICAMENTE CRIADAS */
+  [class*="yellow"], [class*="amber"] {
+    background-color: rgb(255 255 255) !important;
+    color: rgb(31 41 55) !important;
+    border-color: rgb(209 213 219) !important;
   }
 
-  /* Override ring colors */
-  .ring-yellow-500, .ring-amber-500 {
-    @apply ring-red-500;
+  .dark [class*="yellow"], .dark [class*="amber"] {
+    background-color: rgb(30 41 59) !important;
+    color: rgb(203 213 225) !important;
+    border-color: rgb(71 85 105) !important;
+  }
+}
+
+/* ESTRATÉGIA ADICIONAL: CSS CUSTOM PROPERTIES OVERRIDE */
+@layer base {
+  :root {
+    --yellow-50: 255 255 255;
+    --yellow-100: 249 250 251;
+    --yellow-200: 243 244 246;
+    --yellow-300: 209 213 219;
+    --yellow-400: 156 163 175;
+    --yellow-500: 107 114 128;
+    --amber-50: 255 255 255;
+    --amber-100: 249 250 251;
+    --amber-200: 243 244 246;
+    --amber-300: 209 213 219;
+    --amber-400: 156 163 175;
+    --amber-500: 107 114 128;
+  }
+  
+  .dark {
+    --yellow-50: 30 41 59;
+    --yellow-100: 51 65 85;
+    --yellow-200: 71 85 105;
+    --yellow-300: 100 116 139;
+    --yellow-400: 148 163 184;
+    --yellow-500: 203 213 225;
+    --amber-50: 30 41 59;
+    --amber-100: 51 65 85;
+    --amber-200: 71 85 105;
+    --amber-300: 100 116 139;
+    --amber-400: 148 163 184;
+    --amber-500: 203 213 225;
   }
 }

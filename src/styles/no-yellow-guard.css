@@ -1,0 +1,66 @@
+
+/* GUARDA ANTI-AMARELO - Este arquivo previne o retorno de qualquer cor amarela */
+@layer utilities {
+  /* Monitor e intercepta QUALQUER tentativa de usar amarelo */
+  
+  /* Classe utilitária para forçar remoção de amarelo */
+  .force-no-yellow {
+    background-color: rgb(255 255 255) !important;
+    color: rgb(31 41 55) !important;
+    border-color: rgb(209 213 219) !important;
+  }
+
+  .dark .force-no-yellow {
+    background-color: rgb(30 41 59) !important;
+    color: rgb(203 213 225) !important;
+    border-color: rgb(71 85 105) !important;
+  }
+
+  /* Interceptador universal - qualquer elemento com amarelo */
+  .yellow-interceptor {
+    position: relative;
+  }
+
+  .yellow-interceptor::before,
+  .yellow-interceptor::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: inherit;
+    z-index: -1;
+  }
+
+  /* Override de emergência para componentes third-party */
+  .component-override * {
+    background-color: rgb(255 255 255) !important;
+    color: rgb(31 41 55) !important;
+  }
+
+  .dark .component-override * {
+    background-color: rgb(30 41 59) !important;
+    color: rgb(203 213 225) !important;
+  }
+}
+
+/* REGRAS DE CSS ESPECIAIS PARA INTERCEPTAR AMARELO EM RUNTIME */
+@supports (background-color: yellow) {
+  * {
+    background-color: white !important;
+  }
+  
+  .dark * {
+    background-color: rgb(30 41 59) !important;
+  }
+}
+
+/* Interceptar amarelo em seletores CSS complexos */
+*[style*="background"]:not([style*="white"]):not([style*="gray"]):not([style*="red"]):not([style*="blue"]):not([style*="green"]) {
+  background-color: rgb(255 255 255) !important;
+}
+
+.dark *[style*="background"]:not([style*="slate"]):not([style*="gray"]):not([style*="red"]):not([style*="blue"]):not([style*="green"]) {
+  background-color: rgb(30 41 59) !important;
+}
