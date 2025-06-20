@@ -28,8 +28,8 @@ const AuthForm = ({
   loading 
 }: AuthFormProps) => {
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4 white-bg-safe">
-      <Card className="w-full max-w-md bg-white dark:bg-card border-0 shadow-none">
+    <div className="min-h-screen bg-background flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-card border border-border shadow-lg">
         <AuthHeader isLogin={isLogin} />
         <CardContent className="space-y-4">
           <GoogleAuthButton onClick={onGoogleAuth} disabled={loading} />
@@ -37,8 +37,12 @@ const AuthForm = ({
           <Button 
             onClick={onMagicLink} 
             disabled={loading}
-            className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold"
-            style={{ backgroundColor: 'rgb(147, 51, 234)', color: 'rgb(255, 255, 255)', fontWeight: '700' }}
+            className="w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground font-bold"
+            style={{ 
+              backgroundColor: 'rgb(122, 122, 122)', 
+              color: 'rgb(255, 255, 255)', 
+              fontWeight: '700' 
+            }}
           >
             <Sparkles className="w-4 h-4 mr-2" />
             Entrar com Link Mágico

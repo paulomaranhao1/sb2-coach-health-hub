@@ -1,18 +1,20 @@
 
-/* Clean and Modern CSS System - FORÇA TOTAL ANTI-AMARELO */
+/* Elegant Custom Theme - NO YELLOW ANYWHERE */
 @import './styles/base.css';
 @import './styles/anti-yellow.css';
 @import './styles/force-no-yellow.css';
 @import './styles/debug-yellow.css';
 @import './styles/buttons.css';
+@import './styles/text.css';
 @import './styles/utilities.css';
 
-/* OVERRIDE GLOBAL ABSOLUTO - NENHUM AMARELO PERMITIDO */
+/* ABSOLUTE GLOBAL OVERRIDE - Force theme colors everywhere */
 * {
-  /* Força override de qualquer CSS amarelo */
+  /* Remove ANY possibility of yellow backgrounds */
   background-color: inherit !important;
 }
 
+/* Force all elements with yellow/amber to use theme colors */
 *[style*="yellow"], 
 *[style*="amber"],
 *[style*="rgb(255, 255, 0)"],
@@ -25,9 +27,9 @@
 *[class*="amber"],
 .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500,
 .bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500 {
-  background-color: rgb(243 244 246) !important;
-  color: rgb(31 41 55) !important;
-  border-color: rgb(209 213 219) !important;
+  background-color: rgb(122 122 122) !important;
+  color: rgb(255 255 255) !important;
+  border-color: rgb(122 122 122) !important;
 }
 
 .dark *[style*="yellow"], 
@@ -36,31 +38,59 @@
 .dark *[class*="amber"],
 .dark .bg-yellow-50, .dark .bg-yellow-100, .dark .bg-yellow-200, .dark .bg-yellow-300, .dark .bg-yellow-400, .dark .bg-yellow-500,
 .dark .bg-amber-50, .dark .bg-amber-100, .dark .bg-amber-200, .dark .bg-amber-300, .dark .bg-amber-400, .dark .bg-amber-500 {
-  background-color: rgb(55 65 81) !important;
-  color: rgb(243 244 246) !important;
-  border-color: rgb(75 85 99) !important;
+  background-color: rgb(163 163 163) !important;
+  color: rgb(18 18 18) !important;
+  border-color: rgb(163 163 163) !important;
 }
 
-/* Override específico para botões do Google */
+/* Force specific overrides for buttons and Google auth */
 button[style*="yellow"],
 button[class*="yellow"],
 .google-btn,
 *[class*="google"] {
-  background-color: rgb(59 130 246) !important;
+  background-color: rgb(149 6 6) !important;
   color: white !important;
 }
 
-/* Força fundo branco/cinza para toda a aplicação */
+/* Force theme background everywhere */
 body, html, #root {
   background-color: rgb(255 255 255) !important;
 }
 
 .dark body, .dark html, .dark #root {
-  background-color: rgb(15 23 42) !important;
+  background-color: rgb(18 18 18) !important;
 }
 
-/* Override para qualquer gradiente amarelo */
+/* Force app container backgrounds */
+.min-h-screen {
+  background-color: rgb(255 255 255) !important;
+}
+
+.dark .min-h-screen {
+  background-color: rgb(18 18 18) !important;
+}
+
+/* Override any gradients that might contain yellow */
 *[style*="linear-gradient"] {
   background-image: none !important;
-  background-color: rgb(243 244 246) !important;
+  background-color: rgb(255 255 255) !important;
+}
+
+.dark *[style*="linear-gradient"] {
+  background-image: none !important;
+  background-color: rgb(18 18 18) !important;
+}
+
+/* Ensure transparent PNG backgrounds don't show yellow */
+img, svg {
+  background-color: transparent !important;
+}
+
+/* Force card backgrounds */
+.bg-card {
+  background-color: rgb(255 255 255) !important;
+}
+
+.dark .bg-card {
+  background-color: rgb(28 28 28) !important;
 }

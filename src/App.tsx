@@ -11,7 +11,14 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => (
-  <div style={{ backgroundColor: 'rgb(255, 255, 255)', minHeight: '100vh' }}>
+  <div 
+    className="min-h-screen bg-background text-foreground"
+    style={{ 
+      backgroundColor: 'rgb(255, 255, 255)', 
+      color: 'rgb(26, 26, 26)',
+      minHeight: '100vh' 
+    }}
+  >
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />

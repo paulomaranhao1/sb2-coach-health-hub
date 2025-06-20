@@ -66,7 +66,14 @@ const AuthScreen = () => {
   }
 
   return (
-    <div style={{ backgroundColor: 'rgb(255, 255, 255)' }} className="min-h-screen">
+    <div 
+      className="min-h-screen bg-background text-foreground"
+      style={{ 
+        backgroundColor: 'rgb(255, 255, 255)',
+        color: 'rgb(26, 26, 26)',
+        minHeight: '100vh'
+      }}
+    >
       <AuthForm
         isLogin={isLogin}
         onToggleMode={() => setIsLogin(!isLogin)}
