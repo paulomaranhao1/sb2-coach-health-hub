@@ -1,0 +1,74 @@
+
+@layer base {
+  /* Improved input styling */
+  input, textarea, select {
+    @apply bg-white text-slate-900 border-slate-200;
+  }
+  
+  .dark input, .dark textarea, .dark select {
+    @apply bg-slate-800 text-slate-100 border-slate-700;
+  }
+  
+  /* Better contrast for form controls */
+  .form-control, [class*="form-"] input, [class*="Form"] input {
+    @apply bg-white text-slate-900 border-slate-200;
+  }
+  
+  .dark .form-control, .dark [class*="form-"] input, .dark [class*="Form"] input {
+    @apply bg-slate-800 text-slate-100 border-slate-700;
+  }
+  
+  /* Improved text contrast */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-slate-900;
+  }
+  
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    @apply text-slate-100;
+  }
+  
+  p, span, div {
+    @apply text-slate-700;
+  }
+  
+  .dark p, .dark span, .dark div {
+    @apply text-slate-300;
+  }
+  
+  /* Muted text with better contrast */
+  .text-muted-foreground {
+    @apply text-slate-600;
+  }
+  
+  .dark .text-muted-foreground {
+    @apply text-slate-400;
+  }
+  
+  /* Card styling improvements */
+  .card, [class*="Card"] {
+    @apply bg-white text-slate-900 border-slate-200;
+  }
+  
+  .dark .card, .dark [class*="Card"] {
+    @apply bg-slate-800 text-slate-100 border-slate-700;
+  }
+  
+  /* Button text improvements */
+  button {
+    @apply transition-colors duration-200;
+  }
+  
+  /* Focus states for better accessibility */
+  input:focus, textarea:focus, select:focus, button:focus {
+    @apply ring-2 ring-red-500 ring-opacity-50 outline-none;
+  }
+  
+  /* Improved link styling */
+  a {
+    @apply text-red-600 hover:text-red-700 transition-colors duration-200;
+  }
+  
+  .dark a {
+    @apply text-red-400 hover:text-red-300;
+  }
+}
