@@ -1,0 +1,52 @@
+
+/* Anti-Yellow System - Force Gray Override */
+@layer base {
+  /* Override ALL possible yellow/amber variants with elegant gray */
+  .yellow-override,
+  [class*="yellow-"],
+  [class*="amber-"],
+  [style*="yellow"],
+  [style*="amber"],
+  [style*="#fef3c7"],
+  [style*="#fde68a"],
+  [style*="#fcd34d"],
+  [style*="#f59e0b"],
+  [style*="rgb(254, 243, 199)"],
+  [style*="rgb(253, 230, 138)"],
+  [style*="rgb(252, 211, 77)"],
+  [style*="rgb(245, 158, 11)"] {
+    background-color: rgb(156 163 175) !important;
+    color: rgb(17 24 39) !important;
+    border-color: rgb(156 163 175) !important;
+  }
+
+  /* Dark mode overrides */
+  .dark .yellow-override,
+  .dark [class*="yellow-"],
+  .dark [class*="amber-"],
+  .dark [style*="yellow"],
+  .dark [style*="amber"] {
+    background-color: rgb(107 114 128) !important;
+    color: rgb(243 244 246) !important;
+    border-color: rgb(107 114 128) !important;
+  }
+
+  /* Ensure warning colors are always gray */
+  .bg-warning,
+  .text-warning,
+  .border-warning,
+  [class*="warning"] {
+    background-color: rgb(156 163 175) !important;
+    color: rgb(17 24 39) !important;
+    border-color: rgb(156 163 175) !important;
+  }
+
+  .dark .bg-warning,
+  .dark .text-warning,
+  .dark .border-warning,
+  .dark [class*="warning"] {
+    background-color: rgb(107 114 128) !important;
+    color: rgb(243 244 246) !important;
+    border-color: rgb(107 114 128) !important;
+  }
+}

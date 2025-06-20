@@ -1,6 +1,7 @@
 
-/* Clean and Modern CSS System */
+/* Clean and Modern CSS System - NO YELLOW ALLOWED */
 @import './styles/base.css';
+@import './styles/anti-yellow.css';
 @import './styles/buttons.css';
 @import './styles/utilities.css';
 
@@ -22,5 +23,16 @@
   
   .shadow-modern-lg {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Global yellow elimination */
+  * {
+    --tw-bg-opacity: 1;
+  }
+  
+  *[class*="yellow"], 
+  *[class*="amber"] {
+    background-color: rgb(156 163 175) !important;
+    color: rgb(17 24 39) !important;
   }
 }
