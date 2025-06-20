@@ -7,6 +7,7 @@ import { Loading } from "@/components/ui/loading";
 import ProfileForm from "./profile/ProfileForm";
 import ShieldsDisplay from "./profile/ShieldsDisplay";
 import NotificationSettings from "./NotificationSettings";
+import PasswordChangeForm from "./profile/PasswordChangeForm";
 
 interface UserProfileProps {
   onNavigateToHome: () => void;
@@ -45,6 +46,9 @@ const UserProfile = ({ onNavigateToHome }: UserProfileProps) => {
         isSaving={isSaving}
         onSave={handleSave}
       />
+
+      {/* Alterar Senha */}
+      <PasswordChangeForm />
 
       {/* Configurações de Notificação */}
       <NotificationSettings />
