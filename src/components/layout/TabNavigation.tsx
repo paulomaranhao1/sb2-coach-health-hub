@@ -10,7 +10,7 @@ interface TabNavigationProps {
 const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
   const tabItems = [
     { value: "home", label: "Início", icon: Home },
-    { value: "calorie-counter", label: "Contador de Calorias", icon: Camera },
+    { value: "calorie-counter", label: "Foto Caloria", icon: Camera },
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },

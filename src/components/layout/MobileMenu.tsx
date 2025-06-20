@@ -55,7 +55,7 @@ const MobileMenu = ({
   const tabItems = [
     { value: "home", label: "Início", icon: Home },
     { value: "chat", label: "AI Coach", icon: MessageSquare, featured: true },
-    { value: "calorie-counter", label: "Contador de Calorias por Foto", icon: Camera },
+    { value: "calorie-counter", label: "Foto Caloria", icon: Camera },
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
