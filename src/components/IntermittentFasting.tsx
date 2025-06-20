@@ -268,8 +268,8 @@ const IntermittentFasting = () => {
   return <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">⏰ Jejum Intermitente</h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <h1 className="text-3xl font-bold text-left text-gray-700">⏰ Jejum Intermitente</h1>
+        <p className="text-gray-600 dark:text-gray-400 text-left">
           Transforme sua saúde com o poder do jejum intermitente científico
         </p>
       </div>
