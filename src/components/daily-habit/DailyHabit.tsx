@@ -35,7 +35,7 @@ const DailyHabit = () => {
         </CardContent>
       </Card>
 
-      {/* Sequência de botões conforme solicitado */}
+      {/* Sequência de botões conforme solicitado - Registrar Peso em primeiro */}
       <QuickWeightEntry />
       <WaterTracker />
       
