@@ -22,6 +22,7 @@ import MotivationalGreeting from "@/components/MotivationalGreeting";
 import ComingSoonFeatures from "@/components/ComingSoonFeatures";
 import StatisticsOverview from "@/components/statistics/StatisticsOverview";
 import { Camera, Clock, BarChart3 } from "lucide-react";
+import CalorieCounterTab from "@/components/CalorieCounterTab";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -176,15 +177,7 @@ const Index = () => {
           </TabsContent>
 
           <TabsContent value="calorie-counter" className="space-y-6">
-            <div className="text-center py-12">
-              <Camera className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-              <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
-                Contador de Calorias por Foto
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300">
-                Em breve! Tire uma foto da sua refeição e descubra as calorias instantaneamente.
-              </p>
-            </div>
+            <CalorieCounterTab />
           </TabsContent>
 
           <TabsContent value="intermittent-fasting" className="space-y-6">

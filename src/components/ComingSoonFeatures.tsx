@@ -172,37 +172,6 @@ const ComingSoonFeatures = () => {
           );
         })}
       </div>
-
-      {/* Call to Action */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 border-2 border-blue-200">
-        <CardContent className="p-6 text-center">
-          <div className="space-y-4">
-            <div className="flex items-center justify-center gap-2">
-              <Camera className="w-8 h-8 text-blue-600" />
-              <h3 className="text-xl font-bold text-blue-900 dark:text-blue-100">
-                Contador de Calorias por Foto - Em Destaque!
-              </h3>
-            </div>
-            
-            <p className="text-blue-800 dark:text-blue-200 max-w-2xl mx-auto">
-              Esta será nossa primeira funcionalidade revolucionária! Simplesmente fotografe sua comida 
-              e nossa IA calculará automaticamente as calorias, macronutrientes e ainda sugerirá 
-              a quantidade ideal de SB2 Turbo para potencializar seus resultados.
-            </p>
-            
-            <div className="flex items-center justify-center gap-4 text-sm text-blue-700 dark:text-blue-300">
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 bg-blue-500 rounded-full animate-pulse" />
-                <span className="font-medium">Desenvolvimento Ativo</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span>Lançamento previsto: 2 semanas</span>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   );
 };
