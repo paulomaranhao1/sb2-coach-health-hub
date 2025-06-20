@@ -6,7 +6,6 @@ import WaterTracker from "./WaterTracker";
 import CapsuleButtons from "./CapsuleButtons";
 import FirstMealTracker from "./FirstMealTracker";
 import MotivationalSection from "./MotivationalSection";
-import SupplementInfo from "./SupplementInfo";
 import InstructionsDialog from "./InstructionsDialog";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -78,7 +77,6 @@ const DailyHabit = () => {
       </div>
 
       <MotivationalSection />
-      <SupplementInfo />
     </div>
   );
 };
