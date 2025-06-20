@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Settings, Bell, Moon, Sun, Smartphone, Database, Shield, Trash2 } from "lucide-react";
+import { Settings, Bell, Moon, Sun, Smartphone, Database, Shield, Trash2, ExternalLink, Globe } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
+
 const AppSettings = () => {
   const {
     theme,
@@ -85,7 +86,13 @@ const AppSettings = () => {
       toastFeedback.error('Erro ao exportar dados');
     }
   };
-  return <div className="max-w-4xl mx-auto space-y-6">
+  const handleWebsiteClick = (url: string) => {
+    window.open(url, '_blank');
+    toastFeedback.info('Abrindo site...');
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <Card className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
         <CardHeader>
@@ -219,6 +226,38 @@ const AppSettings = () => {
         </CardContent>
       </Card>
 
+      {/* Links e Informações */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Globe className="w-5 h-5" />
+            Links Importantes
+          </CardTitle>
+          <CardDescription>
+            Acesse nossos sites e informações
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-3">
+          <Button 
+            onClick={() => handleWebsiteClick('https://sb2coach.ai')}
+            variant="outline" 
+            className="w-full justify-start"
+          >
+            <ExternalLink className="w-4 h-4 mr-2" />
+            Site do SB2coach.ai
+          </Button>
+          
+          <Button 
+            onClick={() => handleWebsiteClick('https://natuu.ai')}
+            variant="outline" 
+            className="w-full justify-start"
+          >
+            <ExternalLink className="w-4 h-4 mr-2" />
+            Site da Natuu
+          </Button>
+        </CardContent>
+      </Card>
+
       {/* Informações do App */}
       <Card>
         <CardHeader>
@@ -242,6 +281,25 @@ const AppSettings = () => {
           </div>
         </CardContent>
       </Card>
-    </div>;
+
+      {/* Copyright Footer */}
+      <Card className="bg-muted/50">
+        <CardContent className="pt-6">
+          <div className="text-center space-y-2">
+            <p className="text-sm text-muted-foreground">
+              © 2025 Natuu Nutrition International Inc.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Natuu® é marca registrada
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Todos os direitos reservados
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
+
 export default AppSettings;
