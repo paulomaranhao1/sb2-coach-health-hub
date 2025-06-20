@@ -19,6 +19,44 @@
     @apply bg-slate-800 border border-slate-700;
   }
 
+  /* Remove yellow/amber text colors */
+  .text-yellow-50, .text-yellow-100, .text-yellow-200, .text-yellow-300,
+  .text-yellow-400, .text-yellow-500, .text-yellow-600, .text-yellow-700,
+  .text-yellow-800, .text-yellow-900, .text-amber-50, .text-amber-100,
+  .text-amber-200, .text-amber-300, .text-amber-400, .text-amber-500,
+  .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900 {
+    @apply text-gray-700;
+  }
+
+  .dark .text-yellow-50, .dark .text-yellow-100, .dark .text-yellow-200,
+  .dark .text-yellow-300, .dark .text-yellow-400, .dark .text-yellow-500,
+  .dark .text-yellow-600, .dark .text-yellow-700, .dark .text-yellow-800,
+  .dark .text-yellow-900, .dark .text-amber-50, .dark .text-amber-100,
+  .dark .text-amber-200, .dark .text-amber-300, .dark .text-amber-400,
+  .dark .text-amber-500, .dark .text-amber-600, .dark .text-amber-700,
+  .dark .text-amber-800, .dark .text-amber-900 {
+    @apply text-gray-300;
+  }
+
+  /* Remove yellow/amber border colors */
+  .border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300,
+  .border-yellow-400, .border-yellow-500, .border-yellow-600, .border-yellow-700,
+  .border-yellow-800, .border-yellow-900, .border-amber-50, .border-amber-100,
+  .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500,
+  .border-amber-600, .border-amber-700, .border-amber-800, .border-amber-900 {
+    @apply border-gray-300;
+  }
+
+  .dark .border-yellow-50, .dark .border-yellow-100, .dark .border-yellow-200,
+  .dark .border-yellow-300, .dark .border-yellow-400, .dark .border-yellow-500,
+  .dark .border-yellow-600, .dark .border-yellow-700, .dark .border-yellow-800,
+  .dark .border-yellow-900, .dark .border-amber-50, .dark .border-amber-100,
+  .dark .border-amber-200, .dark .border-amber-300, .dark .border-amber-400,
+  .dark .border-amber-500, .dark .border-amber-600, .dark .border-amber-700,
+  .dark .border-amber-800, .dark .border-amber-900 {
+    @apply border-gray-600;
+  }
+
   /* Override any gradient backgrounds that might contain yellow */
   .bg-gradient-to-r.from-yellow-100, .bg-gradient-to-r.from-yellow-200,
   .bg-gradient-to-r.from-amber-100, .bg-gradient-to-r.from-amber-200,

@@ -1,50 +1,50 @@
 
 @layer base {
-  /* Improved input styling */
+  /* Improved input styling with better readability */
   input, textarea, select {
-    @apply bg-white text-slate-900 border-slate-200;
+    @apply bg-white text-slate-900 border-slate-300 font-medium;
   }
   
   .dark input, .dark textarea, .dark select {
-    @apply bg-slate-800 text-slate-100 border-slate-700;
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
   }
   
   /* Better contrast for form controls */
   .form-control, [class*="form-"] input, [class*="Form"] input {
-    @apply bg-white text-slate-900 border-slate-200;
+    @apply bg-white text-slate-900 border-slate-300 font-medium;
   }
   
   .dark .form-control, .dark [class*="form-"] input, .dark [class*="Form"] input {
-    @apply bg-slate-800 text-slate-100 border-slate-700;
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
   }
   
-  /* Improved text contrast */
+  /* Improved text contrast and readability */
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-900;
+    @apply text-slate-900 font-bold;
   }
   
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    @apply text-slate-100;
+    @apply text-slate-50 font-bold;
   }
   
   p, span, div {
-    @apply text-slate-700;
+    @apply text-slate-800 font-medium;
   }
   
   .dark p, .dark span, .dark div {
-    @apply text-slate-300;
+    @apply text-slate-200 font-medium;
   }
   
   /* Muted text with better contrast */
   .text-muted-foreground {
-    @apply text-slate-600;
+    @apply text-slate-700 font-medium;
   }
   
   .dark .text-muted-foreground {
-    @apply text-slate-400;
+    @apply text-slate-300 font-medium;
   }
   
-  /* Card styling improvements */
+  /* Card styling improvements with better text readability */
   .card, [class*="Card"] {
     @apply bg-white text-slate-900 border-slate-200;
   }
@@ -53,9 +53,14 @@
     @apply bg-slate-800 text-slate-100 border-slate-700;
   }
   
-  /* Button text improvements */
+  /* Button text improvements with better contrast */
   button {
-    @apply transition-colors duration-200;
+    @apply transition-colors duration-200 font-semibold;
+  }
+
+  /* Ensure button text is always readable */
+  button:not(.bg-transparent):not([class*="variant-ghost"]):not([class*="variant-outline"]) {
+    @apply text-white;
   }
   
   /* Focus states for better accessibility */
@@ -63,12 +68,30 @@
     @apply ring-2 ring-red-500 ring-opacity-50 outline-none;
   }
   
-  /* Improved link styling */
+  /* Improved link styling with better readability */
   a {
-    @apply text-red-600 hover:text-red-700 transition-colors duration-200;
+    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-medium;
   }
   
   .dark a {
-    @apply text-red-400 hover:text-red-300;
+    @apply text-red-400 hover:text-red-300 font-medium;
+  }
+
+  /* Label improvements for better readability */
+  label {
+    @apply text-slate-800 font-semibold;
+  }
+
+  .dark label {
+    @apply text-slate-200 font-semibold;
+  }
+
+  /* Small text improvements */
+  .text-sm {
+    @apply font-medium;
+  }
+
+  .text-xs {
+    @apply font-medium;
   }
 }
