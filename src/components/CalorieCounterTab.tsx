@@ -20,9 +20,6 @@ const CalorieCounterTab = () => {
       {/* Hero Section */}
       <div className="text-center py-8">
         <Camera className="w-20 h-20 mx-auto mb-4 text-blue-600" />
-        <h1 className="text-3xl font-bold text-gray-800 dark: text-white mb-2">
-          📸 Foto Caloria
-        </h1>
         <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
           Tire uma foto da sua refeição e nossa IA calculará automaticamente as calorias e macronutrientes!
         </p>
