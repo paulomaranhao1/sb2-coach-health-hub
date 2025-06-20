@@ -41,7 +41,7 @@ const AuthForm = ({
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
             <img 
-              src="/lovable-uploads/a525ce97-c7e6-461b-a78a-f7d3756a07ff.png" 
+              src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
               alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
             />

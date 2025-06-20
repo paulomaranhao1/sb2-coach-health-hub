@@ -16,8 +16,8 @@ const EmailVerificationScreen = ({ email, onBackToLogin }: EmailVerificationScre
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
             <img 
-              src="/lovable-uploads/315c645a-f0c2-4b01-b17a-e2337aa7a0bd.png" 
-              alt="SB2FIT Logo" 
+              src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
+              alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
             />
           </div>
@@ -32,7 +32,7 @@ const EmailVerificationScreen = ({ email, onBackToLogin }: EmailVerificationScre
             <Mail className="h-4 w-4 text-blue-600 dark:text-blue-400" />
             <AlertDescription className="text-blue-800 dark:text-blue-200">
               <strong>Importante:</strong> Enviamos um email de confirmação para <strong>{email}</strong>. 
-              Clique no link do email para ativar sua conta e começar a usar o SB2FIT.
+              Clique no link do email para ativar sua conta e começar a usar o SB2 Coach.
             </AlertDescription>
           </Alert>
 
