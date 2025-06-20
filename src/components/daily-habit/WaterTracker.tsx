@@ -3,48 +3,67 @@ import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Droplets } from "lucide-react";
+import { Droplets, Plus } from "lucide-react";
 
 const WaterTracker = () => {
   const [waterCount, setWaterCount] = useState(0);
+  const [bottleCount, setBottleCount] = useState(0);
 
-  const addWater = () => {
+  const addGlass = () => {
     setWaterCount(prev => prev + 1);
   };
 
-  // Cálculo da água consumida e recomendada (fixo em 2000ml)
-  const waterConsumedMl = waterCount * 200; // 200ml por copo
-  const recommendedWaterMl = 2000; // 2000ml fixo (10 copos)
+  const addBottle = () => {
+    setBottleCount(prev => prev + 1);
+  };
+
+  // Cálculo da água consumida (200ml por copo + 500ml por garrafa)
+  const waterConsumedMl = (waterCount * 200) + (bottleCount * 500);
+  const recommendedWaterMl = 2500; // Atualizado para 2500ml (recomendação mais atual)
   const waterPercentage = Math.min(waterConsumedMl / recommendedWaterMl * 100, 100);
 
   return (
     <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30">
       <CardContent className="p-5">
-        <Button 
-          onClick={addWater} 
-          variant="outline" 
-          className="w-full h-20 border-2 border-blue-400 dark:border-blue-500 text-slate-800 dark:text-blue-300 hover:bg-blue-200/50 dark:hover:bg-blue-800/50 bg-white/70 dark:bg-blue-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-2"
-        >
-          <Droplets className="w-6 h-6 flex-shrink-0" />
-          <div className="text-center leading-tight">
-            <div className="font-semibold text-base">BEBI UM COPO</div>
-            <div className="text-sm opacity-90">DE ÁGUA (200ml)</div>
-          </div>
-        </Button>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+          <Button 
+            onClick={addGlass} 
+            variant="outline" 
+            className="h-16 border-2 border-blue-400 dark:border-blue-500 text-slate-800 dark:text-blue-300 hover:bg-blue-200/50 dark:hover:bg-blue-800/50 bg-white/70 dark:bg-blue-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-1"
+          >
+            <Droplets className="w-5 h-5 flex-shrink-0" />
+            <div className="text-center leading-tight">
+              <div className="font-semibold text-sm">COPO</div>
+              <div className="text-xs opacity-90">200ml</div>
+            </div>
+          </Button>
+
+          <Button 
+            onClick={addBottle} 
+            variant="outline" 
+            className="h-16 border-2 border-cyan-400 dark:border-cyan-500 text-slate-800 dark:text-cyan-300 hover:bg-cyan-200/50 dark:hover:bg-cyan-800/50 bg-white/70 dark:bg-cyan-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-1"
+          >
+            <Droplets className="w-5 h-5 flex-shrink-0" />
+            <div className="text-center leading-tight">
+              <div className="font-semibold text-sm">GARRAFA</div>
+              <div className="text-xs opacity-90">500ml</div>
+            </div>
+          </Button>
+        </div>
         
         {/* Informações detalhadas da água */}
-        <div className="mt-4 space-y-3">
+        <div className="space-y-3">
           <div className="flex justify-between items-center text-sm">
             <span className="text-slate-600 dark:text-slate-400">Consumido hoje:</span>
             <span className="font-semibold text-blue-600 dark:text-blue-400">
-              {waterConsumedMl}ml ({waterCount} copos)
+              {waterConsumedMl}ml ({waterCount} copos + {bottleCount} garrafas)
             </span>
           </div>
           
           <div className="flex justify-between items-center text-sm">
             <span className="text-slate-600 dark:text-slate-400">Meta diária:</span>
             <span className="font-semibold text-slate-800 dark:text-slate-200">
-              {recommendedWaterMl}ml (10 copos)
+              {recommendedWaterMl}ml
             </span>
           </div>
           
@@ -71,7 +90,7 @@ const WaterTracker = () => {
           </div>
           
           <div className="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">
-            Meta padrão: 2000ml (10 copos) por dia de acordo com a OMS
+            Recomendação: 35ml por kg de peso corporal (média de 2,5L/dia)
           </div>
         </div>
       </CardContent>
