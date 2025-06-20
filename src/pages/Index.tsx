@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import WeightTracker from "@/components/WeightTracker";
@@ -6,6 +5,7 @@ import SupplementReminder from "@/components/SupplementReminder";
 import AIChat from "@/components/AIChat";
 import ProgressDashboard from "@/components/ProgressDashboard";
 import UserProfile from "@/components/UserProfile";
+import AppSettings from "@/components/AppSettings";
 import WelcomeScreen from "@/components/WelcomeScreen";
 import OnboardingScreen from "@/components/OnboardingScreen";
 import TutorialScreen from "@/components/TutorialScreen";
@@ -223,6 +223,10 @@ const Index = () => {
 
           <TabsContent value="profile">
             <UserProfile onNavigateToHome={handleNavigateToHome} />
+          </TabsContent>
+
+          <TabsContent value="settings">
+            <AppSettings />
           </TabsContent>
         </Tabs>
       </main>
