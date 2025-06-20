@@ -80,51 +80,28 @@ export const useUserProfile = (onSaveSuccess?: () => void) => {
         return;
       }
 
-      const { data: existingProfile } = await supabase
+      // Sempre usar upsert para evitar erro de chave duplicada
+      const { error } = await supabase
         .from('user_profiles')
-        .select('id')
-        .eq('user_id', user.id)
-        .maybeSingle();
+        .upsert({
+          user_id: user.id,
+          name: profile.name,
+          age: profile.age,
+          height: profile.height,
+          weight: profile.weight,
+          goal_weight: profile.goal_weight,
+          gender: profile.gender,
+          phone_number: profile.phone_number,
+          onboarding_completed: true,
+          updated_at: new Date().toISOString()
+        }, {
+          onConflict: 'user_id'
+        });
 
-      if (existingProfile) {
-        const { error } = await supabase
-          .from('user_profiles')
-          .update({
-            name: profile.name,
-            age: profile.age,
-            height: profile.height,
-            weight: profile.weight,
-            goal_weight: profile.goal_weight,
-            gender: profile.gender,
-            phone_number: profile.phone_number,
-            updated_at: new Date().toISOString()
-          })
-          .eq('user_id', user.id);
-
-        if (error) {
-          console.error('Erro ao atualizar perfil:', error);
-          toast.error('Erro ao salvar perfil');
-          return;
-        }
-      } else {
-        const { error } = await supabase
-          .from('user_profiles')
-          .insert({
-            user_id: user.id,
-            name: profile.name,
-            age: profile.age,
-            height: profile.height,
-            weight: profile.weight,
-            goal_weight: profile.goal_weight,
-            gender: profile.gender,
-            phone_number: profile.phone_number
-          });
-
-        if (error) {
-          console.error('Erro ao criar perfil:', error);
-          toast.error('Erro ao salvar perfil');
-          return;
-        }
+      if (error) {
+        console.error('Erro ao salvar perfil:', error);
+        toast.error('Erro ao salvar perfil');
+        return;
       }
 
       toast.success('Perfil salvo com sucesso!');
