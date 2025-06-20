@@ -7,6 +7,7 @@ import OffersScreen from "./OffersScreen";
 import AIFeaturesList from "./ai-coach/AIFeaturesList";
 import AIChatInterface from "./ai-coach/AIChatInterface";
 import AIQuickActions from "./ai-coach/AIQuickActions";
+import AICoachInfo from "./ai-coach/AICoachInfo";
 
 const AIChat = () => {
   const [showOffers, setShowOffers] = useState(false);
@@ -45,6 +46,9 @@ const AIChat = () => {
           </CardDescription>
         </CardHeader>
       </Card>
+
+      {/* Informações detalhadas sobre a IA */}
+      <AICoachInfo />
 
       {!hasPremiumAccess && (
         <AIFeaturesList 

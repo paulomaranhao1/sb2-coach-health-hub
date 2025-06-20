@@ -1,6 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3, User, Zap, Calendar } from "lucide-react";
+import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3, User } from "lucide-react";
 
 interface TabNavigationProps {
   activeTab: string;
@@ -40,41 +40,18 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
       {/* Mobile Tabs */}
       <div className="sm:hidden mb-8">
         <div className="bg-gray-800/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-gray-700/50 dark:border-gray-600/50 transition-colors duration-300">
-          <div className="grid grid-cols-1 gap-3 mb-3">
-            {/* AI Coach - Botão destacado com informações detalhadas */}
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            {/* AI Coach - Botão destacado elegante */}
             <button
               onClick={() => setActiveTab("chat")}
-              className={`flex flex-col items-center justify-center space-y-3 p-6 rounded-xl transition-all duration-200 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg transform hover:scale-105 ${
+              className={`col-span-2 flex items-center justify-center space-x-3 p-4 rounded-xl transition-all duration-200 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg transform hover:scale-105 ${
                 activeTab === "chat" ? 'shadow-purple-500/50 scale-105' : ''
               }`}
             >
-              <div className="flex items-center space-x-3">
-                <MessageSquare className="w-8 h-8 animate-pulse" />
-                <div className="text-left">
-                  <span className="text-lg font-bold block">🧠 IA Nutricional Avançada</span>
-                  <span className="text-sm opacity-90">Chat com IA especializada em nutrição e emagrecimento</span>
-                </div>
-              </div>
-              
-              <div className="w-full bg-white/20 rounded-lg p-3 space-y-2">
-                <div className="flex items-center gap-2 text-xs">
-                  <Zap className="w-3 h-3 text-yellow-300" />
-                  <span className="font-medium">Média Prioridade</span>
-                  <div className="ml-auto flex items-center gap-1 text-purple-200">
-                    <Calendar className="w-3 h-3" />
-                    <span>Próximo mês</span>
-                  </div>
-                </div>
-                
-                <div className="text-xs text-left">
-                  <p className="font-medium mb-1">O que você pode esperar:</p>
-                  <ul className="space-y-1 text-purple-100">
-                    <li>• Análise nutricional personalizada</li>
-                    <li>• Planos alimentares inteligentes</li>
-                    <li>• Dicas baseadas no seu perfil</li>
-                    <li>• Integração com dados do SB2 Turbo</li>
-                  </ul>
-                </div>
+              <MessageSquare className="w-6 h-6 animate-pulse" />
+              <div className="text-left">
+                <span className="text-lg font-bold block">🧠 AI Coach Premium</span>
+                <span className="text-sm opacity-90">Nutrição Inteligente</span>
               </div>
             </button>
           </div>
