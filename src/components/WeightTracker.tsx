@@ -2,12 +2,11 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { Weight, Plus, Trophy, Target, Share2 } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+import { TrendingDown, TrendingUp, Trophy, Target, Share2, Calendar, Activity, Award } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "@/components/ui/badge";
 
 interface WeightEntry {
   id: string;
@@ -17,179 +16,49 @@ interface WeightEntry {
 }
 
 const WeightTracker = () => {
-  const [currentWeight, setCurrentWeight] = useState("");
   const [weightHistory, setWeightHistory] = useState<WeightEntry[]>([]);
+  const [userStats, setUserStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [isRegistering, setIsRegistering] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
-    loadWeightHistory();
+    loadData();
   }, []);
 
-  const loadWeightHistory = async () => {
+  const loadData = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data, error } = await supabase
+      // Carregar histórico de peso
+      const { data: weightData, error: weightError } = await supabase
         .from('weight_entries')
         .select('*')
         .eq('user_id', user.id)
         .order('date', { ascending: true });
 
-      if (error) throw error;
+      if (weightError) throw weightError;
+      setWeightHistory(weightData || []);
 
-      setWeightHistory(data || []);
-    } catch (error) {
-      console.error('Error loading weight history:', error);
-      toast({
-        title: "Erro",
-        description: "Não foi possível carregar o histórico de peso",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const awardPoints = async (points: number, reason: string) => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      // Buscar estatísticas atuais
-      const { data: stats } = await supabase
+      // Carregar estatísticas do usuário
+      const { data: statsData, error: statsError } = await supabase
         .from('user_stats')
         .select('*')
         .eq('user_id', user.id)
         .single();
 
-      const currentPoints = stats?.points || 0;
-      const newPoints = currentPoints + points;
-      const newLevel = Math.floor(newPoints / 100) + 1;
+      if (statsError && statsError.code !== 'PGRST116') throw statsError;
+      setUserStats(statsData);
 
-      // Atualizar pontos
-      await supabase
-        .from('user_stats')
-        .upsert({
-          user_id: user.id,
-          points: newPoints,
-          level: newLevel,
-          shields: stats?.shields || [],
-          stickers: stats?.stickers || [],
-          streak: stats?.streak || 0
-        });
-
-      toast({
-        title: `🎉 +${points} pontos!`,
-        description: reason,
-        duration: 3000
-      });
-
-      // Verificar se desbloqueou medalhas
-      await checkForNewAchievements(user.id, stats);
     } catch (error) {
-      console.error('Error awarding points:', error);
-    }
-  };
-
-  const checkForNewAchievements = async (userId: string, currentStats: any) => {
-    try {
-      const shields = currentStats?.shields || [];
-      const stickers = currentStats?.stickers || [];
-      let newShields = [...shields];
-      let newStickers = [...stickers];
-
-      // Primeira pesagem
-      if (!shields.includes('first_weight')) {
-        newShields.push('first_weight');
-        toast({
-          title: "🛡️ Novo Escudo Desbloqueado!",
-          description: "⚖️ Primeira Pesagem - Você registrou seu primeiro peso!",
-          duration: 5000
-        });
-      }
-
-      // Figurinha motivado para qualquer registro
-      if (!stickers.includes('motivated')) {
-        newStickers.push('motivated');
-        toast({
-          title: "⭐ Nova Figurinha Coletada!",
-          description: "💪 Motivado - Continue assim!",
-          duration: 5000
-        });
-      }
-
-      // Conquistador se perdeu peso
-      if (weightHistory.length >= 2) {
-        const initialWeight = weightHistory[0].weight;
-        const currentWeightValue = weightHistory[weightHistory.length - 1].weight;
-        if (currentWeightValue < initialWeight && !shields.includes('goal_achiever')) {
-          newShields.push('goal_achiever');
-          toast({
-            title: "🛡️ Novo Escudo Desbloqueado!",
-            description: "🎯 Conquistador - Você está perdendo peso!",
-            duration: 5000
-          });
-        }
-      }
-
-      // Atualizar badges se houver novos
-      if (newShields.length > shields.length || newStickers.length > stickers.length) {
-        await supabase
-          .from('user_stats')
-          .update({
-            shields: newShields,
-            stickers: newStickers
-          })
-          .eq('user_id', userId);
-      }
-    } catch (error) {
-      console.error('Error checking achievements:', error);
-    }
-  };
-
-  const handleAddWeight = async () => {
-    if (!currentWeight) return;
-
-    setIsRegistering(true);
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { error } = await supabase
-        .from('weight_entries')
-        .insert({
-          user_id: user.id,
-          weight: parseFloat(currentWeight),
-          date: new Date().toISOString().split('T')[0]
-        });
-
-      if (error) throw error;
-
-      await loadWeightHistory();
-      setCurrentWeight("");
-      
-      // Dar pontos pelo registro
-      await awardPoints(10, "Peso registrado com sucesso!");
-      
-      toast({
-        title: "✅ Peso registrado!",
-        description: `Peso de ${currentWeight}kg foi adicionado ao seu histórico`,
-        duration: 3000
-      });
-    } catch (error: any) {
-      console.error('Error adding weight:', error);
+      console.error('Error loading data:', error);
       toast({
         title: "Erro",
-        description: error.message === 'duplicate key value violates unique constraint "weight_entries_user_id_date_key"' 
-          ? "Você já registrou seu peso hoje"
-          : "Não foi possível adicionar o peso",
+        description: "Não foi possível carregar os dados",
         variant: "destructive"
       });
     } finally {
-      setIsRegistering(false);
+      setLoading(false);
     }
   };
 
@@ -219,15 +88,65 @@ const WeightTracker = () => {
     }
   };
 
+  // Preparar dados para gráficos
   const chartData = weightHistory.map(entry => ({
     date: new Date(entry.date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
-    weight: entry.weight
+    weight: entry.weight,
+    fullDate: entry.date
   }));
 
+  // Dados para gráfico de progresso mensal
+  const monthlyData = weightHistory.reduce((acc, entry) => {
+    const month = new Date(entry.date).toLocaleDateString('pt-BR', { month: 'short', year: '2-digit' });
+    if (!acc[month]) {
+      acc[month] = { month, weights: [] };
+    }
+    acc[month].weights.push(entry.weight);
+    return acc;
+  }, {} as any);
+
+  const monthlyChartData = Object.values(monthlyData).map((item: any) => ({
+    month: item.month,
+    avgWeight: (item.weights.reduce((sum: number, w: number) => sum + w, 0) / item.weights.length).toFixed(1),
+    minWeight: Math.min(...item.weights),
+    maxWeight: Math.max(...item.weights)
+  }));
+
+  // Calcular estatísticas
   const currentWeightValue = weightHistory.length > 0 ? weightHistory[weightHistory.length - 1].weight : 0;
   const initialWeight = weightHistory.length > 0 ? weightHistory[0].weight : 0;
   const weightLoss = initialWeight - currentWeightValue;
-  const todayRegistered = weightHistory.some(entry => entry.date === new Date().toISOString().split('T')[0]);
+  const avgWeightLossPerWeek = weightHistory.length > 7 ? (weightLoss / (weightHistory.length / 7)).toFixed(2) : '0';
+  const bestWeekLoss = calculateBestWeekLoss();
+  const consistencyScore = calculateConsistencyScore();
+
+  function calculateBestWeekLoss() {
+    if (weightHistory.length < 7) return 0;
+    let maxLoss = 0;
+    for (let i = 6; i < weightHistory.length; i++) {
+      const weekLoss = weightHistory[i - 6].weight - weightHistory[i].weight;
+      if (weekLoss > maxLoss) maxLoss = weekLoss;
+    }
+    return maxLoss.toFixed(1);
+  }
+
+  function calculateConsistencyScore() {
+    if (weightHistory.length === 0) return 0;
+    const totalDays = Math.floor((new Date().getTime() - new Date(weightHistory[0].date).getTime()) / (1000 * 60 * 60 * 24));
+    return Math.round((weightHistory.length / Math.max(totalDays, 1)) * 100);
+  }
+
+  // Dados para gráfico de consistência (últimos 30 dias)
+  const last30Days = Array.from({ length: 30 }, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - (29 - i));
+    return date.toISOString().split('T')[0];
+  });
+
+  const consistencyData = last30Days.map(date => ({
+    date: new Date(date).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+    recorded: weightHistory.some(entry => entry.date === date) ? 1 : 0
+  }));
 
   if (loading) {
     return (
@@ -239,95 +158,108 @@ const WeightTracker = () => {
 
   return (
     <div className="space-y-6">
-      {/* Card Principal de Registro - Destaque */}
-      <Card className="border-2 border-red-500 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950 dark:to-orange-950 shadow-xl">
-        <CardHeader className="text-center pb-4">
-          <CardTitle className="flex items-center justify-center gap-3 text-2xl text-red-600 dark:text-red-400">
-            <Weight className="w-8 h-8" />
-            Registrar Peso Hoje
-          </CardTitle>
-          <CardDescription className="text-lg">
-            {todayRegistered ? (
-              <span className="text-green-600 font-semibold">✅ Peso já registrado hoje! (+10 pontos)</span>
-            ) : (
-              <span className="text-red-600 font-semibold">📅 Registre seu peso e ganhe 10 pontos!</span>
-            )}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div className="flex flex-col sm:flex-row items-end gap-4">
-            <div className="flex-1 w-full">
-              <Label htmlFor="weight" className="text-lg font-semibold">Peso atual (kg)</Label>
-              <Input
-                id="weight"
-                type="number"
-                step="0.1"
-                placeholder="Ex: 70.5"
-                value={currentWeight}
-                onChange={(e) => setCurrentWeight(e.target.value)}
-                className="text-lg h-12 border-2 border-red-200 focus:border-red-500"
-                disabled={todayRegistered}
-              />
-            </div>
-            <Button 
-              onClick={handleAddWeight} 
-              className="w-full sm:w-auto bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-8 py-3 h-12 text-lg font-bold shadow-lg transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              disabled={!currentWeight || todayRegistered || isRegistering}
-            >
-              {isRegistering ? (
-                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-              ) : (
-                <Plus className="w-5 h-5 mr-2" />
-              )}
-              {todayRegistered ? "Já Registrado" : "Registrar Peso"}
-            </Button>
-          </div>
-          
-          {!todayRegistered && (
-            <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-4">
-              <div className="flex items-center gap-2 text-yellow-800 dark:text-yellow-200">
-                <Trophy className="w-5 h-5" />
-                <span className="font-semibold">Recompensas por registrar:</span>
-              </div>
-              <ul className="mt-2 text-sm text-yellow-700 dark:text-yellow-300 space-y-1">
-                <li>• +10 pontos por registro diário</li>
-                <li>• Chance de desbloquear medalhas</li>
-                <li>• Progresso para próximo nível</li>
-                <li>• Manter sequência de dias</li>
-              </ul>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      {/* Header com título e compartilhar */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">📊 Estatísticas</h1>
+          <p className="text-gray-600 dark:text-gray-400">Acompanhe seu progresso detalhado</p>
+        </div>
+        {weightHistory.length > 0 && (
+          <Button 
+            variant="outline" 
+            onClick={shareProgress}
+            className="flex items-center gap-2"
+          >
+            <Share2 className="w-4 h-4" />
+            Compartilhar
+          </Button>
+        )}
+      </div>
 
-      {/* Gráfico de Evolução */}
+      {/* Cards de Recompensas */}
+      {userStats && (
+        <div className="grid gap-4 md:grid-cols-3">
+          <Card className="bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-yellow-700">
+                <Trophy className="w-5 h-5" />
+                Nível {userStats.level}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-2xl font-bold text-yellow-800">{userStats.points} pontos</p>
+                <div className="bg-yellow-200 rounded-full h-2">
+                  <div 
+                    className="bg-yellow-500 rounded-full h-2 transition-all"
+                    style={{ width: `${(userStats.points % 100)}%` }}
+                  />
+                </div>
+                <p className="text-sm text-yellow-600">{100 - (userStats.points % 100)} pontos para próximo nível</p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-blue-700">
+                <Award className="w-5 h-5" />
+                Conquistas
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-2xl font-bold text-blue-800">{userStats.shields?.length || 0} escudos</p>
+                <p className="text-2xl font-bold text-blue-800">{userStats.stickers?.length || 0} figurinhas</p>
+                <Badge className="bg-blue-100 text-blue-800">
+                  {userStats.streak} dias seguidos
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="bg-gradient-to-r from-green-50 to-emerald-50 border-green-200">
+            <CardHeader className="pb-3">
+              <CardTitle className="flex items-center gap-2 text-green-700">
+                <Activity className="w-5 h-5" />
+                Atividade
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p className="text-2xl font-bold text-green-800">{weightHistory.length} registros</p>
+                <p className="text-sm text-green-600">Consistência: {consistencyScore}%</p>
+                <Badge className="bg-green-100 text-green-800">
+                  {avgWeightLossPerWeek}kg/semana
+                </Badge>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Gráfico Principal de Evolução do Peso */}
       {weightHistory.length > 0 && (
         <Card>
           <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="w-5 h-5" />
-                  Gráfico de Evolução
-                </CardTitle>
-                <CardDescription>
-                  Sua jornada de emagrecimento com SB2 Turbo
-                </CardDescription>
-              </div>
-              <Button 
-                variant="outline" 
-                onClick={shareProgress}
-                className="flex items-center gap-2"
-              >
-                <Share2 className="w-4 h-4" />
-                Compartilhar
-              </Button>
-            </div>
+            <CardTitle className="flex items-center gap-2">
+              <Target className="w-5 h-5" />
+              Evolução do Peso
+            </CardTitle>
+            <CardDescription>
+              Sua jornada de emagrecimento ao longo do tempo
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-80">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={chartData}>
+                <AreaChart data={chartData}>
+                  <defs>
+                    <linearGradient id="weightGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#dc2626" stopOpacity={0.3}/>
+                      <stop offset="95%" stopColor="#dc2626" stopOpacity={0.1}/>
+                    </linearGradient>
+                  </defs>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis domain={['dataMin - 1', 'dataMax + 1']} />
@@ -335,30 +267,98 @@ const WeightTracker = () => {
                     formatter={(value) => [`${value} kg`, 'Peso']}
                     labelFormatter={(label) => `Data: ${label}`}
                   />
-                  <Line 
+                  <Area 
                     type="monotone" 
                     dataKey="weight" 
                     stroke="#dc2626" 
                     strokeWidth={3}
-                    dot={{ fill: '#dc2626', strokeWidth: 2, r: 6 }}
+                    fillOpacity={1}
+                    fill="url(#weightGradient)"
                   />
-                </LineChart>
+                </AreaChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Estatísticas e Motivação */}
-      <div className="grid gap-4 md:grid-cols-2">
+      {/* Gráficos Secundários */}
+      {weightHistory.length > 0 && (
+        <div className="grid gap-6 md:grid-cols-2">
+          {/* Gráfico de Progresso Mensal */}
+          {monthlyChartData.length > 1 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Calendar className="w-5 h-5" />
+                  Progresso Mensal
+                </CardTitle>
+                <CardDescription>
+                  Peso médio por mês
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="h-64">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={monthlyChartData}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip 
+                        formatter={(value) => [`${value} kg`, 'Peso Médio']}
+                      />
+                      <Bar dataKey="avgWeight" fill="#dc2626" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Gráfico de Consistência */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Activity className="w-5 h-5" />
+                Consistência (30 dias)
+              </CardTitle>
+              <CardDescription>
+                Dias com registro de peso
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="h-64">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={consistencyData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="date" />
+                    <YAxis domain={[0, 1]} />
+                    <Tooltip 
+                      formatter={(value) => [value ? 'Registrado' : 'Não registrado', 'Status']}
+                    />
+                    <Bar 
+                      dataKey="recorded" 
+                      fill="#10b981" 
+                      radius={[2, 2, 0, 0]}
+                    />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      {/* Estatísticas Detalhadas */}
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-yellow-500" />
-              Estatísticas
+              <TrendingDown className="w-5 h-5 text-green-500" />
+              Progresso Total
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-3">
+          <CardContent className="space-y-2">
             {weightHistory.length > 0 ? (
               <>
                 <div className="flex justify-between">
@@ -371,25 +371,75 @@ const WeightTracker = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600">{weightLoss >= 0 ? 'Perdidos:' : 'Ganhos:'}</span>
-                  <span className={`font-semibold ${weightLoss >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  <span className={`font-semibold text-xl ${weightLoss >= 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {weightLoss >= 0 ? '-' : '+'}{Math.abs(weightLoss).toFixed(1)} kg
                   </span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Registros:</span>
-                  <span className="font-semibold text-blue-600">{weightHistory.length} dias</span>
                 </div>
               </>
             ) : (
               <p className="text-gray-600 text-center">
-                Registre seu primeiro peso para ver as estatísticas
+                Nenhum registro encontrado
               </p>
             )}
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <TrendingUp className="w-5 h-5 text-blue-500" />
+              Velocidade
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div className="flex justify-between">
+              <span className="text-gray-600">Média/semana:</span>
+              <span className="font-semibold">{avgWeightLossPerWeek} kg</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Melhor semana:</span>
+              <span className="font-semibold text-green-600">-{bestWeekLoss} kg</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-gray-600">Registros:</span>
+              <span className="font-semibold text-blue-600">{weightHistory.length} dias</span>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-purple-500" />
+              Tempo
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {weightHistory.length > 0 ? (
+              <>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Dias ativos:</span>
+                  <span className="font-semibold">{weightHistory.length}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Sequência:</span>
+                  <span className="font-semibold text-orange-600">{userStats?.streak || 0} dias</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">Consistência:</span>
+                  <span className="font-semibold text-purple-600">{consistencyScore}%</span>
+                </div>
+              </>
+            ) : (
+              <p className="text-gray-600 text-center text-sm">
+                Comece registrando seu peso
+              </p>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-3">
             <CardTitle className="text-lg flex items-center gap-2">
               💪 Motivação
             </CardTitle>
@@ -400,10 +450,7 @@ const WeightTracker = () => {
                 <>
                   <div className="text-4xl">🎉</div>
                   <p className="text-sm text-gray-600">
-                    Parabéns! Você já perdeu <span className="font-semibold text-red-600">{weightLoss.toFixed(1)}kg</span> com o SB2 Turbo!
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Continue registrando diariamente para manter o progresso!
+                    Parabéns! Você já perdeu <span className="font-semibold text-red-600">{weightLoss.toFixed(1)}kg</span>!
                   </p>
                   <Button 
                     variant="outline" 
@@ -412,21 +459,21 @@ const WeightTracker = () => {
                     className="mt-2"
                   >
                     <Share2 className="w-3 h-3 mr-1" />
-                    Compartilhar Conquista
+                    Compartilhar
                   </Button>
+                </>
+              ) : weightHistory.length > 0 ? (
+                <>
+                  <div className="text-4xl">💪</div>
+                  <p className="text-sm text-gray-600">
+                    Continue firme! Todo esforço vale a pena.
+                  </p>
                 </>
               ) : (
                 <>
                   <div className="text-4xl">🎯</div>
                   <p className="text-sm text-gray-600">
-                    {todayRegistered ? (
-                      "Ótimo! Peso registrado hoje. Volte amanhã!"
-                    ) : (
-                      "Registre seu peso hoje e ganhe pontos!"
-                    )}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    Cada registro conta para seus objetivos e medalhas.
+                    Registre seu peso na tela inicial para ver suas estatísticas!
                   </p>
                 </>
               )}
