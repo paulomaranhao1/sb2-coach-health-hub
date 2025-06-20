@@ -86,9 +86,6 @@ const ComingSoonFeatures = () => {
       <div className="text-center space-y-2">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Sparkles className="w-8 h-8 text-yellow-500 animate-pulse" />
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-            Novidades em Desenvolvimento
-          </h2>
           <Sparkles className="w-8 h-8 text-yellow-500 animate-pulse" />
         </div>
         <p className="text-gray-600 dark:text-gray-400">
