@@ -161,14 +161,14 @@ const Index = () => {
 
   if (isLoading || subscriptionLoading) {
     return (
-      <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <Loading size="lg" text="Carregando SB2coach.ai..." />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 transition-colors duration-500">
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
       <Header 
         theme={theme}
         toggleTheme={toggleTheme}
