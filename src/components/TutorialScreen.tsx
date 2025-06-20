@@ -39,8 +39,8 @@ const TutorialScreen = ({ onComplete, onSkip }: TutorialScreenProps) => {
         <CardHeader className="text-center pb-4">
           <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
             <img 
-              src="/lovable-uploads/70a5a53c-adad-4be4-84da-d55301930565.png" 
-              alt="SB2 Coach Logo" 
+              src="/lovable-uploads/3fb7b134-15da-45c9-9aa6-29d4fc844524.png" 
+              alt="SB2 FIT Logo" 
               className="w-full h-full object-contain"
             />
           </div>
