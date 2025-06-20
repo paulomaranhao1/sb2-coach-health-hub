@@ -1,6 +1,6 @@
 
 @layer utilities {
-  /* Modern Contrast Protection System */
+  /* Modern Contrast Protection System - No Yellow */
   
   /* High Contrast Text Utilities */
   .force-readable {
@@ -29,7 +29,7 @@
     font-weight: 600 !important;
   }
 
-  /* Button Contrast Guards - Updated Colors */
+  /* Button Contrast Guards - Modern Colors */
   .btn-contrast-safe {
     background-color: rgb(37 99 235) !important;
     color: rgb(255 255 255) !important;
@@ -53,7 +53,7 @@
   }
 }
 
-/* Emergency Contrast Fixes for New Button Colors */
+/* Emergency Contrast Fixes for Button Colors */
 @supports (color: white) {
   /* Prevent invisible text */
   button:not([class*="bg-blue"]):not([class*="bg-emerald"]):not([class*="bg-violet"]):not([class*="bg-orange"]):not([class*="bg-cyan"]):not([class*="bg-red"]) {
@@ -66,8 +66,9 @@
   }
 }
 
-/* Specific Button Color Guards - Updated */
+/* Specific Button Color Guards */
 button[class*="bg-violet"],
+button[class*="bg-purple"],
 .magic-link-button,
 .purple-button {
   color: rgb(255 255 255) !important;
@@ -83,6 +84,7 @@ button[class*="bg-blue"],
 }
 
 button[class*="bg-emerald"],
+button[class*="bg-green"],
 .success-button {
   color: rgb(255 255 255) !important;
   background-color: rgb(5 150 105) !important;
@@ -104,7 +106,8 @@ button[class*="bg-orange"],
 }
 
 button[class*="bg-red"],
-.danger-button {
+.danger-button,
+.btn-destructive {
   color: rgb(255 255 255) !important;
   background-color: rgb(220 38 38) !important;
   font-weight: 600 !important;
@@ -119,4 +122,19 @@ button[disabled] {
 
 button:disabled:not([class*="variant-link"]) {
   font-weight: 600 !important;
+}
+
+/* Menu item contrast */
+.menu-item, .nav-link {
+  color: rgb(71 85 105) !important;
+  font-weight: 500 !important;
+}
+
+.dark .menu-item, .dark .nav-link {
+  color: rgb(148 163 184) !important;
+}
+
+.menu-item.active, .nav-link.active {
+  color: rgb(255 255 255) !important;
+  background-color: rgb(37 99 235) !important;
 }

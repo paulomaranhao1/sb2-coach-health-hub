@@ -54,4 +54,8 @@
   .btn-gradient-success {
     @apply bg-gradient-to-r from-emerald-600 to-teal-600 text-white hover:from-emerald-700 hover:to-teal-700 active:from-emerald-800 active:to-teal-800 focus:ring-emerald-500/30 font-medium shadow-lg;
   }
+
+  .btn-gradient-warning {
+    @apply bg-gradient-to-r from-orange-600 to-red-600 text-white hover:from-orange-700 hover:to-red-700 active:from-orange-800 active:to-red-800 focus:ring-orange-500/30 font-medium shadow-lg;
+  }
 }

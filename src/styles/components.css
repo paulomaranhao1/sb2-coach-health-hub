@@ -1,6 +1,6 @@
 
 @layer components {
-  /* Modern Component Styles with Updated Colors */
+  /* Modern Component Styles with Updated Colors - No Yellow */
   
   /* Navigation Components */
   .nav-link {
@@ -47,7 +47,7 @@
     border-color: rgb(51 65 85) !important;
   }
   
-  /* Badge Components */
+  /* Badge Components - No Yellow */
   .badge {
     @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
   }
@@ -112,7 +112,7 @@
     color: rgb(252 165 165) !important;
   }
   
-  /* Alert Components */
+  /* Alert Components - No Yellow */
   .alert {
     @apply p-4 rounded-lg border-l-4 font-medium shadow-sm;
   }
@@ -173,6 +173,29 @@
     color: rgb(254 202 202) !important;
   }
   
+  /* Menu Components */
+  .menu-item {
+    @apply px-3 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-slate-100 hover:text-slate-800 cursor-pointer;
+    color: rgb(71 85 105) !important;
+  }
+
+  .menu-item.active {
+    @apply bg-blue-600 text-white shadow-sm;
+    background-color: rgb(37 99 235) !important;
+    color: rgb(255 255 255) !important;
+  }
+
+  .dark .menu-item {
+    @apply hover:bg-slate-800 hover:text-slate-200;
+    color: rgb(148 163 184) !important;
+  }
+
+  .dark .menu-item.active {
+    @apply bg-blue-600 text-white;
+    background-color: rgb(37 99 235) !important;
+    color: rgb(255 255 255) !important;
+  }
+
   /* Progress Components */
   .progress-bar {
     @apply w-full bg-slate-200 rounded-full h-2;
@@ -208,28 +231,5 @@
   .dark .divider {
     @apply border-slate-700;
     border-color: rgb(51 65 85) !important;
-  }
-
-  /* Menu Components */
-  .menu-item {
-    @apply px-3 py-2 rounded-lg font-medium transition-all duration-200 hover:bg-slate-100 hover:text-slate-800 cursor-pointer;
-    color: rgb(71 85 105) !important;
-  }
-
-  .menu-item.active {
-    @apply bg-blue-600 text-white shadow-sm;
-    background-color: rgb(37 99 235) !important;
-    color: rgb(255 255 255) !important;
-  }
-
-  .dark .menu-item {
-    @apply hover:bg-slate-800 hover:text-slate-200;
-    color: rgb(148 163 184) !important;
-  }
-
-  .dark .menu-item.active {
-    @apply bg-blue-600 text-white;
-    background-color: rgb(37 99 235) !important;
-    color: rgb(255 255 255) !important;
   }
 }
