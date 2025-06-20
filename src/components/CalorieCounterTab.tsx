@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -5,15 +6,20 @@ import { Camera, History, BarChart3 } from "lucide-react";
 import PhotoAnalyzer from './calorie-counter/PhotoAnalyzer';
 import AnalysisHistory from './calorie-counter/AnalysisHistory';
 import CalorieStats from './calorie-counter/CalorieStats';
+import CalorieCounterHeader from './calorie-counter/CalorieCounterHeader';
+
 const CalorieCounterTab = () => {
   const [refreshHistoryTrigger, setRefreshHistoryTrigger] = useState(0);
+  
   const handleAnalysisComplete = (analysis: any) => {
     // Atualizar histórico quando uma nova análise for concluída
     setRefreshHistoryTrigger(prev => prev + 1);
   };
-  return <div className="space-y-6">
-      {/* Hero Section */}
-      
+  
+  return (
+    <div className="space-y-6">
+      {/* Header Section */}
+      <CalorieCounterHeader />
 
       {/* Abas principais */}
       <Tabs defaultValue="analyze" className="w-full">
@@ -84,6 +90,8 @@ const CalorieCounterTab = () => {
           </div>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default CalorieCounterTab;
