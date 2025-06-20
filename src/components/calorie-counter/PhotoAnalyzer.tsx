@@ -75,6 +75,11 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     if (cameraInputRef.current) cameraInputRef.current.value = '';
   };
 
+  const handleSaveAnalysis = (analysisData: any) => {
+    // Save analysis logic here
+    console.log('Saving analysis:', analysisData);
+  };
+
   return (
     <div className="space-y-6">
       <Card>
@@ -174,8 +179,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       {analysis && (
         <FoodAnalysisResult 
           analysis={analysis} 
-          imageUrl={selectedImage}
-          onReset={handleReset}
+          onSave={handleSaveAnalysis}
         />
       )}
     </div>

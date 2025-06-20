@@ -13,6 +13,11 @@ const AIChat = () => {
   const [showOffers, setShowOffers] = useState(false);
   const { hasPremiumAccess, subscription, isLoading } = useSubscription();
 
+  const handleSendMessage = (message: string) => {
+    // This would integrate with the chat interface to send the message
+    console.log('Sending message:', message);
+  };
+
   if (showOffers) {
     return <OffersScreen onBack={() => setShowOffers(false)} />;
   }
@@ -62,7 +67,7 @@ const AIChat = () => {
         onShowOffers={() => setShowOffers(true)}
       />
 
-      {hasPremiumAccess && <AIQuickActions />}
+      {hasPremiumAccess && <AIQuickActions onSendMessage={handleSendMessage} />}
     </div>
   );
 };
