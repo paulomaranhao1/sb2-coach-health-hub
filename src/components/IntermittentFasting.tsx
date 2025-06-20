@@ -7,7 +7,6 @@ import FastingPlansGrid from "./fasting/FastingPlansGrid";
 import FastingStatistics from "./fasting/FastingStatistics";
 import FastingGoals from "./fasting/FastingGoals";
 import FastingTabs from "./fasting/FastingTabs";
-
 interface FastingSession {
   id: string;
   startTime: Date;
@@ -16,14 +15,12 @@ interface FastingSession {
   type: string;
   completed: boolean;
 }
-
 interface FastingGoal {
   weekly: number;
   monthly: number;
   currentWeek: number;
   currentMonth: number;
 }
-
 const IntermittentFasting = () => {
   const [currentFast, setCurrentFast] = useState<FastingSession | null>(null);
   const [fastingHistory, setFastingHistory] = useState<FastingSession[]>([]);
@@ -42,7 +39,9 @@ const IntermittentFasting = () => {
     currentWeek: 3,
     currentMonth: 12
   });
-  const { toast } = useToast();
+  const {
+    toast
+  } = useToast();
 
   // Planos de jejum expandidos com mais opções
   const fastingPlans = {
@@ -125,23 +124,23 @@ const IntermittentFasting = () => {
       interval = setInterval(() => {
         setTimeRemaining(time => {
           const newTime = time - 1;
-          
+
           // Notificações em marcos importantes
           if (notifications && currentFast) {
             const elapsed = currentFast.duration - newTime;
-            const progress = (elapsed / currentFast.duration) * 100;
-            
+            const progress = elapsed / currentFast.duration * 100;
+
             // Notificação aos 50%
-            if (reminders.halfway && Math.floor(progress) === 50 && Math.floor(((currentFast.duration - time) / currentFast.duration) * 100) === 49) {
+            if (reminders.halfway && Math.floor(progress) === 50 && Math.floor((currentFast.duration - time) / currentFast.duration * 100) === 49) {
               toast({
                 title: "🔥 Meio Caminho!",
                 description: "Você já completou 50% do seu jejum! Continue firme!",
                 duration: 5000
               });
             }
-            
+
             // Notificação aos 90%
-            if (Math.floor(progress) === 90 && Math.floor(((currentFast.duration - time) / currentFast.duration) * 100) === 89) {
+            if (Math.floor(progress) === 90 && Math.floor((currentFast.duration - time) / currentFast.duration * 100) === 89) {
               toast({
                 title: "🏁 Quase Lá!",
                 description: "Faltam apenas 10% para completar seu jejum!",
@@ -149,7 +148,6 @@ const IntermittentFasting = () => {
               });
             }
           }
-          
           if (newTime <= 1) {
             setIsActive(false);
             completeFast();
@@ -161,7 +159,6 @@ const IntermittentFasting = () => {
     }
     return () => clearInterval(interval);
   }, [isActive, timeRemaining, notifications, reminders, currentFast]);
-
   const startFast = () => {
     const plan = fastingPlans[selectedPlan as keyof typeof fastingPlans];
     const duration = plan.fast * 60 * 60; // Convert hours to seconds
@@ -172,11 +169,9 @@ const IntermittentFasting = () => {
       type: selectedPlan,
       completed: false
     };
-    
     setCurrentFast(newFast);
     setTimeRemaining(duration);
     setIsActive(true);
-    
     if (notifications && reminders.start) {
       toast({
         title: "🚀 Jejum Iniciado!",
@@ -185,15 +180,13 @@ const IntermittentFasting = () => {
       });
     }
   };
-
   const pauseFast = () => {
     setIsActive(!isActive);
     toast({
       title: isActive ? "⏸️ Jejum Pausado" : "▶️ Jejum Retomado",
-      description: isActive ? "Jejum pausado temporariamente" : "Jejum retomado com sucesso",
+      description: isActive ? "Jejum pausado temporariamente" : "Jejum retomado com sucesso"
     });
   };
-
   const stopFast = () => {
     if (currentFast) {
       const completedFast = {
@@ -203,17 +196,14 @@ const IntermittentFasting = () => {
       };
       setFastingHistory(prev => [...prev, completedFast]);
     }
-    
     setCurrentFast(null);
     setTimeRemaining(0);
     setIsActive(false);
-    
     toast({
       title: "🛑 Jejum Interrompido",
-      description: "Não se preocupe, toda tentativa é um aprendizado!",
+      description: "Não se preocupe, toda tentativa é um aprendizado!"
     });
   };
-
   const completeFast = () => {
     if (currentFast) {
       const completedFast = {
@@ -222,14 +212,13 @@ const IntermittentFasting = () => {
         completed: true
       };
       setFastingHistory(prev => [...prev, completedFast]);
-      
+
       // Atualizar metas
       setFastingGoals(prev => ({
         ...prev,
         currentWeek: prev.currentWeek + 1,
         currentMonth: prev.currentMonth + 1
       }));
-      
       if (notifications && reminders.end) {
         toast({
           title: "🎉 Parabéns! Jejum Concluído!",
@@ -238,30 +227,23 @@ const IntermittentFasting = () => {
         });
       }
     }
-    
     setCurrentFast(null);
     setIsActive(false);
   };
-
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+    const minutes = Math.floor(seconds % 3600 / 60);
     const secs = seconds % 60;
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
-
   const calculateProgress = () => {
     if (!currentFast || timeRemaining === 0) return 0;
     const elapsed = currentFast.duration - timeRemaining;
-    return (elapsed / currentFast.duration) * 100;
+    return elapsed / currentFast.duration * 100;
   };
-
   const getStreakCount = () => {
     let streak = 0;
-    const sortedHistory = [...fastingHistory].sort((a, b) => 
-      new Date(b.startTime).getTime() - new Date(a.startTime).getTime()
-    );
-    
+    const sortedHistory = [...fastingHistory].sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
     for (const fast of sortedHistory) {
       if (fast.completed) {
         streak++;
@@ -271,14 +253,10 @@ const IntermittentFasting = () => {
     }
     return streak;
   };
-
   const completedFasts = fastingHistory.filter(fast => fast.completed).length;
   const totalFasts = fastingHistory.length;
-  const successRate = totalFasts > 0 ? (completedFasts / totalFasts) * 100 : 0;
-  const totalHoursFasted = fastingHistory
-    .filter(fast => fast.completed)
-    .reduce((total, fast) => total + (fast.duration / 3600), 0);
-
+  const successRate = totalFasts > 0 ? completedFasts / totalFasts * 100 : 0;
+  const totalHoursFasted = fastingHistory.filter(fast => fast.completed).reduce((total, fast) => total + fast.duration / 3600, 0);
   const getMotivationalMessage = () => {
     const progress = calculateProgress();
     if (progress < 25) return "🌱 Começando forte! Cada minuto conta!";
@@ -287,9 +265,7 @@ const IntermittentFasting = () => {
     if (progress < 90) return "🏃‍♂️ Reta final! Você quase conseguiu!";
     return "🏆 Últimos minutos! Você é um campeão!";
   };
-
-  return (
-    <div className="space-y-6">
+  return <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">⏰ Jejum Intermitente</h1>
@@ -299,63 +275,26 @@ const IntermittentFasting = () => {
       </div>
 
       {/* Timer Principal */}
-      {currentFast ? (
-        <FastingTimer
-          currentFast={currentFast}
-          timeRemaining={timeRemaining}
-          isActive={isActive}
-          onPause={pauseFast}
-          onStop={stopFast}
-          formatTime={formatTime}
-          calculateProgress={calculateProgress}
-          getMotivationalMessage={getMotivationalMessage}
-          fastingPlans={fastingPlans}
-        />
-      ) : (
-        <Card className="border-2 border-blue-500 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
+      {currentFast ? <FastingTimer currentFast={currentFast} timeRemaining={timeRemaining} isActive={isActive} onPause={pauseFast} onStop={stopFast} formatTime={formatTime} calculateProgress={calculateProgress} getMotivationalMessage={getMotivationalMessage} fastingPlans={fastingPlans} /> : <Card className="border-2 border-blue-500 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
           <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center gap-2 text-2xl">
+            <CardTitle className="flex items-center justify-center gap-2 text-2xl text-gray-700">
               <Timer className="w-8 h-8" />
               Pronto para Jejuar?
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <FastingPlansGrid
-              fastingPlans={fastingPlans}
-              selectedPlan={selectedPlan}
-              setSelectedPlan={setSelectedPlan}
-              onStartFast={startFast}
-            />
+            <FastingPlansGrid fastingPlans={fastingPlans} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} onStartFast={startFast} />
           </CardContent>
-        </Card>
-      )}
+        </Card>}
 
       {/* Metas e Progresso */}
       <FastingGoals fastingGoals={fastingGoals} />
 
       {/* Statistics */}
-      <FastingStatistics
-        streakCount={getStreakCount()}
-        completedFasts={completedFasts}
-        successRate={successRate}
-        totalHoursFasted={totalHoursFasted}
-        totalFasts={totalFasts}
-      />
+      <FastingStatistics streakCount={getStreakCount()} completedFasts={completedFasts} successRate={successRate} totalHoursFasted={totalHoursFasted} totalFasts={totalFasts} />
 
       {/* Information Tabs */}
-      <FastingTabs
-        notifications={notifications}
-        setNotifications={setNotifications}
-        reminders={reminders}
-        setReminders={setReminders}
-        fastingGoals={fastingGoals}
-        setFastingGoals={setFastingGoals}
-        fastingHistory={fastingHistory}
-        totalFasts={totalFasts}
-        fastingPlans={fastingPlans}
-      />
-    </div>
-  );
+      <FastingTabs notifications={notifications} setNotifications={setNotifications} reminders={reminders} setReminders={setReminders} fastingGoals={fastingGoals} setFastingGoals={setFastingGoals} fastingHistory={fastingHistory} totalFasts={totalFasts} fastingPlans={fastingPlans} />
+    </div>;
 };
-
 export default IntermittentFasting;
