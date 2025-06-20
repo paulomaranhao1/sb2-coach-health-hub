@@ -1,0 +1,15 @@
+
+@layer base {
+  /* Base Button Styles */
+  
+  button {
+    @apply transition-all duration-200 font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2;
+  }
+
+  /* Disabled States */
+  button:disabled,
+  button[disabled] {
+    @apply opacity-50 cursor-not-allowed !important;
+    pointer-events: none !important;
+  }
+}
