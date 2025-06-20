@@ -32,7 +32,7 @@ const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md mx-auto">
+      <DialogContent className="max-w-md mx-auto bg-white dark:bg-slate-800">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-red-600 dark:text-red-400">
             <Info className="w-5 h-5" />
@@ -82,7 +82,7 @@ const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => 
             </div>
           </div>
           
-          <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-3 border border-red-200 dark:border-red-800">
+          <div className="bg-white dark:bg-slate-700 rounded-lg p-3 border border-red-200 dark:border-red-800">
             <p className="text-xs text-red-700 dark:text-red-300">
               💡 <strong>Dica:</strong> Siga essa ordem para melhores resultados em sua jornada de emagrecimento!
             </p>
