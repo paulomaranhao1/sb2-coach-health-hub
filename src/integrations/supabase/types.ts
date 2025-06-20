@@ -14,6 +14,7 @@ export type Database = {
           age: number | null
           auth_provider: string | null
           created_at: string
+          email: string | null
           email_verified_at: string | null
           gender: string | null
           goal_weight: number | null
@@ -30,6 +31,7 @@ export type Database = {
           age?: number | null
           auth_provider?: string | null
           created_at?: string
+          email?: string | null
           email_verified_at?: string | null
           gender?: string | null
           goal_weight?: number | null
@@ -46,6 +48,7 @@ export type Database = {
           age?: number | null
           auth_provider?: string | null
           created_at?: string
+          email?: string | null
           email_verified_at?: string | null
           gender?: string | null
           goal_weight?: number | null
