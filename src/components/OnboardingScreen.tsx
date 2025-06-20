@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -420,7 +419,7 @@ const OnboardingScreen = ({ onComplete }: OnboardingScreenProps) => {
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 flex items-center justify-center">
             <img 
-              src="/lovable-uploads/315c645a-f0c2-4b01-b17a-e2337aa7a0bd.png" 
+              src="/lovable-uploads/bf6fca4b-d2fa-4dfb-9422-75f0f01befa7.png" 
               alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
             />
