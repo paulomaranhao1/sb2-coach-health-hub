@@ -87,10 +87,10 @@ export const useProgressData = () => {
   const currentWeightValue = weightHistory.length > 0 ? weightHistory[weightHistory.length - 1].weight : 0;
   const initialWeight = weightHistory.length > 0 ? weightHistory[0].weight : 0;
   const weightLoss = initialWeight - currentWeightValue;
-  const avgWeightLossPerWeek = weightHistory.length > 7 ? (weightLoss / (weightHistory.length / 7)).toFixed(2) : '0';
+  const avgWeightLossPerWeek = weightHistory.length > 7 ? (weightLoss / (weightHistory.length / 7)).toFixed(2) : '0.00';
 
   const calculateBestWeekLoss = () => {
-    if (weightHistory.length < 7) return 0;
+    if (weightHistory.length < 7) return '0.0';
     let maxLoss = 0;
     for (let i = 6; i < weightHistory.length; i++) {
       const weekLoss = weightHistory[i - 6].weight - weightHistory[i].weight;
