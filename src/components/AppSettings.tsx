@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,9 +8,11 @@ import { Settings, Bell, Moon, Sun, Smartphone, Database, Shield, Trash2 } from 
 import { useTheme } from "@/hooks/useTheme";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
-
 const AppSettings = () => {
-  const { theme, toggleTheme } = useTheme();
+  const {
+    theme,
+    toggleTheme
+  } = useTheme();
   const [notifications, setNotifications] = useState(() => {
     return localStorage.getItem('sb2_notifications_enabled') !== 'false';
   });
@@ -21,92 +22,70 @@ const AppSettings = () => {
   const [autoSave, setAutoSave] = useState(() => {
     return localStorage.getItem('sb2_auto_save') !== 'false';
   });
-
   const handleNotificationToggle = (enabled: boolean) => {
     setNotifications(enabled);
     localStorage.setItem('sb2_notifications_enabled', enabled.toString());
     toastFeedback.success(enabled ? 'Notificações ativadas' : 'Notificações desativadas');
   };
-
   const handleSoundsToggle = (enabled: boolean) => {
     setSounds(enabled);
     localStorage.setItem('sb2_sounds_enabled', enabled.toString());
     toastFeedback.success(enabled ? 'Sons ativados' : 'Sons desativados');
   };
-
   const handleAutoSaveToggle = (enabled: boolean) => {
     setAutoSave(enabled);
     localStorage.setItem('sb2_auto_save', enabled.toString());
     toastFeedback.success(enabled ? 'Salvamento automático ativado' : 'Salvamento automático desativado');
   };
-
   const clearCache = () => {
     // Limpar dados em cache (exceto configurações essenciais)
-    const keysToKeep = [
-      'sb2_notifications_enabled',
-      'sb2_sounds_enabled', 
-      'sb2_auto_save',
-      'sb2_tutorial_completed'
-    ];
-    
+    const keysToKeep = ['sb2_notifications_enabled', 'sb2_sounds_enabled', 'sb2_auto_save', 'sb2_tutorial_completed'];
     const allKeys = Object.keys(localStorage);
     allKeys.forEach(key => {
       if (key.startsWith('sb2_') && !keysToKeep.includes(key)) {
         localStorage.removeItem(key);
       }
     });
-    
     toastFeedback.success('Cache limpo com sucesso!');
   };
-
   const exportData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
+      const {
+        data: {
+          user
+        }
+      } = await supabase.auth.getUser();
       if (!user) return;
 
       // Buscar dados do usuário
-      const { data: profile } = await supabase
-        .from('user_profiles')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      const { data: stats } = await supabase
-        .from('user_stats')
-        .select('*')
-        .eq('user_id', user.id)
-        .single();
-
-      const { data: weightEntries } = await supabase
-        .from('weight_entries')
-        .select('*')
-        .eq('user_id', user.id);
-
+      const {
+        data: profile
+      } = await supabase.from('user_profiles').select('*').eq('user_id', user.id).single();
+      const {
+        data: stats
+      } = await supabase.from('user_stats').select('*').eq('user_id', user.id).single();
+      const {
+        data: weightEntries
+      } = await supabase.from('weight_entries').select('*').eq('user_id', user.id);
       const exportData = {
         profile,
         stats,
         weightEntries,
         exportDate: new Date().toISOString()
       };
-
       const dataStr = JSON.stringify(exportData, null, 2);
-      const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-      
+      const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
       const exportFileDefaultName = `sb2coach_backup_${new Date().toISOString().split('T')[0]}.json`;
-      
       const linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
-      
       toastFeedback.success('Dados exportados com sucesso!');
     } catch (error) {
       toastFeedback.error('Erro ao exportar dados');
     }
   };
-
-  return (
-    <div className="max-w-4xl mx-auto space-y-6">
+  return <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <Card className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
         <CardHeader>
@@ -139,10 +118,7 @@ const AppSettings = () => {
                 Alternar entre tema claro e escuro
               </p>
             </div>
-            <Switch
-              checked={theme === 'dark'}
-              onCheckedChange={toggleTheme}
-            />
+            <Switch checked={theme === 'dark'} onCheckedChange={toggleTheme} />
           </div>
         </CardContent>
       </Card>
@@ -166,10 +142,7 @@ const AppSettings = () => {
                 Receber notificações sobre metas e lembretes
               </p>
             </div>
-            <Switch
-              checked={notifications}
-              onCheckedChange={handleNotificationToggle}
-            />
+            <Switch checked={notifications} onCheckedChange={handleNotificationToggle} />
           </div>
           
           <Separator />
@@ -181,10 +154,7 @@ const AppSettings = () => {
                 Reproduzir sons ao receber notificações
               </p>
             </div>
-            <Switch
-              checked={sounds}
-              onCheckedChange={handleSoundsToggle}
-            />
+            <Switch checked={sounds} onCheckedChange={handleSoundsToggle} />
           </div>
         </CardContent>
       </Card>
@@ -208,29 +178,18 @@ const AppSettings = () => {
                 Salvar automaticamente análises de fotos
               </p>
             </div>
-            <Switch
-              checked={autoSave}
-              onCheckedChange={handleAutoSaveToggle}
-            />
+            <Switch checked={autoSave} onCheckedChange={handleAutoSaveToggle} />
           </div>
           
           <Separator />
           
           <div className="space-y-3">
-            <Button 
-              onClick={exportData}
-              variant="outline" 
-              className="w-full justify-start"
-            >
+            <Button onClick={exportData} variant="outline" className="w-full justify-start">
               <Database className="w-4 h-4 mr-2" />
               Exportar Meus Dados
             </Button>
             
-            <Button 
-              onClick={clearCache}
-              variant="outline" 
-              className="w-full justify-start"
-            >
+            <Button onClick={clearCache} variant="outline" className="w-full justify-start">
               <Trash2 className="w-4 h-4 mr-2" />
               Limpar Cache do App
             </Button>
@@ -279,12 +238,11 @@ const AppSettings = () => {
           </div>
           <div className="flex justify-between">
             <span className="text-sm text-muted-foreground">Desenvolvido por:</span>
-            <span className="text-sm font-medium">SB2coach.ai</span>
+            <span className="text-sm font-medium">Natuu Nutrition International Inc.
+natuu.ai</span>
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default AppSettings;
