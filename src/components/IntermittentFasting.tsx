@@ -1,300 +1,211 @@
-import { useState, useEffect } from "react";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Timer } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import FastingTimer from "./fasting/FastingTimer";
-import FastingPlansGrid from "./fasting/FastingPlansGrid";
-import FastingStatistics from "./fasting/FastingStatistics";
+import { Timer, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import { useFasting } from "@/hooks/useFasting";
+import AdvancedFastingTimer from "./fasting/AdvancedFastingTimer";
+import FastingPlanSelector from "./fasting/FastingPlanSelector";
+import FastingAnalytics from "./fasting/FastingAnalytics";
 import FastingGoals from "./fasting/FastingGoals";
-import FastingTabs from "./fasting/FastingTabs";
-interface FastingSession {
-  id: string;
-  startTime: Date;
-  endTime?: Date;
-  duration: number;
-  type: string;
-  completed: boolean;
-}
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 interface FastingGoal {
   weekly: number;
   monthly: number;
   currentWeek: number;
   currentMonth: number;
 }
+
 const IntermittentFasting = () => {
-  const [currentFast, setCurrentFast] = useState<FastingSession | null>(null);
-  const [fastingHistory, setFastingHistory] = useState<FastingSession[]>([]);
   const [selectedPlan, setSelectedPlan] = useState("16:8");
-  const [timeRemaining, setTimeRemaining] = useState(0);
-  const [isActive, setIsActive] = useState(false);
-  const [notifications, setNotifications] = useState(true);
-  const [reminders, setReminders] = useState({
-    start: true,
-    halfway: true,
-    end: true
-  });
   const [fastingGoals, setFastingGoals] = useState<FastingGoal>({
     weekly: 5,
     monthly: 20,
     currentWeek: 3,
     currentMonth: 12
   });
+
   const {
-    toast
-  } = useToast();
+    currentFast,
+    timeRemaining,
+    isActive,
+    isPaused,
+    startFast,
+    pauseFast,
+    stopFast,
+    calculateProgress,
+    formatTime,
+    getFastingPhase,
+    getStats
+  } = useFasting();
 
-  // Planos de jejum expandidos com mais opções
-  const fastingPlans = {
-    "12:12": {
-      name: "12:12 - Iniciante",
-      fast: 12,
-      eat: 12,
-      description: "12h jejum, 12h janela alimentar",
-      difficulty: "Muito Fácil",
-      benefits: ["Introdução ao jejum", "Melhora digestão", "Ritmo circadiano"],
-      color: "bg-blue-500",
-      calories: "Queima ~200 calorias extra"
-    },
-    "14:10": {
-      name: "14:10 - Adaptação",
-      fast: 14,
-      eat: 10,
-      description: "14h jejum, 10h janela alimentar",
-      difficulty: "Fácil",
-      benefits: ["Transição suave", "Controle apetite", "Energia estável"],
-      color: "bg-cyan-500",
-      calories: "Queima ~300 calorias extra"
-    },
-    "16:8": {
-      name: "16:8 - Método Clássico",
-      fast: 16,
-      eat: 8,
-      description: "16h jejum, 8h janela alimentar",
-      difficulty: "Iniciante",
-      benefits: ["Melhora metabolismo", "Perda de peso gradual", "Fácil de manter"],
-      color: "bg-green-500",
-      calories: "Queima ~400 calorias extra"
-    },
-    "18:6": {
-      name: "18:6 - Intermediário",
-      fast: 18,
-      eat: 6,
-      description: "18h jejum, 6h janela alimentar",
-      difficulty: "Intermediário",
-      benefits: ["Autofagia aumentada", "Maior queima de gordura", "Disciplina mental"],
-      color: "bg-red-500",
-      calories: "Queima ~500 calorias extra"
-    },
-    "20:4": {
-      name: "20:4 - Warrior Diet",
-      fast: 20,
-      eat: 4,
-      description: "20h jejum, 4h janela alimentar",
-      difficulty: "Avançado",
-      benefits: ["Autofagia intensa", "Máxima eficiência", "Concentração elevada"],
-      color: "bg-orange-500",
-      calories: "Queima ~600 calorias extra"
-    },
-    "24:0": {
-      name: "24:0 - OMAD",
-      fast: 24,
-      eat: 0,
-      description: "Uma refeição por dia",
-      difficulty: "Expert",
-      benefits: ["Máxima simplicidade", "Economia de tempo", "Regeneração celular"],
-      color: "bg-red-500",
-      calories: "Queima ~700+ calorias extra"
-    },
-    "36:12": {
-      name: "36:12 - Jejum Prolongado",
-      fast: 36,
-      eat: 12,
-      description: "36h jejum, 12h janela (dias alternados)",
-      difficulty: "Expert+",
-      benefits: ["Autofagia máxima", "Reset metabólico", "Longevidade"],
-      color: "bg-purple-500",
-      calories: "Queima ~1000+ calorias extra"
-    }
-  };
+  const stats = getStats();
 
-  // Timer effect com notificações
-  useEffect(() => {
-    let interval: NodeJS.Timeout;
-    if (isActive && timeRemaining > 0) {
-      interval = setInterval(() => {
-        setTimeRemaining(time => {
-          const newTime = time - 1;
-
-          // Notificações em marcos importantes
-          if (notifications && currentFast) {
-            const elapsed = currentFast.duration - newTime;
-            const progress = elapsed / currentFast.duration * 100;
-
-            // Notificação aos 50%
-            if (reminders.halfway && Math.floor(progress) === 50 && Math.floor((currentFast.duration - time) / currentFast.duration * 100) === 49) {
-              toast({
-                title: "🔥 Meio Caminho!",
-                description: "Você já completou 50% do seu jejum! Continue firme!",
-                duration: 5000
-              });
-            }
-
-            // Notificação aos 90%
-            if (Math.floor(progress) === 90 && Math.floor((currentFast.duration - time) / currentFast.duration * 100) === 89) {
-              toast({
-                title: "🏁 Quase Lá!",
-                description: "Faltam apenas 10% para completar seu jejum!",
-                duration: 5000
-              });
-            }
-          }
-          if (newTime <= 1) {
-            setIsActive(false);
-            completeFast();
-            return 0;
-          }
-          return newTime;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isActive, timeRemaining, notifications, reminders, currentFast]);
-  const startFast = () => {
-    const plan = fastingPlans[selectedPlan as keyof typeof fastingPlans];
-    const duration = plan.fast * 60 * 60; // Convert hours to seconds
-    const newFast: FastingSession = {
-      id: Date.now().toString(),
-      startTime: new Date(),
-      duration,
-      type: selectedPlan,
-      completed: false
-    };
-    setCurrentFast(newFast);
-    setTimeRemaining(duration);
-    setIsActive(true);
-    if (notifications && reminders.start) {
-      toast({
-        title: "🚀 Jejum Iniciado!",
-        description: `Jejum ${selectedPlan} começou. Você consegue! ${plan.calories}`,
-        duration: 5000
-      });
-    }
-  };
-  const pauseFast = () => {
-    setIsActive(!isActive);
-    toast({
-      title: isActive ? "⏸️ Jejum Pausado" : "▶️ Jejum Retomado",
-      description: isActive ? "Jejum pausado temporariamente" : "Jejum retomado com sucesso"
-    });
-  };
-  const stopFast = () => {
-    if (currentFast) {
-      const completedFast = {
-        ...currentFast,
-        endTime: new Date(),
-        completed: false
-      };
-      setFastingHistory(prev => [...prev, completedFast]);
-    }
-    setCurrentFast(null);
-    setTimeRemaining(0);
-    setIsActive(false);
-    toast({
-      title: "🛑 Jejum Interrompido",
-      description: "Não se preocupe, toda tentativa é um aprendizado!"
-    });
-  };
-  const completeFast = () => {
-    if (currentFast) {
-      const completedFast = {
-        ...currentFast,
-        endTime: new Date(),
-        completed: true
-      };
-      setFastingHistory(prev => [...prev, completedFast]);
-
-      // Atualizar metas
-      setFastingGoals(prev => ({
-        ...prev,
-        currentWeek: prev.currentWeek + 1,
-        currentMonth: prev.currentMonth + 1
-      }));
-      if (notifications && reminders.end) {
-        toast({
-          title: "🎉 Parabéns! Jejum Concluído!",
-          description: `Você completou seu jejum ${selectedPlan}! +50 pontos conquistados!`,
-          duration: 8000
-        });
-      }
-    }
-    setCurrentFast(null);
-    setIsActive(false);
-  };
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor(seconds % 3600 / 60);
-    const secs = seconds % 60;
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-  const calculateProgress = () => {
-    if (!currentFast || timeRemaining === 0) return 0;
-    const elapsed = currentFast.duration - timeRemaining;
-    return elapsed / currentFast.duration * 100;
-  };
-  const getStreakCount = () => {
-    let streak = 0;
-    const sortedHistory = [...fastingHistory].sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
-    for (const fast of sortedHistory) {
-      if (fast.completed) {
-        streak++;
-      } else {
-        break;
-      }
-    }
-    return streak;
-  };
-  const completedFasts = fastingHistory.filter(fast => fast.completed).length;
-  const totalFasts = fastingHistory.length;
-  const successRate = totalFasts > 0 ? completedFasts / totalFasts * 100 : 0;
-  const totalHoursFasted = fastingHistory.filter(fast => fast.completed).reduce((total, fast) => total + fast.duration / 3600, 0);
-  const getMotivationalMessage = () => {
-    const progress = calculateProgress();
-    if (progress < 25) return "🌱 Começando forte! Cada minuto conta!";
-    if (progress < 50) return "🔥 Você está indo muito bem! Continue assim!";
-    if (progress < 75) return "💪 Mais da metade concluída! Você é incrível!";
-    if (progress < 90) return "🏃‍♂️ Reta final! Você quase conseguiu!";
-    return "🏆 Últimos minutos! Você é um campeão!";
-  };
-  return <div className="space-y-6">
+  return (
+    <div className="space-y-6">
       {/* Header */}
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-left text-gray-700">⏰ Jejum Intermitente</h1>
-        <p className="text-gray-600 dark:text-gray-400 text-left">
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+          ⏰ Jejum Intermitente Avançado
+        </h1>
+        <p className="text-gray-600 dark:text-gray-400">
           Transforme sua saúde com o poder do jejum intermitente científico
         </p>
       </div>
 
-      {/* Timer Principal */}
-      {currentFast ? <FastingTimer currentFast={currentFast} timeRemaining={timeRemaining} isActive={isActive} onPause={pauseFast} onStop={stopFast} formatTime={formatTime} calculateProgress={calculateProgress} getMotivationalMessage={getMotivationalMessage} fastingPlans={fastingPlans} /> : <Card className="border-2 border-blue-500 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
+      {/* Main Timer or Plan Selection */}
+      {currentFast ? (
+        <AdvancedFastingTimer 
+          currentFast={currentFast}
+          timeRemaining={timeRemaining}
+          isActive={isActive}
+          isPaused={isPaused}
+          onPause={pauseFast}
+          onStop={stopFast}
+          formatTime={formatTime}
+          calculateProgress={calculateProgress}
+          getFastingPhase={getFastingPhase}
+        />
+      ) : (
+        <Card className="border-2 border-gradient-to-r from-purple-500 to-pink-500 bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 dark:from-purple-950 dark:via-pink-950 dark:to-orange-950 shadow-2xl">
           <CardHeader className="text-center">
-            <CardTitle className="flex items-center justify-center gap-2 text-2xl text-gray-700">
+            <CardTitle className="flex items-center justify-center gap-2 text-2xl text-gray-700 dark:text-gray-200">
               <Timer className="w-8 h-8" />
-              Pronto para Jejuar?
+              Escolha Seu Plano de Jejum
             </CardTitle>
+            <CardDescription className="text-lg">
+              Selecione o plano ideal para seu nível e objetivos
+            </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <FastingPlansGrid fastingPlans={fastingPlans} selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} onStartFast={startFast} />
+            <FastingPlanSelector 
+              selectedPlan={selectedPlan}
+              setSelectedPlan={setSelectedPlan}
+              onStartFast={startFast}
+            />
           </CardContent>
-        </Card>}
+        </Card>
+      )}
 
-      {/* Metas e Progresso */}
-      <FastingGoals fastingGoals={fastingGoals} />
+      {/* Tabs for different sections */}
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Visão Geral</TabsTrigger>
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="goals">Metas</TabsTrigger>
+          <TabsTrigger value="education">Educação</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="overview" className="space-y-6">
+          {/* Quick Stats */}
+          <div className="grid gap-4 md:grid-cols-4">
+            <Card className="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900">
+              <CardContent className="p-4 text-center">
+                <div className="text-2xl font-bold text-blue-600">{stats.currentStreak}</div>
+                <div className="text-sm text-blue-500">Streak Atual</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900">
+              <CardContent className="p-4 text-center">
+                <div className="text-2xl font-bold text-green-600">{stats.completedSessions}</div>
+                <div className="text-sm text-green-500">Jejuns Completos</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900">
+              <CardContent className="p-4 text-center">
+                <div className="text-2xl font-bold text-purple-600">{stats.totalHoursFasted.toFixed(0)}h</div>
+                <div className="text-sm text-purple-500">Horas Totais</div>
+              </CardContent>
+            </Card>
+            <Card className="bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900">
+              <CardContent className="p-4 text-center">
+                <div className="text-2xl font-bold text-orange-600">{stats.averageCompletion.toFixed(0)}%</div>
+                <div className="text-sm text-orange-500">Taxa Sucesso</div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
 
-      {/* Statistics */}
-      <FastingStatistics streakCount={getStreakCount()} completedFasts={completedFasts} successRate={successRate} totalHoursFasted={totalHoursFasted} totalFasts={totalFasts} />
+        <TabsContent value="analytics" className="space-y-6">
+          <FastingAnalytics stats={stats} />
+        </TabsContent>
 
-      {/* Information Tabs */}
-      <FastingTabs notifications={notifications} setNotifications={setNotifications} reminders={reminders} setReminders={setReminders} fastingGoals={fastingGoals} setFastingGoals={setFastingGoals} fastingHistory={fastingHistory} totalFasts={totalFasts} fastingPlans={fastingPlans} />
-    </div>;
+        <TabsContent value="goals" className="space-y-6">
+          <FastingGoals fastingGoals={fastingGoals} />
+        </TabsContent>
+
+        <TabsContent value="education" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="w-5 h-5" />
+                🧬 Ciência do Jejum Intermitente
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg text-blue-600">Fases do Jejum</h3>
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <div className="w-2 h-2 rounded-full bg-blue-500"></div>
+                      <div>
+                        <p className="font-medium text-sm">0-4h: Digestão</p>
+                        <p className="text-xs text-gray-600">Absorção de nutrientes</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+                      <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
+                      <div>
+                        <p className="font-medium text-sm">4-12h: Glicogênio</p>
+                        <p className="text-xs text-gray-600">Uso das reservas de açúcar</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                      <div className="w-2 h-2 rounded-full bg-orange-500"></div>
+                      <div>
+                        <p className="font-medium text-sm">12-18h: Cetose</p>
+                        <p className="text-xs text-gray-600">Queima de gordura intensificada</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-3 p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                      <div className="w-2 h-2 rounded-full bg-purple-500"></div>
+                      <div>
+                        <p className="font-medium text-sm">18+h: Autofagia</p>
+                        <p className="text-xs text-gray-600">Limpeza e regeneração celular</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg text-green-600">Benefícios Comprovados</h3>
+                  <div className="space-y-3">
+                    <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                      <p className="font-medium text-sm">🔥 Perda de Peso</p>
+                      <p className="text-xs text-gray-600">Acelera metabolismo em até 14%</p>
+                    </div>
+                    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                      <p className="font-medium text-sm">🧠 Saúde Cerebral</p>
+                      <p className="text-xs text-gray-600">Aumenta BDNF em até 400%</p>
+                    </div>
+                    <div className="p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                      <p className="font-medium text-sm">❤️ Saúde Cardíaca</p>
+                      <p className="text-xs text-gray-600">Reduz pressão e colesterol</p>
+                    </div>
+                    <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                      <p className="font-medium text-sm">⚡ Longevidade</p>
+                      <p className="text-xs text-gray-600">Ativa genes de longevidade</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
 };
+
 export default IntermittentFasting;
