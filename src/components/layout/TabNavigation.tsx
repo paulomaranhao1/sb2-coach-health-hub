@@ -10,13 +10,13 @@ interface TabNavigationProps {
 const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
   const tabItems = [
     { value: "home", label: "Início", icon: Home },
-    { value: "chat", label: "AI Coach", icon: MessageSquare, featured: true },
     { value: "calorie-counter", label: "Contador de Calorias", icon: Camera },
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
     { value: "statistics", label: "Estatísticas", icon: BarChart3 },
-    { value: "profile", label: "Perfil", icon: User }
+    { value: "profile", label: "Perfil", icon: User },
+    { value: "chat", label: "AI Coach", icon: MessageSquare }
   ];
 
   return (
@@ -27,11 +27,9 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
           <TabsTrigger 
             key={item.value}
             value={item.value} 
-            className={`data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-300 transition-all duration-200 hover:scale-105 ${
-              item.featured ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold border-2 border-purple-400 shadow-lg hover:shadow-purple-500/30' : ''
-            }`}
+            className="data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-300 transition-all duration-200 hover:scale-105"
           >
-            <item.icon className={`w-4 h-4 mr-1 ${item.featured ? 'animate-pulse' : ''}`} />
+            <item.icon className="w-4 h-4 mr-1" />
             {item.label}
           </TabsTrigger>
         ))}
@@ -40,24 +38,8 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
       {/* Mobile Tabs */}
       <div className="sm:hidden mb-8">
         <div className="bg-gray-800/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-gray-700/50 dark:border-gray-600/50 transition-colors duration-300">
-          <div className="grid grid-cols-2 gap-3 mb-3">
-            {/* AI Coach - Botão destacado elegante */}
-            <button
-              onClick={() => setActiveTab("chat")}
-              className={`col-span-2 flex items-center justify-center space-x-3 p-4 rounded-xl transition-all duration-200 bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg transform hover:scale-105 ${
-                activeTab === "chat" ? 'shadow-purple-500/50 scale-105' : ''
-              }`}
-            >
-              <MessageSquare className="w-6 h-6 animate-pulse" />
-              <div className="text-left">
-                <span className="text-lg font-bold block">🧠 AI Coach Premium</span>
-                <span className="text-sm opacity-90">Nutrição Inteligente</span>
-              </div>
-            </button>
-          </div>
-          
           <div className="grid grid-cols-3 gap-2">
-            {tabItems.filter(item => item.value !== "chat").map((item) => (
+            {tabItems.map((item) => (
               <button
                 key={item.value}
                 onClick={() => setActiveTab(item.value)}
