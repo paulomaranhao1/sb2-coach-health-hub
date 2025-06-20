@@ -2,51 +2,52 @@
 @layer base {
   /* Improved input styling with better readability */
   input, textarea, select {
-    @apply bg-white text-slate-900 border-slate-300 font-semibold;
+    @apply bg-white text-gray-900 border-gray-300 font-medium;
   }
   
   .dark input, .dark textarea, .dark select {
-    @apply bg-slate-800 text-slate-100 border-slate-600 font-semibold;
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
   }
   
   /* Better contrast for form controls */
   .form-control, [class*="form-"] input, [class*="Form"] input {
-    @apply bg-white text-slate-900 border-slate-300 font-semibold;
+    @apply bg-white text-gray-900 border-gray-300 font-medium;
   }
   
   .dark .form-control, .dark [class*="form-"] input, .dark [class*="Form"] input {
-    @apply bg-slate-800 text-slate-100 border-slate-600 font-semibold;
+    @apply bg-slate-800 text-slate-100 border-slate-600 font-medium;
   }
   
   /* Improved text contrast and readability */
   h1, h2, h3, h4, h5, h6 {
-    @apply text-slate-900 font-bold;
+    @apply text-gray-900 font-bold;
   }
   
   .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    @apply text-slate-50 font-bold;
+    @apply text-slate-100 font-bold;
   }
   
+  /* Textos normais com melhor contraste */
   p, span, div {
-    @apply text-slate-800 font-semibold;
+    @apply text-gray-800 font-medium;
   }
   
   .dark p, .dark span, .dark div {
-    @apply text-slate-200 font-semibold;
+    @apply text-slate-200 font-medium;
   }
   
   /* Muted text with better contrast */
   .text-muted-foreground {
-    @apply text-slate-700 font-semibold;
+    @apply text-gray-600 font-medium !important;
   }
   
   .dark .text-muted-foreground {
-    @apply text-slate-300 font-semibold;
+    @apply text-slate-400 font-medium !important;
   }
   
   /* Card styling improvements with better text readability */
   .card, [class*="Card"] {
-    @apply bg-white text-slate-900 border-slate-200;
+    @apply bg-white text-gray-900 border-gray-200;
   }
   
   .dark .card, .dark [class*="Card"] {
@@ -55,12 +56,21 @@
   
   /* Button text improvements with better contrast */
   button {
-    @apply transition-colors duration-200 font-bold;
+    @apply transition-colors duration-200 font-medium;
   }
 
   /* Ensure button text is always readable */
   button:not(.bg-transparent):not([class*="variant-ghost"]):not([class*="variant-outline"]) {
-    @apply text-white font-bold;
+    @apply text-white font-medium;
+  }
+  
+  /* Botões outline e ghost com texto escuro */
+  button[class*="variant-ghost"], button[class*="variant-outline"] {
+    @apply text-gray-700 font-medium;
+  }
+  
+  .dark button[class*="variant-ghost"], .dark button[class*="variant-outline"] {
+    @apply text-slate-300 font-medium;
   }
   
   /* Focus states for better accessibility */
@@ -70,32 +80,40 @@
   
   /* Improved link styling with better readability */
   a {
-    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-bold;
+    @apply text-red-600 hover:text-red-700 transition-colors duration-200 font-medium;
   }
   
   .dark a {
-    @apply text-red-400 hover:text-red-300 font-bold;
+    @apply text-red-400 hover:text-red-300 font-medium;
   }
 
   /* Label improvements for better readability */
   label {
-    @apply text-slate-800 font-bold;
+    @apply text-gray-800 font-medium;
   }
 
   .dark label {
-    @apply text-slate-200 font-bold;
+    @apply text-slate-200 font-medium;
   }
 
   /* Small text improvements */
   .text-sm {
-    @apply font-semibold;
+    @apply font-medium text-gray-700;
+  }
+  
+  .dark .text-sm {
+    @apply text-slate-300;
   }
 
   .text-xs {
-    @apply font-semibold;
+    @apply font-medium text-gray-600;
+  }
+  
+  .dark .text-xs {
+    @apply text-slate-400;
   }
 
-  /* Force white text on colored backgrounds for better readability */
+  /* Force readable text on colored backgrounds */
   .bg-red-500, .bg-red-600, .bg-red-700, .bg-red-800, .bg-red-900,
   .bg-blue-500, .bg-blue-600, .bg-blue-700, .bg-blue-800, .bg-blue-900,
   .bg-green-500, .bg-green-600, .bg-green-700, .bg-green-800, .bg-green-900,
@@ -103,12 +121,42 @@
   .bg-indigo-500, .bg-indigo-600, .bg-indigo-700, .bg-indigo-800, .bg-indigo-900,
   .bg-pink-500, .bg-pink-600, .bg-pink-700, .bg-pink-800, .bg-pink-900,
   .bg-gray-700, .bg-gray-800, .bg-gray-900,
-  .bg-slate-700, .bg-slate-800, .bg-slate-900 {
-    @apply text-white font-bold;
+  .bg-slate-700, .bg-slate-800, .bg-slate-900,
+  .bg-orange-500, .bg-orange-600, .bg-orange-700, .bg-orange-800, .bg-orange-900 {
+    @apply text-white font-medium;
+  }
+
+  /* Fundos claros devem ter texto escuro */
+  .bg-gray-50, .bg-gray-100, .bg-gray-200, .bg-gray-300,
+  .bg-slate-50, .bg-slate-100, .bg-slate-200, .bg-slate-300,
+  .bg-red-50, .bg-red-100, .bg-red-200,
+  .bg-blue-50, .bg-blue-100, .bg-blue-200,
+  .bg-green-50, .bg-green-100, .bg-green-200,
+  .bg-purple-50, .bg-purple-100, .bg-purple-200,
+  .bg-orange-50, .bg-orange-100, .bg-orange-200 {
+    @apply text-gray-900 font-medium;
   }
 
   /* Ensure proper contrast on gradient backgrounds */
   [class*="bg-gradient"] {
-    @apply text-white font-bold;
+    @apply font-medium;
+  }
+  
+  /* Gradientes escuros = texto branco */
+  .bg-gradient-to-r.from-red-500, .bg-gradient-to-r.from-blue-500,
+  .bg-gradient-to-r.from-purple-500, .bg-gradient-to-r.from-green-500,
+  .bg-gradient-to-br.from-red-500, .bg-gradient-to-br.from-blue-500,
+  .bg-gradient-to-br.from-purple-500, .bg-gradient-to-br.from-green-500 {
+    @apply text-white;
+  }
+  
+  /* Gradientes claros = texto escuro */
+  .bg-gradient-to-r.from-red-50, .bg-gradient-to-r.from-blue-50,
+  .bg-gradient-to-r.from-purple-50, .bg-gradient-to-r.from-green-50,
+  .bg-gradient-to-r.from-orange-50,
+  .bg-gradient-to-br.from-red-50, .bg-gradient-to-br.from-blue-50,
+  .bg-gradient-to-br.from-purple-50, .bg-gradient-to-br.from-green-50,
+  .bg-gradient-to-br.from-orange-50 {
+    @apply text-gray-900;
   }
 }
