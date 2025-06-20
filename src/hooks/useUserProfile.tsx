@@ -80,8 +80,11 @@ export const useUserProfile = (onSaveSuccess?: () => void) => {
         return;
       }
 
-      // Sempre usar upsert para evitar erro de chave duplicada
-      const { error } = await supabase
+      console.log('Salvando perfil para usuário:', user.id);
+      console.log('Dados do perfil:', profile);
+
+      // Usar upsert com merge para garantir que funcione
+      const { data, error } = await supabase
         .from('user_profiles')
         .upsert({
           user_id: user.id,
@@ -95,22 +98,30 @@ export const useUserProfile = (onSaveSuccess?: () => void) => {
           onboarding_completed: true,
           updated_at: new Date().toISOString()
         }, {
-          onConflict: 'user_id'
-        });
+          onConflict: 'user_id',
+          ignoreDuplicates: false
+        })
+        .select()
+        .single();
 
       if (error) {
-        console.error('Erro ao salvar perfil:', error);
-        toast.error('Erro ao salvar perfil');
+        console.error('Erro detalhado ao salvar perfil:', error);
+        toast.error(`Erro ao salvar perfil: ${error.message}`);
         return;
       }
 
+      console.log('Perfil salvo com sucesso:', data);
       toast.success('Perfil salvo com sucesso!');
+      
+      // Atualizar o estado local com os dados salvos
+      setProfile(data);
+      
       if (onSaveSuccess) {
-        setTimeout(onSaveSuccess, 1000); // Aguarda 1 segundo para mostrar o toast
+        setTimeout(onSaveSuccess, 1000);
       }
     } catch (error) {
-      console.error('Erro ao salvar perfil:', error);
-      toast.error('Erro ao salvar perfil');
+      console.error('Erro geral ao salvar perfil:', error);
+      toast.error('Erro inesperado ao salvar perfil');
     } finally {
       setIsSaving(false);
     }
