@@ -34,8 +34,8 @@ const TutorialScreen = ({ onComplete, onSkip }: TutorialScreenProps) => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 flex items-center justify-center p-4">
-      <Card className="w-full max-w-lg bg-white/95 backdrop-blur-sm shadow-2xl border-0 animate-fade-in">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
+      <Card className="w-full max-w-lg bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm shadow-2xl border-0 animate-fade-in">
         <CardHeader className="text-center pb-4">
           <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
             <img 
@@ -50,7 +50,7 @@ const TutorialScreen = ({ onComplete, onSkip }: TutorialScreenProps) => {
             totalSteps={tutorialSteps.length}
           />
           
-          <p className="text-gray-500 text-sm">
+          <p className="text-gray-500 dark:text-gray-400 text-sm">
             {currentStep + 1} de {tutorialSteps.length}
           </p>
 
@@ -58,7 +58,7 @@ const TutorialScreen = ({ onComplete, onSkip }: TutorialScreenProps) => {
             variant="ghost"
             size="sm"
             onClick={onSkip}
-            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+            className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
           >
             <X className="w-4 h-4 mr-1" />
             Pular
