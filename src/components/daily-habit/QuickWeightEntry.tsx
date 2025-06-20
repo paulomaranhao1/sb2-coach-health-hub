@@ -14,6 +14,19 @@ const QuickWeightEntry = () => {
   const [todayRegistered, setTodayRegistered] = useState(false);
   const { toast } = useToast();
 
+  // Função para formatar a data
+  const getFormattedDate = () => {
+    const today = new Date();
+    const daysOfWeek = ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'];
+    const dayName = daysOfWeek[today.getDay()];
+    
+    const day = today.getDate().toString().padStart(2, '0');
+    const month = (today.getMonth() + 1).toString().padStart(2, '0');
+    const year = today.getFullYear().toString().slice(-2);
+    
+    return `${dayName}, ${day}/${month}/${year}`;
+  };
+
   const handleAddWeight = async () => {
     if (!currentWeight) return;
 
@@ -59,7 +72,7 @@ const QuickWeightEntry = () => {
       <CardHeader className="text-center pb-3">
         <CardTitle className="flex items-center justify-center gap-2 text-xl text-red-600 dark:text-red-400">
           <Weight className="w-6 h-6" />
-          Registrar Peso Hoje
+          Registrar Peso Hoje {getFormattedDate()}
         </CardTitle>
         {todayRegistered && (
           <p className="text-sm text-green-600 font-semibold">✅ Peso já registrado hoje!</p>
