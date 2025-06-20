@@ -80,41 +80,79 @@ export const useUserProfile = (onSaveSuccess?: () => void) => {
         return;
       }
 
-      console.log('Salvando perfil para usuário:', user.id);
-      console.log('Dados do perfil:', profile);
+      console.log('=== DEBUG INÍCIO ===');
+      console.log('User ID:', user.id);
+      console.log('Profile data:', profile);
 
-      // Usar upsert com merge para garantir que funcione
-      const { data, error } = await supabase
+      // Primeiro, vamos verificar se já existe um perfil
+      const { data: existingProfile, error: checkError } = await supabase
         .from('user_profiles')
-        .upsert({
-          user_id: user.id,
-          name: profile.name,
-          age: profile.age,
-          height: profile.height,
-          weight: profile.weight,
-          goal_weight: profile.goal_weight,
-          gender: profile.gender,
-          phone_number: profile.phone_number,
-          onboarding_completed: true,
-          updated_at: new Date().toISOString()
-        }, {
-          onConflict: 'user_id',
-          ignoreDuplicates: false
-        })
-        .select()
-        .single();
+        .select('id, user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      if (error) {
-        console.error('Erro detalhado ao salvar perfil:', error);
-        toast.error(`Erro ao salvar perfil: ${error.message}`);
-        return;
+      console.log('Perfil existente:', existingProfile);
+      console.log('Erro ao verificar perfil:', checkError);
+
+      if (existingProfile) {
+        // Perfil existe, vamos fazer UPDATE
+        console.log('Fazendo UPDATE do perfil existente...');
+        const { data, error } = await supabase
+          .from('user_profiles')
+          .update({
+            name: profile.name,
+            age: profile.age,
+            height: profile.height,
+            weight: profile.weight,
+            goal_weight: profile.goal_weight,
+            gender: profile.gender,
+            phone_number: profile.phone_number,
+            onboarding_completed: true,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', user.id)
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Erro ao atualizar perfil:', error);
+          toast.error(`Erro ao atualizar perfil: ${error.message}`);
+          return;
+        }
+
+        console.log('Perfil atualizado com sucesso:', data);
+        setProfile(data);
+      } else {
+        // Perfil não existe, vamos fazer INSERT
+        console.log('Fazendo INSERT de novo perfil...');
+        const { data, error } = await supabase
+          .from('user_profiles')
+          .insert({
+            user_id: user.id,
+            name: profile.name,
+            age: profile.age,
+            height: profile.height,
+            weight: profile.weight,
+            goal_weight: profile.goal_weight,
+            gender: profile.gender,
+            phone_number: profile.phone_number,
+            onboarding_completed: true
+          })
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Erro ao criar perfil:', error);
+          toast.error(`Erro ao criar perfil: ${error.message}`);
+          return;
+        }
+
+        console.log('Perfil criado com sucesso:', data);
+        setProfile(data);
       }
 
-      console.log('Perfil salvo com sucesso:', data);
+      console.log('=== DEBUG FIM ===');
       toast.success('Perfil salvo com sucesso!');
-      
-      // Atualizar o estado local com os dados salvos
-      setProfile(data);
       
       if (onSaveSuccess) {
         setTimeout(onSaveSuccess, 1000);
