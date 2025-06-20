@@ -2,6 +2,8 @@
 /* Clean and Modern CSS System - NO YELLOW ALLOWED */
 @import './styles/base.css';
 @import './styles/anti-yellow.css';
+@import './styles/force-no-yellow.css'; /* Nova camada de força total */
+@import './styles/debug-yellow.css'; /* Debug para identificar amarelos */
 @import './styles/buttons.css';
 @import './styles/utilities.css';
 
@@ -25,14 +27,31 @@
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
   }
 
-  /* Global yellow elimination */
+  /* Global yellow elimination - FORÇA MÁXIMA */
   * {
     --tw-bg-opacity: 1;
   }
   
+  /* Override QUALQUER elemento com amarelo */
   *[class*="yellow"], 
-  *[class*="amber"] {
+  *[class*="amber"],
+  *[style*="yellow"],
+  *[style*="amber"],
+  *[style*="#fbbf24"],
+  *[style*="#f59e0b"],
+  *[style*="#ffff00"],
+  *[style*="#ffc107"] {
     background-color: rgb(156 163 175) !important;
     color: rgb(17 24 39) !important;
+    border-color: rgb(156 163 175) !important;
+  }
+
+  .dark *[class*="yellow"], 
+  .dark *[class*="amber"],
+  .dark *[style*="yellow"],
+  .dark *[style*="amber"] {
+    background-color: rgb(107 114 128) !important;
+    color: rgb(243 244 246) !important;
+    border-color: rgb(107 114 128) !important;
   }
 }

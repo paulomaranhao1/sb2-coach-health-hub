@@ -1,0 +1,35 @@
+
+/* CSS de Debug para identificar elementos amarelos */
+
+/* Este arquivo ajuda a identificar onde o amarelo pode estar aparecendo */
+@media screen {
+  /* Log de debug via CSS (aparece no console se houver elementos amarelos) */
+  *[style*="yellow"]::before,
+  *[style*="amber"]::before,
+  *[class*="yellow"]::before,
+  *[class*="amber"]::before {
+    content: "YELLOW DETECTED: " attr(class) " | " attr(style);
+    position: absolute;
+    background: red;
+    color: white;
+    font-size: 10px;
+    z-index: 9999;
+    top: 0;
+    left: 0;
+    padding: 2px;
+    border: 1px solid white;
+  }
+}
+
+/* Força override em tempo real para qualquer cor amarela que apareça */
+*[style*="rgb(255, 255, 0)"],
+*[style*="rgb(255, 193, 7)"],
+*[style*="rgb(255, 235, 59)"],
+*[style*="rgb(255, 241, 118)"],
+*[style*="#ffff00"],
+*[style*="#ffc107"],
+*[style*="#ffeb3b"],
+*[style*="#fff176"] {
+  background-color: rgb(156 163 175) !important;
+  color: rgb(17 24 39) !important;
+}

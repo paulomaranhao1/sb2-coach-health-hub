@@ -1,0 +1,96 @@
+
+/* FORÇA TOTAL ANTI-AMARELO - Sistema que sobrescreve TUDO */
+
+/* Força global para prevenir qualquer amarelo */
+* {
+  /* Override de qualquer variável CSS que possa conter amarelo */
+  --yellow-50: 249 250 251 !important;
+  --yellow-100: 243 244 246 !important;
+  --yellow-200: 229 231 235 !important;
+  --yellow-300: 209 213 219 !important;
+  --yellow-400: 156 163 175 !important;
+  --yellow-500: 107 114 128 !important;
+  --yellow-600: 75 85 99 !important;
+  --yellow-700: 55 65 81 !important;
+  --yellow-800: 31 41 55 !important;
+  --yellow-900: 17 24 39 !important;
+  
+  --amber-50: 249 250 251 !important;
+  --amber-100: 243 244 246 !important;
+  --amber-200: 229 231 235 !important;
+  --amber-300: 209 213 219 !important;
+  --amber-400: 156 163 175 !important;
+  --amber-500: 107 114 128 !important;
+  --amber-600: 75 85 99 !important;
+  --amber-700: 55 65 81 !important;
+  --amber-800: 31 41 55 !important;
+  --amber-900: 17 24 39 !important;
+}
+
+/* Force override para qualquer elemento com amarelo */
+*[style*="yellow"],
+*[style*="amber"],
+*[style*="#fbbf24"],
+*[style*="#f59e0b"],
+*[style*="#d97706"],
+*[style*="#92400e"],
+*[style*="rgb(251, 191, 36)"],
+*[style*="rgb(245, 158, 11)"],
+*[style*="rgb(217, 119, 6)"],
+*[style*="rgb(146, 64, 14)"],
+*[class*="yellow"],
+*[class*="amber"],
+*[class*="warning"] {
+  background-color: rgb(156 163 175) !important;
+  color: rgb(17 24 39) !important;
+  border-color: rgb(156 163 175) !important;
+}
+
+.dark *[style*="yellow"],
+.dark *[style*="amber"],
+.dark *[class*="yellow"],
+.dark *[class*="amber"],
+.dark *[class*="warning"] {
+  background-color: rgb(107 114 128) !important;
+  color: rgb(243 244 246) !important;
+  border-color: rgb(107 114 128) !important;
+}
+
+/* Override de todas as possíveis classes Tailwind amarelas */
+.text-yellow-50, .text-yellow-100, .text-yellow-200, .text-yellow-300, .text-yellow-400, .text-yellow-500, .text-yellow-600, .text-yellow-700, .text-yellow-800, .text-yellow-900,
+.text-amber-50, .text-amber-100, .text-amber-200, .text-amber-300, .text-amber-400, .text-amber-500, .text-amber-600, .text-amber-700, .text-amber-800, .text-amber-900,
+.bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500, .bg-yellow-600, .bg-yellow-700, .bg-yellow-800, .bg-yellow-900,
+.bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-amber-800, .bg-amber-900,
+.border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300, .border-yellow-400, .border-yellow-500, .border-yellow-600, .border-yellow-700, .border-yellow-800, .border-yellow-900,
+.border-amber-50, .border-amber-100, .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500, .border-amber-600, .border-amber-700, .border-amber-800, .border-amber-900 {
+  background-color: rgb(156 163 175) !important;
+  color: rgb(17 24 39) !important;
+  border-color: rgb(156 163 175) !important;
+}
+
+/* Dark mode overrides */
+.dark .text-yellow-50, .dark .text-yellow-100, .dark .text-yellow-200, .dark .text-yellow-300, .dark .text-yellow-400, .dark .text-yellow-500, .dark .text-yellow-600, .dark .text-yellow-700, .dark .text-yellow-800, .dark .text-yellow-900,
+.dark .text-amber-50, .dark .text-amber-100, .dark .text-amber-200, .dark .text-amber-300, .dark .text-amber-400, .dark .text-amber-500, .dark .text-amber-600, .dark .text-amber-700, .dark .text-amber-800, .dark .text-amber-900,
+.dark .bg-yellow-50, .dark .bg-yellow-100, .dark .bg-yellow-200, .dark .bg-yellow-300, .dark .bg-yellow-400, .dark .bg-yellow-500, .dark .bg-yellow-600, .dark .bg-yellow-700, .dark .bg-yellow-800, .dark .bg-yellow-900,
+.dark .bg-amber-50, .dark .bg-amber-100, .dark .bg-amber-200, .dark .bg-amber-300, .dark .bg-amber-400, .dark .bg-amber-500, .dark .bg-amber-600, .dark .bg-amber-700, .dark .bg-amber-800, .dark .bg-amber-900,
+.dark .border-yellow-50, .dark .border-yellow-100, .dark .border-yellow-200, .dark .border-yellow-300, .dark .border-yellow-400, .dark .border-yellow-500, .dark .border-yellow-600, .dark .border-yellow-700, .dark .border-yellow-800, .dark .border-yellow-900,
+.dark .border-amber-50, .dark .border-amber-100, .dark .border-amber-200, .dark .border-amber-300, .dark .border-amber-400, .dark .border-amber-500, .dark .border-amber-600, .dark .border-amber-700, .dark .border-amber-800, .dark .border-amber-900 {
+  background-color: rgb(107 114 128) !important;
+  color: rgb(243 244 246) !important;
+  border-color: rgb(107 114 128) !important;
+}
+
+/* Force override para gradientes amarelos */
+*[style*="linear-gradient"] {
+  background-image: none !important;
+}
+
+*[class*="from-yellow"], *[class*="to-yellow"], *[class*="via-yellow"],
+*[class*="from-amber"], *[class*="to-amber"], *[class*="via-amber"] {
+  background-image: linear-gradient(to right, rgb(156 163 175), rgb(107 114 128)) !important;
+}
+
+.dark *[class*="from-yellow"], .dark *[class*="to-yellow"], .dark *[class*="via-yellow"],
+.dark *[class*="from-amber"], .dark *[class*="to-amber"], .dark *[class*="via-amber"] {
+  background-image: linear-gradient(to right, rgb(107 114 128), rgb(75 85 99)) !important;
+}

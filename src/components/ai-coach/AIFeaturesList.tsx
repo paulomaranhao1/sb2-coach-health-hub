@@ -11,7 +11,7 @@ interface AIFeaturesListProps {
 const AIFeaturesList = ({ onShowOffers, subscriptionStatus }: AIFeaturesListProps) => {
   return (
     <>
-      {/* Recursos Avançados da IA */}
+      {/* Recursos Avançados da IA - SEM AMARELO */}
       <Card className="border-2 border-blue-300 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950">
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-xl">
@@ -68,7 +68,7 @@ const AIFeaturesList = ({ onShowOffers, subscriptionStatus }: AIFeaturesListProp
             </div>
           </div>
 
-          {/* Funcionalidades 24h */}
+          {/* Funcionalidades 24h - VERDE EM VEZ DE AMARELO */}
           <div className="bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-950 dark:to-teal-950 p-4 rounded-lg">
             <h4 className="font-semibold text-gray-800 dark:text-gray-200 flex items-center gap-2 mb-3">
               <Clock className="w-4 h-4 text-teal-500" />
@@ -118,19 +118,19 @@ const AIFeaturesList = ({ onShowOffers, subscriptionStatus }: AIFeaturesListProp
         </CardContent>
       </Card>
 
-      {/* Call to Action */}
-      <Card className="border-2 border-gray-400 bg-gradient-to-r from-gray-50 to-gray-100">
+      {/* Call to Action - CINZA EM VEZ DE AMARELO */}
+      <Card className="border-2 border-gray-400 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800">
         <CardContent className="p-6 text-center">
           <div className="mb-4">
             <Star className="w-12 h-12 text-gray-500 mx-auto mb-2" />
-            <h3 className="text-xl font-bold text-gray-800">Desbloqueie a IA Nutricional Completa!</h3>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-gray-200">Desbloqueie a IA Nutricional Completa!</h3>
           </div>
           
-          <p className="text-gray-600 mb-4">
+          <p className="text-gray-600 dark:text-gray-400 mb-4">
             A IA Nutricional Avançada é exclusiva para clientes SB2 Turbo. Tenha acesso a:
           </p>
           
-          <ul className="text-left text-sm text-gray-700 mb-6 space-y-1">
+          <ul className="text-left text-sm text-gray-700 dark:text-gray-300 mb-6 space-y-1">
             <li>🧠 IA especializada em nutrição e emagrecimento</li>
             <li>⏰ Suporte nutricional 24 horas por dia</li>
             <li>🎯 Planos alimentares personalizados</li>
