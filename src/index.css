@@ -1,57 +1,66 @@
 
-/* Clean and Modern CSS System - NO YELLOW ALLOWED */
+/* Clean and Modern CSS System - FORÇA TOTAL ANTI-AMARELO */
 @import './styles/base.css';
 @import './styles/anti-yellow.css';
-@import './styles/force-no-yellow.css'; /* Nova camada de força total */
-@import './styles/debug-yellow.css'; /* Debug para identificar amarelos */
+@import './styles/force-no-yellow.css';
+@import './styles/debug-yellow.css';
 @import './styles/buttons.css';
 @import './styles/utilities.css';
 
-/* Tailwind utilities that ensure proper contrast */
-@layer utilities {
-  .text-contrast {
-    color: hsl(var(--foreground));
-  }
-  
-  .bg-contrast {
-    background-color: hsl(var(--background));
-    color: hsl(var(--foreground));
-  }
-  
-  /* Modern shadow utilities */
-  .shadow-modern {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  }
-  
-  .shadow-modern-lg {
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
+/* OVERRIDE GLOBAL ABSOLUTO - NENHUM AMARELO PERMITIDO */
+* {
+  /* Força override de qualquer CSS amarelo */
+  background-color: inherit !important;
+}
 
-  /* Global yellow elimination - FORÇA MÁXIMA */
-  * {
-    --tw-bg-opacity: 1;
-  }
-  
-  /* Override QUALQUER elemento com amarelo */
-  *[class*="yellow"], 
-  *[class*="amber"],
-  *[style*="yellow"],
-  *[style*="amber"],
-  *[style*="#fbbf24"],
-  *[style*="#f59e0b"],
-  *[style*="#ffff00"],
-  *[style*="#ffc107"] {
-    background-color: rgb(156 163 175) !important;
-    color: rgb(17 24 39) !important;
-    border-color: rgb(156 163 175) !important;
-  }
+*[style*="yellow"], 
+*[style*="amber"],
+*[style*="rgb(255, 255, 0)"],
+*[style*="rgb(255, 193, 7)"],
+*[style*="rgb(255, 235, 59)"],
+*[style*="#ffff00"],
+*[style*="#ffc107"],
+*[style*="#ffeb3b"],
+*[class*="yellow"],
+*[class*="amber"],
+.bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500,
+.bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500 {
+  background-color: rgb(243 244 246) !important;
+  color: rgb(31 41 55) !important;
+  border-color: rgb(209 213 219) !important;
+}
 
-  .dark *[class*="yellow"], 
-  .dark *[class*="amber"],
-  .dark *[style*="yellow"],
-  .dark *[style*="amber"] {
-    background-color: rgb(107 114 128) !important;
-    color: rgb(243 244 246) !important;
-    border-color: rgb(107 114 128) !important;
-  }
+.dark *[style*="yellow"], 
+.dark *[style*="amber"],
+.dark *[class*="yellow"],
+.dark *[class*="amber"],
+.dark .bg-yellow-50, .dark .bg-yellow-100, .dark .bg-yellow-200, .dark .bg-yellow-300, .dark .bg-yellow-400, .dark .bg-yellow-500,
+.dark .bg-amber-50, .dark .bg-amber-100, .dark .bg-amber-200, .dark .bg-amber-300, .dark .bg-amber-400, .dark .bg-amber-500 {
+  background-color: rgb(55 65 81) !important;
+  color: rgb(243 244 246) !important;
+  border-color: rgb(75 85 99) !important;
+}
+
+/* Override específico para botões do Google */
+button[style*="yellow"],
+button[class*="yellow"],
+.google-btn,
+*[class*="google"] {
+  background-color: rgb(59 130 246) !important;
+  color: white !important;
+}
+
+/* Força fundo branco/cinza para toda a aplicação */
+body, html, #root {
+  background-color: rgb(255 255 255) !important;
+}
+
+.dark body, .dark html, .dark #root {
+  background-color: rgb(15 23 42) !important;
+}
+
+/* Override para qualquer gradiente amarelo */
+*[style*="linear-gradient"] {
+  background-image: none !important;
+  background-color: rgb(243 244 246) !important;
 }

@@ -66,15 +66,17 @@ const AuthScreen = () => {
   }
 
   return (
-    <AuthForm
-      isLogin={isLogin}
-      onToggleMode={() => setIsLogin(!isLogin)}
-      onGoogleAuth={handleGoogleAuth}
-      onEmailAuth={onEmailAuth}
-      onForgotPassword={() => setIsForgotPassword(true)}
-      onMagicLink={() => setShowMagicLink(true)}
-      loading={loading}
-    />
+    <div style={{ backgroundColor: 'rgb(255, 255, 255)' }} className="min-h-screen">
+      <AuthForm
+        isLogin={isLogin}
+        onToggleMode={() => setIsLogin(!isLogin)}
+        onGoogleAuth={handleGoogleAuth}
+        onEmailAuth={onEmailAuth}
+        onForgotPassword={() => setIsForgotPassword(true)}
+        onMagicLink={() => setShowMagicLink(true)}
+        loading={loading}
+      />
+    </div>
   );
 };
 
