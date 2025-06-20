@@ -52,8 +52,18 @@ const Index = () => {
       setShowTutorial(true);
     };
     
+    // Listener para navegar para suplementos
+    const handleNavigateToSupplements = () => {
+      setActiveTab('supplement');
+    };
+    
     window.addEventListener('showTutorial', handleShowTutorial);
-    return () => window.removeEventListener('showTutorial', handleShowTutorial);
+    window.addEventListener('navigateToSupplements', handleNavigateToSupplements);
+    
+    return () => {
+      window.removeEventListener('showTutorial', handleShowTutorial);
+      window.removeEventListener('navigateToSupplements', handleNavigateToSupplements);
+    };
   }, []);
 
   // Iniciar notificações quando o usuário concluir o onboarding

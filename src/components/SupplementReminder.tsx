@@ -1,7 +1,7 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bell, Lightbulb, MessageCircle } from "lucide-react";
 import SupplementTimeConfig from "./daily-habit/SupplementTimeConfig";
+import ReminderSettings from "./ReminderSettings";
 
 const SupplementReminder = () => {
   const importantTips = [
@@ -108,6 +108,8 @@ const SupplementReminder = () => {
           </div>
         </CardContent>
       </Card>
+
+      <ReminderSettings />
     </div>
   );
 };
