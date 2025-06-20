@@ -104,7 +104,7 @@ const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => 
             </label>
           </div>
           
-          <Button onClick={handleClose} className="w-full">
+          <Button onClick={handleClose} className="w-full bg-red-600 hover:bg-red-700 text-white">
             Entendi! 👍
           </Button>
         </DialogFooter>
