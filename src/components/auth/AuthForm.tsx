@@ -77,14 +77,14 @@ const AuthForm = ({
               <div>
                 <Label htmlFor="name" className="text-slate-700 dark:text-slate-200">Nome Completo</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-600 dark:text-gray-400" />
+                  <User className="absolute left-3 top-3 h-4 w-4 text-slate-600 dark:text-slate-400" />
                   <Input
                     id="name"
                     type="text"
                     placeholder="Seu nome"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
+                    className="pl-10 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-red-500 focus:ring-red-500"
                     required={!isLogin}
                   />
                 </div>
@@ -94,14 +94,14 @@ const AuthForm = ({
             <div>
               <Label htmlFor="email" className="text-slate-700 dark:text-slate-200">Email</Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <Mail className="absolute left-3 top-3 h-4 w-4 text-slate-600 dark:text-slate-400" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
+                  className="pl-10 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-red-500 focus:ring-red-500"
                   required
                 />
               </div>
@@ -110,14 +110,14 @@ const AuthForm = ({
             <div>
               <Label htmlFor="password" className="text-slate-700 dark:text-slate-200">Senha</Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <Lock className="absolute left-3 top-3 h-4 w-4 text-slate-600 dark:text-slate-400" />
                 <Input
                   id="password"
                   type="password"
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400"
+                  className="pl-10 bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 border-slate-300 dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-400 focus:border-red-500 focus:ring-red-500"
                   required
                 />
               </div>
