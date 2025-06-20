@@ -39,26 +39,36 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
 
   if (success) {
     return (
-      <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4">
-        <Card className="w-full max-w-md bg-white dark:bg-card border-0 shadow-none">
+      <div 
+        className="min-h-screen flex items-center justify-center p-4"
+        style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+      >
+        <Card 
+          className="w-full max-w-md border-0 shadow-none"
+          style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+        >
           <CardHeader className="text-center">
-            <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
+            <div 
+              className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg p-2"
+              style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+            >
               <img 
                 src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
                 alt="SB2 Coach Logo" 
                 className="w-full h-full object-contain"
+                style={{ backgroundColor: 'transparent' }}
               />
             </div>
-            <CheckCircle className="w-12 h-12 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="w-12 h-12 mx-auto mb-4" style={{ color: 'rgb(34, 197, 94)' }} />
             <CardTitle 
-              className="text-2xl font-bold text-slate-800 dark:text-slate-100 force-readable"
-              style={{ color: 'rgb(31, 41, 55)', fontWeight: '700' }}
+              className="text-2xl font-bold"
+              style={{ color: 'rgb(26, 26, 26)', fontWeight: '700' }}
             >
               Email Enviado!
             </CardTitle>
             <CardDescription 
-              className="text-slate-700 dark:text-slate-300 force-readable"
-              style={{ color: 'rgb(55, 65, 81)', fontWeight: '600' }}
+              className="font-semibold"
+              style={{ color: 'rgb(122, 122, 122)', fontWeight: '600' }}
             >
               Enviamos um link mágico para <strong>{email}</strong>. 
               Verifique sua caixa de entrada e clique no link para fazer login.
@@ -67,10 +77,10 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
           <CardContent className="space-y-4">
             <div className="text-center">
               <Button 
-                variant="link" 
+                variant="ghost" 
                 onClick={onBackToLogin}
-                className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 force-readable"
-                style={{ color: 'rgb(75, 85, 99)', fontWeight: '700' }}
+                className="text-sm font-bold"
+                style={{ color: 'rgb(149, 6, 6)', fontWeight: '700' }}
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
                 Voltar ao login
@@ -83,26 +93,36 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md bg-white dark:bg-card border-0 shadow-none">
+    <div 
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+    >
+      <Card 
+        className="w-full max-w-md border-0 shadow-none"
+        style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+      >
         <CardHeader className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
+          <div 
+            className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg p-2"
+            style={{ backgroundColor: 'rgb(255, 255, 255)' }}
+          >
             <img 
               src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
               alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
+              style={{ backgroundColor: 'transparent' }}
             />
           </div>
-          <Sparkles className="w-12 h-12 text-purple-500 mx-auto mb-4" />
+          <Sparkles className="w-12 h-12 mx-auto mb-4" style={{ color: 'rgb(149, 6, 6)' }} />
           <CardTitle 
-            className="text-2xl font-bold text-slate-800 dark:text-slate-100 force-readable"
-            style={{ color: 'rgb(31, 41, 55)', fontWeight: '700' }}
+            className="text-2xl font-bold"
+            style={{ color: 'rgb(26, 26, 26)', fontWeight: '700' }}
           >
             Link Mágico
           </CardTitle>
           <CardDescription 
-            className="text-slate-700 dark:text-slate-300 force-readable"
-            style={{ color: 'rgb(55, 65, 81)', fontWeight: '600' }}
+            className="font-semibold"
+            style={{ color: 'rgb(122, 122, 122)', fontWeight: '600' }}
           >
             Entre sem senha! Enviaremos um link mágico para seu email
           </CardDescription>
@@ -112,21 +132,26 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
             <div>
               <Label 
                 htmlFor="email" 
-                className="text-slate-700 dark:text-slate-200 force-readable"
-                style={{ color: 'rgb(55, 65, 81)', fontWeight: '700' }}
+                className="font-bold"
+                style={{ color: 'rgb(26, 26, 26)', fontWeight: '700' }}
               >
                 Email
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-600 dark:text-gray-400" />
+                <Mail className="absolute left-3 top-3 h-4 w-4" style={{ color: 'rgb(122, 122, 122)' }} />
                 <Input
                   id="email"
                   type="email"
                   placeholder="seu@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-10 text-slate-900 dark:text-slate-100 placeholder:text-slate-500 dark:placeholder:text-slate-400 force-readable"
-                  style={{ color: 'rgb(31, 41, 55)', fontWeight: '600' }}
+                  className="pl-10"
+                  style={{ 
+                    backgroundColor: 'rgb(255, 255, 255)',
+                    color: 'rgb(26, 26, 26)', 
+                    borderColor: 'rgb(229, 231, 235)',
+                    fontWeight: '600' 
+                  }}
                   required
                   disabled={loading}
                 />
@@ -135,9 +160,13 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
 
             <Button 
               type="submit" 
-              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-bold contrast-safe magic-link-button" 
+              className="w-full font-bold" 
               disabled={loading || !email.trim()}
-              style={{ backgroundColor: 'rgb(147, 51, 234)', color: 'rgb(255, 255, 255)', fontWeight: '700' }}
+              style={{ 
+                backgroundColor: 'rgb(149, 6, 6)', 
+                color: 'rgb(255, 255, 255)', 
+                fontWeight: '700' 
+              }}
             >
               {loading ? 'Enviando...' : 'Enviar Link Mágico'}
             </Button>
@@ -145,10 +174,10 @@ const MagicLinkForm = ({ onSubmit, onBackToLogin, loading }: MagicLinkFormProps)
 
           <div className="text-center">
             <Button 
-              variant="link" 
+              variant="ghost" 
               onClick={onBackToLogin}
-              className="text-sm text-slate-600 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 force-readable"
-              style={{ color: 'rgb(75, 85, 99)', fontWeight: '700' }}
+              className="text-sm font-bold"
+              style={{ color: 'rgb(149, 6, 6)', fontWeight: '700' }}
               disabled={loading}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />

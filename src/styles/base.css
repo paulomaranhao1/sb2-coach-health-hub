@@ -147,10 +147,12 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: Inter, system-ui, sans-serif;
     background-color: rgb(255 255 255) !important;
+    color: rgb(26 26 26) !important;
   }
 
   .dark body {
     background-color: rgb(18 18 18) !important;
+    color: rgb(234 234 234) !important;
   }
 
   /* Force all yellow/amber to gray - Complete override */
@@ -188,5 +190,22 @@
 
   .dark .bg-card {
     background-color: rgb(28 28 28) !important;
+  }
+
+  /* Eliminate any purple backgrounds */
+  .bg-purple-50, .bg-purple-100, .bg-purple-200, .bg-purple-300, .bg-purple-400, .bg-purple-500,
+  .bg-purple-600, .bg-purple-700, .bg-purple-800, .bg-purple-900,
+  .text-purple-50, .text-purple-100, .text-purple-200, .text-purple-300, .text-purple-400, .text-purple-500,
+  .text-purple-600, .text-purple-700, .text-purple-800, .text-purple-900 {
+    background-color: rgb(122 122 122) !important;
+    color: rgb(255 255 255) !important;
+  }
+
+  .dark .bg-purple-50, .dark .bg-purple-100, .dark .bg-purple-200, .dark .bg-purple-300, .dark .bg-purple-400, .dark .bg-purple-500,
+  .dark .bg-purple-600, .dark .bg-purple-700, .dark .bg-purple-800, .dark .bg-purple-900,
+  .dark .text-purple-50, .dark .text-purple-100, .dark .text-purple-200, .dark .text-purple-300, .dark .text-purple-400, .dark .text-purple-500,
+  .dark .text-purple-600, .dark .text-purple-700, .dark .text-purple-800, .dark .text-purple-900 {
+    background-color: rgb(163 163 163) !important;
+    color: rgb(18 18 18) !important;
   }
 }
