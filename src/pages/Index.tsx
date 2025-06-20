@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import WeightTracker from "@/components/WeightTracker";
@@ -22,6 +21,7 @@ import TabNavigation from "@/components/layout/TabNavigation";
 import MotivationalGreeting from "@/components/MotivationalGreeting";
 import StatusCards from "@/components/home/StatusCards";
 import GamificationCards from "@/components/home/GamificationCards";
+import ComingSoonFeatures from "@/components/ComingSoonFeatures";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -170,6 +170,7 @@ const Index = () => {
             <DailyHabit />
             <StatusCards userProfile={userProfile} userStats={userStats} />
             <GamificationCards userStats={userStats} />
+            <ComingSoonFeatures />
           </TabsContent>
 
           <TabsContent value="dashboard" className="space-y-6">
