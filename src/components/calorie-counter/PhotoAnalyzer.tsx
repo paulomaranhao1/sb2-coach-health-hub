@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Camera, Upload, Loader2, RotateCcw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import FoodAnalysisResult from './FoodAnalysisResult';
-import { analyzeFoodImage } from '@/lib/foodAnalysis';
+import { analyzeFoodImage, saveFoodAnalysis } from '@/lib/foodAnalysis';
 
 interface PhotoAnalyzerProps {
   onAnalysisComplete?: (analysis: any) => void;
@@ -22,6 +22,8 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
   const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      console.log('Arquivo selecionado:', file.name, 'Tamanho:', file.size);
+      
       if (file.size > 10 * 1024 * 1024) { // 10MB limit
         toast({
           title: "Arquivo muito grande",
@@ -33,19 +35,36 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
 
       const reader = new FileReader();
       reader.onload = (e) => {
-        setSelectedImage(e.target?.result as string);
+        const result = e.target?.result as string;
+        console.log('Imagem carregada com sucesso');
+        setSelectedImage(result);
         setAnalysis(null);
+      };
+      reader.onerror = (e) => {
+        console.error('Erro ao ler arquivo:', e);
+        toast({
+          title: "Erro ao carregar imagem",
+          description: "Não foi possível carregar a imagem selecionada.",
+          variant: "destructive",
+        });
       };
       reader.readAsDataURL(file);
     }
   };
 
   const handleAnalyze = async () => {
-    if (!selectedImage) return;
+    if (!selectedImage) {
+      console.log('Nenhuma imagem selecionada');
+      return;
+    }
 
+    console.log('Iniciando análise...');
     setAnalyzing(true);
+    
     try {
       const result = await analyzeFoodImage(selectedImage);
+      console.log('Análise concluída:', result);
+      
       setAnalysis(result);
       
       if (onAnalysisComplete) {
@@ -54,7 +73,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
 
       toast({
         title: "✅ Análise Concluída!",
-        description: "Sua refeição foi analisada com sucesso!",
+        description: `Encontrados ${result.foods.length} alimentos com ${result.totalCalories} calorias totais!`,
       });
     } catch (error) {
       console.error('Erro ao analisar imagem:', error);
@@ -69,15 +88,42 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
   };
 
   const handleReset = () => {
+    console.log('Resetando análise');
     setSelectedImage(null);
     setAnalysis(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     if (cameraInputRef.current) cameraInputRef.current.value = '';
   };
 
-  const handleSaveAnalysis = (analysisData: any) => {
-    // Save analysis logic here
-    console.log('Saving analysis:', analysisData);
+  const handleSaveAnalysis = async (analysisData: any) => {
+    console.log('Salvando análise:', analysisData);
+    
+    try {
+      const saved = await saveFoodAnalysis(analysisData, selectedImage);
+      if (saved) {
+        toast({
+          title: "✅ Análise Salva!",
+          description: "A análise foi salva no seu histórico.",
+        });
+        
+        if (onAnalysisComplete) {
+          onAnalysisComplete(saved);
+        }
+      } else {
+        toast({
+          title: "⚠️ Análise não salva",
+          description: "Houve um problema ao salvar, mas a análise ainda está disponível.",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Erro ao salvar análise:', error);
+      toast({
+        title: "Erro ao Salvar",
+        description: "Não foi possível salvar a análise.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
