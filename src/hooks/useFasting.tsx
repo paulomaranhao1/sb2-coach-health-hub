@@ -1,6 +1,6 @@
-
 import { useState, useEffect, useCallback } from "react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 export interface FastingSession {
   id: string;
@@ -35,12 +35,124 @@ export const useFasting = () => {
   const [isPaused, setIsPaused] = useState(false);
   const [pauseStartTime, setPauseStartTime] = useState<Date | null>(null);
 
+  // Save to Supabase
+  const saveFastingSessionToSupabase = async (session: FastingSession) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { error } = await supabase
+        .from('fasting_sessions')
+        .upsert({
+          id: session.id,
+          user_id: user.id,
+          start_time: session.startTime.toISOString(),
+          end_time: session.endTime?.toISOString(),
+          duration: session.duration,
+          type: session.type,
+          completed: session.completed,
+          paused_time: session.pausedTime,
+          total_paused_duration: session.totalPausedDuration,
+          mood: session.mood,
+          energy: session.energy,
+          notes: session.notes
+        });
+
+      if (error) {
+        console.error('Erro ao salvar jejum no Supabase:', error);
+      } else {
+        console.log('✅ Jejum salvo no Supabase com sucesso');
+      }
+    } catch (error) {
+      console.error('Erro ao conectar com Supabase:', error);
+    }
+  };
+
+  // Load from Supabase
+  const loadFastingDataFromSupabase = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // Carregar sessão ativa
+      const { data: activeSessions } = await supabase
+        .from('fasting_sessions')
+        .select('*')
+        .eq('user_id', user.id)
+        .eq('completed', false)
+        .order('start_time', { ascending: false })
+        .limit(1);
+
+      if (activeSessions && activeSessions.length > 0) {
+        const session = activeSessions[0];
+        const fastingSession: FastingSession = {
+          id: session.id,
+          startTime: new Date(session.start_time),
+          endTime: session.end_time ? new Date(session.end_time) : undefined,
+          duration: session.duration,
+          type: session.type,
+          completed: session.completed,
+          pausedTime: session.paused_time,
+          totalPausedDuration: session.total_paused_duration,
+          mood: session.mood,
+          energy: session.energy,
+          notes: session.notes
+        };
+
+        setCurrentFast(fastingSession);
+        
+        // Calculate remaining time
+        const now = new Date().getTime();
+        const startTime = new Date(session.start_time).getTime();
+        const elapsed = Math.floor((now - startTime) / 1000);
+        const remaining = Math.max(0, session.duration - elapsed - (session.total_paused_duration || 0));
+        
+        setTimeRemaining(remaining);
+        
+        if (remaining > 0) {
+          setIsActive(true);
+        }
+      }
+
+      // Carregar histórico
+      const { data: history } = await supabase
+        .from('fasting_sessions')
+        .select('*')
+        .eq('user_id', user.id)
+        .order('start_time', { ascending: false });
+
+      if (history) {
+        const historyData = history.map(session => ({
+          id: session.id,
+          startTime: new Date(session.start_time),
+          endTime: session.end_time ? new Date(session.end_time) : undefined,
+          duration: session.duration,
+          type: session.type,
+          completed: session.completed,
+          pausedTime: session.paused_time,
+          totalPausedDuration: session.total_paused_duration,
+          mood: session.mood,
+          energy: session.energy,
+          notes: session.notes
+        }));
+        setFastingHistory(historyData);
+      }
+
+    } catch (error) {
+      console.error('Erro ao carregar dados do Supabase:', error);
+    }
+  };
+
   // Load data from localStorage on mount
   useEffect(() => {
+    // Primeiro tentar carregar do Supabase
+    loadFastingDataFromSupabase();
+
+    // Fallback para localStorage
     const savedCurrentFast = localStorage.getItem('sb2_current_fast');
     const savedHistory = localStorage.getItem('sb2_fasting_history');
     
-    if (savedCurrentFast) {
+    if (savedCurrentFast && !currentFast) {
       const fast = JSON.parse(savedCurrentFast);
       fast.startTime = new Date(fast.startTime);
       if (fast.endTime) fast.endTime = new Date(fast.endTime);
@@ -60,7 +172,7 @@ export const useFasting = () => {
       }
     }
     
-    if (savedHistory) {
+    if (savedHistory && fastingHistory.length === 0) {
       const history = JSON.parse(savedHistory);
       history.forEach((session: FastingSession) => {
         session.startTime = new Date(session.startTime);
@@ -70,10 +182,11 @@ export const useFasting = () => {
     }
   }, []);
 
-  // Save current fast to localStorage
+  // Save current fast to localStorage and Supabase
   useEffect(() => {
     if (currentFast) {
       localStorage.setItem('sb2_current_fast', JSON.stringify(currentFast));
+      saveFastingSessionToSupabase(currentFast);
     } else {
       localStorage.removeItem('sb2_current_fast');
     }
@@ -171,6 +284,7 @@ export const useFasting = () => {
       };
       
       setFastingHistory(prev => [incompleteFast, ...prev]);
+      saveFastingSessionToSupabase(incompleteFast);
     }
     
     setCurrentFast(null);
@@ -191,6 +305,7 @@ export const useFasting = () => {
       };
       
       setFastingHistory(prev => [completedFast, ...prev]);
+      saveFastingSessionToSupabase(completedFast);
       
       // Award points and achievements
       const points = getPointsForFast(currentFast.type);

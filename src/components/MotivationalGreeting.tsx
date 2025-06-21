@@ -1,9 +1,21 @@
 
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useFasting } from '@/hooks/useFasting';
+import CompactFastingTimer from './fasting/CompactFastingTimer';
 
 const MotivationalGreeting = () => {
   const [userName, setUserName] = useState<string>('');
+  const {
+    currentFast,
+    timeRemaining,
+    isActive,
+    isPaused,
+    pauseFast,
+    calculateProgress,
+    formatTime,
+    getFastingPhase
+  } = useFasting();
   
   const motivationalPhrases = [
     "Cada quilograma perdido é uma vitória conquistada! 🎯",
@@ -70,6 +82,34 @@ const MotivationalGreeting = () => {
     setCurrentPhrase(motivationalPhrases[randomIndex]);
   };
 
+  // Se há jejum ativo, mostrar o timer compacto
+  if (currentFast && isActive) {
+    return (
+      <div className="mb-6">
+        <CompactFastingTimer 
+          currentFast={currentFast}
+          timeRemaining={timeRemaining}
+          isActive={isActive}
+          isPaused={isPaused}
+          onPause={pauseFast}
+          formatTime={formatTime}
+          calculateProgress={calculateProgress}
+          getFastingPhase={getFastingPhase}
+        />
+        {userName && (
+          <div className="glass rounded-2xl p-3 border-0 shadow-lg">
+            <div className="text-left">
+              <span className="text-xs text-foreground/80 font-medium leading-tight">
+                Olá, {userName}! 👋 {currentPhrase}
+              </span>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Se não há jejum ativo, mostrar apenas a saudação motivacional
   if (!userName) return null;
 
   return (
