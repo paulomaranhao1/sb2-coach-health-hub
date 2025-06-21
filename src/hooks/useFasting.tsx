@@ -41,15 +41,17 @@ export const useFasting = () => {
           // Calculate remaining time more carefully
           const now = new Date().getTime();
           const startTime = new Date(loadedFast.startTime).getTime();
-          const elapsed = Math.floor((now - startTime) / 1000);
+          const totalElapsed = Math.floor((now - startTime) / 1000);
           const totalPausedDuration = loadedFast.totalPausedDuration || 0;
-          const remaining = Math.max(0, loadedFast.duration - elapsed + totalPausedDuration);
+          const netElapsed = totalElapsed - totalPausedDuration;
+          const remaining = Math.max(0, loadedFast.duration - netElapsed);
           
-          console.log('Cálculo do tempo restante:', {
+          console.log('Cálculo detalhado do tempo restante:', {
             now: new Date(now),
             startTime: new Date(startTime),
-            elapsed,
+            totalElapsed,
             totalPausedDuration,
+            netElapsed,
             duration: loadedFast.duration,
             remaining
           });
@@ -59,11 +61,11 @@ export const useFasting = () => {
           // Only set as active if there's time remaining and it's not completed
           if (remaining > 0 && !loadedFast.completed) {
             setIsActive(true);
-            console.log('Jejum ativo com', remaining, 'segundos restantes');
+            console.log('Jejum ativo restaurado com', remaining, 'segundos restantes');
           } else if (remaining <= 0 && !loadedFast.completed) {
-            console.log('Jejum deveria ter terminado, completando automaticamente');
-            // Complete the fast if time has run out
-            completeFast();
+            console.log('Jejum expirou, completando automaticamente');
+            // Don't call completeFast here to avoid state issues, just mark as inactive
+            setIsActive(false);
           }
         }
         
@@ -77,6 +79,17 @@ export const useFasting = () => {
 
     loadData();
   }, []);
+
+  // Save to localStorage whenever currentFast changes
+  useEffect(() => {
+    if (isLoaded && currentFast) {
+      console.log('Salvando jejum atual no localStorage:', currentFast);
+      localStorage.setItem('sb2_current_fast', JSON.stringify(currentFast));
+    } else if (isLoaded && !currentFast) {
+      console.log('Removendo jejum do localStorage');
+      localStorage.removeItem('sb2_current_fast');
+    }
+  }, [currentFast, isLoaded]);
 
   const completeFast = useCallback(() => {
     console.log('Completando jejum:', currentFast);
@@ -208,6 +221,14 @@ export const useFasting = () => {
       })
     };
   }
+
+  console.log('Estado atual do hook useFasting:', {
+    currentFast: !!currentFast,
+    timeRemaining,
+    isActive,
+    isPaused,
+    isLoaded
+  });
 
   return {
     currentFast,

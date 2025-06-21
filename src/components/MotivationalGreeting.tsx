@@ -89,8 +89,8 @@ const MotivationalGreeting = () => {
     fastType: currentFast?.type
   });
 
-  // Se há jejum ativo (com fast atual e tempo restante), mostrar o timer compacto
-  if (currentFast && timeRemaining > 0) {
+  // Se há jejum ativo (com fast atual e tempo restante válido), mostrar o timer compacto
+  if (currentFast && timeRemaining > 0 && !currentFast.completed) {
     return (
       <div className="mb-6">
         <CompactFastingTimer 
