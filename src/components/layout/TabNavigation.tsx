@@ -1,6 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3, Target } from "lucide-react";
+import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3 } from "lucide-react";
 
 interface TabNavigationProps {
   activeTab: string;
@@ -20,7 +20,7 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
   return (
     <>
       {/* Desktop Tabs */}
-      <TabsList className="grid w-full grid-cols-7 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-all duration-500 ease-in-out">
+      <TabsList className="grid w-full grid-cols-6 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-all duration-500 ease-in-out">
         {tabItems.map((item) => (
           <TabsTrigger 
             key={item.value}
@@ -31,15 +31,6 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
             <span className="transition-all duration-200 ease-in-out">{item.label}</span>
           </TabsTrigger>
         ))}
-        
-        {/* Roadmap separado no final */}
-        <TabsTrigger 
-          value="roadmap" 
-          className="data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-red-500/20 hover:text-white transform-gpu"
-        >
-          <Target className="w-4 h-4 mr-1 transition-transform duration-200 ease-in-out" />
-          <span className="transition-all duration-200 ease-in-out">Roadmap</span>
-        </TabsTrigger>
       </TabsList>
 
       {/* Mobile Tabs */}
@@ -80,23 +71,6 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
                 activeTab === 'chat' ? 'animate-bounce' : ''
               }`} />
               <span className="font-bold text-lg transition-all duration-200 ease-in-out">AI Coach</span>
-            </button>
-          </div>
-
-          {/* Roadmap Button - No final */}
-          <div className="mt-3">
-            <button
-              onClick={() => setActiveTab('roadmap')}
-              className={`w-full flex items-center justify-center space-x-2 p-3 rounded-xl transition-all duration-300 ease-in-out transform-gpu hover:scale-105 ${
-                activeTab === 'roadmap' 
-                  ? 'bg-red-600 text-white shadow-lg shadow-red-500/25 scale-105' 
-                  : 'bg-gray-700/50 text-gray-300 hover:bg-gray-600/50 hover:text-white'
-              }`}
-            >
-              <Target className={`w-5 h-5 transition-all duration-200 ease-in-out ${
-                activeTab === 'roadmap' ? 'animate-bounce' : ''
-              }`} />
-              <span className="font-medium transition-all duration-200 ease-in-out">Roadmap</span>
             </button>
           </div>
         </div>

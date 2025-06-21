@@ -1,6 +1,6 @@
 
 import { Button } from "@/components/ui/button";
-import { Home, MessageSquare, Camera, Clock, Trophy, Pill, ShoppingCart, LogOut, Sun, Moon, BookOpen, BarChart3, User, Settings, Mail } from "lucide-react";
+import { Home, MessageSquare, Camera, Clock, Trophy, Pill, ShoppingCart, LogOut, Sun, Moon, BookOpen, BarChart3, User, Settings, Mail, Target } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,6 +56,11 @@ const MobileMenu = ({
 
   const handleSettingsClick = () => {
     handleTabChange('settings');
+    setShowMobileMenu(false);
+  };
+
+  const handleRoadmapClick = () => {
+    handleTabChange('roadmap');
     setShowMobileMenu(false);
   };
 
@@ -165,6 +170,18 @@ const MobileMenu = ({
             >
               <Settings className="w-5 h-5" />
               <span>Configurações</span>
+            </button>
+
+            <button
+              onClick={handleRoadmapClick}
+              className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-all duration-200 transform hover:scale-105 ${
+                activeTab === 'roadmap' 
+                  ? 'bg-red-600 text-white shadow-lg' 
+                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              }`}
+            >
+              <Target className="w-5 h-5" />
+              <span>Roadmap</span>
             </button>
           </div>
 
