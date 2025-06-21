@@ -197,9 +197,9 @@ export const saveFoodAnalysis = async (analysis: FoodAnalysis, imageUrl: string 
           .from('food_analyses')
           .insert({
             user_id: user.id,
-            foods: analysis.foods,
+            foods: analysis.foods as any, // Cast to Json type
             total_calories: analysis.totalCalories,
-            macros: analysis.macros,
+            macros: analysis.macros as any, // Cast to Json type
             recommendations: analysis.recommendations,
             image_url: imageUrl,
             analyzed_at: analysis.timestamp
