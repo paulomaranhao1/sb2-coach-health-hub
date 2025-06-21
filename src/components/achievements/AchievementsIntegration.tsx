@@ -84,7 +84,7 @@ const AchievementsIntegration = ({
     for (const achievement of achievements) {
       const isNew = await checkAchievement(achievement.id, achievement.condition);
       if (isNew) {
-        await unlock Achievement(achievement.id, achievement.points, achievement.message);
+        await unlockAchievement(achievement.id, achievement.points, achievement.message);
       }
     }
   };
