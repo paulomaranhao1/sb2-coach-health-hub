@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { History, Flame, Calendar, Eye } from "lucide-react";
-import { getFoodAnalysisHistory } from '@/lib/foodAnalysis';
+import { getFoodAnalysisHistory } from '@/lib/food';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 

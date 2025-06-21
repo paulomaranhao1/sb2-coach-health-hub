@@ -1,11 +1,10 @@
-
 import { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Camera, Upload, Loader2, RotateCcw, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import FoodAnalysisResult from './FoodAnalysisResult';
-import { analyzeFoodImage, saveFoodAnalysis, FoodAnalysis } from '@/lib/foodAnalysis';
+import { analyzeFoodImage, saveFoodAnalysis, FoodAnalysis } from '@/lib/food';
 
 interface PhotoAnalyzerProps {
   onAnalysisComplete?: (analysis: any) => void;
