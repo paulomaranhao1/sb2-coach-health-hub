@@ -11,24 +11,74 @@ interface AuthWrapperProps {
 const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
     let mounted = true;
+
+    const initializeAuth = async () => {
+      try {
+        // Buscar sessão atual primeiro
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Erro ao obter sessão:', error);
+        }
+        
+        if (mounted) {
+          setUser(session?.user ?? null);
+          setLoading(false);
+          setInitialized(true);
+          
+          // Criar estatísticas apenas se usuário logado e não existir
+          if (session?.user) {
+            try {
+              const { data: existingStats } = await supabase
+                .from('user_stats')
+                .select('id')
+                .eq('user_id', session.user.id)
+                .maybeSingle();
+              
+              if (!existingStats) {
+                console.log('Criando estatísticas para usuário:', session.user.id);
+                await supabase
+                  .from('user_stats')
+                  .insert({
+                    user_id: session.user.id,
+                    points: 0,
+                    level: 1,
+                    shields: [],
+                    stickers: [],
+                    streak: 0
+                  });
+              }
+            } catch (error) {
+              console.error('Erro ao criar estatísticas:', error);
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Erro na inicialização da autenticação:', error);
+        if (mounted) {
+          setUser(null);
+          setLoading(false);
+          setInitialized(true);
+        }
+      }
+    };
 
     // Configurar listener de mudanças de autenticação
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id || 'no user');
         
-        if (!mounted) return;
+        if (!mounted || !initialized) return;
         
         setUser(session?.user ?? null);
-        setLoading(false);
         
-        // Se usuário fez login e não tem estatísticas, criar
+        // Processar eventos específicos após inicialização
         if (event === 'SIGNED_IN' && session?.user) {
           try {
-            // Verificar se já tem estatísticas
             const { data: existingStats } = await supabase
               .from('user_stats')
               .select('id')
@@ -36,7 +86,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
               .maybeSingle();
             
             if (!existingStats) {
-              console.log('Criando estatísticas para novo usuário');
+              console.log('Criando estatísticas após login');
               await supabase
                 .from('user_stats')
                 .insert({
@@ -49,37 +99,15 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
                 });
             }
           } catch (error) {
-            console.error('Erro ao criar estatísticas:', error);
+            console.error('Erro ao processar login:', error);
           }
         }
       }
     );
 
-    // Obter sessão inicial
-    const getInitialSession = async () => {
-      try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Erro ao obter sessão:', error);
-        }
-        
-        if (mounted) {
-          setUser(session?.user ?? null);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('Erro na verificação inicial de sessão:', error);
-        if (mounted) {
-          setUser(null);
-          setLoading(false);
-        }
-      }
-    };
+    // Inicializar autenticação
+    initializeAuth();
 
-    getInitialSession();
-
-    // Cleanup
     return () => {
       mounted = false;
       subscription.unsubscribe();

@@ -16,21 +16,10 @@ const AuthScreen = () => {
   const { loading, handleGoogleAuth, handleEmailAuth, handleForgotPassword, handleMagicLink } = useAuthOperations();
 
   const onEmailAuth = (emailValue: string, password: string, name: string) => {
-    console.log('AuthScreen - onEmailAuth chamado:', { email: emailValue, isLogin, name });
-    
-    if (!emailValue?.trim() || !password?.trim()) {
-      console.log('AuthScreen - campos vazios');
-      return;
-    }
-    
-    if (!isLogin && !name?.trim()) {
-      console.log('AuthScreen - nome vazio no signup');
-      return;
-    }
+    console.log('AuthScreen - processando autenticação:', { email: emailValue, isLogin });
     
     setEmail(emailValue);
     handleEmailAuth(emailValue, password, name, isLogin, () => {
-      console.log('AuthScreen - mostrando verificação de email');
       setShowEmailVerification(true);
     });
   };
@@ -81,14 +70,7 @@ const AuthScreen = () => {
   }
 
   return (
-    <div 
-      className="min-h-screen bg-background text-foreground transition-colors duration-300"
-      style={{ 
-        backgroundColor: 'rgb(255, 255, 255)',
-        color: 'rgb(26, 26, 26)',
-        minHeight: '100vh'
-      }}
-    >
+    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
       <AuthForm
         isLogin={isLogin}
         onToggleMode={() => setIsLogin(!isLogin)}

@@ -7,36 +7,6 @@ export const useAuthOperations = () => {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
-  const createUserStats = async (userId: string) => {
-    try {
-      console.log('Criando estatísticas para usuário:', userId);
-      
-      const { data, error } = await supabase
-        .from('user_stats')
-        .insert({
-          user_id: userId,
-          points: 0,
-          level: 1,
-          shields: [],
-          stickers: [],
-          streak: 0
-        })
-        .select()
-        .single();
-      
-      if (error) {
-        console.error('Erro ao criar estatísticas do usuário:', error);
-        throw error;
-      }
-      
-      console.log('Estatísticas criadas com sucesso:', data);
-      return data;
-    } catch (error) {
-      console.error('Erro na função createUserStats:', error);
-      throw error;
-    }
-  };
-
   const handleGoogleAuth = async () => {
     setLoading(true);
     try {
@@ -70,7 +40,7 @@ export const useAuthOperations = () => {
   };
 
   const handleMagicLink = async (email: string) => {
-    if (!email) {
+    if (!email?.trim()) {
       toast({
         title: "Email necessário",
         description: "Por favor, insira seu email para receber o link mágico.",
@@ -82,12 +52,9 @@ export const useAuthOperations = () => {
     setLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOtp({
-        email,
+        email: email.trim(),
         options: {
           emailRedirectTo: `${window.location.origin}`,
-          data: {
-            auth_method: 'magic_link'
-          }
         }
       });
       
@@ -100,17 +67,9 @@ export const useAuthOperations = () => {
       return true;
     } catch (error: any) {
       console.error('Erro Magic Link:', error);
-      let errorMessage = error.message;
-      
-      if (error.message.includes('Invalid email')) {
-        errorMessage = 'Email inválido. Verifique o formato.';
-      } else if (error.message.includes('Email rate limit exceeded')) {
-        errorMessage = 'Muitas tentativas. Tente novamente em alguns minutos.';
-      }
-      
       toast({
         title: "Erro ao enviar link mágico",
-        description: errorMessage,
+        description: error.message,
         variant: "destructive"
       });
       return false;
@@ -126,6 +85,7 @@ export const useAuthOperations = () => {
     isLogin: boolean,
     onEmailVerification?: () => void
   ) => {
+    // Validações básicas
     if (!email?.trim() || !password?.trim()) {
       toast({
         title: "Campos obrigatórios",
@@ -148,18 +108,13 @@ export const useAuthOperations = () => {
 
     try {
       if (isLogin) {
-        console.log('Tentando fazer login com:', email);
-        const { data, error } = await supabase.auth.signInWithPassword({
+        console.log('Tentando fazer login...');
+        const { error } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password: password.trim()
         });
         
-        if (error) {
-          console.error('Erro no login:', error);
-          throw error;
-        }
-        
-        console.log('Login realizado com sucesso:', data.user?.id);
+        if (error) throw error;
         
         toast({
           title: "Login realizado!",
@@ -167,31 +122,24 @@ export const useAuthOperations = () => {
         });
         
       } else {
-        console.log('Tentando criar nova conta para:', email);
+        console.log('Tentando criar nova conta...');
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(),
           password: password.trim(),
           options: {
             data: {
               name: name.trim(),
-              auth_method: 'email_password'
             },
             emailRedirectTo: `${window.location.origin}`
           }
         });
         
-        if (error) {
-          console.error('Erro no signup:', error);
-          throw error;
-        }
-        
-        console.log('Conta criada:', data.user?.id, 'Email confirmado:', !!data.user?.email_confirmed_at);
+        if (error) throw error;
         
         if (data.user && !data.user.email_confirmed_at) {
           if (onEmailVerification) {
             onEmailVerification();
           }
-          
           toast({
             title: "Conta criada!",
             description: "Verifique seu email para confirmar sua conta.",
@@ -205,22 +153,17 @@ export const useAuthOperations = () => {
       }
     } catch (error: any) {
       console.error('Erro na autenticação:', error);
-      let errorMessage = error.message;
+      
+      let errorMessage = 'Erro na autenticação. Tente novamente.';
       
       if (error.message.includes('User already registered')) {
         errorMessage = 'Este email já está cadastrado. Tente fazer login.';
       } else if (error.message.includes('Invalid login credentials')) {
-        errorMessage = 'Email ou senha incorretos. Verifique seus dados.';
+        errorMessage = 'Email ou senha incorretos.';
       } else if (error.message.includes('Password should be')) {
         errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
       } else if (error.message.includes('Invalid email')) {
-        errorMessage = 'Email inválido. Verifique o formato.';
-      } else if (error.message.includes('weak password')) {
-        errorMessage = 'Senha muito fraca. Use pelo menos 6 caracteres.';
-      } else if (error.message.includes('Email rate limit exceeded')) {
-        errorMessage = 'Muitas tentativas. Tente novamente em alguns minutos.';
-      } else if (error.message.includes('signup disabled')) {
-        errorMessage = 'Cadastro desabilitado. Entre em contato com o suporte.';
+        errorMessage = 'Email inválido.';
       }
       
       toast({
@@ -258,15 +201,9 @@ export const useAuthOperations = () => {
       return true;
     } catch (error: any) {
       console.error('Erro Forgot Password:', error);
-      let errorMessage = error.message;
-      
-      if (error.message.includes('Email rate limit exceeded')) {
-        errorMessage = 'Muitas tentativas. Tente novamente em alguns minutos.';
-      }
-      
       toast({
         title: "Erro ao enviar email",
-        description: errorMessage,
+        description: error.message,
         variant: "destructive"
       });
       return false;
