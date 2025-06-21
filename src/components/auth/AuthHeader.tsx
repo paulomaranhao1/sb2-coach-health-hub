@@ -13,7 +13,7 @@ const AuthHeader = ({ isLogin }: AuthHeaderProps) => {
         style={{ backgroundColor: 'rgb(255, 255, 255)' }}
       >
         <img 
-          src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
+          src="/lovable-uploads/d6ecc11d-e8b3-4fb5-816d-4f5ce05e4a8c.png" 
           alt="SB2 Coach Logo" 
           className="w-full h-full object-contain"
           style={{ backgroundColor: 'transparent' }}

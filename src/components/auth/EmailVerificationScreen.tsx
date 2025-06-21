@@ -16,7 +16,7 @@ const EmailVerificationScreen = ({ email, onBackToLogin }: EmailVerificationScre
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg bg-white p-2">
             <img 
-              src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
+              src="/lovable-uploads/d6ecc11d-e8b3-4fb5-816d-4f5ce05e4a8c.png" 
               alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
             />

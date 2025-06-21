@@ -17,4 +17,7 @@ export interface FoodAnalysis {
   };
   recommendations: string[];
   timestamp: string;
+  analysisType?: string;
+  isAnalysisUnavailable?: boolean;
+  quotaExceeded?: boolean;
 }

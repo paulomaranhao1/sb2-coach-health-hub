@@ -99,7 +99,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
             <div className="flex items-center space-x-4">
               <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0">
                 <img 
-                  src="/lovable-uploads/24250820-08cd-44d8-97c2-decc25363123.png" 
+                  src="/lovable-uploads/d6ecc11d-e8b3-4fb5-816d-4f5ce05e4a8c.png" 
                   alt="SB2coach.ai Logo" 
                   className="w-full h-full object-contain"
                 />
