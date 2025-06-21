@@ -58,6 +58,7 @@ export const useAuthOperations = () => {
         description: "Você será redirecionado para fazer login com Google.",
       });
     } catch (error: any) {
+      console.error('Erro Google Auth:', error);
       toast({
         title: "Erro na autenticação com Google",
         description: error.message,
@@ -98,6 +99,7 @@ export const useAuthOperations = () => {
       });
       return true;
     } catch (error: any) {
+      console.error('Erro Magic Link:', error);
       let errorMessage = error.message;
       
       if (error.message.includes('Invalid email')) {
@@ -124,7 +126,7 @@ export const useAuthOperations = () => {
     isLogin: boolean,
     onEmailVerification?: () => void
   ) => {
-    if (!email || !password) {
+    if (!email?.trim() || !password?.trim()) {
       toast({
         title: "Campos obrigatórios",
         description: "Por favor, preencha email e senha.",
@@ -133,7 +135,7 @@ export const useAuthOperations = () => {
       return;
     }
 
-    if (!isLogin && !name) {
+    if (!isLogin && !name?.trim()) {
       toast({
         title: "Nome obrigatório",
         description: "Por favor, preencha seu nome para criar a conta.",
@@ -146,15 +148,18 @@ export const useAuthOperations = () => {
 
     try {
       if (isLogin) {
-        console.log('Tentando fazer login...');
+        console.log('Tentando fazer login com:', email);
         const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password
+          email: email.trim(),
+          password: password.trim()
         });
         
-        if (error) throw error;
+        if (error) {
+          console.error('Erro no login:', error);
+          throw error;
+        }
         
-        console.log('Login realizado com sucesso:', data);
+        console.log('Login realizado com sucesso:', data.user?.id);
         
         toast({
           title: "Login realizado!",
@@ -162,25 +167,27 @@ export const useAuthOperations = () => {
         });
         
       } else {
-        console.log('Tentando criar nova conta...');
+        console.log('Tentando criar nova conta para:', email);
         const { data, error } = await supabase.auth.signUp({
-          email,
-          password,
+          email: email.trim(),
+          password: password.trim(),
           options: {
             data: {
-              name: name,
+              name: name.trim(),
               auth_method: 'email_password'
             },
             emailRedirectTo: `${window.location.origin}`
           }
         });
         
-        if (error) throw error;
+        if (error) {
+          console.error('Erro no signup:', error);
+          throw error;
+        }
         
-        console.log('Conta criada, dados:', data);
+        console.log('Conta criada:', data.user?.id, 'Email confirmado:', !!data.user?.email_confirmed_at);
         
         if (data.user && !data.user.email_confirmed_at) {
-          // Mostrar tela de verificação de email se necessário
           if (onEmailVerification) {
             onEmailVerification();
           }
@@ -195,29 +202,15 @@ export const useAuthOperations = () => {
             description: "Bem-vindo ao SB2coach.ai!",
           });
         }
-        
-        // Criar estatísticas do usuário se confirmado
-        if (data.user && data.user.email_confirmed_at) {
-          console.log('Usuário criado e confirmado, ID:', data.user.id);
-          
-          setTimeout(async () => {
-            try {
-              await createUserStats(data.user.id);
-            } catch (statsError) {
-              console.error('Erro ao criar estatísticas:', statsError);
-            }
-          }, 1000);
-        }
       }
     } catch (error: any) {
       console.error('Erro na autenticação:', error);
       let errorMessage = error.message;
       
-      // Traduzir erros comuns para português
       if (error.message.includes('User already registered')) {
         errorMessage = 'Este email já está cadastrado. Tente fazer login.';
       } else if (error.message.includes('Invalid login credentials')) {
-        errorMessage = 'Email ou senha incorretos.';
+        errorMessage = 'Email ou senha incorretos. Verifique seus dados.';
       } else if (error.message.includes('Password should be')) {
         errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
       } else if (error.message.includes('Invalid email')) {
@@ -241,7 +234,7 @@ export const useAuthOperations = () => {
   };
 
   const handleForgotPassword = async (email: string) => {
-    if (!email) {
+    if (!email?.trim()) {
       toast({
         title: "Email necessário",
         description: "Por favor, insira seu email para recuperar a senha.",
@@ -252,7 +245,7 @@ export const useAuthOperations = () => {
 
     setLoading(true);
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
         redirectTo: `${window.location.origin}/reset-password`
       });
       
@@ -264,6 +257,7 @@ export const useAuthOperations = () => {
       });
       return true;
     } catch (error: any) {
+      console.error('Erro Forgot Password:', error);
       let errorMessage = error.message;
       
       if (error.message.includes('Email rate limit exceeded')) {

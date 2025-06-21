@@ -16,16 +16,23 @@ const AuthScreen = () => {
   const { loading, handleGoogleAuth, handleEmailAuth, handleForgotPassword, handleMagicLink } = useAuthOperations();
 
   const onEmailAuth = (emailValue: string, password: string, name: string) => {
-    if (!emailValue || !password) {
+    console.log('AuthScreen - onEmailAuth chamado:', { email: emailValue, isLogin, name });
+    
+    if (!emailValue?.trim() || !password?.trim()) {
+      console.log('AuthScreen - campos vazios');
       return;
     }
     
-    if (!isLogin && !name) {
+    if (!isLogin && !name?.trim()) {
+      console.log('AuthScreen - nome vazio no signup');
       return;
     }
     
     setEmail(emailValue);
-    handleEmailAuth(emailValue, password, name, isLogin, () => setShowEmailVerification(true));
+    handleEmailAuth(emailValue, password, name, isLogin, () => {
+      console.log('AuthScreen - mostrando verificação de email');
+      setShowEmailVerification(true);
+    });
   };
 
   const onForgotPassword = (emailValue: string) => {

@@ -15,7 +15,47 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   useEffect(() => {
     let mounted = true;
 
-    // Função para verificar sessão inicial
+    // Configurar listener de mudanças de autenticação
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        console.log('Auth state changed:', event, session?.user?.id || 'no user');
+        
+        if (!mounted) return;
+        
+        setUser(session?.user ?? null);
+        setLoading(false);
+        
+        // Se usuário fez login e não tem estatísticas, criar
+        if (event === 'SIGNED_IN' && session?.user) {
+          try {
+            // Verificar se já tem estatísticas
+            const { data: existingStats } = await supabase
+              .from('user_stats')
+              .select('id')
+              .eq('user_id', session.user.id)
+              .maybeSingle();
+            
+            if (!existingStats) {
+              console.log('Criando estatísticas para novo usuário');
+              await supabase
+                .from('user_stats')
+                .insert({
+                  user_id: session.user.id,
+                  points: 0,
+                  level: 1,
+                  shields: [],
+                  stickers: [],
+                  streak: 0
+                });
+            }
+          } catch (error) {
+            console.error('Erro ao criar estatísticas:', error);
+          }
+        }
+      }
+    );
+
+    // Obter sessão inicial
     const getInitialSession = async () => {
       try {
         const { data: { session }, error } = await supabase.auth.getSession();
@@ -37,50 +77,6 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       }
     };
 
-    // Configurar listener de mudanças de autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        console.log('Auth state changed:', event, session?.user?.id);
-        
-        if (!mounted) return;
-        
-        setUser(session?.user ?? null);
-        setLoading(false);
-        
-        // Se usuário fez login e não tem estatísticas, criar
-        if (event === 'SIGNED_IN' && session?.user) {
-          // Usar setTimeout para evitar problemas de concorrência
-          setTimeout(async () => {
-            try {
-              // Verificar se já tem estatísticas
-              const { data: existingStats } = await supabase
-                .from('user_stats')
-                .select('id')
-                .eq('user_id', session.user.id)
-                .maybeSingle();
-              
-              if (!existingStats) {
-                console.log('Criando estatísticas para novo usuário');
-                await supabase
-                  .from('user_stats')
-                  .insert({
-                    user_id: session.user.id,
-                    points: 0,
-                    level: 1,
-                    shields: [],
-                    stickers: [],
-                    streak: 0
-                  });
-              }
-            } catch (error) {
-              console.error('Erro ao criar estatísticas:', error);
-            }
-          }, 1000);
-        }
-      }
-    );
-
-    // Obter sessão inicial
     getInitialSession();
 
     // Cleanup
