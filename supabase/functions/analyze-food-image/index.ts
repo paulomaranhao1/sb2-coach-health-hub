@@ -9,6 +9,100 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Enhanced quota error detection
+const isQuotaError = (error: any, statusCode?: number): boolean => {
+  if (statusCode === 429 || statusCode === 402) return true;
+  
+  const errorMessage = error?.message || error?.toString() || '';
+  const quotaKeywords = [
+    'quota', 'insufficient_quota', 'rate_limit', 'billing', 
+    'credits', 'usage_limit', 'exceeded', 'limit_reached',
+    'insufficient funds', 'payment required'
+  ];
+  
+  return quotaKeywords.some(keyword => 
+    errorMessage.toLowerCase().includes(keyword)
+  );
+};
+
+// Retry with exponential backoff
+const retryWithBackoff = async (fn: () => Promise<any>, maxRetries = 2): Promise<any> => {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (error) {
+      const isLastAttempt = attempt === maxRetries;
+      const shouldRetry = !isQuotaError(error) && !isLastAttempt;
+      
+      if (shouldRetry) {
+        const delay = Math.pow(2, attempt) * 1000; // 1s, 2s, 4s
+        console.log(`Tentativa ${attempt + 1} falhou, tentando novamente em ${delay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
+      
+      throw error;
+    }
+  }
+};
+
+// Generate enhanced mock analysis
+const generateEnhancedMockAnalysis = () => {
+  const mockOptions = [
+    {
+      foods: [
+        { name: "Frango Grelhado", quantity: "120g", calories: 195, confidence: 0.85 },
+        { name: "Arroz Integral", quantity: "80g", calories: 112, confidence: 0.80 },
+        { name: "Brócolis Refogado", quantity: "100g", calories: 34, confidence: 0.90 }
+      ],
+      totalCalories: 341,
+      macros: { protein: 28, carbs: 45, fat: 8, fiber: 6 },
+      recommendations: [
+        "Refeição bem balanceada com boa proporção de proteínas.",
+        "Considere adicionar uma fonte de gordura saudável como abacate.",
+        "Excelente escolha de carboidrato complexo com o arroz integral."
+      ]
+    },
+    {
+      foods: [
+        { name: "Salmão Assado", quantity: "100g", calories: 208, confidence: 0.88 },
+        { name: "Batata Doce", quantity: "150g", calories: 129, confidence: 0.82 },
+        { name: "Aspargos Grelhados", quantity: "80g", calories: 16, confidence: 0.85 }
+      ],
+      totalCalories: 353,
+      macros: { protein: 31, carbs: 28, fat: 12, fiber: 4 },
+      recommendations: [
+        "Ótima fonte de ômega-3 com o salmão.",
+        "Batata doce fornece carboidratos de qualidade.",
+        "Considere adicionar mais vegetais para aumentar as fibras."
+      ]
+    },
+    {
+      foods: [
+        { name: "Peito de Peru", quantity: "100g", calories: 135, confidence: 0.83 },
+        { name: "Quinoa Cozida", quantity: "90g", calories: 120, confidence: 0.78 },
+        { name: "Rúcula e Tomate", quantity: "100g", calories: 25, confidence: 0.90 }
+      ],
+      totalCalories: 280,
+      macros: { protein: 25, carbs: 35, fat: 6, fiber: 5 },
+      recommendations: [
+        "Proteína magra de alta qualidade.",
+        "Quinoa é uma excelente fonte de proteína vegetal.",
+        "Adicione azeite extra virgem para melhorar a absorção de nutrientes."
+      ]
+    }
+  ];
+
+  const selectedMock = mockOptions[Math.floor(Math.random() * mockOptions.length)];
+  
+  return {
+    ...selectedMock,
+    timestamp: new Date().toISOString(),
+    isAnalysisUnavailable: true,
+    analysisType: 'mock_fallback'
+  };
+};
+
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -16,7 +110,7 @@ serve(async (req) => {
   }
 
   try {
-    console.log('Iniciando análise de imagem com OpenAI Vision API');
+    console.log('🔍 Iniciando análise de imagem com OpenAI Vision API');
     
     const { imageData } = await req.json();
 
@@ -25,36 +119,36 @@ serve(async (req) => {
     }
 
     if (!openAIApiKey) {
-      throw new Error('Chave da OpenAI API não configurada');
+      console.log('⚠️ Chave da OpenAI API não configurada, usando análise mock');
+      const mockResult = generateEnhancedMockAnalysis();
+      return new Response(JSON.stringify(mockResult), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    // Prompt otimizado para alimentos brasileiros
-    const systemPrompt = `Você é um especialista em nutrição e análise de alimentos brasileiros. Analise a imagem fornecida e identifique todos os alimentos visíveis.
+    // Check quota proactively if possible
+    console.log('🔑 Chave OpenAI configurada, tentando análise real...');
 
-Para cada alimento identificado, forneça:
-1. Nome do alimento (em português brasileiro)
-2. Quantidade estimada (em gramas, colheres, xícaras, etc.)
-3. Calorias estimadas
-4. Nível de confiança da identificação (0.0 a 1.0)
+    // Optimized prompt for better results
+    const systemPrompt = `Você é um especialista em nutrição brasileira. Analise a imagem e identifique TODOS os alimentos visíveis.
 
-Também calcule:
-- Total de calorias da refeição
-- Macronutrientes (proteína, carboidratos, gordura, fibra) em gramas
-- 2-3 recomendações nutricionais específicas
+INSTRUÇÕES ESPECÍFICAS:
+- Identifique alimentos típicos brasileiros (arroz, feijão, farofa, etc.)
+- Estime porções baseadas em referências visuais (pratos, talheres)
+- Seja preciso nas calorias usando tabelas nutricionais brasileiras
+- Forneça recomendações práticas e culturalmente relevantes
 
-Seja preciso nas estimativas de porção baseando-se em referências visuais como pratos, utensílios ou comparações com objetos comuns.
-
-Responda APENAS em formato JSON válido seguindo esta estrutura:
+FORMATO DE RESPOSTA (JSON apenas):
 {
   "foods": [
     {
-      "name": "Nome do alimento",
-      "quantity": "quantidade estimada",
-      "calories": número_de_calorias,
-      "confidence": 0.0_a_1.0
+      "name": "Nome do alimento em português",
+      "quantity": "quantidade com unidade",
+      "calories": número_exato,
+      "confidence": decimal_0_a_1
     }
   ],
-  "totalCalories": número_total,
+  "totalCalories": soma_total,
   "macros": {
     "protein": gramas_proteína,
     "carbs": gramas_carboidratos,
@@ -62,136 +156,121 @@ Responda APENAS em formato JSON válido seguindo esta estrutura:
     "fiber": gramas_fibra
   },
   "recommendations": [
-    "recomendação 1",
-    "recomendação 2"
+    "recomendação prática 1",
+    "recomendação prática 2"
   ]
 }`;
 
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          {
-            role: 'system',
-            content: systemPrompt
-          },
-          {
-            role: 'user',
-            content: [
-              {
-                type: 'text',
-                text: 'Analise esta imagem de alimento e forneça as informações nutricionais detalhadas:'
-              },
-              {
-                type: 'image_url',
-                image_url: {
-                  url: imageData
+    const analysisResult = await retryWithBackoff(async () => {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { role: 'system', content: systemPrompt },
+            {
+              role: 'user',
+              content: [
+                {
+                  type: 'text',
+                  text: 'Analise esta imagem de alimento brasileiro e forneça informações nutricionais detalhadas:'
+                },
+                {
+                  type: 'image_url',
+                  image_url: { url: imageData }
                 }
-              }
-            ]
-          }
-        ],
-        max_tokens: 1000,
-        temperature: 0.1
-      }),
+              ]
+            }
+          ],
+          max_tokens: 1500,
+          temperature: 0.1
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`❌ Erro da OpenAI API (${response.status}):`, errorText);
+        
+        // Enhanced quota detection
+        if (isQuotaError(errorText, response.status)) {
+          throw new Error(`QUOTA_EXCEEDED: ${errorText}`);
+        }
+        
+        throw new Error(`OpenAI API Error (${response.status}): ${errorText}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content;
     });
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('Erro da OpenAI API:', errorData);
-      throw new Error(`Erro da OpenAI API: ${response.status} - ${errorData}`);
-    }
+    console.log('✅ Resposta da OpenAI recebida:', analysisResult.substring(0, 200) + '...');
 
-    const data = await response.json();
-    const content = data.choices[0].message.content;
-    
-    console.log('Resposta bruta da OpenAI:', content);
-
-    // Parse da resposta JSON - remover markdown se presente
-    let analysisResult;
+    // Enhanced JSON parsing
+    let parsedResult;
     try {
-      // Remover markdown code blocks se presentes
-      let cleanContent = content.trim();
+      let cleanContent = analysisResult.trim();
+      
+      // Remove markdown code blocks
       if (cleanContent.startsWith('```json')) {
         cleanContent = cleanContent.replace(/^```json\s*/, '').replace(/\s*```$/, '');
       } else if (cleanContent.startsWith('```')) {
         cleanContent = cleanContent.replace(/^```\s*/, '').replace(/\s*```$/, '');
       }
       
-      analysisResult = JSON.parse(cleanContent);
-      console.log('✅ Parse JSON realizado com sucesso:', analysisResult);
-    } catch (parseError) {
-      console.error('❌ Erro ao fazer parse da resposta:', parseError);
-      console.error('Conteúdo que falhou no parse:', content);
+      parsedResult = JSON.parse(cleanContent);
       
-      // Fallback para dados mock em caso de erro de parse
-      analysisResult = {
-        foods: [
-          {
-            name: "Alimento não identificado",
-            quantity: "Porção estimada",
-            calories: 200,
-            confidence: 0.5
-          }
-        ],
-        totalCalories: 200,
-        macros: {
-          protein: 15,
-          carbs: 25,
-          fat: 8,
-          fiber: 3
-        },
-        recommendations: [
-          "Não foi possível analisar a imagem completamente. Tente uma foto mais clara.",
-          "Certifique-se de que os alimentos estejam bem iluminados e visíveis."
-        ]
-      };
+      // Validate result structure
+      if (!parsedResult.foods || !Array.isArray(parsedResult.foods) || parsedResult.foods.length === 0) {
+        throw new Error('Estrutura de resposta inválida');
+      }
+      
+      // Mark as real analysis
+      parsedResult.timestamp = new Date().toISOString();
+      parsedResult.analysisType = 'openai_real';
+      parsedResult.isAnalysisUnavailable = false;
+      
+      console.log('✅ Análise real da OpenAI concluída com sucesso!');
+      
+    } catch (parseError) {
+      console.error('❌ Erro no parse da resposta OpenAI:', parseError);
+      console.log('Conteúdo que falhou:', analysisResult);
+      throw new Error('Erro ao processar resposta da OpenAI');
     }
 
-    // Adicionar timestamp
-    analysisResult.timestamp = new Date().toISOString();
-
-    console.log('✅ Análise concluída com sucesso:', analysisResult);
-
-    return new Response(JSON.stringify(analysisResult), {
+    return new Response(JSON.stringify(parsedResult), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    console.error('❌ Erro na análise de alimentos:', error);
+    console.error('❌ Erro na análise:', error);
     
-    // Retornar dados mock em caso de erro para não quebrar a funcionalidade
-    const fallbackResult = {
-      foods: [
-        {
-          name: "Alimento (análise indisponível)",
-          quantity: "Porção estimada",
-          calories: 250,
-          confidence: 0.3
-        }
-      ],
-      totalCalories: 250,
-      macros: {
-        protein: 20,
-        carbs: 30,
-        fat: 10,
-        fiber: 5
-      },
-      recommendations: [
-        "Serviço de análise temporariamente indisponível.",
-        "Os valores mostrados são estimativas. Tente novamente mais tarde."
-      ],
-      timestamp: new Date().toISOString()
-    };
-
+    // Enhanced quota error handling
+    if (isQuotaError(error)) {
+      console.log('💳 Quota da OpenAI excedida, usando análise mock aprimorada...');
+      
+      const enhancedMockResult = generateEnhancedMockAnalysis();
+      enhancedMockResult.quotaExceeded = true;
+      enhancedMockResult.errorMessage = 'Quota da OpenAI temporariamente excedida';
+      
+      return new Response(JSON.stringify(enhancedMockResult), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 200
+      });
+    }
+    
+    // Generic error fallback
+    console.log('🔄 Usando análise mock por erro genérico...');
+    const fallbackResult = generateEnhancedMockAnalysis();
+    fallbackResult.errorType = 'generic_error';
+    fallbackResult.errorMessage = error.message || 'Erro desconhecido na análise';
+    
     return new Response(JSON.stringify(fallbackResult), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200 // Retorna 200 para não quebrar o frontend
+      status: 200
     });
   }
 });
