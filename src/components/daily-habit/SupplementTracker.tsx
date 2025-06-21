@@ -2,7 +2,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import CapsuleButtons from "./CapsuleButtons";
 import FirstMealTracker from "./FirstMealTracker";
-import DailyPointsCollector from "./DailyPointsCollector";
 
 const SupplementTracker = () => {
   return (
@@ -22,9 +21,6 @@ const SupplementTracker = () => {
           <CapsuleButtons type="evening" />
         </CardContent>
       </Card>
-
-      {/* Botão de Coletar Pontos Diários */}
-      <DailyPointsCollector />
     </div>
   );
 };
