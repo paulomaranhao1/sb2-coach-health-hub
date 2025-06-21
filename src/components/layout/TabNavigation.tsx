@@ -12,9 +12,9 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
     { value: "home", label: "Início", icon: Home },
     { value: "calorie-counter", label: "Foto Caloria", icon: Camera },
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
-    { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
-    { value: "statistics", label: "Estatísticas", icon: BarChart3 }
+    { value: "statistics", label: "Estatísticas", icon: BarChart3 },
+    { value: "gamification", label: "Conquistas", icon: Trophy }
   ];
 
   return (

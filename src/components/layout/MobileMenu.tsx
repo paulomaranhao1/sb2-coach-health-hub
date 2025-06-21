@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Home, MessageSquare, Camera, Clock, Trophy, Pill, ShoppingCart, LogOut, Sun, Moon, BookOpen, BarChart3, User, Settings, Mail, Target } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
@@ -90,9 +89,9 @@ const MobileMenu = ({
     { value: "chat", label: "AI Coach", icon: MessageSquare, featured: true },
     { value: "calorie-counter", label: "Foto Caloria", icon: Camera },
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
-    { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
-    { value: "statistics", label: "Estatísticas", icon: BarChart3 }
+    { value: "statistics", label: "Estatísticas", icon: BarChart3 },
+    { value: "gamification", label: "Conquistas", icon: Trophy }
   ];
 
   if (!showMobileMenu) return null;
