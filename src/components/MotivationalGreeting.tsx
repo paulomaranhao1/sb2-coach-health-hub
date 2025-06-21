@@ -89,7 +89,7 @@ const MotivationalGreeting = () => {
     fastType: currentFast?.type
   });
 
-  // Se há jejum ativo (com fast atual e tempo restante válido), mostrar o timer compacto
+  // Se há jejum ativo (com fast atual e tempo restante válido), mostrar apenas o timer compacto
   if (currentFast && timeRemaining > 0 && !currentFast.completed) {
     return (
       <div className="mb-6">
@@ -103,15 +103,6 @@ const MotivationalGreeting = () => {
           calculateProgress={calculateProgress}
           getFastingPhase={getFastingPhase}
         />
-        {userName && (
-          <div className="glass rounded-2xl p-3 border-0 shadow-lg">
-            <div className="text-left">
-              <span className="text-xs text-foreground/80 font-medium leading-tight">
-                Olá, {userName}! 👋 {currentPhrase}
-              </span>
-            </div>
-          </div>
-        )}
       </div>
     );
   }
