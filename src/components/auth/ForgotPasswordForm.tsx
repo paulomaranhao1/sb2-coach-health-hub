@@ -29,7 +29,7 @@ const ForgotPasswordForm = ({ onSubmit, onBackToLogin, loading }: ForgotPassword
         <CardHeader className="text-center">
           <div className="w-16 h-16 mx-auto mb-4 rounded-xl overflow-hidden shadow-lg p-2 bg-white">
             <img 
-              src="/lovable-uploads/d6ecc11d-e8b3-4fb5-816d-4f5ce05e4a8c.png" 
+              src="/lovable-uploads/a9ae0ae0-953a-4e4d-afbd-5f6bf88b1dc6.png" 
               alt="SB2 Coach Logo" 
               className="w-full h-full object-contain"
             />
