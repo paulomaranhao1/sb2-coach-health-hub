@@ -1,9 +1,7 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Timer, Pause, Play } from "lucide-react";
 import { FastingSession } from "@/hooks/useFasting";
-
 interface CompactFastingTimerProps {
   currentFast: FastingSession | null;
   timeRemaining: number;
@@ -14,7 +12,6 @@ interface CompactFastingTimerProps {
   calculateProgress: () => number;
   getFastingPhase: () => string;
 }
-
 const CompactFastingTimer = ({
   currentFast,
   timeRemaining,
@@ -26,9 +23,7 @@ const CompactFastingTimer = ({
   getFastingPhase
 }: CompactFastingTimerProps) => {
   if (!currentFast) return null;
-
   const progress = calculateProgress();
-  
   const getPhaseColor = (phase: string) => {
     if (phase.includes('Digestão')) return 'bg-blue-500';
     if (phase.includes('Glicogênio')) return 'bg-yellow-500';
@@ -36,16 +31,14 @@ const CompactFastingTimer = ({
     if (phase.includes('Autofagia')) return 'bg-purple-500';
     return 'bg-green-500';
   };
-
-  return (
-    <Card className="border-2 border-blue-500 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 shadow-lg mb-4">
+  return <Card className="border-2 border-blue-500 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-950 dark:to-purple-950 shadow-lg mb-4">
       <CardContent className="p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Timer className="w-6 h-6 text-blue-600" />
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-bold text-lg">Jejum {currentFast.type}</span>
+                <span className="font-bold text-lg text-slate-600">Jejum {currentFast.type}</span>
                 {isPaused && <Badge variant="secondary" className="text-xs">PAUSADO</Badge>}
               </div>
               <Badge className={`${getPhaseColor(getFastingPhase())} text-white text-xs`}>
@@ -64,10 +57,7 @@ const CompactFastingTimer = ({
               </div>
             </div>
             
-            <button
-              onClick={onPause}
-              className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 transition-colors"
-            >
+            <button onClick={onPause} className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 transition-colors">
               {isActive && !isPaused ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>
           </div>
@@ -76,15 +66,12 @@ const CompactFastingTimer = ({
         {/* Barra de progresso */}
         <div className="mt-3">
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-1000"
-              style={{ width: `${progress}%` }}
-            />
+            <div className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-1000" style={{
+            width: `${progress}%`
+          }} />
           </div>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default CompactFastingTimer;
