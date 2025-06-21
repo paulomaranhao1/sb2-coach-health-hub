@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      fasting_sessions: {
+        Row: {
+          completed: boolean
+          created_at: string
+          duration: number
+          end_time: string | null
+          energy: number | null
+          id: string
+          mood: string | null
+          notes: string | null
+          paused_time: number | null
+          start_time: string
+          total_paused_duration: number | null
+          type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed?: boolean
+          created_at?: string
+          duration: number
+          end_time?: string | null
+          energy?: number | null
+          id?: string
+          mood?: string | null
+          notes?: string | null
+          paused_time?: number | null
+          start_time?: string
+          total_paused_duration?: number | null
+          type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed?: boolean
+          created_at?: string
+          duration?: number
+          end_time?: string | null
+          energy?: number | null
+          id?: string
+          mood?: string | null
+          notes?: string | null
+          paused_time?: number | null
+          start_time?: string
+          total_paused_duration?: number | null
+          type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       food_analyses: {
         Row: {
           analyzed_at: string
