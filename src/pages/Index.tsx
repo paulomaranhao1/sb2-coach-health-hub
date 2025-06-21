@@ -1,58 +1,44 @@
 
-import { useState, useEffect } from "react";
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-import WeightTracker from "@/components/WeightTracker";
-import SupplementReminder from "@/components/SupplementReminder";
-import AIChat from "@/components/AIChat";
-import ProgressDashboard from "@/components/ProgressDashboard";
-import UserProfile from "@/components/UserProfile";
-import AppSettings from "@/components/AppSettings";
-import WelcomeScreen from "@/components/WelcomeScreen";
-import OnboardingScreen from "@/components/OnboardingScreen";
-import TutorialScreen from "@/components/TutorialScreen";
-import DailyHabit from "@/components/DailyHabit";
-import GamificationSystem from "@/components/GamificationSystem";
-import IntermittentFasting from "@/components/IntermittentFasting";
-import NewFeaturesScreen from "@/components/NewFeaturesScreen";
-import { Loading } from "@/components/ui/loading";
-import { toastFeedback } from "@/components/ui/toast-feedback";
-import { useTheme } from "@/hooks/useTheme";
-import { useNotifications } from "@/hooks/useNotifications";
-import { useSubscription } from "@/hooks/useSubscription";
-import { supabase } from "@/integrations/supabase/client";
-import Header from "@/components/layout/Header";
-import MobileMenu from "@/components/layout/MobileMenu";
-import TabNavigation from "@/components/layout/TabNavigation";
-import MotivationalGreeting from "@/components/MotivationalGreeting";
-import ComingSoonFeatures from "@/components/ComingSoonFeatures";
-import StatisticsOverview from "@/components/statistics/StatisticsOverview";
-import { Camera, Clock, BarChart3 } from "lucide-react";
-import CalorieCounterTab from "@/components/CalorieCounterTab";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Lock, Crown } from "lucide-react";
-import Roadmap from "./Roadmap";
+import { useEffect } from "react";
+import { useAppState } from "@/hooks/useAppState";
+import AppScreens from "@/components/screens/AppScreens";
+import AppLayout from "@/components/layout/AppLayout";
+import TabsContentComponent from "@/components/layout/TabsContent";
 
 const Index = () => {
-  const [showWelcome, setShowWelcome] = useState(true);
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
-  const [showNewFeatures, setShowNewFeatures] = useState(false);
-  const [activeTab, setActiveTab] = useState("home");
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
-  const [userStats, setUserStats] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const { theme, toggleTheme } = useTheme();
-  const { permission, startNotificationSchedule } = useNotifications();
-  const { hasPremiumAccess, isLoading: subscriptionLoading } = useSubscription();
+  const {
+    showWelcome,
+    setShowWelcome,
+    showOnboarding,
+    showTutorial,
+    showNewFeatures,
+    setShowNewFeatures,
+    activeTab,
+    setActiveTab,
+    showMobileMenu,
+    setShowMobileMenu,
+    userProfile,
+    userStats,
+    isLoading,
+    theme,
+    toggleTheme,
+    permission,
+    startNotificationSchedule,
+    subscriptionLoading,
+    checkUserProfile,
+    handleOnboardingComplete,
+    handleTutorialComplete,
+    handleTutorialSkip,
+    handleTabChange,
+    handleNavigateToHome
+  } = useAppState();
 
   useEffect(() => {
     checkUserProfile();
     
     // Listener para mostrar tutorial quando solicitado
     const handleShowTutorial = () => {
-      setShowTutorial(true);
+      // This would be handled by the tutorial state in useAppState
     };
     
     // Listener para navegar para suplementos
@@ -76,187 +62,44 @@ const Index = () => {
     }
   }, [userProfile, permission, startNotificationSchedule]);
 
-  const checkUserProfile = async () => {
-    try {
-      setIsLoading(true);
-      const { data: { user } } = await supabase.auth.getUser();
-      
-      if (user) {
-        // Buscar perfil do usuário
-        const { data: profile } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
-        
-        setUserProfile(profile);
-        
-        // Buscar estatísticas do usuário
-        const { data: stats } = await supabase
-          .from('user_stats')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
-        
-        setUserStats(stats);
-        
-        if (!profile || !profile.onboarding_completed) {
-          setShowOnboarding(true);
-        } else {
-          // Verificar se o usuário já viu o tutorial
-          const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed');
-          if (!hasSeenTutorial) {
-            setShowTutorial(true);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('Erro ao verificar perfil do usuário:', error);
-      toastFeedback.error('Erro ao carregar dados do usuário');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // Handle special screens (welcome, onboarding, tutorial, etc.)
+  const screenComponent = (
+    <AppScreens
+      showWelcome={showWelcome}
+      setShowWelcome={setShowWelcome}
+      showOnboarding={showOnboarding}
+      showTutorial={showTutorial}
+      showNewFeatures={showNewFeatures}
+      setShowNewFeatures={setShowNewFeatures}
+      isLoading={isLoading}
+      subscriptionLoading={subscriptionLoading}
+      handleOnboardingComplete={handleOnboardingComplete}
+      handleTutorialComplete={handleTutorialComplete}
+      handleTutorialSkip={handleTutorialSkip}
+    />
+  );
 
-  const handleOnboardingComplete = () => {
-    setShowOnboarding(false);
-    checkUserProfile();
-    // Mostrar tutorial após onboarding
-    setShowTutorial(true);
-    toastFeedback.success('Onboarding concluído! Bem-vindo ao SB2coach.ai!');
-  };
-
-  const handleTutorialComplete = () => {
-    setShowTutorial(false);
-    localStorage.setItem('sb2_tutorial_completed', 'true');
-    toastFeedback.success('Tutorial concluído! Agora você está pronto para começar sua jornada!');
-  };
-
-  const handleTutorialSkip = () => {
-    setShowTutorial(false);
-    localStorage.setItem('sb2_tutorial_completed', 'true');
-    toastFeedback.info('Tutorial pulado. Você pode acessar a ajuda no seu perfil a qualquer momento.');
-  };
-
-  const handleTabChange = (value: string) => {
-    if (value === 'new-features') {
-      setShowNewFeatures(true);
-      setShowMobileMenu(false);
-      return;
-    }
-    
-    setActiveTab(value);
-    setShowMobileMenu(false);
-  };
-
-  const handleNavigateToHome = () => {
-    setActiveTab('home');
-  };
-
-  const handlePurchase = () => {
-    const isInBrazil = navigator.language.includes('pt') || 
-                      Intl.DateTimeFormat().resolvedOptions().timeZone.includes('America/Sao_Paulo');
-    const url = isInBrazil ? 'https://sb2turbo.com.br' : 'https://sb2turbo.com';
-    window.open(url, '_blank');
-    toastFeedback.info('Redirecionando para a loja...');
-  };
-
-  if (showWelcome) {
-    return <WelcomeScreen onContinue={() => setShowWelcome(false)} />;
-  }
-
-  if (showOnboarding) {
-    return <OnboardingScreen onComplete={handleOnboardingComplete} />;
-  }
-
-  if (showTutorial) {
-    return (
-      <TutorialScreen 
-        onComplete={handleTutorialComplete}
-        onSkip={handleTutorialSkip}
-      />
-    );
-  }
-
-  if (showNewFeatures) {
-    return <NewFeaturesScreen onBack={() => setShowNewFeatures(false)} />;
-  }
-
-  if (isLoading || subscriptionLoading) {
-    return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loading size="lg" text="Carregando SB2coach.ai..." />
-      </div>
-    );
+  if (screenComponent) {
+    return screenComponent;
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
-      <Header 
-        theme={theme}
-        toggleTheme={toggleTheme}
-        showMobileMenu={showMobileMenu}
-        setShowMobileMenu={setShowMobileMenu}
-      />
-
-      <MobileMenu 
-        showMobileMenu={showMobileMenu}
-        setShowMobileMenu={setShowMobileMenu}
+    <AppLayout
+      theme={theme}
+      toggleTheme={toggleTheme}
+      showMobileMenu={showMobileMenu}
+      setShowMobileMenu={setShowMobileMenu}
+      activeTab={activeTab}
+      handleTabChange={handleTabChange}
+    >
+      <TabsContentComponent
         activeTab={activeTab}
-        handleTabChange={handleTabChange}
-        theme={theme}
-        toggleTheme={toggleTheme}
+        setActiveTab={setActiveTab}
+        userProfile={userProfile}
+        userStats={userStats}
+        onNavigateToHome={handleNavigateToHome}
       />
-
-      <main className="max-w-6xl mx-auto px-4 py-8">
-        <MotivationalGreeting />
-        
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-
-          <TabsContent value="home" className="space-y-6">
-            <DailyHabit />
-            <ComingSoonFeatures />
-          </TabsContent>
-
-          <TabsContent value="chat">
-            <AIChat />
-          </TabsContent>
-
-          <TabsContent value="calorie-counter" className="space-y-6">
-            <CalorieCounterTab />
-          </TabsContent>
-
-          <TabsContent value="intermittent-fasting" className="space-y-6">
-            <IntermittentFasting />
-          </TabsContent>
-
-          <TabsContent value="gamification">
-            <GamificationSystem />
-          </TabsContent>
-
-          <TabsContent value="supplement">
-            <SupplementReminder />
-          </TabsContent>
-
-          <TabsContent value="roadmap">
-            <Roadmap />
-          </TabsContent>
-
-          <TabsContent value="statistics" className="space-y-6">
-            <StatisticsOverview userProfile={userProfile} userStats={userStats} />
-          </TabsContent>
-
-          <TabsContent value="profile">
-            <UserProfile onNavigateToHome={handleNavigateToHome} />
-          </TabsContent>
-
-          <TabsContent value="settings">
-            <AppSettings />
-          </TabsContent>
-        </Tabs>
-      </main>
-    </div>
+    </AppLayout>
   );
 };
 
