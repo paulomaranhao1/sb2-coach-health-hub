@@ -66,7 +66,7 @@ const analyzeFoodImageMock = async (imageData: string): Promise<FoodAnalysis> =>
       name: "Peito de Frango Grelhado",
       quantity: "150g",
       calories: 248,
-      confidence: 0.75 // Menor confiança para mock
+      confidence: 0.75
     },
     {
       name: "Salmão Grelhado",
@@ -165,18 +165,12 @@ const analyzeFoodImageMock = async (imageData: string): Promise<FoodAnalysis> =>
 
 export const saveFoodAnalysis = async (analysis: FoodAnalysis, imageUrl: string | null = null) => {
   try {
-    console.log('Salvando análise de alimento...');
+    console.log('Iniciando salvamento da análise...');
     
     const { data: { user } } = await supabase.auth.getUser();
     
-    if (!user) {
-      console.log('Usuário não autenticado, salvando localmente');
-      // Se não houver usuário, ainda assim salva localmente
-    }
-
-    // Salvar dados no localStorage
-    const existingAnalyses = JSON.parse(localStorage.getItem('food_analyses') || '[]');
-    const newAnalysis = {
+    // Preparar dados para salvamento
+    const analysisData = {
       id: Date.now().toString(),
       user_id: user?.id || 'anonymous',
       foods: analysis.foods,
@@ -186,23 +180,52 @@ export const saveFoodAnalysis = async (analysis: FoodAnalysis, imageUrl: string 
       image_url: imageUrl,
       analyzed_at: analysis.timestamp
     };
-    
-    existingAnalyses.unshift(newAnalysis);
-    localStorage.setItem('food_analyses', JSON.stringify(existingAnalyses.slice(0, 50))); // Manter apenas os últimos 50
-    
-    console.log('Análise salva com sucesso:', newAnalysis);
 
-    // Atualizar pontos do usuário se estiver logado
+    console.log('Dados preparados para salvamento:', analysisData);
+
+    // Salvar no localStorage primeiro (sempre funciona)
+    const existingAnalyses = JSON.parse(localStorage.getItem('food_analyses') || '[]');
+    existingAnalyses.unshift(analysisData);
+    localStorage.setItem('food_analyses', JSON.stringify(existingAnalyses.slice(0, 50)));
+    console.log('Análise salva no localStorage com sucesso');
+
+    // Tentar salvar no Supabase se usuário estiver logado
     if (user) {
-      await updateUserPoints(user.id, 10); // 10 pontos por análise
+      try {
+        console.log('Tentando salvar no Supabase...');
+        const { data: supabaseData, error: supabaseError } = await supabase
+          .from('food_analyses')
+          .insert({
+            user_id: user.id,
+            foods: analysis.foods,
+            total_calories: analysis.totalCalories,
+            macros: analysis.macros,
+            recommendations: analysis.recommendations,
+            image_url: imageUrl,
+            analyzed_at: analysis.timestamp
+          })
+          .select()
+          .single();
+
+        if (supabaseError) {
+          console.warn('Erro ao salvar no Supabase (usando localStorage):', supabaseError);
+        } else {
+          console.log('Análise salva no Supabase com sucesso:', supabaseData);
+        }
+
+        // Atualizar pontos do usuário
+        await updateUserPoints(user.id, 10);
+      } catch (supabaseError) {
+        console.warn('Erro na comunicação com Supabase (usando localStorage):', supabaseError);
+      }
     }
 
-    return newAnalysis;
+    console.log('Salvamento concluído com sucesso');
+    return analysisData;
 
   } catch (error) {
-    console.error('Erro ao salvar análise de alimentos:', error);
-    // Não throw error para não quebrar o fluxo
-    return null;
+    console.error('Erro crítico ao salvar análise:', error);
+    throw new Error('Falha ao salvar a análise');
   }
 };
 
@@ -244,12 +267,30 @@ export const getFoodAnalysisHistory = async (limit: number = 10) => {
     
     const { data: { user } } = await supabase.auth.getUser();
     
-    // Buscar do localStorage
+    // Buscar do localStorage primeiro
     const analyses = JSON.parse(localStorage.getItem('food_analyses') || '[]');
     
-    let filteredAnalyses = analyses;
+    // Se houver usuário, tentar buscar do Supabase também
+    if (user) {
+      try {
+        const { data: supabaseAnalyses } = await supabase
+          .from('food_analyses')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('analyzed_at', { ascending: false })
+          .limit(limit);
+        
+        if (supabaseAnalyses && supabaseAnalyses.length > 0) {
+          console.log('Usando dados do Supabase');
+          return supabaseAnalyses;
+        }
+      } catch (supabaseError) {
+        console.warn('Erro ao buscar do Supabase, usando localStorage:', supabaseError);
+      }
+    }
     
-    // Se houver usuário, filtrar por usuário, senão mostrar todas (incluindo anônimas)
+    // Usar localStorage como fallback
+    let filteredAnalyses = analyses;
     if (user) {
       filteredAnalyses = analyses.filter((analysis: any) => 
         analysis.user_id === user.id || analysis.user_id === 'anonymous'

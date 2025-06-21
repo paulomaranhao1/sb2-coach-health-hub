@@ -67,11 +67,19 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       
       setAnalysis(result);
       
-      // Salvar automaticamente
-      await saveFoodAnalysis(result, selectedImage);
-      
-      if (onAnalysisComplete) {
-        onAnalysisComplete(result);
+      // Salvar automaticamente após análise
+      try {
+        const saved = await saveFoodAnalysis(result, selectedImage);
+        if (saved) {
+          console.log('Análise salva automaticamente:', saved);
+          
+          if (onAnalysisComplete) {
+            onAnalysisComplete(saved);
+          }
+        }
+      } catch (saveError) {
+        console.error('Erro ao salvar automaticamente:', saveError);
+        // Não bloquear a exibição dos resultados por erro de salvamento
       }
 
       // Verificar se é análise real ou mock
@@ -104,37 +112,6 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     setAnalysis(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
     if (cameraInputRef.current) cameraInputRef.current.value = '';
-  };
-
-  const handleSaveAnalysis = async (analysisData: FoodAnalysis) => {
-    console.log('Salvando análise:', analysisData);
-    
-    try {
-      const saved = await saveFoodAnalysis(analysisData, selectedImage);
-      if (saved) {
-        toast({
-          title: "✅ Análise Salva!",
-          description: "A análise foi salva no seu histórico.",
-        });
-        
-        if (onAnalysisComplete) {
-          onAnalysisComplete(saved);
-        }
-      } else {
-        toast({
-          title: "⚠️ Análise não salva",
-          description: "Houve um problema ao salvar, mas a análise ainda está disponível.",
-          variant: "destructive",
-        });
-      }
-    } catch (error) {
-      console.error('Erro ao salvar análise:', error);
-      toast({
-        title: "Erro ao Salvar",
-        description: "Não foi possível salvar a análise.",
-        variant: "destructive",
-      });
-    }
   };
 
   return (
@@ -185,12 +162,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
                   className="w-full max-h-96 object-cover rounded-lg shadow-lg"
                 />
                 <Button
-                  onClick={() => {
-                    setSelectedImage(null);
-                    setAnalysis(null);
-                    if (fileInputRef.current) fileInputRef.current.value = '';
-                    if (cameraInputRef.current) cameraInputRef.current.value = '';
-                  }}
+                  onClick={handleReset}
                   size="sm"
                   variant="secondary"
                   className="absolute top-2 right-2"
@@ -246,14 +218,14 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
         <FoodAnalysisResult 
           analysis={analysis} 
           onSave={async (analysisData: FoodAnalysis) => {
-            console.log('Salvando análise:', analysisData);
+            console.log('Tentando salvar análise manualmente:', analysisData);
             
             try {
               const saved = await saveFoodAnalysis(analysisData, selectedImage);
               if (saved) {
                 toast({
                   title: "✅ Análise Salva!",
-                  description: "A análise foi salva no seu histórico.",
+                  description: "A análise foi salva no seu histórico com sucesso.",
                 });
                 
                 if (onAnalysisComplete) {
@@ -261,16 +233,16 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
                 }
               } else {
                 toast({
-                  title: "⚠️ Análise não salva",
-                  description: "Houve um problema ao salvar, mas a análise ainda está disponível.",
+                  title: "⚠️ Erro ao Salvar",
+                  description: "Não foi possível salvar a análise. Tente novamente.",
                   variant: "destructive",
                 });
               }
             } catch (error) {
-              console.error('Erro ao salvar análise:', error);
+              console.error('Erro ao salvar análise manualmente:', error);
               toast({
-                title: "Erro ao Salvar",
-                description: "Não foi possível salvar a análise.",
+                title: "❌ Erro ao Salvar",
+                description: "Ocorreu um erro ao salvar a análise. Verifique sua conexão.",
                 variant: "destructive",
               });
             }
