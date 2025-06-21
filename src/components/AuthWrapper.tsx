@@ -13,24 +13,43 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Verificar se já existe um usuário logado
-    const getSession = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
-      setLoading(false);
+    let mounted = true;
+
+    // Função para verificar sessão inicial
+    const getInitialSession = async () => {
+      try {
+        const { data: { session }, error } = await supabase.auth.getSession();
+        
+        if (error) {
+          console.error('Erro ao obter sessão:', error);
+        }
+        
+        if (mounted) {
+          setUser(session?.user ?? null);
+          setLoading(false);
+        }
+      } catch (error) {
+        console.error('Erro na verificação inicial de sessão:', error);
+        if (mounted) {
+          setUser(null);
+          setLoading(false);
+        }
+      }
     };
 
-    getSession();
-
-    // Escutar mudanças na autenticação
+    // Configurar listener de mudanças de autenticação
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         console.log('Auth state changed:', event, session?.user?.id);
+        
+        if (!mounted) return;
+        
         setUser(session?.user ?? null);
         setLoading(false);
         
         // Se usuário fez login e não tem estatísticas, criar
         if (event === 'SIGNED_IN' && session?.user) {
+          // Usar setTimeout para evitar problemas de concorrência
           setTimeout(async () => {
             try {
               // Verificar se já tem estatísticas
@@ -61,7 +80,14 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       }
     );
 
-    return () => subscription.unsubscribe();
+    // Obter sessão inicial
+    getInitialSession();
+
+    // Cleanup
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
   if (loading) {
@@ -69,7 +95,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-red-900 flex items-center justify-center">
         <div className="text-white text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-red-500 mx-auto mb-4"></div>
-          <p className="text-lg">Carregando...</p>
+          <p className="text-lg">Carregando SB2coach.ai...</p>
         </div>
       </div>
     );

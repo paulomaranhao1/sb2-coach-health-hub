@@ -63,11 +63,21 @@ export const useAuthOperations = () => {
         description: error.message,
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleMagicLink = async (email: string) => {
+    if (!email) {
+      toast({
+        title: "Email necessário",
+        description: "Por favor, insira seu email para receber o link mágico.",
+        variant: "destructive"
+      });
+      return false;
+    }
+
     setLoading(true);
     try {
       const { error } = await supabase.auth.signInWithOtp({
@@ -112,20 +122,45 @@ export const useAuthOperations = () => {
     password: string, 
     name: string, 
     isLogin: boolean,
-    onEmailVerification: () => void
+    onEmailVerification?: () => void
   ) => {
+    if (!email || !password) {
+      toast({
+        title: "Campos obrigatórios",
+        description: "Por favor, preencha email e senha.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!isLogin && !name) {
+      toast({
+        title: "Nome obrigatório",
+        description: "Por favor, preencha seu nome para criar a conta.",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
       if (isLogin) {
         console.log('Tentando fazer login...');
-        const { error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password
         });
+        
         if (error) throw error;
         
-        console.log('Login realizado com sucesso');
+        console.log('Login realizado com sucesso:', data);
+        
+        toast({
+          title: "Login realizado!",
+          description: "Bem-vindo de volta ao SB2coach.ai!",
+        });
+        
       } else {
         console.log('Tentando criar nova conta...');
         const { data, error } = await supabase.auth.signUp({
@@ -144,12 +179,26 @@ export const useAuthOperations = () => {
         
         console.log('Conta criada, dados:', data);
         
-        // Mostrar tela de verificação de email
-        onEmailVerification();
+        if (data.user && !data.user.email_confirmed_at) {
+          // Mostrar tela de verificação de email se necessário
+          if (onEmailVerification) {
+            onEmailVerification();
+          }
+          
+          toast({
+            title: "Conta criada!",
+            description: "Verifique seu email para confirmar sua conta.",
+          });
+        } else {
+          toast({
+            title: "Conta criada!",
+            description: "Bem-vindo ao SB2coach.ai!",
+          });
+        }
         
-        // Criar estatísticas do usuário se o email já estiver confirmado
+        // Criar estatísticas do usuário se confirmado
         if (data.user && data.user.email_confirmed_at) {
-          console.log('Usuário criado, ID:', data.user.id);
+          console.log('Usuário criado e confirmado, ID:', data.user.id);
           
           setTimeout(async () => {
             try {
@@ -177,6 +226,8 @@ export const useAuthOperations = () => {
         errorMessage = 'Senha muito fraca. Use pelo menos 6 caracteres.';
       } else if (error.message.includes('Email rate limit exceeded')) {
         errorMessage = 'Muitas tentativas. Tente novamente em alguns minutos.';
+      } else if (error.message.includes('signup disabled')) {
+        errorMessage = 'Cadastro desabilitado. Entre em contato com o suporte.';
       }
       
       toast({
@@ -184,8 +235,9 @@ export const useAuthOperations = () => {
         description: errorMessage,
         variant: "destructive"
       });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleForgotPassword = async (email: string) => {
@@ -195,7 +247,7 @@ export const useAuthOperations = () => {
         description: "Por favor, insira seu email para recuperar a senha.",
         variant: "destructive"
       });
-      return;
+      return false;
     }
 
     setLoading(true);

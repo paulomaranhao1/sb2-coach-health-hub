@@ -7,7 +7,7 @@ import EmailVerificationScreen from './auth/EmailVerificationScreen';
 import MagicLinkForm from './auth/MagicLinkForm';
 
 const AuthScreen = () => {
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
   const [isForgotPassword, setIsForgotPassword] = useState(false);
   const [showEmailVerification, setShowEmailVerification] = useState(false);
   const [showMagicLink, setShowMagicLink] = useState(false);
@@ -16,6 +16,14 @@ const AuthScreen = () => {
   const { loading, handleGoogleAuth, handleEmailAuth, handleForgotPassword, handleMagicLink } = useAuthOperations();
 
   const onEmailAuth = (emailValue: string, password: string, name: string) => {
+    if (!emailValue || !password) {
+      return;
+    }
+    
+    if (!isLogin && !name) {
+      return;
+    }
+    
     setEmail(emailValue);
     handleEmailAuth(emailValue, password, name, isLogin, () => setShowEmailVerification(true));
   };
