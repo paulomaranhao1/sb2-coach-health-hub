@@ -21,33 +21,64 @@ export interface FoodAnalysis {
   timestamp: string;
 }
 
-// Simulação de análise de IA (em produção, seria uma chamada para uma API de visão computacional)
+// Função principal que usa OpenAI Vision API
 export const analyzeFoodImage = async (imageData: string): Promise<FoodAnalysis> => {
-  console.log('Iniciando análise de imagem de alimento...');
+  console.log('Iniciando análise de imagem de alimento com OpenAI Vision API...');
+  
+  try {
+    // Chamar a edge function que usa OpenAI Vision API
+    const { data, error } = await supabase.functions.invoke('analyze-food-image', {
+      body: { imageData }
+    });
+
+    if (error) {
+      console.error('Erro ao chamar edge function:', error);
+      throw error;
+    }
+
+    if (!data) {
+      throw new Error('Nenhum dado retornado da análise');
+    }
+
+    console.log('Análise concluída com OpenAI Vision API:', data);
+    return data as FoodAnalysis;
+
+  } catch (error) {
+    console.error('Erro na análise com OpenAI Vision API:', error);
+    
+    // Fallback para análise mock em caso de erro
+    console.log('Usando análise mock como fallback...');
+    return await analyzeFoodImageMock(imageData);
+  }
+};
+
+// Função mock mantida como fallback
+const analyzeFoodImageMock = async (imageData: string): Promise<FoodAnalysis> => {
+  console.log('Usando análise mock de fallback...');
   
   // Simular delay de processamento
-  await new Promise(resolve => setTimeout(resolve, 2000));
+  await new Promise(resolve => setTimeout(resolve, 1500));
 
-  // Gerar dados mais variados baseados no timestamp para simular diferentes análises
+  // Gerar dados variados baseados no timestamp
   const timestamp = Date.now();
   const foodOptions = [
     {
       name: "Peito de Frango Grelhado",
       quantity: "150g",
       calories: 248,
-      confidence: 0.92
+      confidence: 0.75 // Menor confiança para mock
     },
     {
       name: "Salmão Grelhado",
       quantity: "120g",
       calories: 206,
-      confidence: 0.89
+      confidence: 0.72
     },
     {
       name: "Filé de Tilápia",
       quantity: "130g",
       calories: 128,
-      confidence: 0.87
+      confidence: 0.70
     }
   ];
 
@@ -56,19 +87,19 @@ export const analyzeFoodImage = async (imageData: string): Promise<FoodAnalysis>
       name: "Arroz Branco",
       quantity: "100g (1/2 xícara)",
       calories: 130,
-      confidence: 0.88
+      confidence: 0.68
     },
     {
       name: "Batata Doce",
       quantity: "80g",
       calories: 86,
-      confidence: 0.85
+      confidence: 0.65
     },
     {
       name: "Quinoa",
       quantity: "90g",
       calories: 120,
-      confidence: 0.83
+      confidence: 0.63
     }
   ];
 
@@ -77,19 +108,19 @@ export const analyzeFoodImage = async (imageData: string): Promise<FoodAnalysis>
       name: "Brócolis Refogado",
       quantity: "80g",
       calories: 22,
-      confidence: 0.85
+      confidence: 0.60
     },
     {
       name: "Salada Verde",
       quantity: "100g",
       calories: 15,
-      confidence: 0.78
+      confidence: 0.58
     },
     {
       name: "Cenoura Refogada",
       quantity: "60g",
       calories: 25,
-      confidence: 0.82
+      confidence: 0.62
     }
   ];
 
@@ -98,7 +129,7 @@ export const analyzeFoodImage = async (imageData: string): Promise<FoodAnalysis>
   const selectedCarb = carbOptions[timestamp % carbOptions.length];
   const selectedVeg = vegOptions[timestamp % vegOptions.length];
   
-  const totalCalories = selectedProtein.calories + selectedCarb.calories + selectedVeg.calories + 119; // +azeite
+  const totalCalories = selectedProtein.calories + selectedCarb.calories + selectedVeg.calories + 119;
 
   const mockAnalysis: FoodAnalysis = {
     foods: [
@@ -109,26 +140,26 @@ export const analyzeFoodImage = async (imageData: string): Promise<FoodAnalysis>
         name: "Azeite de Oliva",
         quantity: "1 colher de sopa",
         calories: 119,
-        confidence: 0.78
+        confidence: 0.55
       }
     ],
     totalCalories,
     macros: {
-      protein: Math.round(totalCalories * 0.3 / 4), // 30% proteína
-      carbs: Math.round(totalCalories * 0.4 / 4), // 40% carboidratos
-      fat: Math.round(totalCalories * 0.3 / 9), // 30% gordura
-      fiber: Math.round(Math.random() * 8 + 2) // 2-10g fibra
+      protein: Math.round(totalCalories * 0.3 / 4),
+      carbs: Math.round(totalCalories * 0.4 / 4),
+      fat: Math.round(totalCalories * 0.3 / 9),
+      fiber: Math.round(Math.random() * 8 + 2)
     },
     recommendations: [
-      "Excelente combinação de proteína magra e vegetais! Continue assim.",
+      "⚠️ Análise simulada - Para resultados reais, verifique a conexão com OpenAI.",
       "Considere adicionar mais vegetais para aumentar a fibra.",
-      "Para ganho de massa, você pode aumentar a porção de carboidratos.",
-      "Ótima escolha de gordura saudável com o azeite de oliva."
+      "Ótima escolha de proteína magra!",
+      "Para análise precisa, use o sistema de IA real."
     ],
     timestamp: new Date().toISOString()
   };
 
-  console.log('Análise concluída:', mockAnalysis);
+  console.log('Análise mock concluída:', mockAnalysis);
   return mockAnalysis;
 };
 

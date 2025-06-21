@@ -2,7 +2,7 @@
 import { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, Loader2, RotateCcw } from "lucide-react";
+import { Camera, Upload, Loader2, RotateCcw, AlertCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import FoodAnalysisResult from './FoodAnalysisResult';
 import { analyzeFoodImage, saveFoodAnalysis, FoodAnalysis } from '@/lib/foodAnalysis';
@@ -58,7 +58,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       return;
     }
 
-    console.log('Iniciando análise...');
+    console.log('Iniciando análise com OpenAI Vision API...');
     setAnalyzing(true);
     
     try {
@@ -74,9 +74,17 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
         onAnalysisComplete(result);
       }
 
+      // Verificar se é análise real ou mock
+      const isRealAnalysis = result.recommendations.every(rec => 
+        !rec.includes('simulada') && !rec.includes('indisponível')
+      );
+
       toast({
-        title: "✅ Análise Concluída!",
-        description: `Encontrados ${result.foods.length} alimentos com ${result.totalCalories} calorias totais!`,
+        title: isRealAnalysis ? "✅ Análise IA Concluída!" : "⚠️ Análise Simulada",
+        description: isRealAnalysis 
+          ? `Identificados ${result.foods.length} alimentos com ${result.totalCalories} calorias!`
+          : "Usando dados simulados. Verifique a configuração da OpenAI API.",
+        variant: isRealAnalysis ? "default" : "destructive"
       });
     } catch (error) {
       console.error('Erro ao analisar imagem:', error);
@@ -135,7 +143,11 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Camera className="w-5 h-5 text-blue-600" />
-            Analisar Foto de Alimento
+            Análise IA de Alimentos
+            <div className="ml-auto flex items-center gap-1 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+              <AlertCircle className="w-3 h-3" />
+              OpenAI Vision
+            </div>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -173,7 +185,12 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
                   className="w-full max-h-96 object-cover rounded-lg shadow-lg"
                 />
                 <Button
-                  onClick={handleReset}
+                  onClick={() => {
+                    setSelectedImage(null);
+                    setAnalysis(null);
+                    if (fileInputRef.current) fileInputRef.current.value = '';
+                    if (cameraInputRef.current) cameraInputRef.current.value = '';
+                  }}
                   size="sm"
                   variant="secondary"
                   className="absolute top-2 right-2"
@@ -193,12 +210,12 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
                   {analyzing ? (
                     <>
                       <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Analisando com IA...
+                      Analisando com IA OpenAI...
                     </>
                   ) : (
                     <>
                       <Camera className="w-5 h-5 mr-2" />
-                      Analisar Calorias
+                      Analisar com IA
                     </>
                   )}
                 </Button>
@@ -228,7 +245,36 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       {analysis && (
         <FoodAnalysisResult 
           analysis={analysis} 
-          onSave={handleSaveAnalysis}
+          onSave={async (analysisData: FoodAnalysis) => {
+            console.log('Salvando análise:', analysisData);
+            
+            try {
+              const saved = await saveFoodAnalysis(analysisData, selectedImage);
+              if (saved) {
+                toast({
+                  title: "✅ Análise Salva!",
+                  description: "A análise foi salva no seu histórico.",
+                });
+                
+                if (onAnalysisComplete) {
+                  onAnalysisComplete(saved);
+                }
+              } else {
+                toast({
+                  title: "⚠️ Análise não salva",
+                  description: "Houve um problema ao salvar, mas a análise ainda está disponível.",
+                  variant: "destructive",
+                });
+              }
+            } catch (error) {
+              console.error('Erro ao salvar análise:', error);
+              toast({
+                title: "Erro ao Salvar",
+                description: "Não foi possível salvar a análise.",
+                variant: "destructive",
+              });
+            }
+          }}
         />
       )}
     </div>
