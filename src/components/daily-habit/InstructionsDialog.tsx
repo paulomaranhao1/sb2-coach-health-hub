@@ -1,21 +1,19 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Droplets, Pill, Heart, Gift } from "lucide-react";
-
 interface InstructionsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
-const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => {
+const InstructionsDialog = ({
+  open,
+  onOpenChange
+}: InstructionsDialogProps) => {
   const handleDismiss = () => {
     localStorage.setItem('sb2_instructions_dismissed', 'true');
     onOpenChange(false);
   };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+  return <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-md mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
         <DialogHeader>
           <DialogTitle className="text-center text-xl font-bold text-gray-800 dark:text-gray-200 mb-4">
@@ -71,7 +69,7 @@ const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => 
               </div>
             </div>
 
-            <div className="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg border border-yellow-200 dark:border-yellow-700">
+            <div className="flex items-center gap-3 p-3 rounded-lg border border-yellow-200 dark:border-yellow-700 bg-gray-50">
               <div className="bg-yellow-100 dark:bg-yellow-800/30 p-2 rounded-full">
                 <Gift className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
               </div>
@@ -93,23 +91,14 @@ const InstructionsDialog = ({ open, onOpenChange }: InstructionsDialogProps) => 
         </div>
 
         <div className="flex gap-2 mt-6">
-          <Button 
-            variant="outline" 
-            onClick={() => onOpenChange(false)}
-            className="flex-1"
-          >
+          <Button variant="outline" onClick={() => onOpenChange(false)} className="flex-1">
             Fechar
           </Button>
-          <Button 
-            onClick={handleDismiss}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
-          >
+          <Button onClick={handleDismiss} className="flex-1 bg-blue-600 hover:bg-blue-700 text-white">
             Entendi! Não mostrar novamente
           </Button>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
-
 export default InstructionsDialog;
