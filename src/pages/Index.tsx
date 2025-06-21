@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import WeightTracker from "@/components/WeightTracker";
@@ -12,6 +13,7 @@ import TutorialScreen from "@/components/TutorialScreen";
 import DailyHabit from "@/components/DailyHabit";
 import GamificationSystem from "@/components/GamificationSystem";
 import IntermittentFasting from "@/components/IntermittentFasting";
+import NewFeaturesScreen from "@/components/NewFeaturesScreen";
 import { Loading } from "@/components/ui/loading";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { useTheme } from "@/hooks/useTheme";
@@ -35,6 +37,7 @@ const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showNewFeatures, setShowNewFeatures] = useState(false);
   const [activeTab, setActiveTab] = useState("home");
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [userProfile, setUserProfile] = useState(null);
@@ -136,6 +139,12 @@ const Index = () => {
   };
 
   const handleTabChange = (value: string) => {
+    if (value === 'new-features') {
+      setShowNewFeatures(true);
+      setShowMobileMenu(false);
+      return;
+    }
+    
     setActiveTab(value);
     setShowMobileMenu(false);
   };
@@ -167,6 +176,10 @@ const Index = () => {
         onSkip={handleTutorialSkip}
       />
     );
+  }
+
+  if (showNewFeatures) {
+    return <NewFeaturesScreen onBack={() => setShowNewFeatures(false)} />;
   }
 
   if (isLoading || subscriptionLoading) {
