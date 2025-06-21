@@ -1,3 +1,4 @@
+
 import { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -57,7 +58,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       return;
     }
 
-    console.log('Iniciando análise com OpenAI Vision API...');
+    console.log('Iniciando análise de alimento...');
     setAnalyzing(true);
     
     try {
@@ -66,6 +67,13 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       
       setAnalysis(result);
       
+      // Verificar se é análise real ou mock baseado nas recomendações
+      const isRealAnalysis = result.recommendations.every(rec => 
+        !rec.includes('simulada') && 
+        !rec.includes('indisponível') && 
+        !rec.includes('temporariamente')
+      );
+
       // Salvar automaticamente após análise
       try {
         const saved = await saveFoodAnalysis(result, selectedImage);
@@ -81,23 +89,18 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
         // Não bloquear a exibição dos resultados por erro de salvamento
       }
 
-      // Verificar se é análise real ou mock
-      const isRealAnalysis = result.recommendations.every(rec => 
-        !rec.includes('simulada') && !rec.includes('indisponível')
-      );
-
       toast({
         title: isRealAnalysis ? "✅ Análise IA Concluída!" : "⚠️ Análise Simulada",
         description: isRealAnalysis 
           ? `Identificados ${result.foods.length} alimentos com ${result.totalCalories} calorias!`
-          : "Usando dados simulados. Verifique a configuração da OpenAI API.",
+          : "Usando dados simulados. A API da OpenAI pode estar temporariamente indisponível.",
         variant: isRealAnalysis ? "default" : "destructive"
       });
     } catch (error) {
       console.error('Erro ao analisar imagem:', error);
       toast({
         title: "Erro na Análise",
-        description: "Não foi possível analisar a imagem. Tente novamente.",
+        description: "Não foi possível analisar a imagem. Tente novamente em alguns momentos.",
         variant: "destructive",
       });
     } finally {
@@ -181,7 +184,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
                   {analyzing ? (
                     <>
                       <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Analisando com IA OpenAI...
+                      Analisando com IA...
                     </>
                   ) : (
                     <>
