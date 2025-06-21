@@ -67,11 +67,17 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
       
       setAnalysis(result);
       
-      // Verificar se é análise real ou mock baseado nas recomendações
+      // Verificar se é análise real ou mock baseado no conteúdo das recomendações
       const isRealAnalysis = result.recommendations.every(rec => 
         !rec.includes('simulada') && 
         !rec.includes('indisponível') && 
-        !rec.includes('temporariamente')
+        !rec.includes('temporariamente') &&
+        !rec.includes('Dados simulados') &&
+        !rec.includes('mock')
+      ) && !result.foods.some(food => 
+        food.name.includes('simulado') || 
+        food.name.includes('mock') ||
+        food.name.includes('Alimento exemplo')
       );
 
       // Salvar automaticamente após análise
@@ -89,13 +95,19 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
         // Não bloquear a exibição dos resultados por erro de salvamento
       }
 
-      toast({
-        title: isRealAnalysis ? "✅ Análise IA Concluída!" : "⚠️ Análise Simulada",
-        description: isRealAnalysis 
-          ? `Identificados ${result.foods.length} alimentos com ${result.totalCalories} calorias!`
-          : "Usando dados simulados. A API da OpenAI pode estar temporariamente indisponível.",
-        variant: isRealAnalysis ? "default" : "destructive"
-      });
+      if (isRealAnalysis) {
+        toast({
+          title: "✅ Análise IA Concluída!",
+          description: `OpenAI identificou ${result.foods.length} alimentos com ${result.totalCalories} calorias!`,
+          variant: "default"
+        });
+      } else {
+        toast({
+          title: "⚠️ Análise Simulada",
+          description: "Usando dados simulados. Verifique se a chave OpenAI tem créditos disponíveis.",
+          variant: "destructive"
+        });
+      }
     } catch (error) {
       console.error('Erro ao analisar imagem:', error);
       toast({
