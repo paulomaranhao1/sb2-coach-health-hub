@@ -1,6 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3 } from "lucide-react";
+import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3, Target } from "lucide-react";
 
 interface TabNavigationProps {
   activeTab: string;
@@ -14,13 +14,14 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "gamification", label: "Conquistas", icon: Trophy },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
+    { value: "roadmap", label: "Roadmap", icon: Target },
     { value: "statistics", label: "Estatísticas", icon: BarChart3 }
   ];
 
   return (
     <>
       {/* Desktop Tabs */}
-      <TabsList className="grid w-full grid-cols-6 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-all duration-500 ease-in-out">
+      <TabsList className="grid w-full grid-cols-7 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-all duration-500 ease-in-out">
         {tabItems.map((item) => (
           <TabsTrigger 
             key={item.value}

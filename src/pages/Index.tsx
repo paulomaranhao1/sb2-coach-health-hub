@@ -29,7 +29,7 @@ import CalorieCounterTab from "@/components/CalorieCounterTab";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Lock, Crown } from "lucide-react";
-import RoadmapSection from "@/components/RoadmapSection";
+import Roadmap from "./Roadmap";
 
 const Index = () => {
   const [showWelcome, setShowWelcome] = useState(true);
@@ -203,7 +203,6 @@ const Index = () => {
 
           <TabsContent value="home" className="space-y-6">
             <DailyHabit />
-            <RoadmapSection />
             <ComingSoonFeatures />
           </TabsContent>
 
@@ -225,6 +224,10 @@ const Index = () => {
 
           <TabsContent value="supplement">
             <SupplementReminder />
+          </TabsContent>
+
+          <TabsContent value="roadmap">
+            <Roadmap />
           </TabsContent>
 
           <TabsContent value="statistics" className="space-y-6">
