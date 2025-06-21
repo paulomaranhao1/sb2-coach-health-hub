@@ -40,8 +40,8 @@ const AchievementNotification = ({ achievements, onClose }: AchievementNotificat
   const shareAchievement = async (achievement: Achievement) => {
     try {
       const shareData = {
-        title: 'SB2FIT - Nova Conquista!',
-        text: `Acabei de conquistar ${achievement.emoji} ${achievement.name} no SB2FIT! ${achievement.description}`,
+        title: 'SB2coach.ai - Nova Conquista!',
+        text: `Acabei de conquistar ${achievement.emoji} ${achievement.name} no SB2coach.ai! ${achievement.description}`,
         url: window.location.origin
       };
 

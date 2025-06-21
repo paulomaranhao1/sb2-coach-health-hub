@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -17,11 +18,11 @@ const FoodAnalysisResult = ({ analysis, onSave }: FoodAnalysisResultProps) => {
 
   const handleShare = async () => {
     try {
-      const shareText = `Análise SB2FIT:\n🔥 ${analysis.totalCalories} calorias\n💪 ${analysis.macros.protein}g proteína\n🌾 ${analysis.macros.carbs}g carboidrato\n🥑 ${analysis.macros.fat}g gordura`;
+      const shareText = `Análise SB2coach.ai:\n🔥 ${analysis.totalCalories} calorias\n💪 ${analysis.macros.protein}g proteína\n🌾 ${analysis.macros.carbs}g carboidrato\n🥑 ${analysis.macros.fat}g gordura`;
       
       if (navigator.share) {
         await navigator.share({
-          title: 'Análise Nutricional SB2FIT',
+          title: 'Análise Nutricional SB2coach.ai',
           text: shareText
         });
       } else {

@@ -64,8 +64,8 @@ export const useProgressData = () => {
 
     try {
       const shareData = {
-        title: 'SB2FIT - Meu Progresso',
-        text: `Estou usando o SB2FIT! ${weightLoss > 0 ? `Já perdi ${weightLoss.toFixed(1)}kg` : `Peso atual: ${currentWeightValue}kg`} 💪`,
+        title: 'SB2coach.ai - Meu Progresso',
+        text: `Estou usando o SB2coach.ai! ${weightLoss > 0 ? `Já perdi ${weightLoss.toFixed(1)}kg` : `Peso atual: ${currentWeightValue}kg`} 💪`,
         url: window.location.origin
       };
 
