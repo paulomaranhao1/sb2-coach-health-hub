@@ -33,9 +33,9 @@ const DailyHabit = () => {
       
       <SupplementTracker />
 
-      <MotivationalSection />
-
       <DailyPointsCollector />
+
+      <MotivationalSection />
 
       {/* Botão de instruções no final */}
       <div className="text-center pt-4">
