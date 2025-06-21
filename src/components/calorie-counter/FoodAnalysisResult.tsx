@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -6,7 +5,7 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import { Flame, Droplets, Wheat, Beef, Share2, BookOpen } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { FoodAnalysis } from "@/lib/foodAnalysis";
+import { FoodAnalysis } from "@/lib/food";
 
 interface FoodAnalysisResultProps {
   analysis: FoodAnalysis;
