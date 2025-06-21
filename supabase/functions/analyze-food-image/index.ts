@@ -104,7 +104,7 @@ Responda APENAS em formato JSON válido seguindo esta estrutura:
     if (!response.ok) {
       const errorData = await response.text();
       console.error('Erro da OpenAI API:', errorData);
-      throw new Error(`Erro da OpenAI API: ${response.status}`);
+      throw new Error(`Erro da OpenAI API: ${response.status} - ${errorData}`);
     }
 
     const data = await response.json();
@@ -112,12 +112,23 @@ Responda APENAS em formato JSON válido seguindo esta estrutura:
     
     console.log('Resposta bruta da OpenAI:', content);
 
-    // Parse da resposta JSON
+    // Parse da resposta JSON - remover markdown se presente
     let analysisResult;
     try {
-      analysisResult = JSON.parse(content);
+      // Remover markdown code blocks se presentes
+      let cleanContent = content.trim();
+      if (cleanContent.startsWith('```json')) {
+        cleanContent = cleanContent.replace(/^```json\s*/, '').replace(/\s*```$/, '');
+      } else if (cleanContent.startsWith('```')) {
+        cleanContent = cleanContent.replace(/^```\s*/, '').replace(/\s*```$/, '');
+      }
+      
+      analysisResult = JSON.parse(cleanContent);
+      console.log('✅ Parse JSON realizado com sucesso:', analysisResult);
     } catch (parseError) {
-      console.error('Erro ao fazer parse da resposta:', parseError);
+      console.error('❌ Erro ao fazer parse da resposta:', parseError);
+      console.error('Conteúdo que falhou no parse:', content);
+      
       // Fallback para dados mock em caso de erro de parse
       analysisResult = {
         foods: [
@@ -145,14 +156,14 @@ Responda APENAS em formato JSON válido seguindo esta estrutura:
     // Adicionar timestamp
     analysisResult.timestamp = new Date().toISOString();
 
-    console.log('Análise concluída com sucesso:', analysisResult);
+    console.log('✅ Análise concluída com sucesso:', analysisResult);
 
     return new Response(JSON.stringify(analysisResult), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    console.error('Erro na análise de alimentos:', error);
+    console.error('❌ Erro na análise de alimentos:', error);
     
     // Retornar dados mock em caso de erro para não quebrar a funcionalidade
     const fallbackResult = {
