@@ -7,6 +7,7 @@ import SupplementTracker from "./SupplementTracker";
 import MotivationalSection from "./MotivationalSection";
 import InstructionsDialog from "./InstructionsDialog";
 import InstructionsHeader from "./InstructionsHeader";
+import DailyPointsCollector from "./DailyPointsCollector";
 
 const DailyHabit = () => {
   const { profile } = useUserProfile();
@@ -34,6 +35,8 @@ const DailyHabit = () => {
       <SupplementTracker />
 
       <MotivationalSection />
+
+      <DailyPointsCollector />
     </div>
   );
 };

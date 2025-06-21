@@ -15,7 +15,7 @@ const InstructionsHeader = ({ onShowInstructions }: InstructionsHeaderProps) => 
           <div className="flex items-center gap-3">
             <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />
             <span className="font-bold text-blue-800 dark:text-blue-200">
-              📋 Rotina Diária - Siga a ordem dos botões
+              📋 Rotina Diária - Siga a ordem dos botões + Colete seus pontos!
             </span>
           </div>
           <Button
