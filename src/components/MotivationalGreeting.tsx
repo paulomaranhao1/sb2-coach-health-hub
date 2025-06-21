@@ -82,8 +82,15 @@ const MotivationalGreeting = () => {
     setCurrentPhrase(motivationalPhrases[randomIndex]);
   };
 
-  // Se há jejum ativo, mostrar o timer compacto
-  if (currentFast && isActive) {
+  console.log('MotivationalGreeting - Estado do jejum:', {
+    currentFast: !!currentFast,
+    isActive,
+    timeRemaining,
+    fastType: currentFast?.type
+  });
+
+  // Se há jejum ativo (com fast atual e tempo restante), mostrar o timer compacto
+  if (currentFast && timeRemaining > 0) {
     return (
       <div className="mb-6">
         <CompactFastingTimer 

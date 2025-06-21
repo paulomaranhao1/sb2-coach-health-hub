@@ -22,34 +22,65 @@ export const useFasting = () => {
   const [isActive, setIsActive] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [pauseStartTime, setPauseStartTime] = useState<Date | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   // Use storage hook
   useFastingStorage(currentFast, fastingHistory);
 
   // Load data from localStorage on mount
   useEffect(() => {
-    const { currentFast: loadedFast, fastingHistory: loadedHistory } = loadFastingData();
-    
-    if (loadedFast) {
-      setCurrentFast(loadedFast);
-      
-      // Calculate remaining time
-      const now = new Date().getTime();
-      const startTime = new Date(loadedFast.startTime).getTime();
-      const elapsed = Math.floor((now - startTime) / 1000);
-      const remaining = Math.max(0, loadedFast.duration - elapsed - (loadedFast.totalPausedDuration || 0));
-      
-      setTimeRemaining(remaining);
-      
-      if (remaining > 0 && !loadedFast.completed) {
-        setIsActive(true);
+    const loadData = () => {
+      try {
+        const { currentFast: loadedFast, fastingHistory: loadedHistory } = loadFastingData();
+        
+        console.log('Carregando dados do jejum:', { loadedFast, loadedHistory });
+        
+        if (loadedFast) {
+          setCurrentFast(loadedFast);
+          
+          // Calculate remaining time more carefully
+          const now = new Date().getTime();
+          const startTime = new Date(loadedFast.startTime).getTime();
+          const elapsed = Math.floor((now - startTime) / 1000);
+          const totalPausedDuration = loadedFast.totalPausedDuration || 0;
+          const remaining = Math.max(0, loadedFast.duration - elapsed + totalPausedDuration);
+          
+          console.log('Cálculo do tempo restante:', {
+            now: new Date(now),
+            startTime: new Date(startTime),
+            elapsed,
+            totalPausedDuration,
+            duration: loadedFast.duration,
+            remaining
+          });
+          
+          setTimeRemaining(remaining);
+          
+          // Only set as active if there's time remaining and it's not completed
+          if (remaining > 0 && !loadedFast.completed) {
+            setIsActive(true);
+            console.log('Jejum ativo com', remaining, 'segundos restantes');
+          } else if (remaining <= 0 && !loadedFast.completed) {
+            console.log('Jejum deveria ter terminado, completando automaticamente');
+            // Complete the fast if time has run out
+            completeFast();
+          }
+        }
+        
+        setFastingHistory(loadedHistory);
+        setIsLoaded(true);
+      } catch (error) {
+        console.error('Erro ao carregar dados do jejum:', error);
+        setIsLoaded(true);
       }
-    }
-    
-    setFastingHistory(loadedHistory);
+    };
+
+    loadData();
   }, []);
 
   const completeFast = useCallback(() => {
+    console.log('Completando jejum:', currentFast);
+    
     if (currentFast) {
       const completedFast = {
         ...currentFast,
@@ -70,8 +101,10 @@ export const useFasting = () => {
     }
     
     setCurrentFast(null);
+    setTimeRemaining(0);
     setIsActive(false);
     setIsPaused(false);
+    setPauseStartTime(null);
   }, [currentFast, fastingHistory]);
 
   // Use timer hook
@@ -87,15 +120,20 @@ export const useFasting = () => {
       totalPausedDuration: 0
     };
     
+    console.log('Iniciando novo jejum:', newFast);
+    
     setCurrentFast(newFast);
     setTimeRemaining(duration);
     setIsActive(true);
     setIsPaused(false);
+    setPauseStartTime(null);
     
     toast.success(`🚀 Jejum ${planType} iniciado! Você consegue!`);
   }, []);
 
   const pauseFast = useCallback(() => {
+    console.log('Pausando/resumindo jejum. Estado atual:', { isPaused, pauseStartTime });
+    
     if (isPaused) {
       // Resume
       if (pauseStartTime && currentFast) {
@@ -104,6 +142,8 @@ export const useFasting = () => {
           ...currentFast,
           totalPausedDuration: (currentFast.totalPausedDuration || 0) + pauseDuration
         };
+        
+        console.log('Resumindo jejum, duração da pausa:', pauseDuration);
         setCurrentFast(updatedFast);
       }
       setIsPaused(false);
@@ -118,6 +158,8 @@ export const useFasting = () => {
   }, [isPaused, pauseStartTime, currentFast]);
 
   const stopFast = useCallback(() => {
+    console.log('Parando jejum:', currentFast);
+    
     if (currentFast) {
       const incompleteFast = {
         ...currentFast,
@@ -138,6 +180,34 @@ export const useFasting = () => {
   }, [currentFast]);
 
   const calculateProgress = () => calculateFastingProgress(currentFast, timeRemaining);
+
+  // Don't return data until it's loaded to prevent flash of incorrect state
+  if (!isLoaded) {
+    return {
+      currentFast: null,
+      fastingHistory: [],
+      timeRemaining: 0,
+      isActive: false,
+      isPaused: false,
+      startFast: () => {},
+      pauseFast: () => {},
+      stopFast: () => {},
+      completeFast: () => {},
+      calculateProgress: () => 0,
+      formatTime,
+      getFastingPhase: () => "",
+      getStats: () => ({
+        totalSessions: 0,
+        completedSessions: 0,
+        totalHoursFasted: 0,
+        longestFast: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+        averageCompletion: 0,
+        weeklyAverage: 0
+      })
+    };
+  }
 
   return {
     currentFast,
