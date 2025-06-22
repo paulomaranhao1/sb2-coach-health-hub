@@ -36,7 +36,7 @@ export const useAppState = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { get: getCache, set: setCache, has: hasCache } = useDataCache({ defaultTTL: 10 * 60 * 1000 }); // 10 minutos
+  const { get: getCache, set: setCache, has: hasCache } = useDataCache({ defaultTTL: 10 * 60 * 1000 });
   
   // Estados básicos
   const [showWelcome, setShowWelcome] = useState(initialState.showWelcome);
@@ -51,11 +51,11 @@ export const useAppState = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || initialState.theme);
   const [initialized, setInitialized] = useState(false);
   
-  // Refs para controle de debouncing
+  // Refs para controle
+  const isMountedRef = useRef(true);
   const profileLoadingRef = useRef(false);
-  const debounceTimeoutRef = useRef<NodeJS.Timeout>();
 
-  // Controle de tema memoizado
+  // Controle de tema
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
@@ -65,21 +65,21 @@ export const useAppState = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   }, []);
 
-  // Função para carregar stats do usuário com cache
+  // Função para carregar stats do usuário
   const loadUserStats = useCallback(async (userId: string) => {
+    if (!isMountedRef.current) return;
+    
     try {
       const cacheKey = `user_stats_${userId}`;
       
-      // Verifica cache primeiro
       if (hasCache(cacheKey)) {
         const cachedStats = getCache<UserStats>(cacheKey);
-        if (cachedStats) {
+        if (cachedStats && isMountedRef.current) {
           setUserStats(cachedStats);
           return;
         }
       }
 
-      console.log('useAppState: Carregando estatísticas do usuário...');
       const { data: stats, error } = await supabase
         .from('user_stats')
         .select('*')
@@ -91,8 +91,7 @@ export const useAppState = () => {
         return;
       }
 
-      console.log('useAppState: Stats carregadas:', !!stats);
-      if (stats) {
+      if (stats && isMountedRef.current) {
         setCache(cacheKey, stats);
         setUserStats(stats);
       }
@@ -101,154 +100,133 @@ export const useAppState = () => {
     }
   }, [getCache, setCache, hasCache]);
 
-  // Função principal para verificar perfil com debouncing
+  // Função principal para verificar perfil
   const checkUserProfile = useCallback(async () => {
-    if (initialized || profileLoadingRef.current) return;
-    
-    // Debouncing para evitar múltiplas chamadas
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
+    if (!isMountedRef.current || initialized || profileLoadingRef.current) {
+      return;
     }
     
-    debounceTimeoutRef.current = setTimeout(async () => {
-      profileLoadingRef.current = true;
-      console.log('useAppState: Verificando perfil do usuário...');
-      setIsLoading(true);
+    profileLoadingRef.current = true;
+    setIsLoading(true);
+    
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
       
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        if (!user) {
-          console.log('useAppState: Usuário não logado');
+      if (!user || !isMountedRef.current) {
+        if (isMountedRef.current) {
           setIsLoading(false);
           setInitialized(true);
-          profileLoadingRef.current = false;
-          return;
         }
+        return;
+      }
 
-        console.log('useAppState: Usuário logado:', user.id);
-        const cacheKey = `user_profile_${user.id}`;
+      const cacheKey = `user_profile_${user.id}`;
+      let profile = null;
 
-        // Verifica cache primeiro
-        let profile = null;
-        if (hasCache(cacheKey)) {
-          profile = getCache<UserProfile>(cacheKey);
-          if (profile) {
-            setUserProfile(profile);
-          }
+      // Tentar cache primeiro
+      if (hasCache(cacheKey)) {
+        profile = getCache<UserProfile>(cacheKey);
+        if (profile && isMountedRef.current) {
+          setUserProfile(profile);
         }
+      }
 
-        // Se não tem cache, busca do banco
+      // Se não tem cache, buscar do banco
+      if (!profile) {
+        const { data: profileData, error } = await supabase
+          .from('user_profiles')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle();
+
+        if (!error && profileData && isMountedRef.current) {
+          setCache(cacheKey, profileData);
+          setUserProfile(profileData);
+          profile = profileData;
+        }
+      }
+
+      // Carregar estatísticas
+      if (profile && isMountedRef.current) {
+        await loadUserStats(user.id);
+      }
+
+      // Lógica de navegação
+      if (isMountedRef.current) {
         if (!profile) {
-          const { data: profileData, error } = await supabase
-            .from('user_profiles')
-            .select('*')
-            .eq('user_id', user.id)
-            .maybeSingle();
-
-          if (error) {
-            console.error('useAppState: Erro ao buscar perfil:', error);
-          } else if (profileData) {
-            setCache(cacheKey, profileData);
-            setUserProfile(profileData);
-            profile = profileData;
-          }
-        }
-
-        console.log('useAppState: Perfil encontrado:', !!profile);
-
-        // Carregar estatísticas se o perfil existir
-        if (profile) {
-          await loadUserStats(user.id);
-        }
-
-        // Lógica de navegação entre telas
-        if (!profile) {
-          console.log('useAppState: Sem perfil - mostrando welcome');
           setShowWelcome(true);
           setShowOnboarding(false);
           setShowTutorial(false);
           setShowNewFeatures(false);
         } else if (!profile.onboarding_completed) {
-          console.log('useAppState: Onboarding não completo');
           setShowWelcome(false);
           setShowOnboarding(true);
           setShowTutorial(false);
           setShowNewFeatures(false);
         } else {
-          console.log('useAppState: Perfil completo - indo para app principal');
           setShowWelcome(false);
           setShowOnboarding(false);
           setShowTutorial(false);
           setShowNewFeatures(false);
         }
+      }
 
-      } catch (error) {
-        console.error('useAppState: Erro ao verificar perfil:', error);
-      } finally {
+    } catch (error) {
+      console.error('useAppState: Erro ao verificar perfil:', error);
+    } finally {
+      if (isMountedRef.current) {
         setIsLoading(false);
         setInitialized(true);
-        profileLoadingRef.current = false;
       }
-    }, 100); // 100ms de debounce
+      profileLoadingRef.current = false;
+    }
   }, [initialized, loadUserStats, getCache, setCache, hasCache]);
 
-  // Handlers para fluxo de telas memoizados
+  // Handlers memoizados
   const handleOnboardingComplete = useCallback(async () => {
-    console.log('useAppState: Onboarding completo');
     setShowOnboarding(false);
     setShowTutorial(true);
   }, []);
 
   const handleTutorialComplete = useCallback(async () => {
-    console.log('useAppState: Tutorial completo');
     setShowTutorial(false);
     setShowNewFeatures(true);
   }, []);
 
   const handleTutorialSkip = useCallback(async () => {
-    console.log('useAppState: Tutorial pulado');
     setShowTutorial(false);
     setShowNewFeatures(true);
   }, []);
 
-  // Handler para mudança de aba memoizado
   const handleTabChange = useCallback((tab: string) => {
-    console.log('useAppState: Mudando para aba:', tab);
     setActiveTab(tab);
     setSearchParams({ tab });
     setShowMobileMenu(false);
   }, [setSearchParams]);
 
-  // Handler para navegação home memoizado
   const handleNavigateToHome = useCallback(() => {
-    console.log('useAppState: Navegando para home');
     navigate('/');
     setActiveTab('home');
     setSearchParams({});
   }, [navigate, setSearchParams]);
 
-  // Sincronizar tab com URL params (apenas uma vez)
+  // Sincronizar tab com URL
   useEffect(() => {
     const tab = searchParams.get('tab');
     if (tab && tab !== activeTab) {
-      console.log('useAppState: Sincronizando tab da URL:', tab);
       setActiveTab(tab);
     }
   }, [searchParams, activeTab]);
 
-  // Cleanup do timeout no unmount
+  // Cleanup
   useEffect(() => {
     return () => {
-      if (debounceTimeoutRef.current) {
-        clearTimeout(debounceTimeoutRef.current);
-      }
+      isMountedRef.current = false;
     };
   }, []);
 
-  // Memoizar o retorno para evitar re-renders desnecessários
+  // Retorno memoizado
   return useMemo(() => ({
-    // Estados principais
     showWelcome,
     setShowWelcome,
     showOnboarding,
@@ -259,30 +237,20 @@ export const useAppState = () => {
     setActiveTab,
     showMobileMenu,
     setShowMobileMenu,
-    
-    // Dados do usuário
     userProfile,
     setUserProfile,
     userStats,
     setUserStats,
-    
-    // Estados de loading
     isLoading,
     setIsLoading,
-    
-    // Tema
     theme,
     toggleTheme,
-    
-    // Funções principais
     checkUserProfile,
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,
     handleTabChange,
     handleNavigateToHome,
-    
-    // Função para recarregar stats
     loadUserStats
   }), [
     showWelcome, showOnboarding, showTutorial, showNewFeatures, activeTab, showMobileMenu,
