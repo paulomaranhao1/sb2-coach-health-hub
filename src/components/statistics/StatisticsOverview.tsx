@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import StatisticsHeader from "./StatisticsHeader";
@@ -8,13 +8,14 @@ import ProgressOverview from "./ProgressOverview";
 import StatusCards from "../home/StatusCards";
 import GamificationCards from "../home/GamificationCards";
 import ProgressDashboard from "../ProgressDashboard";
+import { memo } from "react";
 
 interface StatisticsOverviewProps {
   userProfile: any;
   userStats: any;
 }
 
-const StatisticsOverview = ({ userProfile, userStats }: StatisticsOverviewProps) => {
+const StatisticsOverview = memo(({ userProfile, userStats }: StatisticsOverviewProps) => {
   const [weightHistory, setWeightHistory] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
@@ -70,6 +71,27 @@ const StatisticsOverview = ({ userProfile, userStats }: StatisticsOverviewProps)
     }
   };
 
+  // Memoizar componentes que dependem dos dados
+  const memoizedQuickStats = useMemo(() => (
+    <QuickStats 
+      userProfile={userProfile} 
+      userStats={userStats} 
+      weightHistory={weightHistory}
+    />
+  ), [userProfile, userStats, weightHistory]);
+
+  const memoizedProgressOverview = useMemo(() => (
+    <ProgressOverview userProfile={userProfile} userStats={userStats} />
+  ), [userProfile, userStats]);
+
+  const memoizedStatusCards = useMemo(() => (
+    <StatusCards userProfile={userProfile} userStats={userStats} />
+  ), [userProfile, userStats]);
+
+  const memoizedGamificationCards = useMemo(() => (
+    <GamificationCards userStats={userStats} />
+  ), [userStats]);
+
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
@@ -82,26 +104,24 @@ const StatisticsOverview = ({ userProfile, userStats }: StatisticsOverviewProps)
     <div className="space-y-6">
       <StatisticsHeader onShare={shareProgress} />
       
-      <QuickStats 
-        userProfile={userProfile} 
-        userStats={userStats} 
-        weightHistory={weightHistory}
-      />
+      {memoizedQuickStats}
       
-      <ProgressOverview userProfile={userProfile} userStats={userStats} />
+      {memoizedProgressOverview}
       
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
-          <StatusCards userProfile={userProfile} userStats={userStats} />
+          {memoizedStatusCards}
         </div>
         <div className="space-y-6">
-          <GamificationCards userStats={userStats} />
+          {memoizedGamificationCards}
         </div>
       </div>
       
       <ProgressDashboard />
     </div>
   );
-};
+});
+
+StatisticsOverview.displayName = 'StatisticsOverview';
 
 export default StatisticsOverview;

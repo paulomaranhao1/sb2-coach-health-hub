@@ -1,11 +1,11 @@
 
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import { useAppState } from "@/hooks/useAppState";
 import AppScreens from "@/components/screens/AppScreens";
 import AppLayout from "@/components/layout/AppLayout";
 import TabsContentComponent from "@/components/layout/TabsContent";
 
-const Index = () => {
+const Index = memo(() => {
   const {
     showWelcome,
     setShowWelcome,
@@ -29,11 +29,11 @@ const Index = () => {
     handleNavigateToHome
   } = useAppState();
 
-  // Inicialização única
+  // Inicialização única com cleanup
   useEffect(() => {
     console.log('Index: Componente montado, verificando perfil...');
     checkUserProfile();
-  }, []); // Array vazio para executar apenas uma vez
+  }, [checkUserProfile]);
 
   // Renderizar telas especiais (welcome, onboarding, tutorial, etc.)
   const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
@@ -75,6 +75,8 @@ const Index = () => {
       />
     </AppLayout>
   );
-};
+});
+
+Index.displayName = 'Index';
 
 export default Index;
