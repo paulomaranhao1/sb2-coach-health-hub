@@ -49,18 +49,16 @@ export const useAppState = () => {
   const [userStats, setUserStats] = useState<UserStats | null>(initialState.userStats);
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
   const [theme, setTheme] = useState<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || initialState.theme);
-  const [initialized, setInitialized] = useState(false);
   
-  // Refs para controle
+  // Controle de inicialização
+  const [initialized, setInitialized] = useState(false);
   const isMountedRef = useRef(true);
-  const profileLoadingRef = useRef(false);
 
-  // Verificar se deve mostrar tutorial via URL
+  // Verificar tutorial via URL
   useEffect(() => {
     const shouldShowTutorial = searchParams.get('showTutorial');
     if (shouldShowTutorial === 'true') {
       setShowTutorial(true);
-      // Limpar o parâmetro da URL
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.delete('showTutorial');
       setSearchParams(newSearchParams);
@@ -112,23 +110,19 @@ export const useAppState = () => {
     }
   }, [getCache, setCache, hasCache]);
 
-  // Função principal para verificar perfil - só executa se o usuário estiver autenticado
+  // Função principal para verificar perfil - SIMPLIFICADA
   const checkUserProfile = useCallback(async () => {
-    // Aguardar um pouco para garantir que o AuthWrapper processou a sessão
-    await new Promise(resolve => setTimeout(resolve, 100));
-    
-    if (!isMountedRef.current || initialized || profileLoadingRef.current) {
+    if (!isMountedRef.current || initialized) {
       return;
     }
     
-    profileLoadingRef.current = true;
     setIsLoading(true);
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user || !isMountedRef.current) {
-        console.log('useAppState: Usuário não encontrado ou componente desmontado');
+        console.log('useAppState: Usuário não encontrado');
         if (isMountedRef.current) {
           setIsLoading(false);
           setInitialized(true);
@@ -136,77 +130,47 @@ export const useAppState = () => {
         return;
       }
 
-      console.log('useAppState: Usuário encontrado, carregando perfil...');
+      console.log('useAppState: Carregando perfil do usuário...');
 
-      const cacheKey = `user_profile_${user.id}`;
-      let profile = null;
+      const { data: profileData, error } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .maybeSingle();
 
-      // Tentar cache primeiro
-      if (hasCache(cacheKey)) {
-        profile = getCache<UserProfile>(cacheKey);
-        if (profile && isMountedRef.current) {
-          setUserProfile(profile);
-        }
-      }
-
-      // Se não tem cache, buscar do banco
-      if (!profile) {
-        const { data: profileData, error } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
-
-        if (!error && profileData && isMountedRef.current) {
-          setCache(cacheKey, profileData);
-          setUserProfile(profileData);
-          profile = profileData;
-        }
-      }
-
-      // Carregar estatísticas
-      if (profile && isMountedRef.current) {
-        await loadUserStats(user.id);
-      }
-
-      // Lógica de navegação
       if (isMountedRef.current) {
-        if (!profile) {
-          console.log('useAppState: Perfil não encontrado, mostrando welcome');
-          setShowWelcome(true);
-          setShowOnboarding(false);
-          setShowTutorial(false);
-          setShowNewFeatures(false);
-        } else if (!profile.onboarding_completed) {
-          console.log('useAppState: Onboarding não completado');
-          setShowWelcome(false);
-          setShowOnboarding(true);
-          setShowTutorial(false);
-          setShowNewFeatures(false);
-        } else {
-          console.log('useAppState: Perfil completo, mostrando app principal');
-          setShowWelcome(false);
-          setShowOnboarding(false);
-          // Não resetar tutorial se foi ativado via URL
-          if (!showTutorial) {
-            setShowTutorial(false);
+        if (!error && profileData) {
+          setUserProfile(profileData);
+          // Carregar estatísticas
+          await loadUserStats(user.id);
+          
+          // Definir estado baseado no perfil
+          if (!profileData.onboarding_completed) {
+            setShowOnboarding(true);
+          } else {
+            // Usuário já tem perfil completo, mostrar app principal
+            setShowWelcome(false);
+            setShowOnboarding(false);
           }
-          setShowNewFeatures(false);
+        } else {
+          // Perfil não encontrado, mostrar welcome
+          setShowWelcome(true);
         }
+        
+        setIsLoading(false);
+        setInitialized(true);
       }
 
     } catch (error) {
       console.error('useAppState: Erro ao verificar perfil:', error);
-    } finally {
       if (isMountedRef.current) {
         setIsLoading(false);
         setInitialized(true);
       }
-      profileLoadingRef.current = false;
     }
-  }, [initialized, loadUserStats, getCache, setCache, hasCache, showTutorial]);
+  }, [initialized, loadUserStats]);
 
-  // Handlers memoizados
+  // Handlers simplificados
   const handleOnboardingComplete = useCallback(async () => {
     setShowOnboarding(false);
     setShowTutorial(true);

@@ -29,18 +29,13 @@ const Index = memo(() => {
     handleNavigateToHome
   } = useAppState();
 
-  // Inicialização única com delay para sincronização com AuthWrapper
+  // Inicialização única - SIMPLIFICADA
   useEffect(() => {
-    console.log('Index: Componente montado, aguardando e verificando perfil...');
-    // Pequeno delay para garantir que o AuthWrapper já processou a sessão
-    const timer = setTimeout(() => {
-      checkUserProfile();
-    }, 200);
-    
-    return () => clearTimeout(timer);
-  }, [checkUserProfile]);
+    console.log('Index: Verificando perfil do usuário...');
+    checkUserProfile();
+  }, []);
 
-  // Renderizar telas especiais (welcome, onboarding, tutorial, etc.)
+  // Renderizar telas especiais
   const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
 
   if (shouldShowSpecialScreen) {
@@ -61,7 +56,7 @@ const Index = memo(() => {
     );
   }
 
-  // Renderizar app principal
+  // App principal
   return (
     <AppLayout
       theme={theme}

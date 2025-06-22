@@ -12,100 +12,66 @@ interface AuthWrapperProps {
 const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [initialized, setInitialized] = useState(false);
 
   useEffect(() => {
-    console.log('AuthWrapper: Inicializando...');
-    
-    let isMounted = true;
+    console.log('AuthWrapper: Inicializando autenticação...');
 
-    const initializeAuth = async () => {
-      try {
-        console.log('AuthWrapper: Verificando sessão inicial...');
-        
-        // Verificar se estamos em um callback do OAuth
-        const isOAuthCallback = window.location.hash.includes('access_token') || 
-                                window.location.search.includes('code=');
-        
-        if (isOAuthCallback) {
-          console.log('AuthWrapper: Detectado callback OAuth, aguardando processamento...');
-          // Aguardar um pouco para o Supabase processar o callback
-          await new Promise(resolve => setTimeout(resolve, 1000));
-        }
-        
-        // Verificar sessão atual
-        const { data: { session: currentSession }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('AuthWrapper: Erro ao verificar sessão:', error);
-        } else {
-          console.log('AuthWrapper: Sessão obtida:', !!currentSession);
-        }
-
-        if (isMounted) {
-          setSession(currentSession);
-          setInitialized(true);
-          setLoading(false);
-        }
-      } catch (error) {
-        console.error('AuthWrapper: Erro na inicialização:', error);
-        if (isMounted) {
-          setInitialized(true);
-          setLoading(false);
-        }
-      }
-    };
-
-    // Configurar listener para mudanças de auth
+    // Configurar listener primeiro
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, newSession) => {
-        console.log('AuthWrapper: Mudança de auth:', event, !!newSession);
+        console.log('AuthWrapper: Evento de auth:', event, !!newSession);
         
-        if (isMounted) {
-          setSession(newSession);
-          if (!initialized) {
-            setInitialized(true);
-            setLoading(false);
-          }
+        setSession(newSession);
+        
+        // Finalizar loading apenas após processar a sessão
+        if (event === 'INITIAL_SESSION' || event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
+          setLoading(false);
         }
       }
     );
 
-    // Inicializar
-    initializeAuth();
-
-    // Timeout de segurança para evitar loading infinito
-    const timeout = setTimeout(() => {
-      if (!initialized && isMounted) {
-        console.warn('AuthWrapper: Timeout na inicialização, forçando loading=false');
-        setInitialized(true);
+    // Verificar sessão inicial
+    const initializeSession = async () => {
+      try {
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        console.log('AuthWrapper: Sessão inicial:', !!initialSession);
+        
+        setSession(initialSession);
+        setLoading(false);
+      } catch (error) {
+        console.error('AuthWrapper: Erro ao verificar sessão:', error);
         setLoading(false);
       }
-    }, 3000); // Reduzido para 3 segundos
+    };
+
+    initializeSession();
+
+    // Timeout de segurança
+    const timeout = setTimeout(() => {
+      console.log('AuthWrapper: Timeout atingido, finalizando loading');
+      setLoading(false);
+    }, 2000);
 
     return () => {
-      isMounted = false;
       subscription.unsubscribe();
       clearTimeout(timeout);
     };
-  }, [initialized]);
+  }, []);
 
-  console.log('AuthWrapper: Renderizando - loading:', loading, 'user:', !!session, 'initialized:', initialized);
+  console.log('AuthWrapper: Estado atual - loading:', loading, 'session:', !!session);
 
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loading size="lg" text="Inicializando SB2coach.ai..." />
+        <Loading size="lg" text="Carregando..." />
       </div>
     );
   }
 
   if (!session) {
-    console.log('AuthWrapper: Mostrando tela de auth');
     return <AuthScreen />;
   }
 
-  console.log('AuthWrapper: Usuário autenticado, renderizando app');
   return <>{children}</>;
 };
 
