@@ -19,12 +19,14 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
   };
 
   const handleTutorial = () => {
-    // Remover a flag do tutorial para que ele apareça novamente
-    localStorage.removeItem('sb2_tutorial_completed');
-    // Não recarregar a página, apenas mostrar o tutorial diretamente
+    // Fechar o menu primeiro
     setShowMobileMenu(false);
-    // Disparar evento personalizado para mostrar o tutorial
-    window.dispatchEvent(new CustomEvent('showTutorial'));
+    
+    // Forçar o tutorial a aparecer recarregando a página com um parâmetro
+    const currentUrl = new URL(window.location.href);
+    currentUrl.searchParams.set('showTutorial', 'true');
+    window.location.href = currentUrl.toString();
+    
     toastFeedback.info('Iniciando tutorial...');
   };
 

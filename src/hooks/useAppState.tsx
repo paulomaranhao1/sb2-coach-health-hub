@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -54,6 +53,18 @@ export const useAppState = () => {
   // Refs para controle
   const isMountedRef = useRef(true);
   const profileLoadingRef = useRef(false);
+
+  // Verificar se deve mostrar tutorial via URL
+  useEffect(() => {
+    const shouldShowTutorial = searchParams.get('showTutorial');
+    if (shouldShowTutorial === 'true') {
+      setShowTutorial(true);
+      // Limpar o parâmetro da URL
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('showTutorial');
+      setSearchParams(newSearchParams);
+    }
+  }, [searchParams, setSearchParams]);
 
   // Controle de tema
   useEffect(() => {
