@@ -16,8 +16,6 @@ const AuthScreen = () => {
   const { loading, handleGoogleAuth, handleEmailAuth, handleForgotPassword, handleMagicLink } = useAuthOperations();
 
   const onEmailAuth = (emailValue: string, password: string, name: string) => {
-    console.log('AuthScreen - processando autenticação:', { email: emailValue, isLogin });
-    
     setEmail(emailValue);
     handleEmailAuth(emailValue, password, name, isLogin, () => {
       setShowEmailVerification(true);
@@ -70,7 +68,7 @@ const AuthScreen = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+    <div className="min-h-screen bg-background text-foreground">
       <AuthForm
         isLogin={isLogin}
         onToggleMode={() => setIsLogin(!isLogin)}
