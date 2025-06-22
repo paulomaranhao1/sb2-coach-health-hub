@@ -15,51 +15,22 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   useEffect(() => {
     let mounted = true;
 
-    // Configurar listener de mudanças de autenticação PRIMEIRO
+    // Configurar listener de mudanças de autenticação
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
         console.log('Auth event:', event, session?.user?.id || 'no user');
         
         if (mounted) {
           setUser(session?.user ?? null);
-          
-          // Usar setTimeout para operações assíncronas para evitar deadlock
-          if (event === 'SIGNED_IN' && session?.user) {
-            setTimeout(async () => {
-              try {
-                const { data: existingStats } = await supabase
-                  .from('user_stats')
-                  .select('id')
-                  .eq('user_id', session.user.id)
-                  .maybeSingle();
-                
-                if (!existingStats) {
-                  await supabase
-                    .from('user_stats')
-                    .insert({
-                      user_id: session.user.id,
-                      points: 0,
-                      level: 1,
-                      shields: [],
-                      stickers: [],
-                      streak: 0
-                    });
-                  console.log('User stats created for:', session.user.id);
-                }
-              } catch (error) {
-                console.error('Erro ao criar estatísticas:', error);
-              }
-            }, 100);
-          }
+          setLoading(false);
         }
       }
     );
 
-    // DEPOIS verificar sessão atual
-    const checkSession = async () => {
+    // Verificar sessão inicial
+    const initSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        
         if (mounted) {
           setUser(session?.user ?? null);
           setLoading(false);
@@ -73,13 +44,46 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       }
     };
 
-    checkSession();
+    initSession();
 
     return () => {
       mounted = false;
       subscription.unsubscribe();
     };
   }, []);
+
+  // Efeito separado para criar user_stats quando necessário
+  useEffect(() => {
+    if (!user) return;
+
+    const createUserStatsIfNeeded = async () => {
+      try {
+        const { data: existingStats } = await supabase
+          .from('user_stats')
+          .select('id')
+          .eq('user_id', user.id)
+          .maybeSingle();
+        
+        if (!existingStats) {
+          await supabase
+            .from('user_stats')
+            .insert({
+              user_id: user.id,
+              points: 0,
+              level: 1,
+              shields: [],
+              stickers: [],
+              streak: 0
+            });
+          console.log('User stats created for:', user.id);
+        }
+      } catch (error) {
+        console.error('Erro ao criar estatísticas:', error);
+      }
+    };
+
+    createUserStatsIfNeeded();
+  }, [user]);
 
   if (loading) {
     return (

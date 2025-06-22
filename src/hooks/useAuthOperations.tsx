@@ -77,7 +77,7 @@ export const useAuthOperations = () => {
     isLogin: boolean,
     onEmailVerification?: () => void
   ) => {
-    // Validações básicas
+    // Validações simples
     if (!email?.trim() || !password?.trim()) {
       toast({
         title: "Campos obrigatórios",
@@ -91,15 +91,6 @@ export const useAuthOperations = () => {
       toast({
         title: "Nome obrigatório",
         description: "Preencha seu nome.",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    if (password.length < 6) {
-      toast({
-        title: "Senha muito curta",
-        description: "A senha deve ter pelo menos 6 caracteres.",
         variant: "destructive"
       });
       return;
@@ -153,8 +144,6 @@ export const useAuthOperations = () => {
         errorMessage = 'Email já cadastrado. Tente fazer login.';
       } else if (error.message.includes('Invalid login credentials')) {
         errorMessage = 'Email ou senha incorretos.';
-      } else if (error.message.includes('Password should be')) {
-        errorMessage = 'A senha deve ter pelo menos 6 caracteres.';
       } else if (error.message.includes('Email not confirmed')) {
         errorMessage = 'Por favor, confirme seu email antes de fazer login.';
       }
