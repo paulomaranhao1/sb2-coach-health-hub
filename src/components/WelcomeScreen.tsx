@@ -6,7 +6,7 @@ interface WelcomeScreenProps {
   onContinue: () => void;
 }
 
-const WelcomeScreen = ({ onContinue }: WelcomeScrreenProps) => {
+const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
   const [showAnimation, setShowAnimation] = useState(false);
 
   useEffect(() => {

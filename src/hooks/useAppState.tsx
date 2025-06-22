@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -46,7 +47,7 @@ export const useAppState = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(initialState.userProfile);
   const [userStats, setUserStats] = useState<UserStats | null>(initialState.userStats);
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
-  const [theme, setTheme] = useState<string>(localStorage.getItem('theme') || initialState.theme);
+  const [theme, setTheme] = useState<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || initialState.theme);
   const [permission, setPermission] = useState<NotificationPermission>(Notification.permission);
   const { isSubscriptionLoading: subscriptionLoading, subscribe, unsubscribe } = usePushNotifications();
   const { toast } = useToast();
