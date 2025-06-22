@@ -77,18 +77,20 @@ export const useAppState = () => {
           setShowOnboarding(true);
         }
         
-        // Buscar stats de forma não bloqueante
-        supabase
-          .from('user_stats')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle()
-          .then(({ data: stats }) => {
-            if (stats) {
-              setUserStats(stats);
-            }
-          })
-          .catch(error => console.error('useAppState: Erro ao carregar stats:', error));
+        // Buscar stats de forma não bloqueante usando async/await
+        try {
+          const { data: stats } = await supabase
+            .from('user_stats')
+            .select('*')
+            .eq('user_id', user.id)
+            .maybeSingle();
+          
+          if (stats) {
+            setUserStats(stats);
+          }
+        } catch (error) {
+          console.error('useAppState: Erro ao carregar stats:', error);
+        }
       } else {
         console.log('useAppState: Perfil não encontrado');
         setShowWelcome(true);
