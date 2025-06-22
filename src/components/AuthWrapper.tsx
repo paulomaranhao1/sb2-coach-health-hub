@@ -14,21 +14,17 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('AuthWrapper: Iniciando verificação de autenticação...');
+    console.log('AuthWrapper: Iniciando verificação simples...');
 
-    // Limpar parâmetros do Lovable da URL imediatamente
-    const cleanUrl = () => {
-      const url = new URL(window.location.href);
-      if (url.searchParams.has('__lovable_token')) {
-        console.log('AuthWrapper: Removendo token Lovable da URL');
-        url.searchParams.delete('__lovable_token');
-        window.history.replaceState({}, '', url.toString());
-      }
-    };
+    // Limpar token Lovable imediatamente se presente
+    const url = new URL(window.location.href);
+    if (url.searchParams.has('__lovable_token')) {
+      console.log('AuthWrapper: Removendo token Lovable da URL');
+      url.searchParams.delete('__lovable_token');
+      window.history.replaceState({}, '', url.toString());
+    }
 
-    cleanUrl();
-
-    // Configurar listener de mudanças de auth
+    // Configurar listener primeiro
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
         console.log('AuthWrapper: Auth event:', event, !!newSession);
@@ -37,21 +33,21 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       }
     );
 
-    // Verificar sessão inicial apenas uma vez
-    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
-      console.log('AuthWrapper: Sessão inicial encontrada:', !!initialSession);
-      setSession(initialSession);
+    // Verificar sessão atual apenas uma vez
+    supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
+      console.log('AuthWrapper: Sessão atual:', !!currentSession);
+      setSession(currentSession);
       setLoading(false);
     }).catch((error) => {
-      console.error('AuthWrapper: Erro ao obter sessão:', error);
+      console.error('AuthWrapper: Erro ao verificar sessão:', error);
       setLoading(false);
     });
 
-    // Timeout de segurança mais curto
+    // Timeout de segurança - muito mais curto
     const timeout = setTimeout(() => {
-      console.log('AuthWrapper: Timeout de segurança ativado');
+      console.log('AuthWrapper: Timeout - assumindo não autenticado');
       setLoading(false);
-    }, 2000);
+    }, 1000);
 
     return () => {
       subscription.unsubscribe();
@@ -62,7 +58,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loading size="lg" text="Verificando autenticação..." />
+        <Loading size="lg" text="Carregando..." />
       </div>
     );
   }

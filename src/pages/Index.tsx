@@ -29,18 +29,16 @@ const Index = memo(() => {
     handleNavigateToHome
   } = useAppState();
 
-  // Inicialização única e simplificada
+  // Verificar perfil apenas uma vez após montagem
   useEffect(() => {
-    console.log('Index: Inicializando app...');
+    console.log('Index: Verificando se precisa carregar perfil...');
     
-    // Aguardar um pouco para garantir que a autenticação foi verificada
-    const timer = setTimeout(() => {
-      console.log('Index: Executando verificação de perfil...');
+    // Verificar se já temos dados ou se está em algum fluxo especial
+    if (!userProfile && !showWelcome && !showOnboarding && !showTutorial && !showNewFeatures && !isLoading) {
+      console.log('Index: Carregando perfil do usuário...');
       checkUserProfile();
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [checkUserProfile]);
+    }
+  }, [userProfile, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile]);
 
   // Renderizar telas especiais
   const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
@@ -51,7 +49,8 @@ const Index = memo(() => {
     showOnboarding,
     showTutorial,
     showNewFeatures,
-    isLoading
+    isLoading,
+    hasProfile: !!userProfile
   });
 
   if (shouldShowSpecialScreen) {

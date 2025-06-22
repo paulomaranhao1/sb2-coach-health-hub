@@ -20,7 +20,6 @@ export const useAppState = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [profileChecked, setProfileChecked] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || 'light');
 
   // Verificar tutorial via URL apenas uma vez
@@ -46,16 +45,10 @@ export const useAppState = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   }, []);
 
-  // Função otimizada para verificar perfil - executa apenas uma vez
+  // Função simplificada para verificar perfil - executa apenas quando chamada
   const checkUserProfile = useCallback(async () => {
-    if (profileChecked) {
-      console.log('useAppState: Perfil já verificado, pulando...');
-      return;
-    }
-
     console.log('useAppState: Verificando perfil do usuário...');
     setIsLoading(true);
-    setProfileChecked(true);
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
@@ -63,11 +56,13 @@ export const useAppState = () => {
       if (!user) {
         console.log('useAppState: Usuário não encontrado');
         setShowWelcome(true);
+        setIsLoading(false);
         return;
       }
 
       console.log('useAppState: Usuário encontrado:', user.email);
 
+      // Buscar perfil
       const { data: profileData } = await supabase
         .from('user_profiles')
         .select('*')
@@ -82,24 +77,20 @@ export const useAppState = () => {
           setShowOnboarding(true);
         }
         
-        // Carregar stats em background sem bloquear
-        setTimeout(async () => {
-          try {
-            const { data: stats } = await supabase
-              .from('user_stats')
-              .select('*')
-              .eq('user_id', user.id)
-              .maybeSingle();
-            
+        // Buscar stats de forma não bloqueante
+        supabase
+          .from('user_stats')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle()
+          .then(({ data: stats }) => {
             if (stats) {
               setUserStats(stats);
             }
-          } catch (error) {
-            console.error('useAppState: Erro ao carregar stats:', error);
-          }
-        }, 100);
+          })
+          .catch(error => console.error('useAppState: Erro ao carregar stats:', error));
       } else {
-        console.log('useAppState: Perfil não encontrado, mostrar welcome');
+        console.log('useAppState: Perfil não encontrado');
         setShowWelcome(true);
       }
     } catch (error) {
@@ -112,7 +103,7 @@ export const useAppState = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [profileChecked, toast]);
+  }, [toast]);
 
   // Handlers otimizados
   const handleOnboardingComplete = useCallback(() => {

@@ -11,14 +11,14 @@ export const useAuthOperations = () => {
     setLoading(true);
     
     try {
-      // URL base limpa sem parâmetros do Lovable
-      const baseUrl = window.location.origin + window.location.pathname;
-      console.log('useAuthOperations: URL de redirect:', baseUrl);
+      // URL limpa sem parâmetros
+      const redirectTo = window.location.origin;
+      console.log('useAuthOperations: URL de redirect:', redirectTo);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: baseUrl,
+          redirectTo: redirectTo,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -31,18 +31,17 @@ export const useAuthOperations = () => {
         throw error;
       }
       
-      console.log('useAuthOperations: Google Auth iniciado com sucesso');
+      console.log('useAuthOperations: Google Auth iniciado');
       
     } catch (error: any) {
       console.error('useAuthOperations: Erro na autenticação Google:', error);
       toast({
-        title: "Erro na autenticação com Google",
+        title: "Erro na autenticação",
         description: error.message || "Erro desconhecido",
         variant: "destructive"
       });
       setLoading(false);
     }
-    // Não setLoading(false) aqui pois o usuário será redirecionado
   };
 
   const handleEmailAuth = async (
@@ -83,11 +82,7 @@ export const useAuthOperations = () => {
         
         if (error) throw error;
         
-        console.log('useAuthOperations: Login realizado com sucesso');
-        toast({
-          title: "Login realizado!",
-          description: "Redirecionando...",
-        });
+        console.log('useAuthOperations: Login realizado');
         
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -95,7 +90,7 @@ export const useAuthOperations = () => {
           password: password.trim(),
           options: {
             data: { name: name.trim() },
-            emailRedirectTo: window.location.origin + window.location.pathname
+            emailRedirectTo: window.location.origin
           }
         });
         
@@ -131,7 +126,6 @@ export const useAuthOperations = () => {
       });
       setLoading(false);
     }
-    // Não setLoading(false) no sucesso pois haverá redirecionamento
   };
 
   const handleMagicLink = async (email: string) => {
