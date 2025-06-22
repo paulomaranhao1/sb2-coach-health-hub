@@ -5,7 +5,8 @@ import {
   Bell, 
   MessageCircle, 
   Trophy, 
-  User
+  User,
+  Clock
 } from "lucide-react";
 
 export const tutorialSteps = [
@@ -13,7 +14,7 @@ export const tutorialSteps = [
     icon: Home,
     title: "Bem-vindo ao SB2coach.ai! 🎉",
     description: "Seu companheiro inteligente para emagrecimento saudável",
-    content: "Aqui você vai acompanhar sua jornada de transformação com o SB2 TURBO. Vamos te mostrar como usar todas as funcionalidades!",
+    content: "Aqui você vai acompanhar sua jornada de transformação com o SB2 TURBO. Vamos te mostrar as principais funcionalidades!",
     highlight: "Tela Inicial",
     color: "bg-gradient-to-r from-red-500 to-red-600"
   },
@@ -35,7 +36,7 @@ export const tutorialSteps = [
   },
   {
     icon: Bell,
-    title: "Lembretes Inteligentes 🔔",
+    title: "Lembretes de Suplemento 🔔",
     description: "Configure seus horários",
     content: "Na aba 'Suplemento', você pode configurar os horários dos lembretes para nunca esquecer de tomar suas cápsulas.",
     highlight: "Aba 'Suplemento'",
@@ -43,9 +44,9 @@ export const tutorialSteps = [
   },
   {
     icon: MessageCircle,
-    title: "Chat IA Personalizado 🤖",
-    description: "Seu coach pessoal 24/7",
-    content: "Converse com nossa IA especializada em emagrecimento! Tire dúvidas, peça dicas personalizadas e receba orientações.",
+    title: "Chat com IA 🤖",
+    description: "Seu coach pessoal disponível",
+    content: "Converse com nossa IA! Tire dúvidas, peça dicas e receba orientações sobre emagrecimento e uso do SB2 TURBO.",
     highlight: "Aba 'Chat IA'",
     color: "bg-gradient-to-r from-indigo-500 to-indigo-600"
   },
@@ -58,10 +59,18 @@ export const tutorialSteps = [
     color: "bg-gradient-to-r from-yellow-500 to-orange-500"
   },
   {
+    icon: Clock,
+    title: "Jejum Intermitente ⏰",
+    description: "Acompanhe seu jejum",
+    content: "Configure e monitore seus períodos de jejum intermitente com timer e estatísticas detalhadas.",
+    highlight: "Aba 'Jejum'",
+    color: "bg-gradient-to-r from-teal-500 to-cyan-600"
+  },
+  {
     icon: User,
     title: "Seu Perfil 👤",
-    description: "Dados pessoais e configurações",
-    content: "Visualize e edite suas informações, acompanhe estatísticas detalhadas e configure preferências do app.",
+    description: "Dados pessoais e estatísticas",
+    content: "Visualize suas informações, acompanhe estatísticas detalhadas e configure preferências do app.",
     highlight: "Aba 'Perfil'",
     color: "bg-gradient-to-r from-pink-500 to-rose-600"
   }

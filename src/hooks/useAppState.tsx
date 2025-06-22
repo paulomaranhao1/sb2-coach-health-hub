@@ -115,15 +115,15 @@ export const useAppState = () => {
   }, []);
 
   const handleTutorialComplete = useCallback(() => {
-    console.log('useAppState: Tutorial completado');
+    console.log('useAppState: Tutorial completado - indo para app principal');
     setShowTutorial(false);
-    setShowNewFeatures(true);
+    // Não mostrar novidades automaticamente - apenas ir para o app principal
   }, []);
 
   const handleTutorialSkip = useCallback(() => {
-    console.log('useAppState: Tutorial pulado');
+    console.log('useAppState: Tutorial pulado - indo para app principal');
     setShowTutorial(false);
-    setShowNewFeatures(true);
+    // Não mostrar novidades automaticamente - apenas ir para o app principal
   }, []);
 
   const handleTabChange = useCallback((tab: string) => {

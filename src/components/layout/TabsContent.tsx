@@ -14,6 +14,7 @@ import MotivationalGreeting from "@/components/MotivationalGreeting";
 import ComingSoonFeatures from "@/components/ComingSoonFeatures";
 import StatisticsOverview from "@/components/statistics/StatisticsOverview";
 import CalorieCounterTab from "@/components/CalorieCounterTab";
+import NewFeaturesScreen from "@/components/NewFeaturesScreen";
 import Roadmap from "../../pages/Roadmap";
 
 interface TabsContentProps {
@@ -75,6 +76,10 @@ const TabsContentComponent = ({
 
       <TabsContent value="settings">
         <AppSettings />
+      </TabsContent>
+
+      <TabsContent value="new-features">
+        <NewFeaturesScreen onBack={() => setActiveTab('home')} />
       </TabsContent>
     </Tabs>
   );
