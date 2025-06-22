@@ -29,10 +29,15 @@ const Index = memo(() => {
     handleNavigateToHome
   } = useAppState();
 
-  // Inicialização única com cleanup
+  // Inicialização única com delay para sincronização com AuthWrapper
   useEffect(() => {
-    console.log('Index: Componente montado, verificando perfil...');
-    checkUserProfile();
+    console.log('Index: Componente montado, aguardando e verificando perfil...');
+    // Pequeno delay para garantir que o AuthWrapper já processou a sessão
+    const timer = setTimeout(() => {
+      checkUserProfile();
+    }, 200);
+    
+    return () => clearTimeout(timer);
   }, [checkUserProfile]);
 
   // Renderizar telas especiais (welcome, onboarding, tutorial, etc.)

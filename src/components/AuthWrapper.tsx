@@ -23,6 +23,16 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       try {
         console.log('AuthWrapper: Verificando sessão inicial...');
         
+        // Verificar se estamos em um callback do OAuth
+        const isOAuthCallback = window.location.hash.includes('access_token') || 
+                                window.location.search.includes('code=');
+        
+        if (isOAuthCallback) {
+          console.log('AuthWrapper: Detectado callback OAuth, aguardando processamento...');
+          // Aguardar um pouco para o Supabase processar o callback
+          await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+        
         // Verificar sessão atual
         const { data: { session: currentSession }, error } = await supabase.auth.getSession();
         
@@ -71,7 +81,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
         setInitialized(true);
         setLoading(false);
       }
-    }, 5000); // 5 segundos de timeout
+    }, 3000); // Reduzido para 3 segundos
 
     return () => {
       isMounted = false;

@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -111,8 +112,11 @@ export const useAppState = () => {
     }
   }, [getCache, setCache, hasCache]);
 
-  // Função principal para verificar perfil
+  // Função principal para verificar perfil - só executa se o usuário estiver autenticado
   const checkUserProfile = useCallback(async () => {
+    // Aguardar um pouco para garantir que o AuthWrapper processou a sessão
+    await new Promise(resolve => setTimeout(resolve, 100));
+    
     if (!isMountedRef.current || initialized || profileLoadingRef.current) {
       return;
     }
@@ -124,12 +128,15 @@ export const useAppState = () => {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user || !isMountedRef.current) {
+        console.log('useAppState: Usuário não encontrado ou componente desmontado');
         if (isMountedRef.current) {
           setIsLoading(false);
           setInitialized(true);
         }
         return;
       }
+
+      console.log('useAppState: Usuário encontrado, carregando perfil...');
 
       const cacheKey = `user_profile_${user.id}`;
       let profile = null;
@@ -165,19 +172,25 @@ export const useAppState = () => {
       // Lógica de navegação
       if (isMountedRef.current) {
         if (!profile) {
+          console.log('useAppState: Perfil não encontrado, mostrando welcome');
           setShowWelcome(true);
           setShowOnboarding(false);
           setShowTutorial(false);
           setShowNewFeatures(false);
         } else if (!profile.onboarding_completed) {
+          console.log('useAppState: Onboarding não completado');
           setShowWelcome(false);
           setShowOnboarding(true);
           setShowTutorial(false);
           setShowNewFeatures(false);
         } else {
+          console.log('useAppState: Perfil completo, mostrando app principal');
           setShowWelcome(false);
           setShowOnboarding(false);
-          setShowTutorial(false);
+          // Não resetar tutorial se foi ativado via URL
+          if (!showTutorial) {
+            setShowTutorial(false);
+          }
           setShowNewFeatures(false);
         }
       }
@@ -191,7 +204,7 @@ export const useAppState = () => {
       }
       profileLoadingRef.current = false;
     }
-  }, [initialized, loadUserStats, getCache, setCache, hasCache]);
+  }, [initialized, loadUserStats, getCache, setCache, hasCache, showTutorial]);
 
   // Handlers memoizados
   const handleOnboardingComplete = useCallback(async () => {

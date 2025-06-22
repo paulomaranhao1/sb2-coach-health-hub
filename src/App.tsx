@@ -23,15 +23,15 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <AuthWrapper>
-          <BrowserRouter>
+        <BrowserRouter>
+          <AuthWrapper>
             <Routes>
               <Route path="/" element={<Index />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>
-          </BrowserRouter>
-        </AuthWrapper>
+          </AuthWrapper>
+        </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
   </div>
