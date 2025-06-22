@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -8,18 +7,18 @@ export const useAuthOperations = () => {
   const { toast } = useToast();
 
   const handleGoogleAuth = async () => {
-    console.log('useAuthOperations: Google Auth otimizado iniciando...');
+    console.log('useAuthOperations: Iniciando Google Auth...');
     setLoading(true);
     
     try {
-      // Limpar URL de parâmetros do Lovable para evitar conflitos
-      const cleanUrl = window.location.origin + window.location.pathname;
-      console.log('useAuthOperations: Redirect URL limpa:', cleanUrl);
+      // URL base limpa sem parâmetros do Lovable
+      const baseUrl = window.location.origin + window.location.pathname;
+      console.log('useAuthOperations: URL de redirect:', baseUrl);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: cleanUrl,
+          redirectTo: baseUrl,
           queryParams: {
             access_type: 'offline',
             prompt: 'consent',
@@ -38,12 +37,12 @@ export const useAuthOperations = () => {
       console.error('useAuthOperations: Erro na autenticação Google:', error);
       toast({
         title: "Erro na autenticação com Google",
-        description: error.message,
+        description: error.message || "Erro desconhecido",
         variant: "destructive"
       });
-    } finally {
       setLoading(false);
     }
+    // Não setLoading(false) aqui pois o usuário será redirecionado
   };
 
   const handleEmailAuth = async (
@@ -53,7 +52,7 @@ export const useAuthOperations = () => {
     isLogin: boolean,
     onEmailVerification?: () => void
   ) => {
-    console.log('useAuthOperations: Email auth otimizado -', isLogin ? 'login' : 'signup');
+    console.log('useAuthOperations: Email auth -', isLogin ? 'login' : 'signup');
     
     if (!email?.trim() || !password?.trim()) {
       toast({
@@ -87,7 +86,7 @@ export const useAuthOperations = () => {
         console.log('useAuthOperations: Login realizado com sucesso');
         toast({
           title: "Login realizado!",
-          description: "Bem-vindo!",
+          description: "Redirecionando...",
         });
         
       } else {
@@ -96,7 +95,7 @@ export const useAuthOperations = () => {
           password: password.trim(),
           options: {
             data: { name: name.trim() },
-            emailRedirectTo: window.location.origin
+            emailRedirectTo: window.location.origin + window.location.pathname
           }
         });
         
@@ -104,6 +103,7 @@ export const useAuthOperations = () => {
         
         if (data.user && !data.user.email_confirmed_at && onEmailVerification) {
           onEmailVerification();
+          return;
         }
         
         toast({
@@ -129,9 +129,9 @@ export const useAuthOperations = () => {
         description: errorMessage,
         variant: "destructive"
       });
-    } finally {
       setLoading(false);
     }
+    // Não setLoading(false) no sucesso pois haverá redirecionamento
   };
 
   const handleMagicLink = async (email: string) => {

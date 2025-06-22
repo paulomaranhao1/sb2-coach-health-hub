@@ -29,14 +29,15 @@ const Index = memo(() => {
     handleNavigateToHome
   } = useAppState();
 
-  // Inicialização otimizada - aguarda menos tempo
+  // Inicialização única e simplificada
   useEffect(() => {
-    console.log('Index: Inicializando app otimizado...');
+    console.log('Index: Inicializando app...');
     
+    // Aguardar um pouco para garantir que a autenticação foi verificada
     const timer = setTimeout(() => {
-      console.log('Index: Verificando perfil do usuário...');
+      console.log('Index: Executando verificação de perfil...');
       checkUserProfile();
-    }, 100); // Reduzido de 500ms para 100ms
+    }, 500);
 
     return () => clearTimeout(timer);
   }, [checkUserProfile]);

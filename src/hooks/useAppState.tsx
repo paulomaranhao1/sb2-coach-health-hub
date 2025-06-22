@@ -20,8 +20,9 @@ export const useAppState = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [profileChecked, setProfileChecked] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || 'light');
-  
+
   // Verificar tutorial via URL apenas uma vez
   useEffect(() => {
     const shouldShowTutorial = searchParams.get('showTutorial');
@@ -31,7 +32,7 @@ export const useAppState = () => {
       // Limpar URL
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.delete('showTutorial');
-      setSearchParams(newSearchParams);
+      setSearchParams(newSearchParams, { replace: true });
     }
   }, [searchParams, setSearchParams]);
 
@@ -45,19 +46,27 @@ export const useAppState = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   }, []);
 
-  // Função simplificada para verificar perfil - só executa quando solicitado
+  // Função otimizada para verificar perfil - executa apenas uma vez
   const checkUserProfile = useCallback(async () => {
+    if (profileChecked) {
+      console.log('useAppState: Perfil já verificado, pulando...');
+      return;
+    }
+
     console.log('useAppState: Verificando perfil do usuário...');
     setIsLoading(true);
+    setProfileChecked(true);
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
         console.log('useAppState: Usuário não encontrado');
-        setIsLoading(false);
+        setShowWelcome(true);
         return;
       }
+
+      console.log('useAppState: Usuário encontrado:', user.email);
 
       const { data: profileData } = await supabase
         .from('user_profiles')
@@ -75,26 +84,35 @@ export const useAppState = () => {
         
         // Carregar stats em background sem bloquear
         setTimeout(async () => {
-          const { data: stats } = await supabase
-            .from('user_stats')
-            .select('*')
-            .eq('user_id', user.id)
-            .maybeSingle();
-          
-          if (stats) {
-            setUserStats(stats);
+          try {
+            const { data: stats } = await supabase
+              .from('user_stats')
+              .select('*')
+              .eq('user_id', user.id)
+              .maybeSingle();
+            
+            if (stats) {
+              setUserStats(stats);
+            }
+          } catch (error) {
+            console.error('useAppState: Erro ao carregar stats:', error);
           }
-        }, 0);
+        }, 100);
       } else {
         console.log('useAppState: Perfil não encontrado, mostrar welcome');
         setShowWelcome(true);
       }
     } catch (error) {
       console.error('useAppState: Erro ao verificar perfil:', error);
+      toast({
+        title: "Erro",
+        description: "Erro ao carregar dados do usuário",
+        variant: "destructive"
+      });
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [profileChecked, toast]);
 
   // Handlers otimizados
   const handleOnboardingComplete = useCallback(() => {
@@ -118,15 +136,15 @@ export const useAppState = () => {
   const handleTabChange = useCallback((tab: string) => {
     console.log('useAppState: Mudando para tab:', tab);
     setActiveTab(tab);
-    setSearchParams({ tab });
+    setSearchParams({ tab }, { replace: true });
     setShowMobileMenu(false);
   }, [setSearchParams]);
 
   const handleNavigateToHome = useCallback(() => {
     console.log('useAppState: Navegando para home');
-    navigate('/');
+    navigate('/', { replace: true });
     setActiveTab('home');
-    setSearchParams({});
+    setSearchParams({}, { replace: true });
   }, [navigate, setSearchParams]);
 
   // Sincronizar tab com URL
