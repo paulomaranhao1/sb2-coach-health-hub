@@ -14,56 +14,35 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('AuthWrapper: Iniciando configuração de autenticação...');
+    console.log('AuthWrapper: Iniciando sistema de autenticação otimizado...');
 
-    // Configurar listener de auth state change
+    // Configurar listener primeiro
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, newSession) => {
+      (event, newSession) => {
         console.log('AuthWrapper: Auth event:', event);
-        console.log('AuthWrapper: Nova sessão:', !!newSession);
-        
         setSession(newSession);
-        
-        // Finalizar loading para todos os eventos relevantes
-        if (event !== 'TOKEN_REFRESHED') {
-          setLoading(false);
-        }
+        setLoading(false);
       }
     );
 
-    // Verificar sessão inicial apenas uma vez
-    const checkInitialSession = async () => {
-      try {
-        const { data: { session: initialSession }, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('AuthWrapper: Erro ao verificar sessão inicial:', error);
-        } else {
-          console.log('AuthWrapper: Sessão inicial encontrada:', !!initialSession);
-          setSession(initialSession);
-        }
-      } catch (error) {
-        console.error('AuthWrapper: Erro na verificação inicial:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkInitialSession();
-
-    // Timeout de segurança reduzido
-    const timeout = setTimeout(() => {
-      console.log('AuthWrapper: Timeout de segurança atingido');
+    // Verificar sessão inicial uma única vez
+    supabase.auth.getSession().then(({ data: { session: initialSession } }) => {
+      console.log('AuthWrapper: Sessão inicial:', !!initialSession);
+      setSession(initialSession);
       setLoading(false);
-    }, 1000);
+    });
+
+    // Timeout muito menor para performance
+    const timeout = setTimeout(() => {
+      console.log('AuthWrapper: Timeout atingido, finalizando loading');
+      setLoading(false);
+    }, 500);
 
     return () => {
       subscription.unsubscribe();
       clearTimeout(timeout);
     };
   }, []);
-
-  console.log('AuthWrapper: Estado - loading:', loading, 'session:', !!session);
 
   if (loading) {
     return (

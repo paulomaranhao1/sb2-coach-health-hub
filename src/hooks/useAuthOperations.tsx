@@ -8,17 +8,22 @@ export const useAuthOperations = () => {
   const { toast } = useToast();
 
   const handleGoogleAuth = async () => {
-    console.log('useAuthOperations: Iniciando Google Auth...');
+    console.log('useAuthOperations: Google Auth otimizado iniciando...');
     setLoading(true);
+    
     try {
-      // Usar URL base limpa sem parâmetros do Lovable
-      const baseUrl = window.location.origin;
-      console.log('useAuthOperations: Redirect URL:', baseUrl);
+      // Limpar URL de parâmetros do Lovable para evitar conflitos
+      const cleanUrl = window.location.origin + window.location.pathname;
+      console.log('useAuthOperations: Redirect URL limpa:', cleanUrl);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: baseUrl,
+          redirectTo: cleanUrl,
+          queryParams: {
+            access_type: 'offline',
+            prompt: 'consent',
+          }
         }
       });
       
@@ -41,47 +46,6 @@ export const useAuthOperations = () => {
     }
   };
 
-  const handleMagicLink = async (email: string) => {
-    if (!email?.trim()) {
-      toast({
-        title: "Email necessário",
-        description: "Por favor, insira seu email.",
-        variant: "destructive"
-      });
-      return false;
-    }
-
-    console.log('useAuthOperations: Enviando Magic Link para:', email);
-    setLoading(true);
-    try {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email.trim(),
-        options: {
-          emailRedirectTo: `${window.location.origin}`,
-        }
-      });
-      
-      if (error) throw error;
-      
-      console.log('useAuthOperations: Magic Link enviado com sucesso');
-      toast({
-        title: "Link enviado!",
-        description: "Verifique seu email.",
-      });
-      return true;
-    } catch (error: any) {
-      console.error('useAuthOperations: Erro Magic Link:', error);
-      toast({
-        title: "Erro ao enviar link",
-        description: error.message,
-        variant: "destructive"
-      });
-      return false;
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const handleEmailAuth = async (
     email: string, 
     password: string, 
@@ -89,9 +53,8 @@ export const useAuthOperations = () => {
     isLogin: boolean,
     onEmailVerification?: () => void
   ) => {
-    console.log('useAuthOperations: Iniciando', isLogin ? 'login' : 'signup', 'com email:', email);
+    console.log('useAuthOperations: Email auth otimizado -', isLogin ? 'login' : 'signup');
     
-    // Validações simples
     if (!email?.trim() || !password?.trim()) {
       toast({
         title: "Campos obrigatórios",
@@ -114,16 +77,12 @@ export const useAuthOperations = () => {
 
     try {
       if (isLogin) {
-        console.log('useAuthOperations: Fazendo login...');
         const { error } = await supabase.auth.signInWithPassword({
           email: email.trim(),
           password: password.trim()
         });
         
-        if (error) {
-          console.error('useAuthOperations: Erro no login:', error);
-          throw error;
-        }
+        if (error) throw error;
         
         console.log('useAuthOperations: Login realizado com sucesso');
         toast({
@@ -132,28 +91,19 @@ export const useAuthOperations = () => {
         });
         
       } else {
-        console.log('useAuthOperations: Criando conta...');
         const { data, error } = await supabase.auth.signUp({
           email: email.trim(),
           password: password.trim(),
           options: {
             data: { name: name.trim() },
-            emailRedirectTo: `${window.location.origin}`
+            emailRedirectTo: window.location.origin
           }
         });
         
-        if (error) {
-          console.error('useAuthOperations: Erro no signup:', error);
-          throw error;
-        }
+        if (error) throw error;
         
-        console.log('useAuthOperations: Conta criada:', !!data.user);
-        
-        if (data.user && !data.user.email_confirmed_at) {
-          console.log('useAuthOperations: Email não confirmado, mostrando tela de verificação');
-          if (onEmailVerification) {
-            onEmailVerification();
-          }
+        if (data.user && !data.user.email_confirmed_at && onEmailVerification) {
+          onEmailVerification();
         }
         
         toast({
@@ -184,6 +134,44 @@ export const useAuthOperations = () => {
     }
   };
 
+  const handleMagicLink = async (email: string) => {
+    if (!email?.trim()) {
+      toast({
+        title: "Email necessário",
+        description: "Por favor, insira seu email.",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    setLoading(true);
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: email.trim(),
+        options: {
+          emailRedirectTo: window.location.origin,
+        }
+      });
+      
+      if (error) throw error;
+      
+      toast({
+        title: "Link enviado!",
+        description: "Verifique seu email.",
+      });
+      return true;
+    } catch (error: any) {
+      toast({
+        title: "Erro ao enviar link",
+        description: error.message,
+        variant: "destructive"
+      });
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleForgotPassword = async (email: string) => {
     if (!email?.trim()) {
       toast({
@@ -194,7 +182,6 @@ export const useAuthOperations = () => {
       return false;
     }
 
-    console.log('useAuthOperations: Enviando reset de senha para:', email);
     setLoading(true);
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
@@ -203,14 +190,12 @@ export const useAuthOperations = () => {
       
       if (error) throw error;
       
-      console.log('useAuthOperations: Reset de senha enviado');
       toast({
         title: "Email enviado!",
         description: "Verifique seu email."
       });
       return true;
     } catch (error: any) {
-      console.error('useAuthOperations: Erro no reset:', error);
       toast({
         title: "Erro",
         description: error.message,

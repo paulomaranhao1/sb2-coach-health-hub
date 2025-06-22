@@ -29,14 +29,14 @@ const Index = memo(() => {
     handleNavigateToHome
   } = useAppState();
 
-  // Inicialização única - aguarda um pouco para a sessão se estabelecer
+  // Inicialização otimizada - aguarda menos tempo
   useEffect(() => {
-    console.log('Index: Aguardando sessão se estabelecer...');
+    console.log('Index: Inicializando app otimizado...');
     
     const timer = setTimeout(() => {
       console.log('Index: Verificando perfil do usuário...');
       checkUserProfile();
-    }, 500); // Aguarda 500ms para a sessão se estabelecer
+    }, 100); // Reduzido de 500ms para 100ms
 
     return () => clearTimeout(timer);
   }, [checkUserProfile]);
@@ -44,7 +44,14 @@ const Index = memo(() => {
   // Renderizar telas especiais
   const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
 
-  console.log('Index: Renderizando - shouldShowSpecialScreen:', shouldShowSpecialScreen);
+  console.log('Index: Estado atual -', {
+    shouldShowSpecialScreen,
+    showWelcome,
+    showOnboarding,
+    showTutorial,
+    showNewFeatures,
+    isLoading
+  });
 
   if (shouldShowSpecialScreen) {
     return (

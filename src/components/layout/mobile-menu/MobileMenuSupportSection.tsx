@@ -19,15 +19,17 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
   };
 
   const handleTutorial = () => {
-    // Fechar o menu primeiro
+    console.log('MobileMenu: Iniciando tutorial...');
     setShowMobileMenu(false);
     
-    // Forçar o tutorial a aparecer recarregando a página com um parâmetro
-    const currentUrl = new URL(window.location.href);
-    currentUrl.searchParams.set('showTutorial', 'true');
-    window.location.href = currentUrl.toString();
+    // Forçar reload com parâmetro de tutorial de forma mais eficiente
+    const url = new URL(window.location.href);
+    // Limpar todos os parâmetros existentes primeiro
+    url.search = '';
+    url.searchParams.set('showTutorial', 'true');
     
-    toastFeedback.info('Iniciando tutorial...');
+    console.log('MobileMenu: Redirecionando para:', url.toString());
+    window.location.href = url.toString();
   };
 
   const handleLogout = async () => {
@@ -50,7 +52,6 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
       window.location.href = mailtoLink;
       toastFeedback.info('Abrindo seu cliente de email...');
     } catch (error) {
-      // Fallback para copiar email
       navigator.clipboard.writeText(email).then(() => {
         toastFeedback.success(`Email copiado: ${email}`);
       }).catch(() => {
