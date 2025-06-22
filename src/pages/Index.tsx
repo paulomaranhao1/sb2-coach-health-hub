@@ -14,9 +14,8 @@ const Index = () => {
     showNewFeatures,
     setShowNewFeatures,
     activeTab,
-    setActiveTab,
-    showMobileMenu,
     setShowMobileMenu,
+    showMobileMenu,
     userProfile,
     userStats,
     isLoading,
@@ -30,29 +29,11 @@ const Index = () => {
     handleNavigateToHome
   } = useAppState();
 
+  // Inicialização única
   useEffect(() => {
     console.log('Index: Componente montado, verificando perfil...');
     checkUserProfile();
-    
-    // Event listeners para comunicação entre componentes
-    const handleShowTutorial = () => {
-      console.log('Index: Evento showTutorial recebido');
-      // A lógica de tutorial é controlada pelo estado no useAppState
-    };
-    
-    const handleNavigateToSupplements = () => {
-      console.log('Index: Navegando para suplementos');
-      handleTabChange('supplement');
-    };
-    
-    window.addEventListener('showTutorial', handleShowTutorial);
-    window.addEventListener('navigateToSupplements', handleNavigateToSupplements);
-    
-    return () => {
-      window.removeEventListener('showTutorial', handleShowTutorial);
-      window.removeEventListener('navigateToSupplements', handleNavigateToSupplements);
-    };
-  }, [checkUserProfile, handleTabChange]);
+  }, []); // Array vazio para executar apenas uma vez
 
   // Renderizar telas especiais (welcome, onboarding, tutorial, etc.)
   const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
@@ -87,7 +68,7 @@ const Index = () => {
     >
       <TabsContentComponent
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={handleTabChange}
         userProfile={userProfile}
         userStats={userStats}
         onNavigateToHome={handleNavigateToHome}

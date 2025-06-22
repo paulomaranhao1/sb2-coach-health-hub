@@ -34,6 +34,9 @@ const initialState: AppState = {
 export const useAppState = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  
+  // Estados básicos
   const [showWelcome, setShowWelcome] = useState(initialState.showWelcome);
   const [showOnboarding, setShowOnboarding] = useState(initialState.showOnboarding);
   const [showTutorial, setShowTutorial] = useState(initialState.showTutorial);
@@ -44,18 +47,20 @@ export const useAppState = () => {
   const [userStats, setUserStats] = useState<UserStats | null>(initialState.userStats);
   const [isLoading, setIsLoading] = useState(initialState.isLoading);
   const [theme, setTheme] = useState<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || initialState.theme);
-  const { toast } = useToast();
+  const [initialized, setInitialized] = useState(false);
 
+  // Controle de tema
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
+  const toggleTheme = useCallback(() => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  }, []);
 
-  const loadUserStats = async (userId: string) => {
+  // Função para carregar stats do usuário
+  const loadUserStats = useCallback(async (userId: string) => {
     try {
       console.log('useAppState: Carregando estatísticas do usuário...');
       const { data: stats, error } = await supabase
@@ -74,9 +79,12 @@ export const useAppState = () => {
     } catch (error) {
       console.error('useAppState: Erro ao carregar stats:', error);
     }
-  };
+  }, []);
 
-  const checkUserProfile = async () => {
+  // Função principal para verificar perfil
+  const checkUserProfile = useCallback(async () => {
+    if (initialized) return; // Evita múltiplas execuções
+    
     console.log('useAppState: Verificando perfil do usuário...');
     setIsLoading(true);
     
@@ -86,6 +94,7 @@ export const useAppState = () => {
       if (!user) {
         console.log('useAppState: Usuário não logado');
         setIsLoading(false);
+        setInitialized(true);
         return;
       }
 
@@ -101,6 +110,7 @@ export const useAppState = () => {
       if (error) {
         console.error('useAppState: Erro ao buscar perfil:', error);
         setIsLoading(false);
+        setInitialized(true);
         return;
       }
 
@@ -137,50 +147,53 @@ export const useAppState = () => {
       console.error('useAppState: Erro ao verificar perfil:', error);
     } finally {
       setIsLoading(false);
+      setInitialized(true);
     }
-  };
+  }, [initialized, loadUserStats]);
 
-  const handleOnboardingComplete = async () => {
+  // Handlers para fluxo de telas
+  const handleOnboardingComplete = useCallback(async () => {
     console.log('useAppState: Onboarding completo');
     setShowOnboarding(false);
     setShowTutorial(true);
-    await checkUserProfile();
-  };
+  }, []);
 
-  const handleTutorialComplete = async () => {
+  const handleTutorialComplete = useCallback(async () => {
     console.log('useAppState: Tutorial completo');
     setShowTutorial(false);
     setShowNewFeatures(true);
-  };
+  }, []);
 
-  const handleTutorialSkip = async () => {
+  const handleTutorialSkip = useCallback(async () => {
     console.log('useAppState: Tutorial pulado');
     setShowTutorial(false);
     setShowNewFeatures(true);
-  };
+  }, []);
 
-  const handleTabChange = (tab: string) => {
+  // Handler para mudança de aba
+  const handleTabChange = useCallback((tab: string) => {
     console.log('useAppState: Mudando para aba:', tab);
     setActiveTab(tab);
     setSearchParams({ tab });
-    setShowMobileMenu(false); // Fechar menu móvel ao trocar aba
-  };
+    setShowMobileMenu(false);
+  }, [setSearchParams]);
 
-  const handleNavigateToHome = () => {
+  // Handler para navegação home
+  const handleNavigateToHome = useCallback(() => {
     console.log('useAppState: Navegando para home');
     navigate('/');
     setActiveTab('home');
     setSearchParams({});
-  };
+  }, [navigate, setSearchParams]);
 
-  // Sincronizar tab com URL params
+  // Sincronizar tab com URL params (apenas uma vez)
   useEffect(() => {
     const tab = searchParams.get('tab');
     if (tab && tab !== activeTab) {
       console.log('useAppState: Sincronizando tab da URL:', tab);
       setActiveTab(tab);
     }
-  }, [searchParams, activeTab]);
+  }, [searchParams]); // Removido activeTab da dependência para evitar loop
 
   return {
     // Estados principais
