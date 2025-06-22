@@ -6,13 +6,24 @@ interface WelcomeScreenProps {
   onContinue: () => void;
 }
 
-const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
+const WelcomeScreen = ({ onContinue }: WelcomeScrreenProps) => {
   const [showAnimation, setShowAnimation] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowAnimation(true), 100);
+    console.log('WelcomeScreen: Montado');
+    const timer = setTimeout(() => {
+      setShowAnimation(true);
+      console.log('WelcomeScreen: Animação ativada');
+    }, 100);
     return () => clearTimeout(timer);
   }, []);
+
+  const handleContinue = () => {
+    console.log('WelcomeScreen: Botão "Começar Jornada" clicado');
+    onContinue();
+  };
+
+  console.log('WelcomeScreen: Renderizando - showAnimation:', showAnimation);
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden bg-gradient-to-br from-red-600 to-red-800">
@@ -27,6 +38,8 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
               src="/lovable-uploads/f8f1e84e-87a5-402c-b38e-56ddaf65fcc8.png"
               alt="SB2coach.ai - Seu companheiro de emagrecimento"
               className="w-full h-screen object-cover sm:object-contain sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl sm:h-auto sm:max-h-[70vh]"
+              onLoad={() => console.log('WelcomeScreen: Imagem carregada')}
+              onError={() => console.log('WelcomeScreen: Erro ao carregar imagem')}
             />
           </div>
         </div>
@@ -37,7 +50,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
             showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
             <Button 
-              onClick={onContinue}
+              onClick={handleContinue}
               className="w-full bg-white/95 hover:bg-white text-red-600 font-semibold py-3 sm:py-4 px-6 sm:px-8 rounded-xl shadow-2xl border-0 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl backdrop-blur-sm relative overflow-hidden group text-base sm:text-lg"
             >
               <span className="relative z-10">Começar Jornada</span>
@@ -51,7 +64,7 @@ const WelcomeScreen = ({ onContinue }: WelcomeScreenProps) => {
             showAnimation ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
           }`}>
             <Button 
-              onClick={onContinue}
+              onClick={handleContinue}
               className="w-full bg-white/95 hover:bg-white text-red-600 font-semibold py-4 px-6 rounded-xl shadow-2xl border-0 transform transition-all duration-300 hover:scale-105 hover:shadow-2xl backdrop-blur-sm relative overflow-hidden group text-lg"
             >
               <span className="relative z-10">Começar Jornada</span>
