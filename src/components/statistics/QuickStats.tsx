@@ -48,7 +48,7 @@ const QuickStats = memo(({ userProfile, userStats, weightHistory = [] }: QuickSt
       label: "Nível",
       value: userStats?.level || 1,
       color: "text-purple-600",
-      bg  Color: "bg-purple-50 dark:bg-purple-900/20"
+      bgColor: "bg-purple-50 dark:bg-purple-900/20"
     },
     {
       icon: Award,
