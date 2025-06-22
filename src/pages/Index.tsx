@@ -31,16 +31,18 @@ const Index = () => {
   } = useAppState();
 
   useEffect(() => {
+    console.log('Index: Componente montado, verificando perfil...');
     checkUserProfile();
     
-    // Listener para mostrar tutorial quando solicitado
+    // Event listeners para comunicação entre componentes
     const handleShowTutorial = () => {
-      // This would be handled by the tutorial state in useAppState
+      console.log('Index: Evento showTutorial recebido');
+      // A lógica de tutorial é controlada pelo estado no useAppState
     };
     
-    // Listener para navegar para suplementos
     const handleNavigateToSupplements = () => {
-      setActiveTab('supplement');
+      console.log('Index: Navegando para suplementos');
+      handleTabChange('supplement');
     };
     
     window.addEventListener('showTutorial', handleShowTutorial);
@@ -50,29 +52,30 @@ const Index = () => {
       window.removeEventListener('showTutorial', handleShowTutorial);
       window.removeEventListener('navigateToSupplements', handleNavigateToSupplements);
     };
-  }, []);
+  }, [checkUserProfile, handleTabChange]);
 
-  // Handle special screens (welcome, onboarding, tutorial, etc.)
-  const screenComponent = (
-    <AppScreens
-      showWelcome={showWelcome}
-      setShowWelcome={setShowWelcome}
-      showOnboarding={showOnboarding}
-      showTutorial={showTutorial}
-      showNewFeatures={showNewFeatures}
-      setShowNewFeatures={setShowNewFeatures}
-      isLoading={isLoading}
-      subscriptionLoading={false}
-      handleOnboardingComplete={handleOnboardingComplete}
-      handleTutorialComplete={handleTutorialComplete}
-      handleTutorialSkip={handleTutorialSkip}
-    />
-  );
+  // Renderizar telas especiais (welcome, onboarding, tutorial, etc.)
+  const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
 
-  if (screenComponent) {
-    return screenComponent;
+  if (shouldShowSpecialScreen) {
+    return (
+      <AppScreens
+        showWelcome={showWelcome}
+        setShowWelcome={setShowWelcome}
+        showOnboarding={showOnboarding}
+        showTutorial={showTutorial}
+        showNewFeatures={showNewFeatures}
+        setShowNewFeatures={setShowNewFeatures}
+        isLoading={isLoading}
+        subscriptionLoading={false}
+        handleOnboardingComplete={handleOnboardingComplete}
+        handleTutorialComplete={handleTutorialComplete}
+        handleTutorialSkip={handleTutorialSkip}
+      />
+    );
   }
 
+  // Renderizar app principal
   return (
     <AppLayout
       theme={theme}

@@ -55,6 +55,27 @@ export const useAppState = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
   };
 
+  const loadUserStats = async (userId: string) => {
+    try {
+      console.log('useAppState: Carregando estatísticas do usuário...');
+      const { data: stats, error } = await supabase
+        .from('user_stats')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle();
+
+      if (error) {
+        console.error('useAppState: Erro ao buscar stats:', error);
+        return;
+      }
+
+      console.log('useAppState: Stats carregadas:', !!stats);
+      setUserStats(stats);
+    } catch (error) {
+      console.error('useAppState: Erro ao carregar stats:', error);
+    }
+  };
+
   const checkUserProfile = async () => {
     console.log('useAppState: Verificando perfil do usuário...');
     setIsLoading(true);
@@ -70,6 +91,7 @@ export const useAppState = () => {
 
       console.log('useAppState: Usuário logado:', user.id);
 
+      // Carregar perfil
       const { data: profile, error } = await supabase
         .from('user_profiles')
         .select('*')
@@ -85,18 +107,30 @@ export const useAppState = () => {
       console.log('useAppState: Perfil encontrado:', !!profile);
       setUserProfile(profile);
 
-      // Lógica simples para determinar qual tela mostrar
+      // Carregar estatísticas se o perfil existir
+      if (profile) {
+        await loadUserStats(user.id);
+      }
+
+      // Lógica de navegação entre telas
       if (!profile) {
         console.log('useAppState: Sem perfil - mostrando welcome');
         setShowWelcome(true);
+        setShowOnboarding(false);
+        setShowTutorial(false);
+        setShowNewFeatures(false);
       } else if (!profile.onboarding_completed) {
         console.log('useAppState: Onboarding não completo');
         setShowWelcome(false);
         setShowOnboarding(true);
+        setShowTutorial(false);
+        setShowNewFeatures(false);
       } else {
         console.log('useAppState: Perfil completo - indo para app principal');
         setShowWelcome(false);
         setShowOnboarding(false);
+        setShowTutorial(false);
+        setShowNewFeatures(false);
       }
 
     } catch (error) {
@@ -126,23 +160,30 @@ export const useAppState = () => {
   };
 
   const handleTabChange = (tab: string) => {
+    console.log('useAppState: Mudando para aba:', tab);
     setActiveTab(tab);
     setSearchParams({ tab });
+    setShowMobileMenu(false); // Fechar menu móvel ao trocar aba
   };
-
-  useEffect(() => {
-    const tab = searchParams.get('tab');
-    if (tab) {
-      setActiveTab(tab);
-    }
-  }, [searchParams]);
 
   const handleNavigateToHome = () => {
+    console.log('useAppState: Navegando para home');
     navigate('/');
     setActiveTab('home');
+    setSearchParams({});
   };
 
+  // Sincronizar tab com URL params
+  useEffect(() => {
+    const tab = searchParams.get('tab');
+    if (tab && tab !== activeTab) {
+      console.log('useAppState: Sincronizando tab da URL:', tab);
+      setActiveTab(tab);
+    }
+  }, [searchParams, activeTab]);
+
   return {
+    // Estados principais
     showWelcome,
     setShowWelcome,
     showOnboarding,
@@ -153,19 +194,30 @@ export const useAppState = () => {
     setActiveTab,
     showMobileMenu,
     setShowMobileMenu,
+    
+    // Dados do usuário
     userProfile,
     setUserProfile,
     userStats,
     setUserStats,
+    
+    // Estados de loading
     isLoading,
     setIsLoading,
+    
+    // Tema
     theme,
     toggleTheme,
+    
+    // Funções principais
     checkUserProfile,
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,
     handleTabChange,
-    handleNavigateToHome
+    handleNavigateToHome,
+    
+    // Função para recarregar stats
+    loadUserStats
   };
 };
