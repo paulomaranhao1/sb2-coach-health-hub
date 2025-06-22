@@ -22,9 +22,6 @@ const Index = () => {
     isLoading,
     theme,
     toggleTheme,
-    permission,
-    startNotificationSchedule,
-    subscriptionLoading,
     checkUserProfile,
     handleOnboardingComplete,
     handleTutorialComplete,
@@ -55,13 +52,6 @@ const Index = () => {
     };
   }, []);
 
-  // Iniciar notificações quando o usuário concluir o onboarding
-  useEffect(() => {
-    if (userProfile?.onboarding_completed && permission === 'granted') {
-      startNotificationSchedule();
-    }
-  }, [userProfile, permission, startNotificationSchedule]);
-
   // Handle special screens (welcome, onboarding, tutorial, etc.)
   const screenComponent = (
     <AppScreens
@@ -72,7 +62,7 @@ const Index = () => {
       showNewFeatures={showNewFeatures}
       setShowNewFeatures={setShowNewFeatures}
       isLoading={isLoading}
-      subscriptionLoading={subscriptionLoading}
+      subscriptionLoading={false}
       handleOnboardingComplete={handleOnboardingComplete}
       handleTutorialComplete={handleTutorialComplete}
       handleTutorialSkip={handleTutorialSkip}
