@@ -1,58 +1,70 @@
 
-/* SB2 Coach - Sistema de Cores Modo Claro */
+/* SB2 Coach - Light Theme Color System */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    /* Cores Primárias */
-    --color-primary: 149 6 6; /* #950606 - Vermelho escuro */
-    --color-primary-hover: 127 5 5; /* Hover state */
+    /* Primary Color Palette */
+    --color-primary: 220 38 38; /* #DC2626 - Red 600 */
+    --color-primary-hover: 185 28 28; /* Red 700 */
+    --color-primary-light: 239 68 68; /* Red 500 */
     
-    /* Cores Secundárias */
-    --color-secondary: 122 122 122; /* #7A7A7A - Cinza suave */
+    /* Text Colors - Readable and soft */
+    --color-text-primary: 51 65 85; /* #334155 - Slate 700 */
+    --color-text-secondary: 71 85 105; /* #475569 - Slate 600 */
+    --color-text-muted: 100 116 139; /* #64748B - Slate 500 */
+    --color-text-light: 148 163 184; /* #94A3B8 - Slate 400 */
     
-    /* Fundos */
-    --color-bg-light: 255 255 255; /* #FFFFFF */
-    --color-bg-card-light: 255 255 255;
+    /* Background Colors */
+    --color-bg-primary: 255 255 255; /* White */
+    --color-bg-secondary: 248 250 252; /* Slate 50 */
+    --color-bg-accent: 241 245 249; /* Slate 100 */
     
-    /* Textos */
-    --color-text-light: 26 26 26; /* #1A1A1A */
-    --color-text-muted-light: 122 122 122;
+    /* State Colors */
+    --color-success: 34 197 94; /* Green 500 */
+    --color-info: 59 130 246; /* Blue 500 */
+    --color-warning: 245 158 11; /* Amber 500 */
+    --color-error: 220 38 38; /* Red 600 */
     
-    /* Cores de Estado */
-    --color-success: 34 197 94; /* Verde para sucessos */
-    --color-info: 59 130 246; /* Azul para informações */
-    --color-warning: 245 158 11; /* Laranja para avisos */
-    --color-error: 239 68 68; /* Vermelho para erros */
-    
-    /* Bordas */
-    --color-border-light: 229 231 235;
+    /* Border Colors */
+    --color-border-light: 226 232 240; /* Slate 200 */
+    --color-border-medium: 203 213 225; /* Slate 300 */
   }
 
-  /* Aplicação Global - Modo Claro */
+  /* Global Application - Light Theme Only */
   * {
     border-color: rgb(var(--color-border-light));
   }
   
   body {
-    background-color: rgb(var(--color-bg-light)) !important;
-    color: rgb(var(--color-text-light)) !important;
+    background-color: rgb(var(--color-bg-secondary)) !important;
+    color: rgb(var(--color-text-secondary)) !important;
     font-family: Inter, system-ui, sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Elementos de Interface */
+  /* Typography Hierarchy */
+  h1, h2, h3, h4, h5, h6 {
+    color: rgb(var(--color-text-primary)) !important;
+    font-weight: 700;
+  }
+
+  p, span, div {
+    color: rgb(var(--color-text-secondary)) !important;
+  }
+
+  /* Interface Elements */
   .bg-background {
-    background-color: rgb(var(--color-bg-light)) !important;
+    background-color: rgb(var(--color-bg-secondary)) !important;
   }
 
   .bg-card {
-    background-color: rgb(var(--color-bg-card-light)) !important;
+    background-color: rgb(var(--color-bg-primary)) !important;
   }
 
-  /* Botões Primários */
+  /* Primary Buttons */
   .btn-primary {
     background-color: rgb(var(--color-primary)) !important;
     color: white !important;
@@ -63,18 +75,12 @@
     background-color: rgb(var(--color-primary-hover)) !important;
   }
 
-  /* Botões Secundários */
-  .btn-secondary {
-    background-color: rgb(var(--color-secondary)) !important;
-    color: white !important;
-  }
-
-  /* Texto Muted */
+  /* Muted Text */
   .text-muted-foreground {
-    color: rgb(var(--color-text-muted-light)) !important;
+    color: rgb(var(--color-text-muted)) !important;
   }
 
-  /* Estados de Cores */
+  /* State Colors */
   .text-success { color: rgb(var(--color-success)) !important; }
   .text-info { color: rgb(var(--color-info)) !important; }
   .text-warning { color: rgb(var(--color-warning)) !important; }
@@ -85,19 +91,33 @@
   .bg-warning { background-color: rgb(var(--color-warning)) !important; }
   .bg-error { background-color: rgb(var(--color-error)) !important; }
 
-  /* Eliminação Completa de Amarelo e Roxo */
-  *[class*="yellow"],
-  *[class*="amber"],
-  *[class*="purple"],
-  .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500,
-  .bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500,
-  .bg-purple-50, .bg-purple-100, .bg-purple-200, .bg-purple-300, .bg-purple-400, .bg-purple-500 {
-    background-color: rgb(var(--color-secondary)) !important;
-    color: white !important;
+  /* Input Fields */
+  input, textarea, select {
+    color: rgb(var(--color-text-secondary)) !important;
+    background-color: rgb(var(--color-bg-primary)) !important;
   }
 
-  /* Imagens com Fundo Transparente */
-  img {
+  input::placeholder, textarea::placeholder {
+    color: rgb(var(--color-text-light)) !important;
+  }
+
+  /* Labels */
+  label {
+    color: rgb(var(--color-text-secondary)) !important;
+    font-weight: 600;
+  }
+
+  /* Links */
+  a {
+    color: rgb(var(--color-primary)) !important;
+  }
+
+  /* Remove any dark colors completely */
+  .text-black, .bg-black, .border-black,
+  .text-gray-900, .bg-gray-900, .border-gray-900,
+  .text-slate-900, .bg-slate-900, .border-slate-900 {
+    color: rgb(var(--color-text-secondary)) !important;
     background-color: transparent !important;
+    border-color: rgb(var(--color-border-light)) !important;
   }
 }

@@ -1,106 +1,98 @@
 
 @layer base {
-  /* Modern Typography with Perfect Contrast */
+  /* Typography System - Light Theme Optimized */
   
-  /* Headings - Strong hierarchy */
+  /* Headings - Strong but not black */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     letter-spacing: -0.025em;
     transition: color 0.3s ease;
-    color: rgb(26 26 26) !important;
+    color: rgb(51 65 85) !important; /* slate-700 - strong but readable */
   }
   
-  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
-    color: rgb(234 234 234) !important;
-  }
-  
-  /* Body text with excellent readability */
+  /* Body text - Soft and readable */
   p, span, div {
     font-weight: 500;
     line-height: 1.625;
     transition: color 0.3s ease;
-    color: rgb(26 26 26) !important;
+    color: rgb(71 85 105) !important; /* slate-600 - perfect readability */
   }
   
-  .dark p, .dark span, .dark div {
-    color: rgb(234 234 234) !important;
-  }
-  
-  /* Muted text - still readable */
+  /* Muted text - Still readable */
   .text-muted-foreground {
     font-weight: 500 !important;
     transition: color 0.3s ease !important;
-    color: rgb(122 122 122) !important;
-  }
-  
-  .dark .text-muted-foreground {
-    color: rgb(163 163 163) !important;
+    color: rgb(100 116 139) !important; /* slate-500 - muted but clear */
   }
 
-  /* Links - Theme accent colors */
+  /* Links - Theme colors */
   a {
     font-weight: 600;
     transition: color 0.2s ease;
-    color: rgb(149 6 6) !important;
+    color: rgb(220 38 38) !important; /* primary red */
   }
   
   a:hover {
-    opacity: 0.9;
-  }
-  
-  .dark a {
-    color: rgb(185 28 28) !important;
+    opacity: 0.8;
   }
 
-  /* Small text - optimized sizes */
+  /* Small text - Optimized sizes */
   .text-sm {
-    font-weight: 600;
-    color: rgb(122 122 122) !important;
+    font-weight: 500;
+    color: rgb(100 116 139) !important; /* slate-500 */
     transition: color 0.3s ease;
-  }
-  
-  .dark .text-sm {
-    color: rgb(163 163 163) !important;
   }
 
   .text-xs {
-    font-weight: 600;
-    color: rgb(122 122 122) !important;
+    font-weight: 500;
+    color: rgb(100 116 139) !important; /* slate-500 */
     transition: color 0.3s ease;
   }
   
-  .dark .text-xs {
-    color: rgb(163 163 163) !important;
-  }
-  
-  /* Special text variants */
+  /* Special text variants - Vibrant colors */
   .text-success {
     font-weight: 600;
-    color: rgb(34 197 94) !important;
+    color: rgb(34 197 94) !important; /* green-500 */
     transition: color 0.3s ease;
-  }
-  
-  .dark .text-success {
-    color: rgb(34 197 94) !important;
   }
   
   .text-warning {
     font-weight: 600;
-    color: rgb(122 122 122) !important;
+    color: rgb(245 158 11) !important; /* amber-500 */
     transition: color 0.3s ease;
-  }
-  
-  .dark .text-warning {
-    color: rgb(163 163 163) !important;
   }
   
   .text-error {
     font-weight: 600;
-    color: rgb(149 6 6) !important;
+    color: rgb(220 38 38) !important; /* red-600 */
     transition: color 0.3s ease;
   }
-  
-  .dark .text-error {
-    color: rgb(185 28 28) !important;
+
+  /* Info text variant */
+  .text-info {
+    font-weight: 600;
+    color: rgb(59 130 246) !important; /* blue-500 */
+    transition: color 0.3s ease;
+  }
+
+  /* Button specific text colors */
+  button {
+    font-weight: 600;
+  }
+
+  /* Ensure input text is readable */
+  input, textarea, select {
+    color: rgb(71 85 105) !important; /* slate-600 */
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: rgb(148 163 184) !important; /* slate-400 */
+    font-weight: 400;
+  }
+
+  /* Label text */
+  label {
+    color: rgb(71 85 105) !important; /* slate-600 */
+    font-weight: 600;
   }
 }
