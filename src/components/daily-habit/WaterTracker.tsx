@@ -41,7 +41,7 @@ const WaterTracker = () => {
         <div className="space-y-3">
           <div className="flex justify-between items-center text-sm">
             <span className="font-semibold text-blue-600">Consumido hoje:</span>
-            <span className="font-semibold text-blue-600">
+            <span className="text-base font-semibold text-left text-slate-950">
               {waterConsumedMl}ml ({waterCount} copos + {bottleCount} garrafas)
             </span>
           </div>
