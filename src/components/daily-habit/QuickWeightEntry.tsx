@@ -62,7 +62,7 @@ const QuickWeightEntry = () => {
       setIsRegistering(false);
     }
   };
-  return <Card className="border-2 border-red-900 bg-gradient-to-r from-red-50 to-red-500 shadow-lg">
+  return <Card className="border-2 border-red-950 bg-gradient-to-r from-red-50 to-red-600 shadow-lg">
       <CardHeader className="text-center pb-3">
         <CardTitle className="flex items-center justify-center gap-2 text-xl text-red-700">
           <Weight className="w-6 h-6" />
