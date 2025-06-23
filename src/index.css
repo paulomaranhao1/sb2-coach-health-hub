@@ -1,5 +1,5 @@
 
-/* SB2 Coach - Importação do Sistema de Cores Definitivo */
+/* SB2 Coach - Importação do Sistema de Cores Modo Claro */
 @import './styles/theme.css';
 
 /* Reset Global Minimalista */
@@ -19,10 +19,6 @@ html, body, #root {
   min-height: 100vh;
   background-color: rgb(var(--color-bg-light)) !important;
   transition: background-color 0.3s ease;
-}
-
-.dark .min-h-screen {
-  background-color: rgb(var(--color-bg-dark)) !important;
 }
 
 /* Transições Suaves */

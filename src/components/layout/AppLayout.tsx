@@ -5,8 +5,6 @@ import MobileMenu from './MobileMenu';
 
 interface AppLayoutProps {
   children: ReactNode;
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
   showMobileMenu: boolean;
   setShowMobileMenu: (show: boolean) => void;
   activeTab: string;
@@ -15,8 +13,6 @@ interface AppLayoutProps {
 
 const AppLayout = ({
   children,
-  theme,
-  toggleTheme,
   showMobileMenu,
   setShowMobileMenu,
   activeTab,
@@ -25,8 +21,6 @@ const AppLayout = ({
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
       <Header 
-        theme={theme}
-        toggleTheme={toggleTheme}
         showMobileMenu={showMobileMenu}
         setShowMobileMenu={setShowMobileMenu}
       />
@@ -36,8 +30,6 @@ const AppLayout = ({
         setShowMobileMenu={setShowMobileMenu}
         activeTab={activeTab}
         handleTabChange={handleTabChange}
-        theme={theme}
-        toggleTheme={toggleTheme}
       />
 
       <main className="max-w-6xl mx-auto px-4 py-8">

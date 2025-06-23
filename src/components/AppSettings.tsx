@@ -1,19 +1,15 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
-import { Settings, Bell, Moon, Sun, Smartphone, Database, Shield, Trash2, ExternalLink, Globe } from "lucide-react";
-import { useTheme } from "@/hooks/useTheme";
+import { Settings, Bell, Smartphone, Database, Shield, Trash2, ExternalLink, Globe } from "lucide-react";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
 
 const AppSettings = () => {
-  const {
-    theme,
-    toggleTheme
-  } = useTheme();
   const [notifications, setNotifications] = useState(() => {
     return localStorage.getItem('sb2_notifications_enabled') !== 'false';
   });
@@ -23,21 +19,25 @@ const AppSettings = () => {
   const [autoSave, setAutoSave] = useState(() => {
     return localStorage.getItem('sb2_auto_save') !== 'false';
   });
+
   const handleNotificationToggle = (enabled: boolean) => {
     setNotifications(enabled);
     localStorage.setItem('sb2_notifications_enabled', enabled.toString());
     toastFeedback.success(enabled ? 'Notificações ativadas' : 'Notificações desativadas');
   };
+
   const handleSoundsToggle = (enabled: boolean) => {
     setSounds(enabled);
     localStorage.setItem('sb2_sounds_enabled', enabled.toString());
     toastFeedback.success(enabled ? 'Sons ativados' : 'Sons desativados');
   };
+
   const handleAutoSaveToggle = (enabled: boolean) => {
     setAutoSave(enabled);
     localStorage.setItem('sb2_auto_save', enabled.toString());
     toastFeedback.success(enabled ? 'Salvamento automático ativado' : 'Salvamento automático desativado');
   };
+
   const clearCache = () => {
     // Limpar dados em cache (exceto configurações essenciais)
     const keysToKeep = ['sb2_notifications_enabled', 'sb2_sounds_enabled', 'sb2_auto_save', 'sb2_tutorial_completed'];
@@ -49,43 +49,52 @@ const AppSettings = () => {
     });
     toastFeedback.success('Cache limpo com sucesso!');
   };
+
   const exportData = async () => {
     try {
-      const {
-        data: {
-          user
-        }
-      } = await supabase.auth.getUser();
+      const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       // Buscar dados do usuário
-      const {
-        data: profile
-      } = await supabase.from('user_profiles').select('*').eq('user_id', user.id).single();
-      const {
-        data: stats
-      } = await supabase.from('user_stats').select('*').eq('user_id', user.id).single();
-      const {
-        data: weightEntries
-      } = await supabase.from('weight_entries').select('*').eq('user_id', user.id);
+      const { data: profile } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      const { data: stats } = await supabase
+        .from('user_stats')
+        .select('*')
+        .eq('user_id', user.id)
+        .single();
+
+      const { data: weightEntries } = await supabase
+        .from('weight_entries')
+        .select('*')
+        .eq('user_id', user.id);
+
       const exportData = {
         profile,
         stats,
         weightEntries,
         exportDate: new Date().toISOString()
       };
+
       const dataStr = JSON.stringify(exportData, null, 2);
       const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
       const exportFileDefaultName = `sb2coach_backup_${new Date().toISOString().split('T')[0]}.json`;
+
       const linkElement = document.createElement('a');
       linkElement.setAttribute('href', dataUri);
       linkElement.setAttribute('download', exportFileDefaultName);
       linkElement.click();
+
       toastFeedback.success('Dados exportados com sucesso!');
     } catch (error) {
       toastFeedback.error('Erro ao exportar dados');
     }
   };
+
   const handleWebsiteClick = (url: string) => {
     window.open(url, '_blank');
     toastFeedback.info('Abrindo site...');
@@ -104,30 +113,6 @@ const AppSettings = () => {
             Personalize sua experiência no SB2coach.ai
           </CardDescription>
         </CardHeader>
-      </Card>
-
-      {/* Aparência */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {theme === 'light' ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
-            Aparência
-          </CardTitle>
-          <CardDescription>
-            Configure o tema e aparência do aplicativo
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-1">
-              <Label>Tema Escuro</Label>
-              <p className="text-sm text-muted-foreground">
-                Alternar entre tema claro e escuro
-              </p>
-            </div>
-            <Switch checked={theme === 'dark'} onCheckedChange={toggleTheme} />
-          </div>
-        </CardContent>
       </Card>
 
       {/* Notificações */}

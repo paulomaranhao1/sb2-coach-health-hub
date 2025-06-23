@@ -19,8 +19,6 @@ const Index = memo(() => {
     userProfile,
     userStats,
     isLoading,
-    theme,
-    toggleTheme,
     checkUserProfile,
     handleOnboardingComplete,
     handleTutorialComplete,
@@ -76,8 +74,6 @@ const Index = memo(() => {
   // App principal
   return (
     <AppLayout
-      theme={theme}
-      toggleTheme={toggleTheme}
       showMobileMenu={showMobileMenu}
       setShowMobileMenu={setShowMobileMenu}
       activeTab={activeTab}

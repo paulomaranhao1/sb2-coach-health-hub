@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bell, ShoppingCart, Menu, Sun, Moon, Crown } from "lucide-react";
+import { Bell, ShoppingCart, Menu, Crown } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { useState, useEffect } from "react";
@@ -10,13 +10,11 @@ import OffersScreen from "../OffersScreen";
 import RemindersModal from "../RemindersModal";
 
 interface HeaderProps {
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
   showMobileMenu: boolean;
   setShowMobileMenu: (show: boolean) => void;
 }
 
-const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: HeaderProps) => {
+const Header = ({ showMobileMenu, setShowMobileMenu }: HeaderProps) => {
   const [pendingReminders, setPendingReminders] = useState(0);
   const [showOffers, setShowOffers] = useState(false);
   const [showRemindersModal, setShowRemindersModal] = useState(false);
@@ -105,10 +103,10 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
                 />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 dark:from-red-400 dark:to-red-600 bg-clip-text text-transparent">
+                <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
                   SB2coach.ai
                 </h1>
-                <p className="text-sm text-slate-800 dark:text-slate-200 font-medium flex items-center gap-1">
+                <p className="text-sm text-slate-800 font-medium flex items-center gap-1">
                   {hasPremiumAccess ? (
                     <>
                       <Crown className="w-3 h-3 text-yellow-500" />
@@ -122,15 +120,6 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
             </div>
             
             <div className="flex items-center space-x-3">
-              <Button
-                onClick={toggleTheme}
-                size="sm"
-                variant="outline"
-                className="glass border-0 hover:scale-105 transition-all duration-200 hidden sm:flex"
-              >
-                {theme === 'light' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
-              </Button>
-              
               {!hasPremiumAccess && (
                 <AnimatedButton 
                   onClick={handlePurchase}
@@ -153,7 +142,7 @@ const Header = ({ theme, toggleTheme, showMobileMenu, setShowMobileMenu }: Heade
                   onClick={handleRemindersClick}
                   size="sm"
                   variant="secondary"
-                  className={`glass border-0 hidden sm:flex shadow-lg hover:scale-105 transition-all duration-200 text-slate-800 dark:text-slate-200 ${
+                  className={`glass border-0 hidden sm:flex shadow-lg hover:scale-105 transition-all duration-200 text-slate-800 ${
                     visualAlertEnabled ? 'animate-pulse' : ''
                   }`}
                 >

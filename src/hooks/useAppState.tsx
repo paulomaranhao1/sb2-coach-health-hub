@@ -20,7 +20,6 @@ export const useAppState = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [theme, setTheme] = useState<'light' | 'dark'>((localStorage.getItem('theme') as 'light' | 'dark') || 'light');
 
   // Verificar tutorial via URL apenas uma vez
   useEffect(() => {
@@ -34,16 +33,6 @@ export const useAppState = () => {
       setSearchParams(newSearchParams, { replace: true });
     }
   }, [searchParams, setSearchParams]);
-
-  // Controle de tema
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = useCallback(() => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  }, []);
 
   // Função simplificada para verificar perfil - executa apenas quando chamada
   const checkUserProfile = useCallback(async () => {
@@ -165,8 +154,6 @@ export const useAppState = () => {
     setUserStats,
     isLoading,
     setIsLoading,
-    theme,
-    toggleTheme,
     checkUserProfile,
     handleOnboardingComplete,
     handleTutorialComplete,
@@ -175,7 +162,7 @@ export const useAppState = () => {
     handleNavigateToHome
   }), [
     showWelcome, showOnboarding, showTutorial, showNewFeatures, activeTab, showMobileMenu,
-    userProfile, userStats, isLoading, theme, toggleTheme, checkUserProfile,
+    userProfile, userStats, isLoading, checkUserProfile,
     handleOnboardingComplete, handleTutorialComplete, handleTutorialSkip,
     handleTabChange, handleNavigateToHome
   ]);

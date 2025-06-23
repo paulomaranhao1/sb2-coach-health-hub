@@ -1,5 +1,4 @@
 
-import MobileMenuHeader from "./mobile-menu/MobileMenuHeader";
 import MobileMenuNavigation from "./mobile-menu/MobileMenuNavigation";
 import MobileMenuUserSection from "./mobile-menu/MobileMenuUserSection";
 import MobileMenuNewSection from "./mobile-menu/MobileMenuNewSection";
@@ -10,17 +9,13 @@ interface MobileMenuProps {
   setShowMobileMenu: (show: boolean) => void;
   activeTab: string;
   handleTabChange: (value: string) => void;
-  theme: 'light' | 'dark';
-  toggleTheme: () => void;
 }
 
 const MobileMenu = ({ 
   showMobileMenu, 
   setShowMobileMenu, 
   activeTab, 
-  handleTabChange, 
-  theme, 
-  toggleTheme 
+  handleTabChange
 }: MobileMenuProps) => {
   const handleProfileClick = () => {
     handleTabChange('profile');
@@ -50,17 +45,19 @@ const MobileMenu = ({
       onClick={() => setShowMobileMenu(false)}
     >
       <div 
-        className="bg-gray-800 dark:bg-gray-900 w-64 h-full shadow-xl animate-slide-in-right transition-colors duration-300 overflow-y-auto" 
+        className="bg-gray-800 w-64 h-full shadow-xl animate-slide-in-right transition-colors duration-300 overflow-y-auto" 
         onClick={(e) => e.stopPropagation()}
       >
-        <MobileMenuHeader theme={theme} toggleTheme={toggleTheme} />
+        <div className="p-4 border-b border-gray-700">
+          <h2 className="text-white font-semibold">Menu</h2>
+        </div>
         
         <div className="p-4 space-y-2">
           {/* Menu Principal */}
           <MobileMenuNavigation activeTab={activeTab} handleTabChange={handleTabChange} />
 
           {/* Separador */}
-          <div className="border-t border-gray-700 dark:border-gray-600 my-4"></div>
+          <div className="border-t border-gray-700 my-4"></div>
 
           {/* Seção de Usuário */}
           <MobileMenuUserSection
@@ -71,7 +68,7 @@ const MobileMenu = ({
           />
 
           {/* Separador */}
-          <div className="border-t border-gray-700 dark:border-gray-600 my-4"></div>
+          <div className="border-t border-gray-700 my-4"></div>
 
           {/* Seção NOVO */}
           <MobileMenuNewSection
@@ -80,7 +77,7 @@ const MobileMenu = ({
           />
 
           {/* Separador */}
-          <div className="border-t border-gray-700 dark:border-gray-600 my-4"></div>
+          <div className="border-t border-gray-700 my-4"></div>
 
           {/* Seção de Suporte */}
           <MobileMenuSupportSection setShowMobileMenu={setShowMobileMenu} />
