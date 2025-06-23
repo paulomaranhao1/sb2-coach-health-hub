@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Crown, Brain } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useAIChat } from "@/hooks/useAIChat";
+import { supabase } from "@/integrations/supabase/client";
 import OffersScreen from "./OffersScreen";
 import AIFeaturesList from "./ai-coach/AIFeaturesList";
 import AIChatInterface from "./ai-coach/AIChatInterface";
@@ -11,11 +13,24 @@ import AICoachInfo from "./ai-coach/AICoachInfo";
 
 const AIChat = () => {
   const [showOffers, setShowOffers] = useState(false);
+  const [user, setUser] = useState<any>(null);
   const { hasPremiumAccess, subscription, isLoading } = useSubscription();
 
+  // Obter usuário atual
+  useState(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+  });
+
+  const { sendMessage } = useAIChat({
+    userId: user?.id,
+    hasPremiumAccess,
+    onShowOffers: () => setShowOffers(true)
+  });
+
   const handleSendMessage = (message: string) => {
-    // This would integrate with the chat interface to send the message
-    console.log('Sending message:', message);
+    sendMessage(message);
   };
 
   if (showOffers) {

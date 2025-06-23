@@ -3,7 +3,9 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { MessageSquare, Lock } from "lucide-react";
+import { MessageSquare, Lock, Loader2 } from "lucide-react";
+import { useAIChat } from "@/hooks/useAIChat";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: number;
@@ -19,42 +21,32 @@ interface AIChatInterfaceProps {
 
 const AIChatInterface = ({ hasPremiumAccess, onShowOffers }: AIChatInterfaceProps) => {
   const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: 1,
-      sender: "ai",
-      text: "Olá! Sou seu AI Coach pessoal. Como posso ajudar você hoje na sua jornada de emagrecimento com o SB2 Turbo?",
-      time: "10:00"
-    }
-  ]);
+  const [user, setUser] = useState<any>(null);
 
-  const sendMessage = () => {
-    if (!hasPremiumAccess) {
-      onShowOffers();
-      return;
-    }
+  // Obter usuário atual
+  useState(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      setUser(user);
+    });
+  });
 
-    if (message.trim()) {
-      const newMessage: Message = {
-        id: messages.length + 1,
-        sender: "user",
-        text: message,
-        time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-      };
-      
-      setMessages([...messages, newMessage]);
+  const { messages, sendMessage, isLoading } = useAIChat({
+    userId: user?.id,
+    hasPremiumAccess,
+    onShowOffers
+  });
+
+  const handleSendMessage = async () => {
+    if (message.trim() && !isLoading) {
+      await sendMessage(message);
       setMessage("");
+    }
+  };
 
-      // Simulate AI response
-      setTimeout(() => {
-        const aiResponse: Message = {
-          id: messages.length + 2,
-          sender: "ai",
-          text: "Obrigado pela sua pergunta! Vou analisar e fornecer a melhor orientação para seu caso específico. Lembre-se sempre de manter a regularidade no uso do SB2 Turbo para melhores resultados.",
-          time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
-        };
-        setMessages(prevMessages => [...prevMessages, aiResponse]);
-      }, 1000);
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
     }
   };
 
@@ -83,15 +75,25 @@ const AIChatInterface = ({ hasPremiumAccess, onShowOffers }: AIChatInterfaceProp
               <div
                 className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
                   msg.sender === 'user'
-                    ? 'bg-blue-600 text-white'
+                    ? 'bg-red-600 text-white'
                     : 'bg-gray-100 text-gray-800'
                 }`}
               >
-                <p className="text-sm">{msg.text}</p>
+                <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
                 <p className="text-xs opacity-70 mt-1">{msg.time}</p>
               </div>
             </div>
           ))}
+          {isLoading && (
+            <div className="flex justify-start">
+              <div className="bg-gray-100 text-gray-800 px-4 py-2 rounded-lg max-w-xs lg:max-w-md">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <span className="text-sm">AI Coach está pensando...</span>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         
         <div className="flex gap-2">
@@ -99,16 +101,22 @@ const AIChatInterface = ({ hasPremiumAccess, onShowOffers }: AIChatInterfaceProp
             placeholder={hasPremiumAccess ? "Digite sua pergunta sobre nutrição..." : "Acesso premium necessário..."}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+            onKeyPress={handleKeyPress}
             className="flex-1"
-            disabled={!hasPremiumAccess}
+            disabled={!hasPremiumAccess || isLoading}
           />
           <Button 
-            onClick={sendMessage} 
-            className="bg-purple-600 hover:bg-purple-700"
-            disabled={!hasPremiumAccess}
+            onClick={handleSendMessage} 
+            className="bg-red-600 hover:bg-red-700"
+            disabled={!hasPremiumAccess || isLoading || !message.trim()}
           >
-            {hasPremiumAccess ? 'Enviar' : <Lock className="w-4 h-4" />}
+            {isLoading ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : hasPremiumAccess ? (
+              'Enviar'
+            ) : (
+              <Lock className="w-4 h-4" />
+            )}
           </Button>
         </div>
       </CardContent>

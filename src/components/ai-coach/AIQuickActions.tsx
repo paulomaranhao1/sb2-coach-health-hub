@@ -13,41 +13,41 @@ const AIQuickActions = ({ onSendMessage }: AIQuickActionsProps) => {
     {
       category: "🎯 Objetivos",
       icon: Target,
-      color: "bg-red-100 text-red-800 dark:bg-red-800 dark:text-red-200",
+      color: "bg-red-100 text-red-800",
       actions: [
-        "Como definir minha meta de peso?",
-        "Quanto tempo para emagrecer 10kg?",
-        "Qual meu peso ideal?"
+        "Como definir minha meta de peso ideal?",
+        "Quanto tempo para emagrecer 10kg de forma saudável?",
+        "Como o SB2 Turbo pode acelerar meus resultados?"
       ]
     },
     {
       category: "🍽️ Alimentação",
       icon: Utensils,
-      color: "bg-green-100 text-green-800 dark:bg-green-800 dark:text-green-200",
+      color: "bg-green-100 text-green-800",
       actions: [
-        "Monte meu cardápio semanal",
-        "Receitas saudáveis e gostosas",
-        "Como controlar a fome?"
+        "Monte um cardápio semanal para emagrecer",
+        "Receitas saudáveis e gostosas para o dia a dia",
+        "Como controlar a fome entre as refeições?"
       ]
     },
     {
       category: "💪 Exercícios",
       icon: Dumbbell,
-      color: "bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-200",
+      color: "bg-blue-100 text-blue-800",
       actions: [
-        "Treino para iniciantes",
-        "Exercícios em casa",
-        "Como criar uma rotina?"
+        "Treino para iniciantes em casa",
+        "Exercícios que queimam mais gordura",
+        "Como criar uma rotina de exercícios?"
       ]
     },
     {
       category: "🧠 Motivação",
       icon: Brain,
-      color: "bg-purple-100 text-purple-800 dark:bg-purple-800 dark:text-purple-200",
+      color: "bg-purple-100 text-purple-800",
       actions: [
-        "Estou desmotivado, me ajude",
-        "Como manter a disciplina?",
-        "Dicas para não desistir"
+        "Estou desmotivado, preciso de ajuda",
+        "Como manter a disciplina na dieta?",
+        "Dicas para não desistir dos objetivos"
       ]
     }
   ];
@@ -55,10 +55,10 @@ const AIQuickActions = ({ onSendMessage }: AIQuickActionsProps) => {
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <h3 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
+        <h3 className="font-semibold text-gray-800 mb-2">
           ⚡ Ações Rápidas
         </h3>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
+        <p className="text-sm text-gray-600">
           Clique em qualquer pergunta para começar uma conversa
         </p>
       </div>
@@ -67,7 +67,7 @@ const AIQuickActions = ({ onSendMessage }: AIQuickActionsProps) => {
         {quickActions.map((category, categoryIndex) => {
           const IconComponent = category.icon;
           return (
-            <Card key={categoryIndex} className="border-gray-200 dark:border-gray-700">
+            <Card key={categoryIndex} className="border-gray-200">
               <CardContent className="p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <Badge className={category.color}>
@@ -82,7 +82,7 @@ const AIQuickActions = ({ onSendMessage }: AIQuickActionsProps) => {
                       key={actionIndex}
                       variant="ghost"
                       size="sm"
-                      className="w-full justify-start text-left h-auto p-2 text-xs hover:bg-red-50 dark:hover:bg-red-950 text-gray-700 dark:text-gray-300"
+                      className="w-full justify-start text-left h-auto p-2 text-xs hover:bg-red-50 text-gray-700"
                       onClick={() => onSendMessage(action)}
                     >
                       <MessageCircle className="w-3 h-3 mr-2 flex-shrink-0 text-red-500" />
@@ -97,7 +97,7 @@ const AIQuickActions = ({ onSendMessage }: AIQuickActionsProps) => {
       </div>
 
       <div className="text-center">
-        <p className="text-xs text-gray-500 dark:text-gray-400">
+        <p className="text-xs text-gray-500">
           💡 Ou digite sua própria pergunta no chat acima
         </p>
       </div>
