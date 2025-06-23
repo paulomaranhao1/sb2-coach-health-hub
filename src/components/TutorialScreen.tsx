@@ -29,7 +29,7 @@ const TutorialScreen = ({
       setCurrentStep(currentStep - 1);
     }
   };
-  return <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4 bg-slate-400">
+  return <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4 bg-slate-400 py-px">
       <Card className="w-full max-w-lg backdrop-blur-sm shadow-2xl border-0 animate-fade-in bg-slate-400">
         <CardHeader className="text-center pb-4 bg-slate-400">
           <div className="w-20 h-20 mx-auto mb-4 flex items-center justify-center">
