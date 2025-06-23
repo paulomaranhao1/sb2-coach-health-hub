@@ -26,20 +26,20 @@ const TutorialStep = ({ stepData }: TutorialStepProps) => {
 
       {/* Conteúdo do passo */}
       <div className="text-center space-y-4 animate-fade-in">
-        <CardTitle className="text-xl font-bold text-gray-900 dark:text-gray-100">
+        <CardTitle className="text-xl font-bold text-slate-700">
           {stepData.title}
         </CardTitle>
         
-        <div className="bg-red-50 dark:bg-red-950/30 rounded-lg p-3 border-l-4 border-red-500">
-          <p className="text-sm font-semibold text-red-600 dark:text-red-400 mb-1">
+        <div className="bg-red-50 rounded-lg p-3 border-l-4 border-red-500">
+          <p className="text-sm font-semibold text-red-600 mb-1">
             📍 {stepData.highlight}
           </p>
-          <p className="text-gray-700 dark:text-red-200 text-sm">
+          <p className="text-slate-600 text-sm">
             {stepData.description}
           </p>
         </div>
         
-        <p className="text-gray-700 dark:text-gray-200 leading-relaxed">
+        <p className="text-slate-800 leading-relaxed font-medium">
           {stepData.content}
         </p>
       </div>
