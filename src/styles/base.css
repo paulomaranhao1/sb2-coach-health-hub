@@ -5,114 +5,98 @@
 
 @layer base {
   :root {
-    /* Background & Surface Colors */
-    --background: 255 255 255; /* #FFFFFF */
-    --foreground: 26 26 26; /* #1A1A1A */
+    /* Modern Red Palette */
+    --background: 248 250 252; /* slate-50 */
+    --foreground: 15 23 42; /* slate-900 */
     --card: 255 255 255;
-    --card-foreground: 26 26 26;
+    --card-foreground: 15 23 42;
     --popover: 255 255 255;
-    --popover-foreground: 26 26 26;
+    --popover-foreground: 15 23 42;
     
-    /* Primary Colors - Dark Red */
-    --primary: 149 6 6; /* #950606 */
+    /* Primary - Modern Red */
+    --primary: 220 38 38; /* red-600 */
     --primary-foreground: 255 255 255;
+    --primary-hover: 185 28 28; /* red-700 */
+    --primary-light: 239 68 68; /* red-500 */
     
-    /* Secondary Colors - Soft Gray */
-    --secondary: 122 122 122; /* #7A7A7A */
+    /* Secondary - Modern Slate */
+    --secondary: 100 116 139; /* slate-500 */
     --secondary-foreground: 255 255 255;
+    --secondary-light: 148 163 184; /* slate-400 */
     
     /* Muted Colors */
-    --muted: 248 250 252;
-    --muted-foreground: 122 122 122;
+    --muted: 248 250 252; /* slate-50 */
+    --muted-foreground: 100 116 139; /* slate-500 */
     
     /* Accent Colors */
-    --accent: 248 250 252;
-    --accent-foreground: 26 26 26;
+    --accent: 241 245 249; /* slate-100 */
+    --accent-foreground: 15 23 42;
     
-    /* Destructive Colors */
-    --destructive: 149 6 6;
+    /* State Colors */
+    --destructive: 220 38 38;
     --destructive-foreground: 255 255 255;
-    
-    /* Success Colors */
     --success: 34 197 94;
     --success-foreground: 255 255 255;
-    
-    /* Warning Colors - Gray instead of yellow */
-    --warning: 122 122 122;
+    --warning: 245 158 11;
     --warning-foreground: 255 255 255;
-    
-    /* Info Colors */
     --info: 59 130 246;
     --info-foreground: 255 255 255;
     
     /* Border & Input */
-    --border: 229 231 235;
+    --border: 226 232 240; /* slate-200 */
     --input: 255 255 255;
-    --ring: 149 6 6;
-    
-    /* Chart Colors - Custom palette without yellow */
-    --chart-1: 149 6 6;
-    --chart-2: 34 197 94;
-    --chart-3: 122 122 122;
-    --chart-4: 168 85 247;
-    --chart-5: 59 130 246;
+    --ring: 220 38 38;
     
     --radius: 0.75rem;
-    
-    /* Sidebar Colors */
-    --sidebar-background: 255 255 255;
-    --sidebar-foreground: 26 26 26;
-    --sidebar-primary: 149 6 6;
-    --sidebar-primary-foreground: 255 255 255;
-    --sidebar-accent: 248 250 252;
-    --sidebar-accent-foreground: 26 26 26;
-    --sidebar-border: 229 231 235;
-    --sidebar-ring: 149 6 6;
   }
 }
 
 @layer base {
   * {
     @apply border-border;
-    background-color: inherit;
   }
   
   body {
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: Inter, system-ui, sans-serif;
-    background-color: rgb(255 255 255) !important;
-    color: rgb(26 26 26) !important;
+    background-color: rgb(248 250 252) !important;
+    color: rgb(15 23 42) !important;
   }
 
-  /* Force all yellow/amber to gray - Complete override */
-  .bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, .bg-yellow-400, .bg-yellow-500, 
-  .bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500,
-  .text-yellow-50, .text-yellow-100, .text-yellow-200, .text-yellow-300, .text-yellow-400, .text-yellow-500,
-  .text-amber-50, .text-amber-100, .text-amber-200, .text-amber-300, .text-amber-400, .text-amber-500,
-  .border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300, .border-yellow-400, .border-yellow-500,
-  .border-amber-50, .border-amber-100, .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500 {
-    background-color: rgb(122 122 122) !important;
-    color: rgb(255 255 255) !important;
-    border-color: rgb(122 122 122) !important;
+  /* Modern Glass Effect */
+  .glass {
+    @apply backdrop-blur-sm bg-white/90 border border-white/20;
+    box-shadow: 0 8px 32px 0 rgba(220, 38, 38, 0.1);
   }
 
-  /* Ensure proper image backgrounds */
-  img, svg {
-    background-color: transparent !important;
-  }
-
-  /* Force card backgrounds */
+  /* Enhanced Card Styles */
   .bg-card {
     background-color: rgb(255 255 255) !important;
+    box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.08);
   }
 
-  /* Eliminate any purple backgrounds */
-  .bg-purple-50, .bg-purple-100, .bg-purple-200, .bg-purple-300, .bg-purple-400, .bg-purple-500,
-  .bg-purple-600, .bg-purple-700, .bg-purple-800, .bg-purple-900,
-  .text-purple-50, .text-purple-100, .text-purple-200, .text-purple-300, .text-purple-400, .text-purple-500,
-  .text-purple-600, .text-purple-700, .text-purple-800, .text-purple-900 {
-    background-color: rgb(122 122 122) !important;
-    color: rgb(255 255 255) !important;
+  /* Typography Improvements */
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-slate-900 font-bold;
+    color: rgb(15 23 42) !important;
+  }
+  
+  p, span {
+    @apply text-slate-700;
+    color: rgb(51 65 85) !important;
+  }
+  
+  .text-muted-foreground {
+    color: rgb(100 116 139) !important;
+  }
+
+  /* Interactive Elements */
+  .hover-lift {
+    @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+  }
+  
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
   }
 }

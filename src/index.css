@@ -1,8 +1,8 @@
 
-/* SB2 Coach - Importação do Sistema de Cores Modo Claro */
-@import './styles/theme.css';
+/* SB2 Coach - Modern Light Theme */
+@import './styles/base.css';
 
-/* Reset Global Minimalista */
+/* Global Styles */
 * {
   box-sizing: border-box;
 }
@@ -14,14 +14,41 @@ html, body, #root {
   width: 100%;
 }
 
-/* Container Principal */
+/* Modern Background */
 .min-h-screen {
   min-height: 100vh;
-  background-color: rgb(var(--color-bg-light)) !important;
-  transition: background-color 0.3s ease;
+  background: linear-gradient(135deg, rgb(248 250 252) 0%, rgb(241 245 249) 100%);
+  transition: all 0.3s ease;
 }
 
-/* Transições Suaves */
+/* Smooth Transitions */
 * {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Enhanced Glass Effects */
+.glass {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px 0 rgba(220, 38, 38, 0.1);
+}
+
+/* Modern Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(248 250 252);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(203 213 225);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(148 163 184);
 }

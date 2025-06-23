@@ -91,11 +91,11 @@ const Header = ({ showMobileMenu, setShowMobileMenu }: HeaderProps) => {
 
   return (
     <>
-      <header className="glass border-b border-border/50 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40">
+      <header className="glass border-b border-slate-200/60 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg bg-white p-1 flex-shrink-0">
+              <div className="w-12 h-12 rounded-xl overflow-hidden shadow-card bg-white p-1 flex-shrink-0 hover-scale">
                 <img 
                   src="/lovable-uploads/a9ae0ae0-953a-4e4d-afbd-5f6bf88b1dc6.png" 
                   alt="SB2coach.ai Logo" 
@@ -106,7 +106,7 @@ const Header = ({ showMobileMenu, setShowMobileMenu }: HeaderProps) => {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
                   SB2coach.ai
                 </h1>
-                <p className="text-sm text-slate-800 font-medium flex items-center gap-1">
+                <p className="text-sm text-slate-600 font-medium flex items-center gap-1">
                   {hasPremiumAccess ? (
                     <>
                       <Crown className="w-3 h-3 text-yellow-500" />
@@ -124,7 +124,7 @@ const Header = ({ showMobileMenu, setShowMobileMenu }: HeaderProps) => {
                 <AnimatedButton 
                   onClick={handlePurchase}
                   size="sm" 
-                  className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white border-0 hidden sm:flex shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="hidden sm:flex shadow-button hover:shadow-button-hover"
                 >
                   <ShoppingCart className="w-4 h-4 mr-2" />
                   Comprar SB2 Turbo
@@ -132,7 +132,7 @@ const Header = ({ showMobileMenu, setShowMobileMenu }: HeaderProps) => {
               )}
               
               {subscription?.verification_status === 'pending' && (
-                <Badge variant="secondary" className="hidden sm:flex animate-pulse">
+                <Badge variant="secondary" className="hidden sm:flex animate-pulse bg-slate-100 text-slate-700">
                   Verificando...
                 </Badge>
               )}
@@ -141,9 +141,9 @@ const Header = ({ showMobileMenu, setShowMobileMenu }: HeaderProps) => {
                 <Button
                   onClick={handleRemindersClick}
                   size="sm"
-                  variant="secondary"
-                  className={`glass border-0 hidden sm:flex shadow-lg hover:scale-105 transition-all duration-200 text-slate-800 ${
-                    visualAlertEnabled ? 'animate-pulse' : ''
+                  variant="outline"
+                  className={`hidden sm:flex shadow-md hover:shadow-lg transition-all duration-200 ${
+                    visualAlertEnabled ? 'animate-bounce-subtle' : ''
                   }`}
                 >
                   <Bell className="w-3 h-3 mr-1" />
@@ -153,7 +153,7 @@ const Header = ({ showMobileMenu, setShowMobileMenu }: HeaderProps) => {
               <Button
                 size="sm"
                 variant="outline"
-                className="glass border-0 hover:scale-105 transition-all duration-200"
+                className="shadow-md hover:shadow-lg hover:scale-105 transition-all duration-200"
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
               >
                 <Menu className="w-4 h-4" />

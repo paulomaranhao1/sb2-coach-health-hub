@@ -2,7 +2,7 @@
 import * as React from "react";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { Loader2 } from "lucide-react";
+import { Loader2, Check } from "lucide-react";
 
 interface AnimatedButtonProps extends ButtonProps {
   loading?: boolean;
@@ -26,25 +26,34 @@ export const AnimatedButton = React.forwardRef<HTMLButtonElement, AnimatedButton
     return (
       <Button
         className={cn(
-          "transition-all duration-300 transform hover:scale-105 active:scale-95",
-          "hover:shadow-lg",
-          showSuccess && "bg-green-600 hover:bg-green-700",
+          "relative overflow-hidden transition-all duration-300",
+          "hover:shadow-button-hover active:scale-95",
+          "before:absolute before:inset-0 before:bg-gradient-to-r before:from-white/20 before:to-transparent before:opacity-0 before:transition-opacity before:duration-300 hover:before:opacity-100",
+          showSuccess && "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700",
+          loading && "animate-pulse",
           className
         )}
         disabled={disabled || loading}
         ref={ref}
         {...props}
       >
-        {loading && (
-          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-        )}
-        {showSuccess ? (
-          "✓ Sucesso!"
-        ) : loading ? (
-          loadingText || "Carregando..."
-        ) : (
-          children
-        )}
+        <div className="relative z-10 flex items-center gap-2">
+          {loading && (
+            <Loader2 className="w-4 h-4 animate-spin" />
+          )}
+          {showSuccess && !loading && (
+            <Check className="w-4 h-4 animate-bounce-subtle" />
+          )}
+          <span>
+            {showSuccess ? (
+              "✓ Sucesso!"
+            ) : loading ? (
+              loadingText || "Carregando..."
+            ) : (
+              children
+            )}
+          </span>
+        </div>
       </Button>
     );
   }

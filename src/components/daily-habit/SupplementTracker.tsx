@@ -5,10 +5,14 @@ import FirstMealTracker from "./FirstMealTracker";
 
 const SupplementTracker = () => {
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* SB2 TURBO Manhã */}
-      <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-900/20 dark:to-orange-800/20">
-        <CardContent className="p-4">
+      <Card className="border-0 shadow-card hover:shadow-lg transition-all duration-300 bg-gradient-card hover-lift">
+        <CardContent className="p-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-bold text-slate-900 mb-1">🌅 SB2 TURBO - Manhã</h3>
+            <p className="text-sm text-slate-600">Tome em jejum, 30min antes da primeira refeição</p>
+          </div>
           <CapsuleButtons type="morning" />
         </CardContent>
       </Card>
@@ -16,8 +20,12 @@ const SupplementTracker = () => {
       <FirstMealTracker />
       
       {/* SB2 TURBO Noite */}
-      <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-indigo-50 to-indigo-100 dark:from-indigo-900/20 dark:to-indigo-800/20">
-        <CardContent className="p-4">
+      <Card className="border-0 shadow-card hover:shadow-lg transition-all duration-300 bg-gradient-card hover-lift">
+        <CardContent className="p-6">
+          <div className="mb-4">
+            <h3 className="text-lg font-bold text-slate-900 mb-1">🌙 SB2 TURBO - Noite</h3>
+            <p className="text-sm text-slate-600">Tome 2h após o jantar ou antes de dormir</p>
+          </div>
           <CapsuleButtons type="evening" />
         </CardContent>
       </Card>
