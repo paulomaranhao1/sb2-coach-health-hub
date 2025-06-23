@@ -6,7 +6,6 @@ import { Label } from "@/components/ui/label";
 import { Weight, Plus } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-
 const QuickWeightEntry = () => {
   const [currentWeight, setCurrentWeight] = useState("");
   const [isRegistering, setIsRegistering] = useState(false);
@@ -63,7 +62,7 @@ const QuickWeightEntry = () => {
       setIsRegistering(false);
     }
   };
-  return <Card className="border-2 border-red-500 bg-gradient-to-r from-red-50 to-red-100 shadow-lg">
+  return <Card className="border-2 border-red-900 bg-gradient-to-r from-red-50 to-red-500 shadow-lg">
       <CardHeader className="text-center pb-3">
         <CardTitle className="flex items-center justify-center gap-2 text-xl text-red-700">
           <Weight className="w-6 h-6" />
@@ -77,27 +76,10 @@ const QuickWeightEntry = () => {
             <Label htmlFor="quick-weight" className="text-sm font-semibold text-slate-600">
               Peso atual (kg)
             </Label>
-            <Input
-              id="quick-weight"
-              type="number"
-              step="0.1"
-              placeholder="Ex: 70.5"
-              value={currentWeight}
-              onChange={(e) => setCurrentWeight(e.target.value)}
-              className="border-2 border-gray-200 focus:border-red-500 bg-white text-slate-600"
-              disabled={todayRegistered}
-            />
+            <Input id="quick-weight" type="number" step="0.1" placeholder="Ex: 70.5" value={currentWeight} onChange={e => setCurrentWeight(e.target.value)} className="border-2 border-gray-200 focus:border-red-500 bg-white text-slate-600" disabled={todayRegistered} />
           </div>
-          <Button
-            onClick={handleAddWeight}
-            className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 font-bold"
-            disabled={!currentWeight || todayRegistered || isRegistering}
-          >
-            {isRegistering ? (
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-            ) : (
-              <Plus className="w-4 h-4 mr-1" />
-            )}
+          <Button onClick={handleAddWeight} className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 font-bold" disabled={!currentWeight || todayRegistered || isRegistering}>
+            {isRegistering ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div> : <Plus className="w-4 h-4 mr-1" />}
             {todayRegistered ? "Registrado" : "Registrar"}
           </Button>
         </div>
