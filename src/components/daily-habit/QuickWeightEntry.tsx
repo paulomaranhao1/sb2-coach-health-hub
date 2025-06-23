@@ -64,7 +64,7 @@ const QuickWeightEntry = () => {
   };
   return <Card className="border-2 border-red-500 bg-gradient-to-r from-red-50 to-red-100 dark:from-red-950 dark:to-red-900 shadow-lg">
       <CardHeader className="text-center pb-3">
-        <CardTitle className="flex items-center justify-center gap-2 text-xl text-red-600">
+        <CardTitle className="flex items-center justify-center gap-2 text-xl text-slate-50">
           <Weight className="w-6 h-6" />
           Registrar Peso Hoje {getFormattedDate()}
         </CardTitle>
