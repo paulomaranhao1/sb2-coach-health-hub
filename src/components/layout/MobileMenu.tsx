@@ -45,10 +45,10 @@ const MobileMenu = ({
       onClick={() => setShowMobileMenu(false)}
     >
       <div 
-        className="bg-gray-800 w-64 h-full shadow-xl animate-slide-in-right transition-colors duration-300 overflow-y-auto" 
+        className="bg-slate-800 w-64 h-full shadow-xl animate-slide-in-right transition-colors duration-300 overflow-y-auto" 
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="p-4 border-b border-gray-700">
+        <div className="p-4 border-b border-slate-600">
           <h2 className="text-white font-semibold">Menu</h2>
         </div>
         
@@ -57,7 +57,7 @@ const MobileMenu = ({
           <MobileMenuNavigation activeTab={activeTab} handleTabChange={handleTabChange} />
 
           {/* Separador */}
-          <div className="border-t border-gray-700 my-4"></div>
+          <div className="border-t border-slate-600 my-4"></div>
 
           {/* Seção de Usuário */}
           <MobileMenuUserSection
@@ -68,7 +68,7 @@ const MobileMenu = ({
           />
 
           {/* Separador */}
-          <div className="border-t border-gray-700 my-4"></div>
+          <div className="border-t border-slate-600 my-4"></div>
 
           {/* Seção NOVO */}
           <MobileMenuNewSection
@@ -77,7 +77,7 @@ const MobileMenu = ({
           />
 
           {/* Separador */}
-          <div className="border-t border-gray-700 my-4"></div>
+          <div className="border-t border-slate-600 my-4"></div>
 
           {/* Seção de Suporte */}
           <MobileMenuSupportSection setShowMobileMenu={setShowMobileMenu} />

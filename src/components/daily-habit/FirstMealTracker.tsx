@@ -13,7 +13,7 @@ const FirstMealTracker = () => {
   };
 
   return (
-    <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-white dark:bg-slate-800 border border-gray-200 dark:border-slate-700">
+    <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-white border border-gray-200">
       <CardContent className="p-5">
         <Button
           onClick={handleMealClick}
@@ -21,7 +21,7 @@ const FirstMealTracker = () => {
           className={`w-full h-20 text-sm font-semibold transition-all duration-300 flex flex-col items-center justify-center gap-2 ${
             mealCompleted 
               ? "bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white border-0 shadow-lg" 
-              : "border-2 border-green-400 dark:border-green-500 text-green-700 dark:text-green-300 hover:bg-green-200/50 dark:hover:bg-green-800/50 bg-white dark:bg-slate-800"
+              : "border-2 border-green-400 text-green-700 hover:bg-green-50 bg-white"
           }`}
         >
           <Utensils className="w-6 h-6 flex-shrink-0" />
@@ -40,7 +40,7 @@ const FirstMealTracker = () => {
         
         {mealCompleted && (
           <div className="text-center mt-3">
-            <Badge className="bg-green-200 dark:bg-green-800 text-green-800 dark:text-green-200 text-sm border-green-300 dark:border-green-600">
+            <Badge className="bg-green-100 text-green-800 text-sm border-green-200">
               <Utensils className="w-4 h-4 mr-1" />
               Primeira refeição OK!
             </Badge>
