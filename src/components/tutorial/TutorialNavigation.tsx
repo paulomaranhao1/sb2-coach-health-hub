@@ -24,7 +24,7 @@ const TutorialNavigation = ({
         variant="outline"
         onClick={onPrevious}
         disabled={isFirstStep}
-        className="flex items-center gap-2"
+        className="flex items-center gap-2 text-slate-700 border-slate-300 hover:bg-slate-50"
       >
         <ArrowLeft className="w-4 h-4" />
         Anterior
@@ -32,7 +32,7 @@ const TutorialNavigation = ({
 
       <Button
         onClick={onNext}
-        className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white"
+        className="flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white border-0"
       >
         {isLastStep ? (
           <>

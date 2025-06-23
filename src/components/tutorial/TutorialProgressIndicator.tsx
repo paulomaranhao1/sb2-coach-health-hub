@@ -13,7 +13,7 @@ const TutorialProgressIndicator = ({ currentStep, totalSteps }: TutorialProgress
           className={`w-3 h-3 rounded-full transition-all duration-300 ${
             index <= currentStep 
               ? 'bg-red-500 shadow-lg shadow-red-500/50 scale-110' 
-              : 'bg-gray-300 hover:bg-gray-400'
+              : 'bg-slate-300 hover:bg-slate-400'
           }`}
         />
       ))}
