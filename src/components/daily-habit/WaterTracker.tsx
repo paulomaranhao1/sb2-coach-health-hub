@@ -19,17 +19,17 @@ const WaterTracker = () => {
 
   // Cálculo da água consumida (200ml por copo + 500ml por garrafa)
   const waterConsumedMl = (waterCount * 200) + (bottleCount * 500);
-  const recommendedWaterMl = 2500; // Atualizado para 2500ml (recomendação mais atual)
+  const recommendedWaterMl = 2500; // Recomendação atual
   const waterPercentage = Math.min(waterConsumedMl / recommendedWaterMl * 100, 100);
 
   return (
-    <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-blue-100 to-cyan-100 dark:from-blue-900/30 dark:to-cyan-900/30">
+    <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-blue-50 to-cyan-50">
       <CardContent className="p-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
           <Button 
             onClick={addGlass} 
             variant="outline" 
-            className="h-16 border-2 border-blue-400 dark:border-blue-500 text-slate-800 dark:text-blue-300 hover:bg-blue-200/50 dark:hover:bg-blue-800/50 bg-white/70 dark:bg-blue-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-1"
+            className="h-16 border-2 border-blue-400 text-blue-700 hover:bg-blue-50 bg-white transition-all duration-300 flex flex-col items-center justify-center gap-1"
           >
             <Droplets className="w-5 h-5 flex-shrink-0" />
             <div className="text-center leading-tight">
@@ -41,7 +41,7 @@ const WaterTracker = () => {
           <Button 
             onClick={addBottle} 
             variant="outline" 
-            className="h-16 border-2 border-cyan-400 dark:border-cyan-500 text-slate-800 dark:text-cyan-300 hover:bg-cyan-200/50 dark:hover:bg-cyan-800/50 bg-white/70 dark:bg-cyan-900/20 transition-all duration-300 flex flex-col items-center justify-center gap-1"
+            className="h-16 border-2 border-cyan-400 text-cyan-700 hover:bg-cyan-50 bg-white transition-all duration-300 flex flex-col items-center justify-center gap-1"
           >
             <Droplets className="w-5 h-5 flex-shrink-0" />
             <div className="text-center leading-tight">
@@ -54,21 +54,21 @@ const WaterTracker = () => {
         {/* Informações detalhadas da água */}
         <div className="space-y-3">
           <div className="flex justify-between items-center text-sm">
-            <span className="text-slate-600 dark:text-slate-400">Consumido hoje:</span>
-            <span className="font-semibold text-blue-600 dark:text-blue-400">
+            <span className="text-slate-600">Consumido hoje:</span>
+            <span className="font-semibold text-blue-600">
               {waterConsumedMl}ml ({waterCount} copos + {bottleCount} garrafas)
             </span>
           </div>
           
           <div className="flex justify-between items-center text-sm">
-            <span className="text-slate-600 dark:text-slate-400">Meta diária:</span>
-            <span className="font-semibold text-slate-800 dark:text-slate-200">
+            <span className="text-slate-600">Meta diária:</span>
+            <span className="font-semibold text-gray-800">
               {recommendedWaterMl}ml
             </span>
           </div>
           
           {/* Barra de progresso */}
-          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-3 mt-3">
+          <div className="w-full bg-gray-200 rounded-full h-3 mt-3">
             <div 
               className="bg-blue-500 h-3 rounded-full transition-all duration-300" 
               style={{ width: `${waterPercentage}%` }}
@@ -80,8 +80,8 @@ const WaterTracker = () => {
               variant="outline" 
               className={`text-sm ${
                 waterPercentage >= 100 
-                  ? 'text-green-600 dark:text-green-400 border-green-300 dark:border-green-600' 
-                  : 'text-blue-600 dark:text-blue-400 border-blue-300 dark:border-blue-600'
+                  ? 'text-green-600 border-green-300 bg-green-50' 
+                  : 'text-blue-600 border-blue-300 bg-blue-50'
               }`}
             >
               {waterPercentage.toFixed(0)}% da meta diária
@@ -89,7 +89,7 @@ const WaterTracker = () => {
             </Badge>
           </div>
           
-          <div className="text-xs text-center text-slate-500 dark:text-slate-400 mt-2">
+          <div className="text-xs text-center text-slate-500 mt-2">
             Recomendação: 35ml por kg de peso corporal (média de 2,5L/dia)
           </div>
         </div>

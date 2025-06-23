@@ -22,53 +22,63 @@ export default {
 				sans: ['Inter', 'system-ui', 'sans-serif'],
 			},
 			colors: {
-				border: 'rgb(226 232 240)',
+				border: 'rgb(226 232 240)', // slate-200
 				input: 'rgb(255 255 255)',
-				ring: 'rgb(220 38 38)',
-				background: 'rgb(248 250 252)',
-				foreground: 'rgb(15 23 42)',
+				ring: 'rgb(229 62 62)', // red-500 da logo
+				background: 'rgb(248 250 252)', // slate-50
+				foreground: 'rgb(71 85 105)', // slate-600 - legível
 				primary: {
-					DEFAULT: 'rgb(220 38 38)',
+					DEFAULT: 'rgb(229 62 62)', // #E53E3E - cor da logo
 					foreground: 'rgb(255 255 255)',
-					hover: 'rgb(185 28 28)',
-					light: 'rgb(239 68 68)'
+					hover: 'rgb(197 48 48)', // #C53030
+					light: 'rgb(254 215 215)' // red-100
 				},
 				secondary: {
-					DEFAULT: 'rgb(100 116 139)',
+					DEFAULT: 'rgb(100 116 139)', // slate-500
 					foreground: 'rgb(255 255 255)',
-					light: 'rgb(148 163 184)'
+					light: 'rgb(148 163 184)' // slate-400
 				},
 				destructive: {
-					DEFAULT: 'rgb(220 38 38)',
+					DEFAULT: 'rgb(220 38 38)', // red-600
 					foreground: 'rgb(255 255 255)'
 				},
 				success: {
-					DEFAULT: 'rgb(34 197 94)',
-					foreground: 'rgb(255 255 255)'
+					DEFAULT: 'rgb(34 197 94)', // green-500
+					foreground: 'rgb(255 255 255)',
+					light: 'rgb(187 247 208)' // green-100
 				},
 				warning: {
-					DEFAULT: 'rgb(245 158 11)',
-					foreground: 'rgb(255 255 255)'
+					DEFAULT: 'rgb(245 158 11)', // amber-500
+					foreground: 'rgb(255 255 255)',
+					light: 'rgb(254 243 199)' // amber-100
 				},
 				info: {
-					DEFAULT: 'rgb(59 130 246)',
-					foreground: 'rgb(255 255 255)'
+					DEFAULT: 'rgb(59 130 246)', // blue-500
+					foreground: 'rgb(255 255 255)',
+					light: 'rgb(219 234 254)' // blue-100
 				},
 				muted: {
-					DEFAULT: 'rgb(248 250 252)',
-					foreground: 'rgb(100 116 139)'
+					DEFAULT: 'rgb(248 250 252)', // slate-50
+					foreground: 'rgb(100 116 139)' // slate-500
 				},
 				accent: {
-					DEFAULT: 'rgb(241 245 249)',
-					foreground: 'rgb(15 23 42)'
+					DEFAULT: 'rgb(241 245 249)', // slate-100
+					foreground: 'rgb(51 65 85)' // slate-700
 				},
 				popover: {
 					DEFAULT: 'rgb(255 255 255)',
-					foreground: 'rgb(15 23 42)'
+					foreground: 'rgb(71 85 105)' // slate-600
 				},
 				card: {
 					DEFAULT: 'rgb(255 255 255)',
-					foreground: 'rgb(15 23 42)'
+					foreground: 'rgb(71 85 105)' // slate-600
+				},
+				// Texto hierárquico
+				text: {
+					primary: 'rgb(45 55 72)', // gray-800 - títulos
+					secondary: 'rgb(74 85 104)', // gray-600 - corpo
+					muted: 'rgb(107 114 128)', // gray-500 - secundário
+					light: 'rgb(156 163 175)' // gray-400 - placeholder
 				}
 			},
 			borderRadius: {
@@ -77,13 +87,12 @@ export default {
 				sm: '6px'
 			},
 			boxShadow: {
-				'glass': '0 8px 32px 0 rgba(220, 38, 38, 0.1)',
 				'card': '0 4px 20px 0 rgba(0, 0, 0, 0.08)',
-				'button': '0 4px 12px 0 rgba(220, 38, 38, 0.25)',
-				'button-hover': '0 8px 25px 0 rgba(220, 38, 38, 0.35)'
+				'button': '0 4px 12px 0 rgba(229, 62, 62, 0.25)',
+				'button-hover': '0 8px 25px 0 rgba(229, 62, 62, 0.35)'
 			},
 			backgroundImage: {
-				'gradient-primary': 'linear-gradient(135deg, rgb(220 38 38), rgb(185 28 28))',
+				'gradient-primary': 'linear-gradient(135deg, rgb(229 62 62), rgb(197 48 48))',
 				'gradient-secondary': 'linear-gradient(135deg, rgb(100 116 139), rgb(71 85 105))',
 				'gradient-card': 'linear-gradient(135deg, rgb(255 255 255), rgb(248 250 252))'
 			},

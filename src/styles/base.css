@@ -5,47 +5,45 @@
 
 @layer base {
   :root {
-    /* Modern Red Palette - Light Theme Only */
+    /* Sistema de Cores Moderno - Baseado na Logo Vermelha */
     --background: 248 250 252; /* slate-50 */
-    --foreground: 71 85 105; /* slate-600 - legível em fundos claros */
+    --foreground: 71 85 105; /* slate-600 - legível */
     --card: 255 255 255;
-    --card-foreground: 71 85 105; /* slate-600 - legível em fundos claros */
+    --card-foreground: 71 85 105; /* slate-600 */
     --popover: 255 255 255;
-    --popover-foreground: 71 85 105; /* slate-600 - legível em fundos claros */
+    --popover-foreground: 71 85 105; /* slate-600 */
     
-    /* Primary - Modern Red */
-    --primary: 220 38 38; /* red-600 */
-    --primary-foreground: 255 255 255; /* branco em fundos vermelhos */
-    --primary-hover: 185 28 28; /* red-700 */
-    --primary-light: 239 68 68; /* red-500 */
+    /* Primary - Vermelho da Logo */
+    --primary: 229 62 62; /* #E53E3E */
+    --primary-foreground: 255 255 255;
+    --primary-hover: 197 48 48; /* #C53030 */
+    --primary-light: 254 215 215; /* red-100 */
     
-    /* Secondary - Modern Slate */
+    /* Secondary - Cinza Moderno */
     --secondary: 100 116 139; /* slate-500 */
-    --secondary-foreground: 255 255 255; /* branco em fundos slate */
+    --secondary-foreground: 255 255 255;
     --secondary-light: 148 163 184; /* slate-400 */
     
-    /* Muted Colors */
-    --muted: 248 250 252; /* slate-50 */
-    --muted-foreground: 100 116 139; /* slate-500 - legível */
-    
-    /* Accent Colors */
-    --accent: 241 245 249; /* slate-100 */
-    --accent-foreground: 71 85 105; /* slate-600 - legível */
-    
-    /* State Colors */
-    --destructive: 220 38 38;
+    /* Cores de Estado */
+    --destructive: 220 38 38; /* red-600 */
     --destructive-foreground: 255 255 255;
-    --success: 34 197 94;
+    --success: 34 197 94; /* green-500 */
     --success-foreground: 255 255 255;
-    --warning: 245 158 11;
+    --warning: 245 158 11; /* amber-500 */
     --warning-foreground: 255 255 255;
-    --info: 59 130 246;
+    --info: 59 130 246; /* blue-500 */
     --info-foreground: 255 255 255;
     
-    /* Border & Input */
+    /* Cores Neutras */
+    --muted: 248 250 252; /* slate-50 */
+    --muted-foreground: 100 116 139; /* slate-500 */
+    --accent: 241 245 249; /* slate-100 */
+    --accent-foreground: 51 65 85; /* slate-700 */
+    
+    /* Borders & Input */
     --border: 226 232 240; /* slate-200 */
     --input: 255 255 255;
-    --ring: 220 38 38;
+    --ring: 229 62 62; /* primary */
     
     --radius: 0.75rem;
   }
@@ -61,31 +59,31 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: Inter, system-ui, sans-serif;
     background-color: rgb(248 250 252) !important;
-    color: rgb(71 85 105) !important; /* slate-600 - legível em fundos claros */
+    color: rgb(71 85 105) !important;
   }
 
   /* Sistema de Contraste Inteligente */
   
-  /* Textos em fundos claros - usar cores escuras */
+  /* Textos em fundos claros - usar cores escuras legíveis */
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold;
-    color: rgb(51 65 85) !important; /* slate-700 - títulos mais escuros */
+    color: rgb(45 55 72) !important; /* gray-800 - títulos bem legíveis */
     font-weight: 700;
     letter-spacing: -0.025em;
   }
   
   p, span, div {
-    color: rgb(71 85 105) !important; /* slate-600 - texto corpo legível */
+    color: rgb(74 85 104) !important; /* gray-600 - corpo legível */
     font-weight: 500;
     line-height: 1.6;
   }
   
   .text-muted-foreground {
-    color: rgb(100 116 139) !important; /* slate-500 - texto secundário */
+    color: rgb(107 114 128) !important; /* gray-500 - secundário */
     font-weight: 500;
   }
 
-  /* Textos em fundos escuros - usar cores claras */
+  /* Textos em fundos escuros/coloridos - usar branco */
   .bg-primary *,
   .bg-red-500 *,
   .bg-red-600 *,
@@ -110,18 +108,20 @@
   .bg-indigo-600 *,
   .bg-purple-500 *,
   .bg-purple-600 * {
-    color: rgb(255 255 255) !important; /* branco em fundos escuros */
-  }
-
-  /* Fundos gradientes também recebem texto branco */
-  .bg-gradient-to-r *,
-  .bg-gradient-to-br * {
     color: rgb(255 255 255) !important;
   }
 
-  /* Links com cor do tema */
+  /* Fundos gradientes recebem texto branco */
+  .bg-gradient-to-r *,
+  .bg-gradient-to-br *,
+  .bg-gradient-primary *,
+  .bg-gradient-secondary * {
+    color: rgb(255 255 255) !important;
+  }
+
+  /* Links com cor primária */
   a {
-    color: rgb(220 38 38) !important; /* primary red */
+    color: rgb(229 62 62) !important; /* primary */
     font-weight: 600;
     transition: opacity 0.2s ease;
   }
@@ -130,14 +130,14 @@
     opacity: 0.8;
   }
 
-  /* Small text - legível */
+  /* Textos pequenos */
   .text-sm {
-    color: rgb(100 116 139) !important; /* slate-500 */
+    color: rgb(107 114 128) !important; /* gray-500 */
     font-weight: 500;
   }
 
   .text-xs {
-    color: rgb(100 116 139) !important; /* slate-500 */
+    color: rgb(107 114 128) !important; /* gray-500 */
     font-weight: 500;
   }
   
@@ -157,13 +157,12 @@
     font-weight: 600;
   }
 
-  /* Info text variant */
   .text-info {
     color: rgb(59 130 246) !important; /* blue-500 */
     font-weight: 600;
   }
 
-  /* Cards com melhor contraste */
+  /* Cards com contraste */
   .bg-card {
     background-color: rgb(255 255 255) !important;
     box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.06);
@@ -172,7 +171,7 @@
   /* Glass effect suave */
   .glass {
     @apply backdrop-blur-sm bg-white/95 border border-white/30;
-    box-shadow: 0 8px 32px 0 rgba(220, 38, 38, 0.08);
+    box-shadow: 0 8px 32px 0 rgba(229, 62, 62, 0.08);
   }
 
   /* Interactive elements */
@@ -186,41 +185,23 @@
 
   /* Inputs com texto legível */
   input, textarea, select {
-    color: rgb(71 85 105) !important; /* slate-600 - legível */
+    color: rgb(74 85 104) !important; /* gray-600 */
     background-color: rgb(255 255 255) !important;
   }
 
   input::placeholder, textarea::placeholder {
-    color: rgb(148 163 184) !important; /* slate-400 - suave mas visível */
+    color: rgb(156 163 175) !important; /* gray-400 */
     font-weight: 400;
   }
 
   /* Labels legíveis */
   label {
-    color: rgb(71 85 105) !important; /* slate-600 - legível */
+    color: rgb(74 85 104) !important; /* gray-600 */
     font-weight: 600;
   }
 
-  /* Button text - contraste adequado */
+  /* Button text */
   button {
     font-weight: 600;
-  }
-
-  /* Remover todas as classes dark que causam problemas */
-  .dark\:text-white,
-  .dark\:text-gray-100,
-  .dark\:text-gray-200,
-  .dark\:text-gray-300,
-  .dark\:text-slate-100,
-  .dark\:text-slate-200,
-  .dark\:text-slate-300 {
-    color: inherit !important;
-  }
-
-  .dark\:bg-gray-800,
-  .dark\:bg-gray-900,
-  .dark\:bg-slate-800,
-  .dark\:bg-slate-900 {
-    background-color: inherit !important;
   }
 }

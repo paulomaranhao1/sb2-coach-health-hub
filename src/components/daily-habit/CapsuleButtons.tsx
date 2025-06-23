@@ -21,13 +21,13 @@ const CapsuleButtons = ({ type }: CapsuleButtonsProps) => {
   const colorClasses = isMorning 
     ? {
         taken: "bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white border-0 shadow-lg",
-        notTaken: "border-2 border-orange-400 text-orange-700 hover:bg-orange-100 bg-white/80 dark:border-orange-500 dark:text-orange-300 dark:hover:bg-orange-900/30 dark:bg-orange-900/10",
-        badge: "bg-orange-100 text-orange-800 border-orange-200 dark:bg-orange-900/30 dark:text-orange-200 dark:border-orange-700"
+        notTaken: "border-2 border-orange-400 text-orange-700 hover:bg-orange-50 bg-white",
+        badge: "bg-orange-100 text-orange-800 border-orange-200"
       }
     : {
         taken: "bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white border-0 shadow-lg",
-        notTaken: "border-2 border-indigo-400 text-indigo-700 hover:bg-indigo-100 bg-white/80 dark:border-indigo-500 dark:text-indigo-300 dark:hover:bg-indigo-900/30 dark:bg-indigo-900/10",
-        badge: "bg-indigo-100 text-indigo-800 border-indigo-200 dark:bg-indigo-900/30 dark:text-indigo-200 dark:border-indigo-700"
+        notTaken: "border-2 border-indigo-400 text-indigo-700 hover:bg-indigo-50 bg-white",
+        badge: "bg-indigo-100 text-indigo-800 border-indigo-200"
       };
 
   return (
