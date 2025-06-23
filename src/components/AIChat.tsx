@@ -20,15 +20,11 @@ const AIChat = () => {
     });
   }, []);
 
-  const { sendMessage } = useAIChat({
+  const { messages, sendMessage, isLoading } = useAIChat({
     userId: user?.id,
     hasPremiumAccess: true, // Sempre permitir acesso
     onShowOffers: () => setShowOffers(true)
   });
-
-  const handleSendMessage = (message: string) => {
-    sendMessage(message);
-  };
 
   if (showOffers) {
     return <OffersScreen onBack={() => setShowOffers(false)} />;
@@ -52,11 +48,14 @@ const AIChat = () => {
       <AICoachInfo />
 
       <AIChatInterface 
+        messages={messages}
+        sendMessage={sendMessage}
+        isLoading={isLoading}
         hasPremiumAccess={true} // Sempre permitir acesso
         onShowOffers={() => setShowOffers(true)}
       />
 
-      <AIQuickActions onSendMessage={handleSendMessage} />
+      <AIQuickActions onSendMessage={sendMessage} />
     </div>
   );
 };

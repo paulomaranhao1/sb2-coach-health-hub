@@ -1,11 +1,9 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MessageSquare, Loader2 } from "lucide-react";
-import { useAIChat } from "@/hooks/useAIChat";
-import { supabase } from "@/integrations/supabase/client";
 
 interface Message {
   id: number;
@@ -15,26 +13,15 @@ interface Message {
 }
 
 interface AIChatInterfaceProps {
+  messages: Message[];
+  sendMessage: (message: string) => Promise<void>;
+  isLoading: boolean;
   hasPremiumAccess: boolean;
   onShowOffers: () => void;
 }
 
-const AIChatInterface = ({ hasPremiumAccess, onShowOffers }: AIChatInterfaceProps) => {
+const AIChatInterface = ({ messages, sendMessage, isLoading, hasPremiumAccess, onShowOffers }: AIChatInterfaceProps) => {
   const [message, setMessage] = useState("");
-  const [user, setUser] = useState<any>(null);
-
-  // Obter usuário atual
-  useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      setUser(user);
-    });
-  }, []);
-
-  const { messages, sendMessage, isLoading } = useAIChat({
-    userId: user?.id,
-    hasPremiumAccess: true, // Sempre permitir acesso
-    onShowOffers
-  });
 
   const handleSendMessage = async () => {
     if (message.trim() && !isLoading) {
