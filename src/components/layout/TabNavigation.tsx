@@ -1,6 +1,6 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3 } from "lucide-react";
+import { Home, MessageSquare, Camera, Clock, Trophy, Pill, BarChart3, Brain } from "lucide-react";
 
 interface TabNavigationProps {
   activeTab: string;
@@ -10,6 +10,7 @@ interface TabNavigationProps {
 const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
   const tabItems = [
     { value: "home", label: "Início", icon: Home },
+    { value: "chat", label: "AI Coach", icon: Brain },
     { value: "calorie-counter", label: "Foto Caloria", icon: Camera },
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
     { value: "supplement", label: "Minha Suplementação", icon: Pill },
@@ -20,12 +21,16 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
   return (
     <>
       {/* Desktop Tabs */}
-      <TabsList className="grid w-full grid-cols-6 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-all duration-500 ease-in-out">
+      <TabsList className="grid w-full grid-cols-7 mb-8 bg-gray-800/90 dark:bg-gray-900/90 border-gray-700 dark:border-gray-600 hidden sm:grid backdrop-blur-sm transition-all duration-500 ease-in-out">
         {tabItems.map((item) => (
           <TabsTrigger 
             key={item.value}
             value={item.value} 
-            className="data-[state=active]:bg-red-600 data-[state=active]:text-white text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:bg-red-500/20 hover:text-white transform-gpu"
+            className={`data-[state=active]:text-white text-gray-300 transition-all duration-300 ease-in-out hover:scale-105 hover:text-white transform-gpu ${
+              item.value === 'chat' 
+                ? 'data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-600 data-[state=active]:to-pink-600 hover:bg-purple-500/20' 
+                : 'data-[state=active]:bg-red-600 hover:bg-red-500/20'
+            }`}
           >
             <item.icon className="w-4 h-4 mr-1 transition-transform duration-200 ease-in-out" />
             <span className="transition-all duration-200 ease-in-out">{item.label}</span>
@@ -37,7 +42,7 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
       <div className="sm:hidden mb-8">
         <div className="bg-gray-800/90 dark:bg-gray-900/90 backdrop-blur-sm rounded-xl p-3 shadow-lg border border-gray-700/50 dark:border-gray-600/50 transition-all duration-500 ease-in-out">
           <div className="grid grid-cols-3 gap-2">
-            {tabItems.map((item) => (
+            {tabItems.filter(item => item.value !== 'chat').map((item) => (
               <button
                 key={item.value}
                 onClick={() => setActiveTab(item.value)}
