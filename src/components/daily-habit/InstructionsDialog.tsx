@@ -28,7 +28,7 @@ const InstructionsDialog = ({
         
         <div className="space-y-3 sm:space-y-4 text-gray-700 dark:text-gray-300 max-h-[60vh] overflow-y-auto">
           <div className="p-3 sm:p-4 rounded-lg border border-blue-200 dark:border-blue-700 bg-slate-600">
-            <p className="text-xs sm:text-sm font-semibold mb-2 text-slate-950">
+            <p className="text-xs sm:text-sm font-semibold mb-2 text-slate-50">
               ✨ Siga esta ordem para máximos resultados:
             </p>
           </div>
