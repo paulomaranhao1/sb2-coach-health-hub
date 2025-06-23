@@ -29,11 +29,6 @@ export const useAIChat = ({ userId, hasPremiumAccess, onShowOffers }: UseAIChatP
   const [isLoading, setIsLoading] = useState(false);
 
   const sendMessage = useCallback(async (messageText: string) => {
-    if (!hasPremiumAccess) {
-      onShowOffers();
-      return;
-    }
-
     if (!userId) {
       toast({
         title: "Erro",
@@ -77,11 +72,6 @@ export const useAIChat = ({ userId, hasPremiumAccess, onShowOffers }: UseAIChatP
         throw error;
       }
 
-      if (data?.error === 'premium_required') {
-        onShowOffers();
-        return;
-      }
-
       if (data?.error) {
         throw new Error(data.message || 'Erro ao processar mensagem');
       }
@@ -109,7 +99,7 @@ export const useAIChat = ({ userId, hasPremiumAccess, onShowOffers }: UseAIChatP
     } finally {
       setIsLoading(false);
     }
-  }, [messages, hasPremiumAccess, userId, onShowOffers, toast]);
+  }, [messages, userId, toast]);
 
   return {
     messages,

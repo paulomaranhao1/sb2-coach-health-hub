@@ -1,7 +1,6 @@
 
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.50.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -9,10 +8,6 @@ const corsHeaders = {
 };
 
 const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-
-const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 const NUTRITION_SYSTEM_PROMPT = `Você é um AI Coach especializado em nutrição e emagrecimento, focado no produto SB2 Turbo. Suas características:
 
@@ -49,28 +44,6 @@ serve(async (req) => {
 
   try {
     const { message, userId, conversationHistory = [] } = await req.json();
-
-    // Verificar se o usuário tem acesso premium
-    const { data: hasAccess, error: accessError } = await supabase
-      .rpc('has_premium_access', { user_id_param: userId });
-
-    if (accessError) {
-      console.error('Error checking premium access:', accessError);
-      return new Response(JSON.stringify({ error: 'Erro ao verificar acesso premium' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    if (!hasAccess) {
-      return new Response(JSON.stringify({ 
-        error: 'premium_required',
-        message: 'Acesso premium necessário para usar o AI Coach'
-      }), {
-        status: 403,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
 
     // Preparar histórico da conversa para OpenAI
     const messages = [

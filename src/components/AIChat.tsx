@@ -1,20 +1,17 @@
 
 import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Crown, Brain } from "lucide-react";
-import { useSubscription } from "@/hooks/useSubscription";
+import { Brain } from "lucide-react";
 import { useAIChat } from "@/hooks/useAIChat";
 import { supabase } from "@/integrations/supabase/client";
 import OffersScreen from "./OffersScreen";
-import AIFeaturesList from "./ai-coach/AIFeaturesList";
+import AICoachInfo from "./ai-coach/AICoachInfo";
 import AIChatInterface from "./ai-coach/AIChatInterface";
 import AIQuickActions from "./ai-coach/AIQuickActions";
-import AICoachInfo from "./ai-coach/AICoachInfo";
 
 const AIChat = () => {
   const [showOffers, setShowOffers] = useState(false);
   const [user, setUser] = useState<any>(null);
-  const { hasPremiumAccess, subscription, isLoading } = useSubscription();
 
   // Obter usuário atual
   useState(() => {
@@ -25,7 +22,7 @@ const AIChat = () => {
 
   const { sendMessage } = useAIChat({
     userId: user?.id,
-    hasPremiumAccess,
+    hasPremiumAccess: true, // Sempre permitir acesso
     onShowOffers: () => setShowOffers(true)
   });
 
@@ -37,32 +34,16 @@ const AIChat = () => {
     return <OffersScreen onBack={() => setShowOffers(false)} />;
   }
 
-  if (isLoading) {
-    return <div>Carregando...</div>;
-  }
-
   return (
     <div className="space-y-6">
-      <Card className={`${hasPremiumAccess ? 'bg-gradient-to-r from-purple-500 to-pink-500' : 'bg-gradient-to-r from-gray-500 to-gray-600'} text-white`}>
+      <Card className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            {hasPremiumAccess ? (
-              <>
-                <Crown className="w-5 h-5" />
-                AI Coach Premium Ativo
-              </>
-            ) : (
-              <>
-                <Brain className="w-5 h-5" />
-                🧠 IA Nutricional Avançada Premium
-              </>
-            )}
+            <Brain className="w-5 h-5" />
+            🧠 IA Nutricional Avançada
           </CardTitle>
-          <CardDescription className={hasPremiumAccess ? "text-purple-100" : "text-gray-100"}>
-            {hasPremiumAccess 
-              ? "Tire suas dúvidas sobre emagrecimento, nutrição e SB2 Turbo" 
-              : "IA especializada em nutrição e emagrecimento disponível 24h por dia"
-            }
+          <CardDescription className="text-blue-100">
+            Tire suas dúvidas sobre emagrecimento, nutrição e SB2 Turbo
           </CardDescription>
         </CardHeader>
       </Card>
@@ -70,19 +51,12 @@ const AIChat = () => {
       {/* Informações detalhadas sobre a IA */}
       <AICoachInfo />
 
-      {!hasPremiumAccess && (
-        <AIFeaturesList 
-          onShowOffers={() => setShowOffers(true)}
-          subscriptionStatus={subscription?.verification_status}
-        />
-      )}
-
       <AIChatInterface 
-        hasPremiumAccess={hasPremiumAccess}
+        hasPremiumAccess={true} // Sempre permitir acesso
         onShowOffers={() => setShowOffers(true)}
       />
 
-      {hasPremiumAccess && <AIQuickActions onSendMessage={handleSendMessage} />}
+      <AIQuickActions onSendMessage={handleSendMessage} />
     </div>
   );
 };
