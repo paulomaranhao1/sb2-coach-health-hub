@@ -54,36 +54,36 @@ const CalorieCounterTab = () => {
       {/* Como Funciona */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-center">Como Funciona</CardTitle>
+          <CardTitle className="text-center text-slate-600">Como Funciona</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="text-center space-y-3">
-              <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto">
                 <span className="text-2xl">📱</span>
               </div>
-              <h3 className="font-semibold">1. Fotografe</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <h3 className="font-semibold text-slate-600">1. Fotografe</h3>
+              <p className="text-sm text-slate-500">
                 Tire uma foto da sua refeição ou selecione da galeria
               </p>
             </div>
             
             <div className="text-center space-y-3">
-              <div className="w-16 h-16 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto">
                 <span className="text-2xl">🤖</span>
               </div>
-              <h3 className="font-semibold">2. IA Analisa</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <h3 className="font-semibold text-slate-600">2. IA Analisa</h3>
+              <p className="text-sm text-slate-500">
                 Nossa inteligência artificial identifica e analisa os alimentos
               </p>
             </div>
             
             <div className="text-center space-y-3">
-              <div className="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto">
                 <span className="text-2xl">📊</span>
               </div>
-              <h3 className="font-semibold">3. Resultados</h3>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <h3 className="font-semibold text-slate-600">3. Resultados</h3>
+              <p className="text-sm text-slate-500">
                 Receba instantaneamente as informações nutricionais completas
               </p>
             </div>

@@ -151,28 +151,28 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     switch (analysisStatus) {
       case 'real':
         return (
-          <div className="flex items-center gap-1 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
             <Wifi className="w-3 h-3" />
             IA Real
           </div>
         );
       case 'quota_exceeded':
         return (
-          <div className="flex items-center gap-1 text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
             <AlertCircle className="w-3 h-3" />
             Quota Excedida
           </div>
         );
       case 'mock':
         return (
-          <div className="flex items-center gap-1 text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
             <WifiOff className="w-3 h-3" />
             Alternativa
           </div>
         );
       default:
         return (
-          <div className="flex items-center gap-1 text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">
+          <div className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
             <AlertCircle className="w-3 h-3" />
             OpenAI Vision
           </div>
@@ -184,7 +184,7 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-slate-600">
             <Camera className="w-5 h-5 text-blue-600" />
             Análise IA de Alimentos
             <div className="ml-auto">
@@ -209,12 +209,12 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
               <Button
                 onClick={() => fileInputRef.current?.click()}
                 variant="outline"
-                className="h-32 border-2 border-dashed border-blue-300 hover:border-blue-500"
+                className="h-32 border-2 border-dashed border-blue-300 hover:border-blue-500 text-slate-600"
               >
                 <div className="flex flex-col items-center space-y-2">
                   <Upload className="w-8 h-8 text-blue-600" />
-                  <span className="text-lg font-semibold text-blue-900">Enviar Foto</span>
-                  <span className="text-sm text-gray-600">Escolher da galeria</span>
+                  <span className="text-lg font-semibold text-slate-600">Enviar Foto</span>
+                  <span className="text-sm text-slate-500">Escolher da galeria</span>
                 </div>
               </Button>
             </div>

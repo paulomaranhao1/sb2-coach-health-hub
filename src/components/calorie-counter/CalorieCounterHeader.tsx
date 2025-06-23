@@ -6,11 +6,11 @@ const CalorieCounterHeader = () => {
     <div className="mb-6">
       <div className="flex items-center gap-3 mb-2">
         <Camera className="w-8 h-8 text-blue-600" />
-        <h1 className="text-3xl font-bold text-gray-800 dark:text-gray-200">
+        <h1 className="text-3xl font-bold text-slate-600">
           Contador de Calorias
         </h1>
       </div>
-      <p className="text-gray-600 dark:text-gray-400">
+      <p className="text-slate-500 font-medium">
         Descubra as calorias dos seus alimentos com inteligência artificial
       </p>
     </div>

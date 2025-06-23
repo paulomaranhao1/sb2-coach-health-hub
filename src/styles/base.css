@@ -7,11 +7,11 @@
   :root {
     /* Modern Red Palette - Light Theme Only */
     --background: 248 250 252; /* slate-50 */
-    --foreground: 71 85 105; /* slate-600 - mais suave que preto */
+    --foreground: 100 116 139; /* slate-500 - mais suave que antes */
     --card: 255 255 255;
-    --card-foreground: 71 85 105;
+    --card-foreground: 100 116 139; /* mais suave */
     --popover: 255 255 255;
-    --popover-foreground: 71 85 105;
+    --popover-foreground: 100 116 139; /* mais suave */
     
     /* Primary - Modern Red */
     --primary: 220 38 38; /* red-600 */
@@ -26,11 +26,11 @@
     
     /* Muted Colors */
     --muted: 248 250 252; /* slate-50 */
-    --muted-foreground: 100 116 139; /* slate-500 - mais suave */
+    --muted-foreground: 148 163 184; /* slate-400 - mais suave */
     
     /* Accent Colors */
     --accent: 241 245 249; /* slate-100 */
-    --accent-foreground: 71 85 105;
+    --accent-foreground: 100 116 139; /* mais suave */
     
     /* State Colors */
     --destructive: 220 38 38;
@@ -61,25 +61,25 @@
     font-feature-settings: "rlig" 1, "calt" 1;
     font-family: Inter, system-ui, sans-serif;
     background-color: rgb(248 250 252) !important;
-    color: rgb(71 85 105) !important; /* Cor mais suave que preto */
+    color: rgb(100 116 139) !important; /* slate-500 - mais suave e legível */
   }
 
-  /* Typography - Cores suaves e legíveis */
+  /* Typography - Cores ainda mais suaves e legíveis */
   h1, h2, h3, h4, h5, h6 {
     @apply font-bold;
-    color: rgb(51 65 85) !important; /* slate-700 - forte mas não preto */
+    color: rgb(71 85 105) !important; /* slate-600 - mais suave que antes */
     font-weight: 700;
     letter-spacing: -0.025em;
   }
   
   p, span, div {
-    color: rgb(71 85 105) !important; /* slate-600 - legível e suave */
+    color: rgb(100 116 139) !important; /* slate-500 - equilibrado e legível */
     font-weight: 500;
     line-height: 1.6;
   }
   
   .text-muted-foreground {
-    color: rgb(100 116 139) !important; /* slate-500 - muted mas legível */
+    color: rgb(148 163 184) !important; /* slate-400 - mais suave */
     font-weight: 500;
   }
 
@@ -94,14 +94,14 @@
     opacity: 0.8;
   }
 
-  /* Small text - mais legível */
+  /* Small text - mais suave */
   .text-sm {
-    color: rgb(100 116 139) !important; /* slate-500 */
+    color: rgb(148 163 184) !important; /* slate-400 - mais suave */
     font-weight: 500;
   }
 
   .text-xs {
-    color: rgb(100 116 139) !important; /* slate-500 */
+    color: rgb(148 163 184) !important; /* slate-400 - mais suave */
     font-weight: 500;
   }
   
@@ -146,15 +146,21 @@
   button:disabled,
   button[disabled] {
     opacity: 0.5;
-    color: rgb(100 116 139) !important; /* Evita texto preto */
+    color: rgb(148 163 184) !important; /* Cores mais suaves */
   }
 
   /* Inputs com texto legível */
   input, textarea, select {
-    color: rgb(71 85 105) !important; /* slate-600 */
+    color: rgb(100 116 139) !important; /* slate-500 - legível */
   }
 
   input::placeholder, textarea::placeholder {
-    color: rgb(148 163 184) !important; /* slate-400 */
+    color: rgb(148 163 184) !important; /* slate-400 - suave mas visível */
+  }
+
+  /* Labels mais suaves */
+  label {
+    color: rgb(100 116 139) !important; /* slate-500 - mais suave */
+    font-weight: 600;
   }
 }

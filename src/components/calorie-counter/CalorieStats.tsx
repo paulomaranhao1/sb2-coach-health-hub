@@ -124,51 +124,51 @@ const CalorieStats = () => {
     </div>
   ), []);
 
-  // Memoizar os dados dos cards principais
+  // Memoizar os dados dos cards principais com cores mais suaves
   const statsCards = useMemo(() => [
     {
       title: "Total de Análises",
       value: stats.totalAnalyses,
       description: "fotos analisadas",
       icon: Camera,
-      gradient: "from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800",
-      textColor: "text-blue-800 dark:text-blue-200",
+      gradient: "from-blue-50 to-blue-100",
+      textColor: "text-slate-600",
       iconColor: "text-blue-600",
-      valueColor: "text-blue-900 dark:text-blue-100",
-      descColor: "text-blue-700 dark:text-blue-300"
+      valueColor: "text-slate-700",
+      descColor: "text-slate-500"
     },
     {
       title: "Total de Calorias",
       value: stats.totalCalories.toLocaleString(),
       description: "calorias rastreadas",
       icon: TrendingUp,
-      gradient: "from-green-50 to-green-100 dark:from-green-900 dark:to-green-800",
-      textColor: "text-green-800 dark:text-green-200",
+      gradient: "from-green-50 to-green-100",
+      textColor: "text-slate-600",
       iconColor: "text-green-600",
-      valueColor: "text-green-900 dark:text-green-100",
-      descColor: "text-green-700 dark:text-green-300"
+      valueColor: "text-slate-700",
+      descColor: "text-slate-500"
     },
     {
       title: "Média por Refeição",
       value: stats.averageCalories,
       description: "calorias em média",
       icon: Target,
-      gradient: "from-purple-50 to-purple-100 dark:from-purple-900 dark:to-purple-800",
-      textColor: "text-purple-800 dark:text-purple-200",
+      gradient: "from-purple-50 to-purple-100",
+      textColor: "text-slate-600",
       iconColor: "text-purple-600",
-      valueColor: "text-purple-900 dark:text-purple-100",
-      descColor: "text-purple-700 dark:text-purple-300"
+      valueColor: "text-slate-700",
+      descColor: "text-slate-500"
     },
     {
       title: "Esta Semana",
       value: stats.thisWeekAnalyses,
       description: "análises nos últimos 7 dias",
       icon: BarChart3,
-      gradient: "from-orange-50 to-orange-100 dark:from-orange-900 dark:to-orange-800",
-      textColor: "text-orange-800 dark:text-orange-200",
+      gradient: "from-orange-50 to-orange-100",
+      textColor: "text-slate-600",
       iconColor: "text-orange-600",
-      valueColor: "text-orange-900 dark:text-orange-100",
-      descColor: "text-orange-700 dark:text-orange-300"
+      valueColor: "text-slate-700",
+      descColor: "text-slate-500"
     }
   ], [stats]);
 
@@ -179,10 +179,10 @@ const CalorieStats = () => {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
+        <h2 className="text-2xl font-bold text-slate-600 mb-2">
           📊 Suas Estatísticas
         </h2>
-        <p className="text-gray-600 dark:text-gray-300">
+        <p className="text-slate-500 font-medium">
           Acompanhe seu progresso na análise de calorias
         </p>
       </div>
@@ -210,36 +210,36 @@ const CalorieStats = () => {
 
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
+          <CardTitle className="flex items-center gap-2 text-slate-600">
             <BarChart3 className="w-5 h-5 text-blue-600" />
             Insights
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
-            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+            <span className="text-sm font-medium text-slate-500">
               Alimento mais fotografado:
             </span>
-            <span className="text-sm font-bold text-blue-600 dark:text-blue-400">
+            <span className="text-sm font-bold text-blue-600">
               {stats.mostCommonFood}
             </span>
           </div>
 
           {stats.totalAnalyses > 0 ? (
-            <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900 dark:to-purple-900 rounded-lg">
-              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
+            <div className="p-4 bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg">
+              <h4 className="font-semibold text-slate-600 mb-2">
                 🎉 Parabéns!
               </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-slate-500">
                 Você já analisou {stats.totalAnalyses} refeições e está no caminho certo para uma alimentação mais consciente!
               </p>
             </div>
           ) : (
-            <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900 dark:to-blue-900 rounded-lg text-center">
-              <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
+            <div className="p-4 bg-gradient-to-r from-green-50 to-blue-50 rounded-lg text-center">
+              <h4 className="font-semibold text-slate-600 mb-2">
                 🚀 Comece sua jornada!
               </h4>
-              <p className="text-sm text-gray-600 dark:text-gray-300">
+              <p className="text-sm text-slate-500">
                 Tire sua primeira foto e descubra as calorias dos seus alimentos!
               </p>
             </div>
