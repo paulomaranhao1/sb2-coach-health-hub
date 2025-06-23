@@ -1,31 +1,25 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Droplets, Pill, Heart, Gift } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useState } from "react";
-
 interface InstructionsDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
-
 const InstructionsDialog = ({
   open,
   onOpenChange
 }: InstructionsDialogProps) => {
   const [dontShowAgain, setDontShowAgain] = useState(false);
-
   const handleClose = () => {
     if (dontShowAgain) {
       localStorage.setItem('sb2_instructions_dismissed', 'true');
     }
     onOpenChange(false);
   };
-
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-md mx-auto bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+  return <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-[95vw] sm:max-w-md mx-auto border border-gray-200 dark:border-gray-700 bg-slate-400">
         <DialogHeader>
           <DialogTitle className="text-center text-lg sm:text-xl font-bold text-gray-800 dark:text-gray-200 mb-2 sm:mb-4">
             🎯 Como usar sua Rotina Diária
@@ -103,15 +97,8 @@ const InstructionsDialog = ({
 
         <div className="space-y-3 mt-4 sm:mt-6">
           <div className="flex items-center space-x-2">
-            <Checkbox 
-              id="dont-show-again" 
-              checked={dontShowAgain}
-              onCheckedChange={(checked) => setDontShowAgain(checked as boolean)}
-            />
-            <label 
-              htmlFor="dont-show-again" 
-              className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 cursor-pointer"
-            >
+            <Checkbox id="dont-show-again" checked={dontShowAgain} onCheckedChange={checked => setDontShowAgain(checked as boolean)} />
+            <label htmlFor="dont-show-again" className="text-xs sm:text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
               Não mostrar novamente
             </label>
           </div>
@@ -126,8 +113,6 @@ const InstructionsDialog = ({
           </div>
         </div>
       </DialogContent>
-    </Dialog>
-  );
+    </Dialog>;
 };
-
 export default InstructionsDialog;
