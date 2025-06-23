@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,11 +24,11 @@ const AIChatInterface = ({ hasPremiumAccess, onShowOffers }: AIChatInterfaceProp
   const [user, setUser] = useState<any>(null);
 
   // Obter usuário atual
-  useState(() => {
+  useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
     });
-  });
+  }, []);
 
   const { messages, sendMessage, isLoading } = useAIChat({
     userId: user?.id,

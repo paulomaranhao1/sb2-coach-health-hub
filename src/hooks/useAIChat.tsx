@@ -42,7 +42,7 @@ export const useAIChat = ({ userId, hasPremiumAccess, onShowOffers }: UseAIChatP
 
     // Adicionar mensagem do usuário
     const userMessage: Message = {
-      id: messages.length + 1,
+      id: Date.now(),
       sender: "user",
       text: messageText,
       time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
@@ -78,7 +78,7 @@ export const useAIChat = ({ userId, hasPremiumAccess, onShowOffers }: UseAIChatP
 
       // Adicionar resposta da IA
       const aiResponse: Message = {
-        id: messages.length + 2,
+        id: Date.now() + 1,
         sender: "ai",
         text: data.response,
         time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
@@ -99,7 +99,7 @@ export const useAIChat = ({ userId, hasPremiumAccess, onShowOffers }: UseAIChatP
     } finally {
       setIsLoading(false);
     }
-  }, [messages, userId, toast]);
+  }, [userId, toast, messages]);
 
   return {
     messages,

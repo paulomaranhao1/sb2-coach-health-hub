@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Brain } from "lucide-react";
 import { useAIChat } from "@/hooks/useAIChat";
@@ -14,11 +14,11 @@ const AIChat = () => {
   const [user, setUser] = useState<any>(null);
 
   // Obter usuário atual
-  useState(() => {
+  useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
       setUser(user);
     });
-  });
+  }, []);
 
   const { sendMessage } = useAIChat({
     userId: user?.id,
