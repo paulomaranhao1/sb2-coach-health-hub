@@ -4,52 +4,60 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { UserProfile, UserStats } from '@/types';
+import { logger } from '@/utils/logger';
 
 export const useAppState = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
   
-  // Estados básicos
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [showOnboarding, setShowOnboarding] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
-  const [showNewFeatures, setShowNewFeatures] = useState(false);
-  const [activeTab, setActiveTab] = useState('home');
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
+  // Estados básicos otimizados
+  const [state, setState] = useState({
+    showWelcome: false,
+    showOnboarding: false,
+    showTutorial: false,
+    showNewFeatures: false,
+    activeTab: 'home',
+    showMobileMenu: false,
+    isLoading: false
+  });
+  
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
+
+  // Update individual state properties efficiently
+  const updateState = useCallback((updates: Partial<typeof state>) => {
+    setState(prev => ({ ...prev, ...updates }));
+  }, []);
 
   // Verificar tutorial via URL apenas uma vez
   useEffect(() => {
     const shouldShowTutorial = searchParams.get('showTutorial');
     if (shouldShowTutorial === 'true') {
-      console.log('useAppState: Tutorial solicitado via URL');
-      setShowTutorial(true);
+      logger.info('Tutorial requested via URL');
+      updateState({ showTutorial: true });
       // Limpar URL
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.delete('showTutorial');
       setSearchParams(newSearchParams, { replace: true });
     }
-  }, [searchParams, setSearchParams]);
+  }, [searchParams, setSearchParams, updateState]);
 
-  // Função simplificada para verificar perfil - executa apenas quando chamada
+  // Função otimizada para verificar perfil
   const checkUserProfile = useCallback(async () => {
-    console.log('useAppState: Verificando perfil do usuário...');
-    setIsLoading(true);
+    logger.info('Checking user profile');
+    updateState({ isLoading: true });
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        console.log('useAppState: Usuário não encontrado');
-        setShowWelcome(true);
-        setIsLoading(false);
+        logger.warn('No user found');
+        updateState({ showWelcome: true, isLoading: false });
         return;
       }
 
-      console.log('useAppState: Usuário encontrado:', user.email);
+      logger.info('User found', { email: user.email });
 
       // Buscar perfil
       const { data: profileData } = await supabase
@@ -59,111 +67,109 @@ export const useAppState = () => {
         .maybeSingle();
 
       if (profileData) {
-        console.log('useAppState: Perfil encontrado:', profileData.name);
+        logger.info('Profile found', { name: profileData.name });
         setUserProfile(profileData);
         
         if (!profileData.onboarding_completed) {
-          setShowOnboarding(true);
+          updateState({ showOnboarding: true, isLoading: false });
+          return;
         }
         
-        // Buscar stats de forma não bloqueante usando async/await
-        try {
-          const { data: stats } = await supabase
-            .from('user_stats')
-            .select('*')
-            .eq('user_id', user.id)
-            .maybeSingle();
-          
-          if (stats) {
-            setUserStats(stats);
-          }
-        } catch (error) {
-          console.error('useAppState: Erro ao carregar stats:', error);
-        }
+        // Buscar stats de forma não bloqueante
+        supabase
+          .from('user_stats')
+          .select('*')
+          .eq('user_id', user.id)
+          .maybeSingle()
+          .then(({ data: stats }) => {
+            if (stats) {
+              setUserStats(stats);
+            }
+          })
+          .catch(error => {
+            logger.error('Error loading user stats', { error });
+          });
       } else {
-        console.log('useAppState: Perfil não encontrado');
-        setShowWelcome(true);
+        logger.info('Profile not found');
+        updateState({ showWelcome: true });
       }
     } catch (error) {
-      console.error('useAppState: Erro ao verificar perfil:', error);
+      logger.error('Error checking user profile', { error });
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do usuário",
         variant: "destructive"
       });
     } finally {
-      setIsLoading(false);
+      updateState({ isLoading: false });
     }
-  }, [toast]);
+  }, [toast, updateState]);
 
-  // Handlers otimizados
+  // Handlers otimizados com useCallback
   const handleOnboardingComplete = useCallback(() => {
-    console.log('useAppState: Onboarding completado');
-    setShowOnboarding(false);
-    setShowTutorial(true);
-  }, []);
+    logger.info('Onboarding completed');
+    updateState({ showOnboarding: false, showTutorial: true });
+  }, [updateState]);
 
   const handleTutorialComplete = useCallback(() => {
-    console.log('useAppState: Tutorial completado - indo para app principal');
-    setShowTutorial(false);
-    // Não mostrar novidades automaticamente - apenas ir para o app principal
-  }, []);
+    logger.info('Tutorial completed');
+    updateState({ showTutorial: false });
+  }, [updateState]);
 
   const handleTutorialSkip = useCallback(() => {
-    console.log('useAppState: Tutorial pulado - indo para app principal');
-    setShowTutorial(false);
-    // Não mostrar novidades automaticamente - apenas ir para o app principal
-  }, []);
+    logger.info('Tutorial skipped');
+    updateState({ showTutorial: false });
+  }, [updateState]);
 
   const handleTabChange = useCallback((tab: string) => {
-    console.log('useAppState: Mudando para tab:', tab);
-    setActiveTab(tab);
+    logger.debug('Tab changed', { tab });
+    updateState({ activeTab: tab, showMobileMenu: false });
     setSearchParams({ tab }, { replace: true });
-    setShowMobileMenu(false);
-  }, [setSearchParams]);
+  }, [setSearchParams, updateState]);
 
   const handleNavigateToHome = useCallback(() => {
-    console.log('useAppState: Navegando para home');
+    logger.info('Navigating to home');
     navigate('/', { replace: true });
-    setActiveTab('home');
+    updateState({ activeTab: 'home' });
     setSearchParams({}, { replace: true });
-  }, [navigate, setSearchParams]);
+  }, [navigate, setSearchParams, updateState]);
 
-  // Sincronizar tab com URL
+  // Sincronizar tab com URL apenas quando necessário
   useEffect(() => {
     const tab = searchParams.get('tab');
-    if (tab && tab !== activeTab) {
-      setActiveTab(tab);
+    if (tab && tab !== state.activeTab) {
+      updateState({ activeTab: tab });
     }
-  }, [searchParams, activeTab]);
+  }, [searchParams, state.activeTab, updateState]);
 
+  // Memoize return object to prevent unnecessary re-renders
   return useMemo(() => ({
-    showWelcome,
-    setShowWelcome,
-    showOnboarding,
-    showTutorial,
-    showNewFeatures,
-    setShowNewFeatures,
-    activeTab,
-    setActiveTab,
-    showMobileMenu,
-    setShowMobileMenu,
+    ...state,
     userProfile,
     setUserProfile,
     userStats,
     setUserStats,
-    isLoading,
-    setIsLoading,
     checkUserProfile,
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,
     handleTabChange,
-    handleNavigateToHome
+    handleNavigateToHome,
+    // Helper functions
+    setShowWelcome: (show: boolean) => updateState({ showWelcome: show }),
+    setShowNewFeatures: (show: boolean) => updateState({ showNewFeatures: show }),
+    setShowMobileMenu: (show: boolean) => updateState({ showMobileMenu: show }),
+    setIsLoading: (loading: boolean) => updateState({ isLoading: loading })
   }), [
-    showWelcome, showOnboarding, showTutorial, showNewFeatures, activeTab, showMobileMenu,
-    userProfile, userStats, isLoading, checkUserProfile,
-    handleOnboardingComplete, handleTutorialComplete, handleTutorialSkip,
-    handleTabChange, handleNavigateToHome
+    state,
+    userProfile,
+    userStats,
+    checkUserProfile,
+    handleOnboardingComplete,
+    handleTutorialComplete,
+    handleTutorialSkip,
+    handleTabChange,
+    handleNavigateToHome,
+    updateState
   ]);
 };

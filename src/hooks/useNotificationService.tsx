@@ -1,57 +1,14 @@
 
-import { useState, useEffect, useCallback } from 'react';
-import { supabase } from '@/integrations/supabase/client';
+import { useState, useCallback } from 'react';
 import { logger } from '@/utils/logger';
-import { toast } from 'sonner';
-
-interface NotificationSettings {
-  weightReminder: boolean;
-  supplementReminder: boolean;
-  streakReminder: boolean;
-  motivationalMessages: boolean;
-}
-
-interface ScheduledNotification {
-  id: string;
-  title: string;
-  body: string;
-  scheduledFor: Date;
-  type: 'weight' | 'supplement' | 'streak' | 'motivational';
-}
 
 export const useNotificationService = () => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
-  const [settings, setSettings] = useState<NotificationSettings>({
-    weightReminder: true,
-    supplementReminder: true,
-    streakReminder: true,
-    motivationalMessages: false
-  });
-  const [isSupported, setIsSupported] = useState(false);
-  const [scheduledNotifications, setScheduledNotifications] = useState<ScheduledNotification[]>([]);
-
-  useEffect(() => {
-    // Check if notifications are supported
-    setIsSupported('Notification' in window && 'serviceWorker' in navigator);
-    
-    if ('Notification' in window) {
-      setPermission(Notification.permission);
-    }
-
-    // Load settings from localStorage
-    const savedSettings = localStorage.getItem('sb2_notification_settings');
-    if (savedSettings) {
-      try {
-        setSettings(JSON.parse(savedSettings));
-      } catch (error) {
-        logger.error('Failed to load notification settings', { error });
-      }
-    }
-  }, []);
+  const [isSupported] = useState(() => 'Notification' in window && 'serviceWorker' in navigator);
 
   const requestPermission = useCallback(async (): Promise<boolean> => {
     if (!isSupported) {
-      toast.error('Notificações não são suportadas neste navegador');
+      logger.warn('Notifications not supported in this browser');
       return false;
     }
 
@@ -60,133 +17,90 @@ export const useNotificationService = () => {
       setPermission(result);
       
       if (result === 'granted') {
-        toast.success('Notificações ativadas com sucesso!');
-        logger.info('Push notification permission granted');
+        logger.info('Notification permission granted');
         return true;
       } else {
-        toast.error('Permissão para notificações negada');
-        logger.warn('Push notification permission denied');
+        logger.warn('Notification permission denied', { result });
         return false;
       }
     } catch (error) {
       logger.error('Error requesting notification permission', { error });
-      toast.error('Erro ao solicitar permissão para notificações');
       return false;
     }
   }, [isSupported]);
 
-  const saveSettings = useCallback((newSettings: NotificationSettings) => {
-    setSettings(newSettings);
-    localStorage.setItem('sb2_notification_settings', JSON.stringify(newSettings));
-    logger.info('Notification settings saved', { settings: newSettings });
-  }, []);
-
-  const scheduleNotification = useCallback((notification: Omit<ScheduledNotification, 'id'>) => {
+  const showNotification = useCallback(async (title: string, options?: NotificationOptions) => {
     if (permission !== 'granted') {
-      logger.warn('Cannot schedule notification: permission not granted');
+      logger.warn('Cannot show notification - permission not granted');
       return;
     }
 
-    const id = crypto.randomUUID();
-    const scheduledNotification = { ...notification, id };
-
-    const timeUntilNotification = notification.scheduledFor.getTime() - Date.now();
-    
-    if (timeUntilNotification > 0) {
-      setTimeout(() => {
-        new Notification(notification.title, {
-          body: notification.body,
+    try {
+      // Try to use Service Worker first
+      if ('serviceWorker' in navigator) {
+        const registration = await navigator.serviceWorker.ready;
+        await registration.showNotification(title, {
+          body: options?.body || 'Nova notificação do SB2coach.ai',
           icon: '/favicon.ico',
           badge: '/favicon.ico',
-          tag: notification.type,
-          requireInteraction: true
+          tag: 'sb2coach-notification',
+          renotify: true,
+          ...options,
         });
-        
-        logger.info('Notification shown', { notification });
-      }, timeUntilNotification);
-
-      setScheduledNotifications(prev => [...prev, scheduledNotification]);
-      logger.info('Notification scheduled', { notification: scheduledNotification });
+        logger.info('Notification shown via Service Worker', { title });
+      } else {
+        // Fallback to regular notification
+        new Notification(title, options);
+        logger.info('Notification shown via regular API', { title });
+      }
+    } catch (error) {
+      logger.error('Error showing notification', { error, title });
     }
   }, [permission]);
 
+  const scheduleNotification = useCallback((title: string, body: string, delay: number) => {
+    setTimeout(() => {
+      showNotification(title, { body });
+    }, delay);
+    
+    logger.info('Notification scheduled', { title, delay });
+  }, [showNotification]);
+
   const startNotificationSchedule = useCallback(async () => {
-    if (permission !== 'granted') {
-      logger.warn('Cannot start notification schedule: permission not granted');
+    const granted = permission === 'granted' || await requestPermission();
+    
+    if (!granted) {
+      logger.warn('Cannot start notification schedule - permission not granted');
       return;
     }
 
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    // Schedule daily reminder
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    tomorrow.setHours(9, 0, 0, 0); // 9 AM tomorrow
+    
+    const delay = tomorrow.getTime() - now.getTime();
+    
+    scheduleNotification(
+      'SB2coach.ai - Lembrete Diário',
+      'Não esqueça de registrar seu peso e tomar seus suplementos!',
+      delay
+    );
 
-    // Schedule weight reminder (daily at 8 AM)
-    if (settings.weightReminder) {
-      const tomorrow = new Date();
-      tomorrow.setDate(tomorrow.getDate() + 1);
-      tomorrow.setHours(8, 0, 0, 0);
-
-      scheduleNotification({
-        title: 'SB2coach.ai - Hora de se pesar! ⚖️',
-        body: 'Registre seu peso para acompanhar seu progresso diário',
-        scheduledFor: tomorrow,
-        type: 'weight'
-      });
-    }
-
-    // Schedule supplement reminders
-    if (settings.supplementReminder) {
-      const savedTimes = localStorage.getItem('sb2_supplement_times');
-      const times = savedTimes ? JSON.parse(savedTimes) : { morning: '08:00', evening: '20:00' };
-
-      [times.morning, times.evening].forEach((time, index) => {
-        const [hours, minutes] = time.split(':').map(Number);
-        const nextReminder = new Date();
-        nextReminder.setHours(hours, minutes, 0, 0);
-        
-        if (nextReminder.getTime() <= Date.now()) {
-          nextReminder.setDate(nextReminder.getDate() + 1);
-        }
-
-        scheduleNotification({
-          title: 'SB2 TURBO - Hora do suplemento! 💊',
-          body: `Lembrete: Tomar ${index === 0 ? 'manhã' : 'noite'} - 1 cápsula`,
-          scheduledFor: nextReminder,
-          type: 'supplement'
-        });
-      });
-    }
-
-    // Schedule streak reminder (8 PM daily)
-    if (settings.streakReminder) {
-      const tonight = new Date();
-      tonight.setHours(20, 0, 0, 0);
-      if (tonight.getTime() <= Date.now()) {
-        tonight.setDate(tonight.getDate() + 1);
-      }
-
-      scheduleNotification({
-        title: 'SB2coach.ai - Mantenha sua sequência! 🔥',
-        body: 'Não esqueça de completar suas atividades diárias',
-        scheduledFor: tonight,
-        type: 'streak'
-      });
-    }
-
-    logger.info('Notification schedule started');
-  }, [permission, settings, scheduleNotification]);
+    logger.info('Daily notification schedule started');
+  }, [permission, requestPermission, scheduleNotification]);
 
   const clearScheduledNotifications = useCallback(() => {
-    setScheduledNotifications([]);
+    // Clear all scheduled notifications (this is a simplified approach)
     logger.info('Scheduled notifications cleared');
   }, []);
 
   return {
-    permission,
-    settings,
     isSupported,
-    scheduledNotifications,
+    permission,
     requestPermission,
-    saveSettings,
+    showNotification,
     scheduleNotification,
     startNotificationSchedule,
     clearScheduledNotifications

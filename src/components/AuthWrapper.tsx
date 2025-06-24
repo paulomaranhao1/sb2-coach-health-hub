@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import AuthScreen from "./AuthScreen";
 import { Loading } from "./ui/loading";
+import { logger } from "@/utils/logger";
 
 interface AuthWrapperProps {
   children: React.ReactNode;
@@ -14,12 +15,12 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    console.log('AuthWrapper: Iniciando verificação simples...');
+    logger.info('AuthWrapper: Starting authentication check');
 
     // Limpar token Lovable imediatamente se presente
     const url = new URL(window.location.href);
     if (url.searchParams.has('__lovable_token')) {
-      console.log('AuthWrapper: Removendo token Lovable da URL');
+      logger.debug('AuthWrapper: Removing Lovable token from URL');
       url.searchParams.delete('__lovable_token');
       window.history.replaceState({}, '', url.toString());
     }
@@ -27,7 +28,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
     // Configurar listener primeiro
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, newSession) => {
-        console.log('AuthWrapper: Auth event:', event, !!newSession);
+        logger.info('AuthWrapper: Auth state changed', { event, hasSession: !!newSession });
         setSession(newSession);
         setLoading(false);
       }
@@ -35,17 +36,17 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
 
     // Verificar sessão atual apenas uma vez
     supabase.auth.getSession().then(({ data: { session: currentSession } }) => {
-      console.log('AuthWrapper: Sessão atual:', !!currentSession);
+      logger.info('AuthWrapper: Current session checked', { hasSession: !!currentSession });
       setSession(currentSession);
       setLoading(false);
     }).catch((error) => {
-      console.error('AuthWrapper: Erro ao verificar sessão:', error);
+      logger.error('AuthWrapper: Error checking session', { error });
       setLoading(false);
     });
 
-    // Timeout de segurança - muito mais curto
+    // Timeout de segurança
     const timeout = setTimeout(() => {
-      console.log('AuthWrapper: Timeout - assumindo não autenticado');
+      logger.warn('AuthWrapper: Timeout reached - assuming unauthenticated');
       setLoading(false);
     }, 1000);
 
