@@ -8,6 +8,7 @@ import AppLayout from "@/components/layout/AppLayout";
 import TabsContentComponent from "@/components/layout/TabsContent";
 import { LoadingPage } from "@/components/ui/loading-states";
 import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
+import AuthWrapper from "@/components/AuthWrapper";
 
 const Index = memo(() => {
   const logger = useLogger('Index');
@@ -52,17 +53,6 @@ const Index = memo(() => {
     };
   }, [logger, showVideoWelcome, showWelcome, showOnboarding, showTutorial, userProfile]);
 
-  // Verificar perfil apenas uma vez após montagem
-  useEffect(() => {
-    logger.debug('Checking if user profile needs to be loaded');
-    
-    // Verificar se já temos dados ou se está em algum fluxo especial
-    if (!userProfile && !showVideoWelcome && !showWelcome && !showOnboarding && !showTutorial && !showNewFeatures && !isLoading) {
-      logger.info('Loading user profile');
-      checkUserProfile();
-    }
-  }, [userProfile, showVideoWelcome, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile, logger]);
-
   // Log Service Worker status
   useEffect(() => {
     if (swSupported && swRegistered) {
@@ -70,12 +60,100 @@ const Index = memo(() => {
     }
   }, [swSupported, swRegistered, logger]);
 
+  // Se o vídeo de boas-vindas deve ser mostrado, mostrá-lo ANTES da autenticação
+  if (showVideoWelcome) {
+    logger.debug('Showing video welcome screen');
+    return (
+      <GlobalErrorBoundary 
+        level="page" 
+        name="Video Welcome Screen"
+        showDebugInfo={true}
+      >
+        <AppScreens
+          showVideoWelcome={showVideoWelcome}
+          handleVideoWelcomeComplete={handleVideoWelcomeComplete}
+          showWelcome={false}
+          setShowWelcome={setShowWelcome}
+          showOnboarding={false}
+          showTutorial={false}
+          showNewFeatures={false}
+          setShowNewFeatures={setShowNewFeatures}
+          isLoading={false}
+          subscriptionLoading={false}
+          handleOnboardingComplete={handleOnboardingComplete}
+          handleTutorialComplete={handleTutorialComplete}
+          handleTutorialSkip={handleTutorialSkip}
+        />
+      </GlobalErrorBoundary>
+    );
+  }
+
+  // Após o vídeo, verificar autenticação
+  return (
+    <AuthWrapper>
+      <AuthenticatedApp
+        showWelcome={showWelcome}
+        setShowWelcome={setShowWelcome}
+        showOnboarding={showOnboarding}
+        showTutorial={showTutorial}
+        showNewFeatures={showNewFeatures}
+        setShowNewFeatures={setShowNewFeatures}
+        activeTab={activeTab}
+        setShowMobileMenu={setShowMobileMenu}
+        showMobileMenu={showMobileMenu}
+        userProfile={userProfile}
+        userStats={userStats}
+        isLoading={isLoading}
+        checkUserProfile={checkUserProfile}
+        handleOnboardingComplete={handleOnboardingComplete}
+        handleTutorialComplete={handleTutorialComplete}
+        handleTutorialSkip={handleTutorialSkip}
+        handleTabChange={handleTabChange}
+        handleNavigateToHome={handleNavigateToHome}
+      />
+    </AuthWrapper>
+  );
+});
+
+// Componente separado para a aplicação autenticada
+const AuthenticatedApp = memo(({
+  showWelcome,
+  setShowWelcome,
+  showOnboarding,
+  showTutorial,
+  showNewFeatures,
+  setShowNewFeatures,
+  activeTab,
+  setShowMobileMenu,
+  showMobileMenu,
+  userProfile,
+  userStats,
+  isLoading,
+  checkUserProfile,
+  handleOnboardingComplete,
+  handleTutorialComplete,
+  handleTutorialSkip,
+  handleTabChange,
+  handleNavigateToHome
+}: any) => {
+  const logger = useLogger('AuthenticatedApp');
+
+  // Verificar perfil apenas uma vez após montagem
+  useEffect(() => {
+    logger.debug('Checking if user profile needs to be loaded');
+    
+    // Verificar se já temos dados ou se está em algum fluxo especial
+    if (!userProfile && !showWelcome && !showOnboarding && !showTutorial && !showNewFeatures && !isLoading) {
+      logger.info('Loading user profile');
+      checkUserProfile();
+    }
+  }, [userProfile, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile, logger]);
+
   // Renderizar telas especiais
-  const shouldShowSpecialScreen = showVideoWelcome || showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
+  const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
 
   logger.debug('Current state', {
     shouldShowSpecialScreen,
-    showVideoWelcome,
     showWelcome,
     showOnboarding,
     showTutorial,
@@ -97,8 +175,8 @@ const Index = memo(() => {
         showDebugInfo={true}
       >
         <AppScreens
-          showVideoWelcome={showVideoWelcome}
-          handleVideoWelcomeComplete={handleVideoWelcomeComplete}
+          showVideoWelcome={false}
+          handleVideoWelcomeComplete={() => {}}
           showWelcome={showWelcome}
           setShowWelcome={setShowWelcome}
           showOnboarding={showOnboarding}
@@ -148,6 +226,7 @@ const Index = memo(() => {
   );
 });
 
+AuthenticatedApp.displayName = 'AuthenticatedApp';
 Index.displayName = 'Index';
 
 export default Index;

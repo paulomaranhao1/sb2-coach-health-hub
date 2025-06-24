@@ -214,12 +214,34 @@ export const useAppState = () => {
     setUserStats,
     checkUserProfile,
     handleVideoWelcomeComplete,
-    handleOnboardingComplete,
-    handleTutorialComplete,
-    handleTutorialSkip,
-    handleTabChange,
-    handleNavigateToHome,
-    invalidateUserCaches,
+    handleOnboardingComplete: useCallback(() => {
+      logger.info('Onboarding completed');
+      cache.invalidateAll();
+      updateState({ showOnboarding: false, showTutorial: true });
+    }, [updateState, cache, logger]),
+    handleTutorialComplete: useCallback(() => {
+      logger.info('Tutorial completed');
+      updateState({ showTutorial: false });
+    }, [updateState, logger]),
+    handleTutorialSkip: useCallback(() => {
+      logger.info('Tutorial skipped');
+      updateState({ showTutorial: false });
+    }, [updateState, logger]),
+    handleTabChange: useCallback((tab: string) => {
+      logger.debug('Tab changed', { tab });
+      updateState({ activeTab: tab, showMobileMenu: false });
+      setSearchParams({ tab }, { replace: true });
+    }, [setSearchParams, updateState, logger]),
+    handleNavigateToHome: useCallback(() => {
+      logger.info('Navigating to home');
+      navigate('/', { replace: true });
+      updateState({ activeTab: 'home' });
+      setSearchParams({}, { replace: true });
+    }, [navigate, setSearchParams, updateState, logger]),
+    invalidateUserCaches: useCallback(() => {
+      logger.info('Invalidating user caches');
+      cache.invalidateAll();
+    }, [cache, logger]),
     // Helper functions
     setShowWelcome: (show: boolean) => updateState({ showWelcome: show }),
     setShowNewFeatures: (show: boolean) => updateState({ showNewFeatures: show }),
@@ -231,12 +253,17 @@ export const useAppState = () => {
     userStats,
     checkUserProfile,
     handleVideoWelcomeComplete,
+    updateState,
+    cache,
+    logger,
+    toast,
+    navigate,
+    setSearchParams,
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,
     handleTabChange,
     handleNavigateToHome,
-    invalidateUserCaches,
-    updateState
+    invalidateUserCaches
   ]);
 };

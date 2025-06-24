@@ -44,11 +44,11 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
       setLoading(false);
     });
 
-    // Timeout de segurança
+    // Timeout de segurança reduzido
     const timeout = setTimeout(() => {
       logger.warn('AuthWrapper: Timeout reached - assuming unauthenticated');
       setLoading(false);
-    }, 1000);
+    }, 500); // Reduzido de 1000ms para 500ms
 
     return () => {
       subscription.unsubscribe();
@@ -59,7 +59,7 @@ const AuthWrapper = ({ children }: AuthWrapperProps) => {
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <Loading size="lg" text="Carregando..." />
+        <Loading size="lg" text="Verificando autenticação..." />
       </div>
     );
   }

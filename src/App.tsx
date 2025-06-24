@@ -1,44 +1,44 @@
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import AuthWrapper from "./components/AuthWrapper";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfService from "./pages/TermsOfService";
+import Roadmap from "./pages/Roadmap";
+import "./App.css";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      refetchOnWindowFocus: false,
+      retry: 1
+    }
+  }
+});
 
-const App = () => (
-  <div 
-    className="min-h-screen bg-background text-foreground transition-colors duration-300"
-    style={{ 
-      backgroundColor: 'rgb(255, 255, 255)', 
-      color: 'rgb(26, 26, 26)',
-      minHeight: '100vh' 
-    }}
-  >
+function App() {
+  return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <AuthWrapper>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-              <Route path="/terms-of-service" element={<TermsOfService />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </AuthWrapper>
-        </BrowserRouter>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/terms" element={<TermsOfService />} />
+            <Route path="/roadmap" element={<Roadmap />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Router>
       </TooltipProvider>
     </QueryClientProvider>
-  </div>
-);
+  );
+}
 
 export default App;
