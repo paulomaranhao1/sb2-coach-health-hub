@@ -2,7 +2,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { FoodAnalysis } from './types';
 
-export const saveFoodAnalysis = async (analysis: FoodAnalysis): Promise<boolean> => {
+export const saveFoodAnalysis = async (analysis: FoodAnalysis, imageData?: string): Promise<{ success: boolean; id?: string }> => {
   try {
     console.log('🗃️ Salvando análise de alimento no Supabase...');
     
@@ -10,38 +10,40 @@ export const saveFoodAnalysis = async (analysis: FoodAnalysis): Promise<boolean>
     
     if (!user) {
       console.warn('⚠️ Usuário não autenticado, salvando apenas no localStorage');
-      saveToLocalStorage(analysis);
-      return true;
+      const savedAnalysis = saveToLocalStorage(analysis);
+      return { success: true, id: savedAnalysis.id };
     }
 
     const analysisData = {
       user_id: user.id,
-      foods: analysis.foods,
+      foods: analysis.foods as any, // Cast para Json
       total_calories: analysis.totalCalories,
-      macros: analysis.macros,
+      macros: analysis.macros as any, // Cast para Json
       recommendations: analysis.recommendations || [],
       analyzed_at: analysis.timestamp,
-      image_url: null // Por enquanto não salvamos a imagem
+      image_url: imageData || null
     };
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('food_analyses')
-      .insert(analysisData);
+      .insert(analysisData)
+      .select('id')
+      .single();
 
     if (error) {
       console.error('❌ Erro ao salvar no Supabase:', error);
       // Fallback para localStorage se falhar
-      saveToLocalStorage(analysis);
-      return false;
+      const savedAnalysis = saveToLocalStorage(analysis);
+      return { success: false, id: savedAnalysis.id };
     }
 
     console.log('✅ Análise salva no Supabase com sucesso');
-    return true;
+    return { success: true, id: data.id };
   } catch (error) {
     console.error('❌ Erro geral ao salvar análise:', error);
     // Fallback para localStorage
-    saveToLocalStorage(analysis);
-    return false;
+    const savedAnalysis = saveToLocalStorage(analysis);
+    return { success: false, id: savedAnalysis.id };
   }
 };
 
@@ -59,8 +61,10 @@ const saveToLocalStorage = (analysis: FoodAnalysis) => {
     const limitedAnalyses = analyses.slice(0, 50);
     localStorage.setItem('food_analyses', JSON.stringify(limitedAnalyses));
     console.log('💾 Análise salva no localStorage');
+    return analysisWithId;
   } catch (error) {
     console.error('❌ Erro ao salvar no localStorage:', error);
+    return { ...analysis, id: crypto.randomUUID(), user_id: 'anonymous' };
   }
 };
 

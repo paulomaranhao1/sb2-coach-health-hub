@@ -1,4 +1,3 @@
-
 import { useState, useRef } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -85,12 +84,12 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
 
       // Auto-save analysis
       try {
-        const saved = await saveFoodAnalysis(result, selectedImage);
-        if (saved) {
-          console.log('💾 Análise salva automaticamente:', saved.id);
+        const saveResult = await saveFoodAnalysis(result, selectedImage);
+        if (saveResult.success) {
+          console.log('💾 Análise salva automaticamente:', saveResult.id);
           
           if (onAnalysisComplete) {
-            onAnalysisComplete(saved);
+            onAnalysisComplete({ ...result, id: saveResult.id });
           }
 
           // Status-specific toast messages
@@ -286,15 +285,15 @@ const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
             console.log('💾 Tentando salvar análise manualmente:', analysisData);
             
             try {
-              const saved = await saveFoodAnalysis(analysisData, selectedImage);
-              if (saved) {
+              const saveResult = await saveFoodAnalysis(analysisData, selectedImage);
+              if (saveResult.success) {
                 toast({
                   title: "💾 Análise Salva!",
                   description: "A análise foi salva no seu histórico com sucesso.",
                 });
                 
                 if (onAnalysisComplete) {
-                  onAnalysisComplete(saved);
+                  onAnalysisComplete({ ...analysisData, id: saveResult.id });
                 }
               }
             } catch (error: any) {
