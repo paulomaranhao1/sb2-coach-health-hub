@@ -58,29 +58,20 @@ const MotivationalGreeting = memo(() => {
     getFastingPhase
   } = useFasting();
 
-  const setRandomPhrase = useCallback(() => {
-    const timer = logger.startTimer('Generate random phrase');
+  const setDailyPhrase = useCallback(() => {
+    const timer = logger.startTimer('Generate daily phrase');
     
-    // Usar cache para evitar repetir frases muito recentemente
-    const recentPhrases = cache.get<number[]>('temp:recent_phrases') || [];
-    const availablePhrases = motivationalPhrases.filter((_, index) => 
-      !recentPhrases.includes(index)
-    );
-    
-    const phrasesToUse = availablePhrases.length > 5 ? availablePhrases : motivationalPhrases;
-    const randomIndex = Math.floor(Math.random() * phrasesToUse.length);
-    const selectedPhrase = phrasesToUse[randomIndex];
+    // Usar seed baseado na data para manter a mesma frase durante todo o dia
+    const today = new Date();
+    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+    const phraseIndex = dayOfYear % motivationalPhrases.length;
+    const selectedPhrase = motivationalPhrases[phraseIndex];
     
     setCurrentPhrase(selectedPhrase);
     
-    // Atualizar cache de frases recentes
-    const originalIndex = motivationalPhrases.indexOf(selectedPhrase);
-    const updatedRecent = [...recentPhrases, originalIndex].slice(-10); // Manter últimas 10
-    cache.set('temp:recent_phrases', updatedRecent, { ttl: 24 * 60 * 60 * 1000 }); // 24h
-    
     timer();
-    logger.info('Random phrase generated', { phrase: selectedPhrase });
-  }, [cache, logger]);
+    logger.info('Daily phrase set', { phrase: selectedPhrase, dayOfYear });
+  }, [logger]);
 
   const fetchUserName = useCallback(async () => {
     const timer = logger.startTimer('Fetch user name');
@@ -131,7 +122,7 @@ const MotivationalGreeting = memo(() => {
     Promise.all([
       fetchUserName(),
       new Promise(resolve => {
-        setRandomPhrase();
+        setDailyPhrase();
         resolve(true);
       })
     ]);
@@ -140,7 +131,7 @@ const MotivationalGreeting = memo(() => {
       timer();
       logger.info('MotivationalGreeting unmounted');
     };
-  }, [fetchUserName, setRandomPhrase, logger]);
+  }, [fetchUserName, setDailyPhrase, logger]);
 
   logger.debug('MotivationalGreeting render state', {
     currentFast: !!currentFast,
@@ -174,7 +165,7 @@ const MotivationalGreeting = memo(() => {
   if (isLoading) {
     return (
       <div className="mb-6">
-        <div className="glass rounded-2xl p-3 border-0 shadow-lg">
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-3 border-0 shadow-lg">
           <EnhancedSkeleton variant="text" lines={2} className="h-4" />
         </div>
       </div>
@@ -185,9 +176,9 @@ const MotivationalGreeting = memo(() => {
   if (!userName) return null;
 
   return (
-    <div className="glass rounded-2xl p-3 mb-6 border-0 shadow-lg animate-fade-in">
+    <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-3 mb-6 border-0 shadow-lg animate-fade-in">
       <div className="text-left">
-        <span className="text-xs text-foreground/80 font-medium leading-tight">
+        <span className="text-xs text-blue-800 font-medium leading-tight">
           Olá, {userName}! 👋 {currentPhrase}
         </span>
       </div>
