@@ -1,98 +1,114 @@
 
 @layer base {
-  /* Typography System - Light Theme Optimized */
+  /* Typography System - High Contrast for Perfect Readability */
   
-  /* Headings - Strong but not black */
+  /* Headings - Strong contrast */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     letter-spacing: -0.025em;
     transition: color 0.3s ease;
-    color: rgb(51 65 85) !important; /* slate-700 - strong but readable */
+    color: rgb(17 24 39) !important; /* Gray 900 - máximo contraste */
   }
   
-  /* Body text - Soft and readable */
+  /* Body text - High contrast */
   p, span, div {
     font-weight: 500;
     line-height: 1.625;
     transition: color 0.3s ease;
-    color: rgb(71 85 105) !important; /* slate-600 - perfect readability */
+    color: rgb(31 41 55) !important; /* Gray 800 - alta legibilidade */
   }
   
-  /* Muted text - Still readable */
+  /* Muted text - Still very readable */
   .text-muted-foreground {
     font-weight: 500 !important;
     transition: color 0.3s ease !important;
-    color: rgb(100 116 139) !important; /* slate-500 - muted but clear */
+    color: rgb(55 65 81) !important; /* Gray 700 - ainda legível */
   }
 
-  /* Links - Theme colors */
+  /* Links - High contrast blue */
   a {
     font-weight: 600;
     transition: color 0.2s ease;
-    color: rgb(220 38 38) !important; /* primary red */
+    color: rgb(29 78 216) !important; /* Blue 700 - mais escuro */
   }
   
   a:hover {
     opacity: 0.8;
   }
 
-  /* Small text - Optimized sizes */
+  /* Small text - High contrast */
   .text-sm {
     font-weight: 500;
-    color: rgb(100 116 139) !important; /* slate-500 */
+    color: rgb(55 65 81) !important; /* Gray 700 */
     transition: color 0.3s ease;
   }
 
   .text-xs {
     font-weight: 500;
-    color: rgb(100 116 139) !important; /* slate-500 */
+    color: rgb(75 85 99) !important; /* Gray 600 */
     transition: color 0.3s ease;
   }
   
-  /* Special text variants - Vibrant colors */
+  /* Special text variants - High contrast colors */
   .text-success {
     font-weight: 600;
-    color: rgb(34 197 94) !important; /* green-500 */
+    color: rgb(21 128 61) !important; /* Green 700 - mais escuro */
     transition: color 0.3s ease;
   }
   
   .text-warning {
     font-weight: 600;
-    color: rgb(245 158 11) !important; /* amber-500 */
+    color: rgb(55 65 81) !important; /* Gray 700 - NO YELLOW */
     transition: color 0.3s ease;
   }
   
   .text-error {
     font-weight: 600;
-    color: rgb(220 38 38) !important; /* red-600 */
+    color: rgb(185 28 28) !important; /* Red 700 - mais escuro */
     transition: color 0.3s ease;
   }
 
   /* Info text variant */
   .text-info {
     font-weight: 600;
-    color: rgb(59 130 246) !important; /* blue-500 */
+    color: rgb(29 78 216) !important; /* Blue 700 - mais escuro */
     transition: color 0.3s ease;
   }
 
-  /* Button specific text colors */
+  /* Button specific text colors - High contrast */
   button {
     font-weight: 600;
   }
 
-  /* Ensure input text is readable */
+  /* Ensure input text is highly readable */
   input, textarea, select {
-    color: rgb(71 85 105) !important; /* slate-600 */
+    color: rgb(17 24 39) !important; /* Gray 900 */
+    font-weight: 500;
   }
 
   input::placeholder, textarea::placeholder {
-    color: rgb(148 163 184) !important; /* slate-400 */
+    color: rgb(107 114 128) !important; /* Gray 500 */
     font-weight: 400;
   }
 
-  /* Label text */
+  /* Label text - High contrast */
   label {
-    color: rgb(71 85 105) !important; /* slate-600 */
+    color: rgb(17 24 39) !important; /* Gray 900 */
     font-weight: 600;
+  }
+
+  /* Badge text - High contrast */
+  .badge {
+    font-weight: 600;
+    color: rgb(17 24 39) !important; /* Gray 900 */
+  }
+
+  /* Card text - High contrast */
+  .card-title {
+    color: rgb(17 24 39) !important; /* Gray 900 */
+  }
+
+  .card-description {
+    color: rgb(31 41 55) !important; /* Gray 800 */
   }
 }

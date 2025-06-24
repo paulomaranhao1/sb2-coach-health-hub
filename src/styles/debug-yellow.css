@@ -1,24 +1,10 @@
 
-/* CSS de Debug para identificar elementos amarelos */
+/* CSS de Debug para identificar elementos amarelos - SEM AVISOS VISUAIS */
 
 /* Este arquivo ajuda a identificar onde o amarelo pode estar aparecendo */
 @media screen {
-  /* Log de debug via CSS (aparece no console se houver elementos amarelos) */
-  *[style*="yellow"]::before,
-  *[style*="amber"]::before,
-  *[class*="yellow"]::before,
-  *[class*="amber"]::before {
-    content: "YELLOW DETECTED: " attr(class) " | " attr(style);
-    position: absolute;
-    background: red;
-    color: white;
-    font-size: 10px;
-    z-index: 9999;
-    top: 0;
-    left: 0;
-    padding: 2px;
-    border: 1px solid white;
-  }
+  /* Removido: avisos visuais que estavam causando poluição visual */
+  /* Debug silencioso - apenas force override */
 }
 
 /* Força override em tempo real para qualquer cor amarela que apareça */
@@ -29,7 +15,26 @@
 *[style*="#ffff00"],
 *[style*="#ffc107"],
 *[style*="#ffeb3b"],
-*[style*="#fff176"] {
-  background-color: rgb(156 163 175) !important;
-  color: rgb(17 24 39) !important;
+*[style*="#fff176"],
+*[style*="yellow"],
+*[style*="gold"] {
+  background-color: rgb(209 213 219) !important; /* Gray 300 - mais claro */
+  color: rgb(17 24 39) !important; /* Gray 900 - alto contraste */
+  border-color: rgb(209 213 219) !important;
+}
+
+/* Dark mode overrides */
+.dark *[style*="rgb(255, 255, 0)"],
+.dark *[style*="rgb(255, 193, 7)"],
+.dark *[style*="rgb(255, 235, 59)"],
+.dark *[style*="rgb(255, 241, 118)"],
+.dark *[style*="#ffff00"],
+.dark *[style*="#ffc107"],
+.dark *[style*="#ffeb3b"],
+.dark *[style*="#fff176"],
+.dark *[style*="yellow"],
+.dark *[style*="gold"] {
+  background-color: rgb(156 163 175) !important; /* Gray 400 */
+  color: rgb(243 244 246) !important; /* Gray 100 */
+  border-color: rgb(156 163 175) !important;
 }

@@ -41,9 +41,9 @@
 *[class*="yellow"],
 *[class*="amber"],
 *[class*="warning"] {
-  background-color: rgb(156 163 175) !important;
-  color: rgb(17 24 39) !important;
-  border-color: rgb(156 163 175) !important;
+  background-color: rgb(209 213 219) !important; /* Gray 300 - mais claro */
+  color: rgb(17 24 39) !important; /* Gray 900 - alto contraste */
+  border-color: rgb(209 213 219) !important;
 }
 
 .dark *[style*="yellow"],
@@ -51,9 +51,9 @@
 .dark *[class*="yellow"],
 .dark *[class*="amber"],
 .dark *[class*="warning"] {
-  background-color: rgb(107 114 128) !important;
-  color: rgb(243 244 246) !important;
-  border-color: rgb(107 114 128) !important;
+  background-color: rgb(156 163 175) !important; /* Gray 400 */
+  color: rgb(17 24 39) !important; /* Texto escuro para contraste */
+  border-color: rgb(156 163 175) !important;
 }
 
 /* Override de todas as possíveis classes Tailwind amarelas */
@@ -63,9 +63,9 @@
 .bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300, .bg-amber-400, .bg-amber-500, .bg-amber-600, .bg-amber-700, .bg-amber-800, .bg-amber-900,
 .border-yellow-50, .border-yellow-100, .border-yellow-200, .border-yellow-300, .border-yellow-400, .border-yellow-500, .border-yellow-600, .border-yellow-700, .border-yellow-800, .border-yellow-900,
 .border-amber-50, .border-amber-100, .border-amber-200, .border-amber-300, .border-amber-400, .border-amber-500, .border-amber-600, .border-amber-700, .border-amber-800, .border-amber-900 {
-  background-color: rgb(156 163 175) !important;
-  color: rgb(17 24 39) !important;
-  border-color: rgb(156 163 175) !important;
+  background-color: rgb(209 213 219) !important; /* Gray 300 */
+  color: rgb(17 24 39) !important; /* Gray 900 */
+  border-color: rgb(209 213 219) !important;
 }
 
 /* Dark mode overrides */
@@ -75,9 +75,9 @@
 .dark .bg-amber-50, .dark .bg-amber-100, .dark .bg-amber-200, .dark .bg-amber-300, .dark .bg-amber-400, .dark .bg-amber-500, .dark .bg-amber-600, .dark .bg-amber-700, .dark .bg-amber-800, .dark .bg-amber-900,
 .dark .border-yellow-50, .dark .border-yellow-100, .dark .border-yellow-200, .dark .border-yellow-300, .dark .border-yellow-400, .dark .border-yellow-500, .dark .border-yellow-600, .dark .border-yellow-700, .dark .border-yellow-800, .dark .border-yellow-900,
 .dark .border-amber-50, .dark .border-amber-100, .dark .border-amber-200, .dark .border-amber-300, .dark .border-amber-400, .dark .border-amber-500, .dark .border-amber-600, .dark .border-amber-700, .dark .border-amber-800, .dark .border-amber-900 {
-  background-color: rgb(107 114 128) !important;
-  color: rgb(243 244 246) !important;
-  border-color: rgb(107 114 128) !important;
+  background-color: rgb(156 163 175) !important; /* Gray 400 */
+  color: rgb(17 24 39) !important; /* Texto escuro */
+  border-color: rgb(156 163 175) !important;
 }
 
 /* Force override para gradientes amarelos */
@@ -87,10 +87,10 @@
 
 *[class*="from-yellow"], *[class*="to-yellow"], *[class*="via-yellow"],
 *[class*="from-amber"], *[class*="to-amber"], *[class*="via-amber"] {
-  background-image: linear-gradient(to right, rgb(156 163 175), rgb(107 114 128)) !important;
+  background-image: linear-gradient(to right, rgb(209 213 219), rgb(156 163 175)) !important;
 }
 
 .dark *[class*="from-yellow"], .dark *[class*="to-yellow"], .dark *[class*="via-yellow"],
 .dark *[class*="from-amber"], .dark *[class*="to-amber"], .dark *[class*="via-amber"] {
-  background-image: linear-gradient(to right, rgb(107 114 128), rgb(75 85 99)) !important;
+  background-image: linear-gradient(to right, rgb(156 163 175), rgb(75 85 99)) !important;
 }

@@ -20,22 +20,22 @@ interface StickersAlbumProps {
 const StickersAlbum = ({ stickers, userStickers, onShareSticker }: StickersAlbumProps) => {
   const getRarityColor = (rarity: string) => {
     switch (rarity) {
-      case 'comum': return 'bg-gray-100 text-gray-800';
-      case 'raro': return 'bg-blue-100 text-blue-800';  
-      case 'épico': return 'bg-purple-100 text-purple-800';
-      case 'lendário': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
+      case 'comum': return 'bg-gray-200 text-gray-900';
+      case 'raro': return 'bg-blue-100 text-blue-900';  
+      case 'épico': return 'bg-purple-100 text-purple-900';
+      case 'lendário': return 'bg-red-100 text-red-900';
+      default: return 'bg-gray-200 text-gray-900';
     }
   };
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-gray-900">
           <Star className="w-5 h-5" />
           Álbum de Figurinhas
         </CardTitle>
-        <CardDescription>
+        <CardDescription className="text-gray-700">
           Colecione figurinhas épicas e compartilhe suas conquistas
         </CardDescription>
       </CardHeader>
@@ -48,20 +48,20 @@ const StickersAlbum = ({ stickers, userStickers, onShareSticker }: StickersAlbum
                 key={sticker.id}
                 className={`p-4 rounded-lg border-2 transition-all ${
                   isCollected 
-                    ? 'border-blue-200 bg-blue-50' 
-                    : 'border-gray-200 bg-gray-50 opacity-60'
+                    ? 'border-blue-300 bg-blue-50' 
+                    : 'border-gray-300 bg-gray-100 opacity-60'
                 }`}
               >
                 <div className="text-3xl mb-2 text-center">{sticker.emoji}</div>
-                <h3 className="font-semibold text-center mb-1">{sticker.name}</h3>
-                <Badge className={`w-full mb-2 justify-center ${getRarityColor(sticker.rarity)}`}>
+                <h3 className="font-semibold text-center mb-1 text-gray-900">{sticker.name}</h3>
+                <Badge className={`w-full mb-2 justify-center font-semibold ${getRarityColor(sticker.rarity)}`}>
                   {sticker.rarity}
                 </Badge>
                 {isCollected ? (
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    className="w-full"
+                    className="w-full text-gray-900 border-gray-400 hover:bg-gray-100"
                     onClick={() => onShareSticker(sticker.id)}
                   >
                     <Share2 className="w-3 h-3 mr-1" />
@@ -71,7 +71,7 @@ const StickersAlbum = ({ stickers, userStickers, onShareSticker }: StickersAlbum
                   <Button 
                     size="sm" 
                     variant="outline" 
-                    className="w-full opacity-50"
+                    className="w-full opacity-50 text-gray-600 border-gray-300"
                     disabled
                   >
                     Não coletada

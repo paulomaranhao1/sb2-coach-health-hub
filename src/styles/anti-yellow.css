@@ -1,7 +1,7 @@
 
 /* Anti-Yellow System - Force Gray Override */
 @layer base {
-  /* Override ALL possible yellow/amber variants with elegant gray */
+  /* Override ALL possible yellow/amber variants with elegant light gray */
   .yellow-override,
   [class*="yellow-"],
   [class*="amber-"],
@@ -15,9 +15,9 @@
   [style*="rgb(253, 230, 138)"],
   [style*="rgb(252, 211, 77)"],
   [style*="rgb(245, 158, 11)"] {
-    background-color: rgb(156 163 175) !important;
-    color: rgb(17 24 39) !important;
-    border-color: rgb(156 163 175) !important;
+    background-color: rgb(209 213 219) !important; /* Gray 300 - mais legível */
+    color: rgb(17 24 39) !important; /* Gray 900 - alto contraste */
+    border-color: rgb(209 213 219) !important;
   }
 
   /* Dark mode overrides */
@@ -26,31 +26,31 @@
   .dark [class*="amber-"],
   .dark [style*="yellow"],
   .dark [style*="amber"] {
-    background-color: rgb(107 114 128) !important;
-    color: rgb(243 244 246) !important;
-    border-color: rgb(107 114 128) !important;
+    background-color: rgb(156 163 175) !important; /* Gray 400 */
+    color: rgb(17 24 39) !important; /* Texto escuro para contraste */
+    border-color: rgb(156 163 175) !important;
   }
 
-  /* Ensure warning colors are always gray */
+  /* Ensure warning colors are always light gray with dark text */
   .bg-warning,
   .text-warning,
   .border-warning,
   [class*="warning"] {
-    background-color: rgb(156 163 175) !important;
-    color: rgb(17 24 39) !important;
-    border-color: rgb(156 163 175) !important;
+    background-color: rgb(209 213 219) !important; /* Gray 300 */
+    color: rgb(17 24 39) !important; /* Gray 900 */
+    border-color: rgb(209 213 219) !important;
   }
 
   .dark .bg-warning,
   .dark .text-warning,
   .dark .border-warning,
   .dark [class*="warning"] {
-    background-color: rgb(107 114 128) !important;
-    color: rgb(243 244 246) !important;
-    border-color: rgb(107 114 128) !important;
+    background-color: rgb(156 163 175) !important; /* Gray 400 */
+    color: rgb(17 24 39) !important; /* Texto escuro */
+    border-color: rgb(156 163 175) !important;
   }
 
-  /* Force specific yellow classes to gray */
+  /* Force specific yellow classes to light gray */
   .text-yellow-500,
   .text-amber-500,
   .bg-yellow-50,
@@ -67,9 +67,9 @@
   .border-yellow-400,
   .border-amber-200,
   .border-amber-400 {
-    background-color: rgb(156 163 175) !important;
-    color: rgb(17 24 39) !important;
-    border-color: rgb(156 163 175) !important;
+    background-color: rgb(209 213 219) !important; /* Gray 300 */
+    color: rgb(17 24 39) !important; /* Gray 900 */
+    border-color: rgb(209 213 219) !important;
   }
 
   /* Dark mode specific overrides */
@@ -89,9 +89,9 @@
   .dark .border-yellow-400,
   .dark .border-amber-200,  
   .dark .border-amber-400 {
-    background-color: rgb(107 114 128) !important;
-    color: rgb(243 244 246) !important;
-    border-color: rgb(107 114 128) !important;
+    background-color: rgb(156 163 175) !important; /* Gray 400 */
+    color: rgb(17 24 39) !important; /* Texto escuro para contraste */
+    border-color: rgb(156 163 175) !important;
   }
 
   /* Global override for any element with yellow in its class or style */
@@ -99,17 +99,17 @@
   *[class*="amber"],
   *[style*="yellow"],
   *[style*="amber"] {
-    background-color: rgb(156 163 175) !important;
-    color: rgb(17 24 39) !important;
-    border-color: rgb(156 163 175) !important;
+    background-color: rgb(209 213 219) !important; /* Gray 300 */
+    color: rgb(17 24 39) !important; /* Gray 900 */
+    border-color: rgb(209 213 219) !important;
   }
 
   .dark *[class*="yellow"],
   .dark *[class*="amber"],
   .dark *[style*="yellow"],
   .dark *[style*="amber"] {
-    background-color: rgb(107 114 128) !important;
-    color: rgb(243 244 246) !important;
-    border-color: rgb(107 114 128) !important;
+    background-color: rgb(156 163 175) !important; /* Gray 400 */
+    color: rgb(17 24 39) !important; /* Texto escuro */
+    border-color: rgb(156 163 175) !important;
   }
 }
