@@ -6,7 +6,7 @@ import { Trophy, Award, Activity } from "lucide-react";
 interface UserStatsCardsProps {
   userStats: any;
   weightHistoryLength: number;
-  consistencyScore: number;
+  consistencyScore: string;
   avgWeightLossPerWeek: string;
 }
 
