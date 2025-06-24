@@ -3,6 +3,9 @@ import { useState, useEffect, useCallback, memo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useFasting } from '@/hooks/useFasting';
 import CompactFastingTimer from './fasting/CompactFastingTimer';
+import { useAdvancedLogger } from '@/utils/advancedLogger';
+import { useIntelligentCache } from '@/utils/intelligentCache';
+import { EnhancedSkeleton } from '@/components/ui/enhanced-skeleton';
 
 const motivationalPhrases = [
   "Cada quilograma perdido é uma vitória conquistada! 🎯",
@@ -38,8 +41,11 @@ const motivationalPhrases = [
 ];
 
 const MotivationalGreeting = memo(() => {
+  const logger = useAdvancedLogger('MotivationalGreeting');
+  const cache = useIntelligentCache();
   const [userName, setUserName] = useState<string>('');
   const [currentPhrase, setCurrentPhrase] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
   
   const {
     currentFast,
@@ -53,12 +59,43 @@ const MotivationalGreeting = memo(() => {
   } = useFasting();
 
   const setRandomPhrase = useCallback(() => {
-    const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
-    setCurrentPhrase(motivationalPhrases[randomIndex]);
-  }, []);
+    const timer = logger.startTimer('Generate random phrase');
+    
+    // Usar cache para evitar repetir frases muito recentemente
+    const recentPhrases = cache.get<number[]>('temp:recent_phrases') || [];
+    const availablePhrases = motivationalPhrases.filter((_, index) => 
+      !recentPhrases.includes(index)
+    );
+    
+    const phrasesToUse = availablePhrases.length > 5 ? availablePhrases : motivationalPhrases;
+    const randomIndex = Math.floor(Math.random() * phrasesToUse.length);
+    const selectedPhrase = phrasesToUse[randomIndex];
+    
+    setCurrentPhrase(selectedPhrase);
+    
+    // Atualizar cache de frases recentes
+    const originalIndex = motivationalPhrases.indexOf(selectedPhrase);
+    const updatedRecent = [...recentPhrases, originalIndex].slice(-10); // Manter últimas 10
+    cache.set('temp:recent_phrases', updatedRecent, { ttl: 24 * 60 * 60 * 1000 }); // 24h
+    
+    timer();
+    logger.info('Random phrase generated', { phrase: selectedPhrase });
+  }, [cache, logger]);
 
   const fetchUserName = useCallback(async () => {
+    const timer = logger.startTimer('Fetch user name');
+    
     try {
+      // Verificar cache primeiro
+      const cachedName = cache.get<string>('user:name');
+      if (cachedName) {
+        logger.debug('Using cached user name', { name: cachedName });
+        setUserName(cachedName);
+        setIsLoading(false);
+        timer();
+        return;
+      }
+
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
@@ -70,26 +107,51 @@ const MotivationalGreeting = memo(() => {
         
         if (profile?.name) {
           setUserName(profile.name);
+          // Cache com prioridade alta por 1 hora
+          cache.set('user:name', profile.name, { 
+            ttl: 60 * 60 * 1000, 
+            priority: 'high',
+            tags: ['user', 'persist']
+          });
+          logger.info('User name fetched and cached', { name: profile.name });
         }
       }
     } catch (error) {
-      console.error('Erro ao buscar nome do usuário:', error);
+      logger.error('Failed to fetch user name', { error });
+    } finally {
+      setIsLoading(false);
+      timer();
     }
-  }, []);
+  }, [cache, logger]);
 
   useEffect(() => {
-    fetchUserName();
-    setRandomPhrase();
-  }, [fetchUserName, setRandomPhrase]);
+    const timer = logger.startTimer('MotivationalGreeting mount');
+    logger.info('MotivationalGreeting mounted');
+    
+    Promise.all([
+      fetchUserName(),
+      new Promise(resolve => {
+        setRandomPhrase();
+        resolve(true);
+      })
+    ]);
+    
+    return () => {
+      timer();
+      logger.info('MotivationalGreeting unmounted');
+    };
+  }, [fetchUserName, setRandomPhrase, logger]);
 
-  console.log('MotivationalGreeting - Estado do jejum:', {
+  logger.debug('MotivationalGreeting render state', {
     currentFast: !!currentFast,
     isActive,
     timeRemaining,
-    fastType: currentFast?.type
+    fastType: currentFast?.type,
+    isLoading,
+    userName: !!userName
   });
 
-  // Se há jejum ativo (com fast atual e tempo restante válido), mostrar apenas o timer compacto
+  // Se há jejum ativo, mostrar apenas o timer compacto
   if (currentFast && timeRemaining > 0 && !currentFast.completed) {
     return (
       <div className="mb-6">
@@ -98,7 +160,7 @@ const MotivationalGreeting = memo(() => {
           timeRemaining={timeRemaining}
           isActive={isActive}
           isPaused={isPaused}
-          onPause={() => {}} // Empty function since pause is removed
+          onPause={() => {}}
           onStop={stopFast}
           formatTime={formatTime}
           calculateProgress={calculateProgress}
@@ -108,11 +170,22 @@ const MotivationalGreeting = memo(() => {
     );
   }
 
-  // Se não há jejum ativo, mostrar apenas a saudação motivacional
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="mb-6">
+        <div className="glass rounded-2xl p-3 border-0 shadow-lg">
+          <EnhancedSkeleton variant="text" lines={2} className="h-4" />
+        </div>
+      </div>
+    );
+  }
+
+  // Se não há nome de usuário, não mostrar nada
   if (!userName) return null;
 
   return (
-    <div className="glass rounded-2xl p-3 mb-6 border-0 shadow-lg">
+    <div className="glass rounded-2xl p-3 mb-6 border-0 shadow-lg animate-fade-in">
       <div className="text-left">
         <span className="text-xs text-foreground/80 font-medium leading-tight">
           Olá, {userName}! 👋 {currentPhrase}
