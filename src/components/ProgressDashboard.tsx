@@ -31,6 +31,9 @@ const ProgressDashboard = () => {
     );
   }
 
+  // Convert consistencyScore to string for components
+  const consistencyScoreString = consistencyScore.toString();
+
   return (
     <div className="space-y-6">
       <ProgressHeader hasData={weightHistory.length > 0} onShare={shareProgress} />
@@ -40,7 +43,7 @@ const ProgressDashboard = () => {
       <UserStatsCards 
         userStats={userStats}
         weightHistoryLength={weightHistory.length}
-        consistencyScore={typeof consistencyScore === 'string' ? parseInt(consistencyScore) : consistencyScore}
+        consistencyScore={consistencyScoreString}
         avgWeightLossPerWeek={avgWeightLossPerWeek}
       />
       
@@ -60,7 +63,7 @@ const ProgressDashboard = () => {
         weightLoss={weightLoss}
         avgWeightLossPerWeek={avgWeightLossPerWeek}
         bestWeekLoss={bestWeekLoss}
-        consistencyScore={consistencyScore.toString()}
+        consistencyScore={consistencyScoreString}
         onShare={shareProgress}
       />
     </div>
