@@ -6,11 +6,22 @@ interface VideoWelcomeScreenProps {
   onVideoComplete: () => void;
 }
 
+declare global {
+  interface Window {
+    onYouTubeIframeAPIReady: () => void;
+    YT: any;
+  }
+}
+
 const VideoWelcomeScreen = ({ onVideoComplete }: VideoWelcomeScreenProps) => {
   const logger = useLogger('VideoWelcomeScreen');
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+  const [showFadeOut, setShowFadeOut] = useState(false);
   const [showFallback, setShowFallback] = useState(false);
+  const playerRef = useRef<any>(null);
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const fadeTimeoutRef = useRef<NodeJS.Timeout>();
+  const transitionTimeoutRef = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     logger.info('VideoWelcomeScreen mounted');
@@ -22,35 +33,95 @@ const VideoWelcomeScreen = ({ onVideoComplete }: VideoWelcomeScreenProps) => {
       onVideoComplete();
     }, 10000);
 
+    // Inicializar YouTube Player API
+    const initYouTubeAPI = () => {
+      if (window.YT && window.YT.Player) {
+        createPlayer();
+      } else {
+        // Carregar YouTube API se não estiver carregada
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode?.insertBefore(tag, firstScriptTag);
+
+        window.onYouTubeIframeAPIReady = createPlayer;
+      }
+    };
+
+    const createPlayer = () => {
+      logger.info('Creating YouTube player');
+      playerRef.current = new window.YT.Player('youtube-player', {
+        height: '100%',
+        width: '100%',
+        videoId: 'q2LekXTRawU',
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          showinfo: 0,
+          rel: 0,
+          modestbranding: 1,
+          iv_load_policy: 3,
+          fs: 0,
+          disablekb: 1,
+          playsinline: 1,
+          mute: 0,
+          start: 0,
+          end: 28 // Parar 2 segundos antes do fim para evitar vídeos sugeridos
+        },
+        events: {
+          onReady: (event: any) => {
+            logger.info('YouTube player ready');
+            setIsVideoLoaded(true);
+            // Limpar timeout de fallback quando o player está pronto
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+            }
+            
+            // Iniciar fade-out aos 25 segundos
+            fadeTimeoutRef.current = setTimeout(() => {
+              logger.info('Starting fade out transition');
+              setShowFadeOut(true);
+            }, 25000);
+
+            // Transição final aos 28 segundos
+            transitionTimeoutRef.current = setTimeout(() => {
+              logger.info('Video completed, transitioning to next screen');
+              onVideoComplete();
+            }, 28000);
+          },
+          onStateChange: (event: any) => {
+            if (event.data === window.YT.PlayerState.ENDED) {
+              logger.info('Video ended, immediate transition');
+              onVideoComplete();
+            }
+          },
+          onError: (event: any) => {
+            logger.error('YouTube player error', { error: event.data });
+            onVideoComplete();
+          }
+        }
+      });
+    };
+
+    initYouTubeAPI();
+
     // Cleanup function
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
+      if (fadeTimeoutRef.current) {
+        clearTimeout(fadeTimeoutRef.current);
+      }
+      if (transitionTimeoutRef.current) {
+        clearTimeout(transitionTimeoutRef.current);
+      }
+      if (playerRef.current && playerRef.current.destroy) {
+        playerRef.current.destroy();
+      }
       logger.info('VideoWelcomeScreen unmounted');
     };
   }, [onVideoComplete, logger]);
-
-  useEffect(() => {
-    // Simular fim do vídeo após 30 segundos (duração aproximada do vídeo)
-    const videoEndTimeout = setTimeout(() => {
-      if (!showFallback) {
-        logger.info('Video completed, transitioning to next screen');
-        onVideoComplete();
-      }
-    }, 30000);
-
-    return () => clearTimeout(videoEndTimeout);
-  }, [onVideoComplete, showFallback, logger]);
-
-  const handleIframeLoad = () => {
-    logger.info('Video iframe loaded');
-    setIsVideoLoaded(true);
-    // Limpar timeout de fallback quando o vídeo carrega
-    if (timeoutRef.current) {
-      clearTimeout(timeoutRef.current);
-    }
-  };
 
   if (showFallback) {
     return null;
@@ -65,21 +136,22 @@ const VideoWelcomeScreen = ({ onVideoComplete }: VideoWelcomeScreenProps) => {
         </div>
       )}
 
-      {/* YouTube Video */}
-      <iframe
-        src="https://www.youtube.com/embed/q2LekXTRawU?autoplay=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&fs=0&disablekb=1&playsinline=1&mute=0"
-        className="w-full h-full"
-        frameBorder="0"
-        allow="autoplay; encrypted-media"
-        allowFullScreen
-        onLoad={handleIframeLoad}
-        title="SB2coach.ai - Vídeo de Boas-vindas"
-      />
+      {/* YouTube Player Container */}
+      <div className="w-full h-full relative">
+        <div id="youtube-player" className="w-full h-full" />
+      </div>
 
       {/* Fade overlay for smooth transition */}
       <div 
         className={`absolute inset-0 bg-black transition-opacity duration-1000 pointer-events-none ${
           isVideoLoaded ? 'opacity-0' : 'opacity-100'
+        }`} 
+      />
+
+      {/* Fade out overlay */}
+      <div 
+        className={`absolute inset-0 bg-black transition-opacity duration-3000 pointer-events-none ${
+          showFadeOut ? 'opacity-100' : 'opacity-0'
         }`} 
       />
     </div>
