@@ -6,19 +6,19 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-bold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:scale-105 active:scale-95 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-semibold ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:scale-105 active:scale-95 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
-        default: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-button hover:shadow-button-hover hover:from-red-600 hover:to-red-700",
-        destructive: "bg-gradient-to-r from-red-600 to-red-700 text-white shadow-button hover:shadow-button-hover",
-        outline: "border-2 border-red-500 bg-white text-red-600 hover:bg-red-50 hover:border-red-600",
-        secondary: "bg-gradient-to-r from-slate-500 to-slate-600 text-white shadow-md hover:from-slate-600 hover:to-slate-700",
-        ghost: "text-red-600 hover:bg-red-50 hover:text-red-700",
-        link: "text-red-600 underline-offset-4 hover:underline hover:text-red-700",
-        success: "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-md hover:from-green-600 hover:to-green-700",
-        warning: "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md hover:from-amber-600 hover:to-amber-700",
-        info: "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md hover:from-blue-600 hover:to-blue-700",
+        default: "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-button hover:shadow-button-hover hover:from-blue-600 hover:to-blue-700",
+        destructive: "bg-gradient-to-r from-red-500 to-red-600 text-white shadow-medium hover:shadow-strong",
+        outline: "border-2 border-slate-300 bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-400",
+        secondary: "bg-gradient-to-r from-slate-100 to-slate-200 text-slate-700 hover:from-slate-200 hover:to-slate-300",
+        ghost: "text-slate-600 hover:bg-slate-100 hover:text-slate-700",
+        link: "text-blue-500 underline-offset-4 hover:underline hover:text-blue-600",
+        success: "bg-gradient-to-r from-green-500 to-green-600 text-white shadow-medium hover:from-green-600 hover:to-green-700",
+        warning: "bg-gradient-to-r from-gray-400 to-gray-500 text-gray-900 shadow-medium hover:from-gray-500 hover:to-gray-600",
+        info: "bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-medium hover:from-blue-500 hover:to-blue-600",
       },
       size: {
         default: "h-11 px-6 py-2",

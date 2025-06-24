@@ -1,0 +1,102 @@
+
+/* Complete Reset of Dark Theme & Yellow References */
+
+/* Force Light Theme Only */
+.dark, [data-theme="dark"], .theme-dark {
+  background-color: rgb(255 255 255) !important;
+  color: rgb(15 23 42) !important;
+}
+
+/* Eliminate ALL Yellow/Amber References */
+*[class*="yellow"], *[class*="amber"], 
+*[style*="yellow"], *[style*="amber"],
+*[style*="#fbbf24"], *[style*="#f59e0b"], *[style*="#d97706"],
+*[style*="rgb(251, 191, 36)"], *[style*="rgb(245, 158, 11)"],
+.bg-yellow-50, .bg-yellow-100, .bg-yellow-200, .bg-yellow-300, 
+.bg-yellow-400, .bg-yellow-500, .bg-yellow-600, .bg-yellow-700,
+.bg-amber-50, .bg-amber-100, .bg-amber-200, .bg-amber-300,
+.bg-amber-400, .bg-amber-500, .bg-amber-600, .bg-amber-700,
+.text-yellow-50, .text-yellow-100, .text-yellow-200, .text-yellow-300,
+.text-yellow-400, .text-yellow-500, .text-yellow-600, .text-yellow-700,
+.text-amber-50, .text-amber-100, .text-amber-200, .text-amber-300,
+.text-amber-400, .text-amber-500, .text-amber-600, .text-amber-700,
+.border-yellow-200, .border-yellow-300, .border-yellow-400,
+.border-amber-200, .border-amber-300, .border-amber-400 {
+  background-color: rgb(156 163 175) !important; /* Gray 400 */
+  color: rgb(17 24 39) !important; /* Gray 900 - High contrast */
+  border-color: rgb(156 163 175) !important;
+}
+
+/* Warning Colors - Use Gray Instead of Yellow */
+.warning, .warn, [class*="warning"], [class*="warn"] {
+  background-color: rgb(156 163 175) !important; /* Gray 400 */
+  color: rgb(17 24 39) !important; /* Gray 900 */
+  border-color: rgb(156 163 175) !important;
+}
+
+/* Override Any Remaining Dark Mode */
+.bg-slate-900, .bg-gray-900, .bg-black,
+.text-slate-900, .text-gray-900, .text-black {
+  background-color: rgb(255 255 255) !important;
+  color: rgb(15 23 42) !important;
+}
+
+/* Ensure Perfect Text Contrast */
+.text-white {
+  color: rgb(15 23 42) !important; /* Only use white text on dark backgrounds */
+}
+
+/* Override any transparent or low-contrast elements */
+.bg-transparent {
+  background-color: rgb(255 255 255) !important;
+}
+
+.text-transparent {
+  color: rgb(15 23 42) !important;
+}
+
+/* Force readable contrast for all states */
+.hover\:text-white:hover {
+  color: rgb(15 23 42) !important;
+}
+
+.focus\:text-white:focus {
+  color: rgb(15 23 42) !important;
+}
+
+/* Ensure cards have proper background */
+[class*="Card"], [class*="card"] {
+  background-color: rgb(255 255 255) !important;
+  color: rgb(15 23 42) !important;
+  border-color: rgb(226 232 240) !important;
+}
+
+/* Fix any gradient text issues */
+.bg-gradient-to-r {
+  -webkit-text-fill-color: unset !important;
+  background-clip: unset !important;
+}
+
+/* Ensure buttons have proper contrast */
+button {
+  font-weight: 600;
+}
+
+button:not(.btn-primary):not(.bg-primary) {
+  color: rgb(51 65 85) !important; /* Slate 700 */
+}
+
+/* Fix input placeholders */
+::placeholder {
+  color: rgb(148 163 184) !important; /* Slate 400 */
+  opacity: 1;
+}
+
+/* Ensure proper link colors */
+a:not(.btn):not(.button) {
+  color: rgb(59 130 246) !important; /* Blue 500 */
+}
+
+a:not(.btn):not(.button):hover {
+  color: rgb(37 99 235) !important; /* Blue 600 */
+}
