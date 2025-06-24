@@ -139,8 +139,8 @@ const PhotoAnalyzer = memo(({ onAnalysisComplete }: PhotoAnalyzerProps) => {
         
         if (result) {
           logger.info('Analysis completed successfully', { 
-            foodName: result.name,
-            calories: result.nutrition?.calories 
+            foodsCount: result.foods?.length || 0,
+            calories: result.totalCalories 
           });
 
           setAnalysisResult(result);
@@ -154,7 +154,7 @@ const PhotoAnalyzer = memo(({ onAnalysisComplete }: PhotoAnalyzerProps) => {
 
           toast({
             title: "Análise concluída!",
-            description: `Identificamos: ${result.name}`,
+            description: `Identificamos ${result.foods?.length || 0} alimentos`,
           });
         } else {
           throw new Error('Análise retornou resultado vazio');
@@ -201,9 +201,15 @@ const PhotoAnalyzer = memo(({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     return (
       <GlobalErrorBoundary level="component" name="Photo Analyzer Results">
         <FoodAnalysisResult 
-          analysis={analysisResult} 
-          onReset={handleReset}
+          analysis={analysisResult}
         />
+        <Button
+          onClick={handleReset}
+          variant="outline"
+          className="w-full mt-4"
+        >
+          Nova Análise
+        </Button>
       </GlobalErrorBoundary>
     );
   }

@@ -22,7 +22,6 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
     isPaused,
     startFast,
     pauseFast,
-    resumeFast,
     stopFast
   } = useFasting();
 
@@ -71,11 +70,6 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
     pauseFast();
   }, [pauseFast, logger]);
 
-  const handleResume = useCallback(() => {
-    logger.info('Resuming fasting');
-    resumeFast();
-  }, [resumeFast, logger]);
-
   const handleStop = useCallback(() => {
     logger.info('Stopping fasting');
     stopFast();
@@ -120,7 +114,7 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
                   {displayTime}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {currentFast?.planType} - {isPaused ? 'Pausado' : 'Ativo'}
+                  {currentFast?.type} - {isPaused ? 'Pausado' : 'Ativo'}
                 </p>
               </div>
 
@@ -138,7 +132,7 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
 
               <div className="flex gap-2">
                 {isPaused ? (
-                  <Button onClick={handleResume} className="flex-1">
+                  <Button onClick={handlePause} className="flex-1">
                     <Play className="w-4 h-4 mr-2" />
                     Retomar
                   </Button>

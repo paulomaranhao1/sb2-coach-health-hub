@@ -1,4 +1,3 @@
-
 import React, { useMemo, memo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -83,13 +82,14 @@ const AchievementSystem = memo(({ userStats, onAchievementUnlock }: AchievementS
     }));
   }, [mockAchievements]);
 
-  // Memoized stats
+  // Memoized stats - use userProgress from hook or fallback to defaults
   const stats = useMemo(() => {
     const unlockedCount = mockAchievements.filter(a => a.unlocked).length;
     const totalCount = mockAchievements.length;
     const completionRate = totalCount > 0 ? (unlockedCount / totalCount) * 100 : 0;
-    const totalPoints = userProgress?.points || 0;
-    const level = userProgress?.level || 1;
+    // Get points from userProgress, but it doesn't have these properties, so calculate from achievements
+    const totalPoints = mockAchievements.filter(a => a.unlocked).reduce((sum, a) => sum + a.points, 0);
+    const level = Math.floor(totalPoints / 100) + 1;
 
     return {
       unlockedCount,
