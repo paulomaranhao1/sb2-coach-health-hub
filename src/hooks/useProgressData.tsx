@@ -1,19 +1,19 @@
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import { UserStats } from '@/types';
+
+interface WeightEntry {
+  id: string;
+  weight: number;
+  date: string;
+  notes?: string;
+}
 
 interface ProgressData {
-  weightEntries: Array<{
-    weight: number;
-    date: string;
-  }>;
-  userStats: {
-    level: number;
-    points: number;
-    streak: number;
-    shields: string[];
-    stickers: string[];
-  } | null;
+  weightEntries: WeightEntry[];
+  userStats: UserStats | null;
 }
 
 export const useProgressData = () => {
@@ -22,6 +22,7 @@ export const useProgressData = () => {
     userStats: null
   });
   const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   const loadData = useCallback(async () => {
     try {
@@ -57,5 +58,93 @@ export const useProgressData = () => {
     loadData();
   }, [loadData]);
 
-  return { data, loading, refetch: loadData };
+  // Cálculos derivados
+  const weightHistory = useMemo(() => data.weightEntries, [data.weightEntries]);
+  const userStats = useMemo(() => data.userStats, [data.userStats]);
+  
+  const currentWeightValue = useMemo(() => {
+    return weightHistory.length > 0 ? weightHistory[weightHistory.length - 1].weight : 0;
+  }, [weightHistory]);
+  
+  const initialWeight = useMemo(() => {
+    return weightHistory.length > 0 ? weightHistory[0].weight : 0;
+  }, [weightHistory]);
+  
+  const weightLoss = useMemo(() => {
+    return initialWeight - currentWeightValue;
+  }, [initialWeight, currentWeightValue]);
+  
+  const avgWeightLossPerWeek = useMemo(() => {
+    if (weightHistory.length < 2) return "0.0";
+    
+    const firstEntry = new Date(weightHistory[0].date);
+    const lastEntry = new Date(weightHistory[weightHistory.length - 1].date);
+    const daysDiff = Math.abs(lastEntry.getTime() - firstEntry.getTime()) / (1000 * 60 * 60 * 24);
+    const weeksDiff = daysDiff / 7;
+    
+    if (weeksDiff === 0) return "0.0";
+    
+    const avgLoss = weightLoss / weeksDiff;
+    return avgLoss.toFixed(1);
+  }, [weightHistory, weightLoss]);
+  
+  const bestWeekLoss = useMemo(() => {
+    if (weightHistory.length < 2) return "0.0";
+    
+    let maxLoss = 0;
+    for (let i = 1; i < weightHistory.length; i++) {
+      const currentLoss = weightHistory[i - 1].weight - weightHistory[i].weight;
+      if (currentLoss > maxLoss) {
+        maxLoss = currentLoss;
+      }
+    }
+    
+    return maxLoss.toFixed(1);
+  }, [weightHistory]);
+  
+  const consistencyScore = useMemo(() => {
+    if (weightHistory.length === 0) return 0;
+    
+    const last30Days = 30;
+    const recordedDays = Math.min(weightHistory.length, last30Days);
+    
+    return Math.round((recordedDays / last30Days) * 100);
+  }, [weightHistory]);
+
+  const shareProgress = useCallback(async () => {
+    try {
+      const shareData = {
+        title: 'SB2coach.ai - Meu Progresso',
+        text: `Estou usando o SB2coach.ai! ${weightLoss > 0 ? `Já perdi ${weightLoss.toFixed(1)}kg` : `Peso atual: ${currentWeightValue}kg`} 💪`,
+        url: window.location.origin
+      };
+
+      if (navigator.share && navigator.canShare(shareData)) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        toast({
+          title: "Link copiado!",
+          description: "Cole onde quiser compartilhar seu progresso"
+        });
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
+  }, [weightLoss, currentWeightValue, toast]);
+
+  return {
+    data,
+    loading,
+    refetch: loadData,
+    weightHistory,
+    userStats,
+    shareProgress,
+    currentWeightValue,
+    initialWeight,
+    weightLoss,
+    avgWeightLossPerWeek,
+    bestWeekLoss,
+    consistencyScore
+  };
 };
