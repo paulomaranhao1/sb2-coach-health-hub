@@ -1,11 +1,10 @@
 
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { handleAuthError, showAuthErrorToast, showAuthSuccessToast } from '@/utils/authErrorHandling';
 
 export const useEmailAuth = () => {
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
 
   const handleEmailAuth = async (
     email: string, 
@@ -14,23 +13,15 @@ export const useEmailAuth = () => {
     isLogin: boolean,
     onEmailVerification?: () => void
   ) => {
-    console.log('useEmailAuth: Email auth -', isLogin ? 'login' : 'signup');
+    console.log('🔐 useEmailAuth: Iniciando', isLogin ? 'login' : 'cadastro');
     
     if (!email?.trim() || !password?.trim()) {
-      toast({
-        title: "Campos obrigatórios",
-        description: "Preencha email e senha.",
-        variant: "destructive"
-      });
+      showAuthErrorToast({ message: 'Preencha email e senha' });
       return;
     }
 
     if (!isLogin && !name?.trim()) {
-      toast({
-        title: "Nome obrigatório",
-        description: "Preencha seu nome.",
-        variant: "destructive"
-      });
+      showAuthErrorToast({ message: 'Preencha seu nome' });
       return;
     }
 
@@ -45,7 +36,8 @@ export const useEmailAuth = () => {
         
         if (error) throw error;
         
-        console.log('useEmailAuth: Login realizado');
+        console.log('✅ Login realizado com sucesso');
+        showAuthSuccessToast('Login realizado com sucesso!');
         
       } else {
         const { data, error } = await supabase.auth.signUp({
@@ -64,29 +56,12 @@ export const useEmailAuth = () => {
           return;
         }
         
-        toast({
-          title: "Conta criada!",
-          description: "Verifique seu email para confirmar.",
-        });
+        showAuthSuccessToast('Conta criada! Verifique seu email');
       }
     } catch (error: any) {
-      console.error('useEmailAuth: Erro na autenticação:', error);
-      
-      let errorMessage = 'Erro na autenticação.';
-      
-      if (error.message.includes('User already registered')) {
-        errorMessage = 'Email já cadastrado. Tente fazer login.';
-      } else if (error.message.includes('Invalid login credentials')) {
-        errorMessage = 'Email ou senha incorretos.';
-      } else if (error.message.includes('Email not confirmed')) {
-        errorMessage = 'Por favor, confirme seu email antes de fazer login.';
-      }
-      
-      toast({
-        title: "Erro",
-        description: errorMessage,
-        variant: "destructive"
-      });
+      console.error('❌ Erro na autenticação:', error);
+      showAuthErrorToast(error);
+    } finally {
       setLoading(false);
     }
   };

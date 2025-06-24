@@ -1,19 +1,14 @@
 
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { showAuthErrorToast, showAuthSuccessToast } from '@/utils/authErrorHandling';
 
 export const usePasswordAuth = () => {
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
 
   const handleMagicLink = async (email: string) => {
     if (!email?.trim()) {
-      toast({
-        title: "Email necessário",
-        description: "Por favor, insira seu email.",
-        variant: "destructive"
-      });
+      showAuthErrorToast({ message: 'Por favor, insira seu email' });
       return false;
     }
 
@@ -28,17 +23,11 @@ export const usePasswordAuth = () => {
       
       if (error) throw error;
       
-      toast({
-        title: "Link enviado!",
-        description: "Verifique seu email.",
-      });
+      showAuthSuccessToast('Link mágico enviado! Verifique seu email');
       return true;
     } catch (error: any) {
-      toast({
-        title: "Erro ao enviar link",
-        description: error.message,
-        variant: "destructive"
-      });
+      console.error('❌ Erro ao enviar link mágico:', error);
+      showAuthErrorToast(error);
       return false;
     } finally {
       setLoading(false);
@@ -47,11 +36,7 @@ export const usePasswordAuth = () => {
 
   const handleForgotPassword = async (email: string) => {
     if (!email?.trim()) {
-      toast({
-        title: "Email necessário",
-        description: "Digite seu email.",
-        variant: "destructive"
-      });
+      showAuthErrorToast({ message: 'Digite seu email' });
       return false;
     }
 
@@ -63,17 +48,11 @@ export const usePasswordAuth = () => {
       
       if (error) throw error;
       
-      toast({
-        title: "Email enviado!",
-        description: "Verifique seu email."
-      });
+      showAuthSuccessToast('Email de recuperação enviado!');
       return true;
     } catch (error: any) {
-      toast({
-        title: "Erro",
-        description: error.message,
-        variant: "destructive"
-      });
+      console.error('❌ Erro ao resetar senha:', error);
+      showAuthErrorToast(error);
       return false;
     } finally {
       setLoading(false);

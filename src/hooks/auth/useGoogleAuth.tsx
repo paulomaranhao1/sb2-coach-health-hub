@@ -1,19 +1,18 @@
 
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { showAuthErrorToast } from '@/utils/authErrorHandling';
 
 export const useGoogleAuth = () => {
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
 
   const handleGoogleAuth = async () => {
-    console.log('useGoogleAuth: Iniciando Google Auth...');
+    console.log('🔐 Iniciando Google Auth...');
     setLoading(true);
     
     try {
       const redirectTo = window.location.origin;
-      console.log('useGoogleAuth: URL de redirect:', redirectTo);
+      console.log('🔗 URL de redirect:', redirectTo);
       
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
@@ -27,19 +26,15 @@ export const useGoogleAuth = () => {
       });
       
       if (error) {
-        console.error('useGoogleAuth: Erro Google Auth:', error);
+        console.error('❌ Erro Google Auth:', error);
         throw error;
       }
       
-      console.log('useGoogleAuth: Google Auth iniciado');
+      console.log('✅ Google Auth iniciado com sucesso');
       
     } catch (error: any) {
-      console.error('useGoogleAuth: Erro na autenticação Google:', error);
-      toast({
-        title: "Erro na autenticação",
-        description: error.message || "Erro desconhecido",
-        variant: "destructive"
-      });
+      console.error('❌ Erro na autenticação Google:', error);
+      showAuthErrorToast(error);
       setLoading(false);
     }
   };
