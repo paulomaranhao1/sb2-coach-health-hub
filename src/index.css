@@ -1,4 +1,9 @@
 
+/* Tailwind directives - Required for @layer to work */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 /* SB2 Coach - Modern Design System */
 @import './styles/design-system/index.css';
 

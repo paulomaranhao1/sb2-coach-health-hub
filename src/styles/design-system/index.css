@@ -8,7 +8,7 @@
 @import './layout.css';
 
 /* Global Overrides - Ensure perfect contrast everywhere */
-@layer base {
+@layer components {
   
   /* Force all text to have proper contrast */
   * {
@@ -59,22 +59,5 @@
   .bg-green-50 *,
   .bg-red-50 * {
     color: rgb(var(--text-secondary)) !important;
-  }
-  
-  /* Ensure input text is always readable */
-  input,
-  textarea,
-  select {
-    color: rgb(var(--text-secondary)) !important;
-  }
-  
-  /* Remove any yellow/amber colors completely */
-  *[class*="yellow"],
-  *[class*="amber"],
-  *[style*="yellow"],
-  *[style*="amber"] {
-    background-color: rgb(var(--warning)) !important;
-    color: rgb(var(--text-primary)) !important;
-    border-color: rgb(var(--warning)) !important;
   }
 }
