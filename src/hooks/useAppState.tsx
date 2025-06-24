@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -75,19 +76,19 @@ export const useAppState = () => {
         }
         
         // Buscar stats de forma não bloqueante
-        const statsPromise = supabase
-          .from('user_stats')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle();
+        try {
+          const { data: stats } = await supabase
+            .from('user_stats')
+            .select('*')
+            .eq('user_id', user.id)
+            .maybeSingle();
 
-        statsPromise.then(({ data: stats }) => {
           if (stats) {
             setUserStats(stats);
           }
-        }).catch(error => {
+        } catch (error) {
           logger.error('Error loading user stats', { error });
-        });
+        }
       } else {
         logger.info('Profile not found');
         updateState({ showWelcome: true });
