@@ -1,24 +1,20 @@
-
 import { useState } from "react";
 import OffersScreen from "./OffersScreen";
 import NewFeaturesHeader from "./new-features/NewFeaturesHeader";
 import FeaturesGrid from "./new-features/FeaturesGrid";
 import PremiumAccessCard from "./new-features/PremiumAccessCard";
-
 interface NewFeaturesScreenProps {
   onBack: () => void;
 }
-
-const NewFeaturesScreen = ({ onBack }: NewFeaturesScreenProps) => {
+const NewFeaturesScreen = ({
+  onBack
+}: NewFeaturesScreenProps) => {
   const [showOffers, setShowOffers] = useState(false);
-
   if (showOffers) {
     return <OffersScreen onBack={() => setShowOffers(false)} />;
   }
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-red-500 to-red-700 p-4">
-      <div className="max-w-4xl mx-auto">
+  return <div className="min-h-screen bg-gradient-to-br from-red-500 to-red-700 p-4 bg-slate-500">
+      <div className="max-w-4xl mx-auto bg-slate-500">
         <NewFeaturesHeader onBack={onBack} />
         
         <div className="text-center mb-8">
@@ -35,8 +31,6 @@ const NewFeaturesScreen = ({ onBack }: NewFeaturesScreenProps) => {
         <FeaturesGrid />
         <PremiumAccessCard onShowOffers={() => setShowOffers(true)} />
       </div>
-    </div>
-  );
+    </div>;
 };
-
 export default NewFeaturesScreen;

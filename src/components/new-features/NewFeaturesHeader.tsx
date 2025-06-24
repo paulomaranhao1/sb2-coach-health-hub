@@ -1,27 +1,21 @@
-
 import { ArrowLeft, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-
 interface NewFeaturesHeaderProps {
   onBack: () => void;
 }
-
-const NewFeaturesHeader = ({ onBack }: NewFeaturesHeaderProps) => {
-  return (
-    <>
+const NewFeaturesHeader = ({
+  onBack
+}: NewFeaturesHeaderProps) => {
+  return <>
       <div className="flex items-center mb-6">
-        <Button 
-          onClick={onBack}
-          variant="ghost" 
-          className="text-white hover:bg-white/20"
-        >
+        <Button onClick={onBack} variant="ghost" className="text-white hover:bg-white/20">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Voltar
         </Button>
       </div>
 
       <div className="text-center mb-8">
-        <div className="flex items-center justify-center mb-4">
+        <div className="flex items-center justify-center mb-4 bg-slate-500">
           <Sparkles className="w-8 h-8 text-yellow-300 mr-3" />
           <h1 className="text-4xl font-bold text-white">
             Novidades SB2coach.ai
@@ -38,8 +32,6 @@ const NewFeaturesHeader = ({ onBack }: NewFeaturesHeaderProps) => {
           </p>
         </div>
       </div>
-    </>
-  );
+    </>;
 };
-
 export default NewFeaturesHeader;
