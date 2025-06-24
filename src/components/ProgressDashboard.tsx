@@ -40,7 +40,7 @@ const ProgressDashboard = () => {
       <UserStatsCards 
         userStats={userStats}
         weightHistoryLength={weightHistory.length}
-        consistencyScore={consistencyScore}
+        consistencyScore={typeof consistencyScore === 'string' ? parseInt(consistencyScore) : consistencyScore}
         avgWeightLossPerWeek={avgWeightLossPerWeek}
       />
       
@@ -60,7 +60,7 @@ const ProgressDashboard = () => {
         weightLoss={weightLoss}
         avgWeightLossPerWeek={avgWeightLossPerWeek}
         bestWeekLoss={bestWeekLoss}
-        consistencyScore={consistencyScore}
+        consistencyScore={typeof consistencyScore === 'string' ? parseInt(consistencyScore) : consistencyScore}
         onShare={shareProgress}
       />
     </div>
