@@ -11,8 +11,8 @@ const MobileMenuNewSection = ({ activeTab, handleNewFeaturesClick }: MobileMenuN
     <div className="space-y-1">
       <button
         onClick={handleNewFeaturesClick}
-        className={`mobile-menu-item w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/20 border border-red-400/30 hover:from-red-400 hover:to-red-500 ${
-          activeTab === 'new-features' ? 'ring-2 ring-red-300' : ''
+        className={`mobile-menu-item w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20 border border-blue-400/30 hover:from-blue-400 hover:to-blue-500 ${
+          activeTab === 'new-features' ? 'ring-2 ring-blue-300' : ''
         }`}
       >
         <div className="p-1.5 rounded-md bg-white/20">

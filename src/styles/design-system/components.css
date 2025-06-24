@@ -1,30 +1,30 @@
 
-/* Modern Component System - Elegant and Consistent */
+/* Modern Component System - Professional & Clean */
 @layer components {
   
-  /* Card System - Clean and modern */
+  /* Card System */
   .card,
   [class*="Card"],
   .card-container {
-    background-color: rgb(var(--bg-primary)) !important;
-    border: 1px solid rgb(var(--border-medium)) !important;
+    background-color: rgb(var(--bg-secondary)) !important;
+    border: 1px solid rgb(var(--border-light)) !important;
     border-radius: var(--radius-lg) !important;
-    box-shadow: var(--shadow-soft) !important;
+    box-shadow: var(--shadow-sm) !important;
     transition: all 0.2s ease;
-    padding: var(--space-lg);
+    padding: 1.5rem;
   }
   
   .card:hover,
   [class*="Card"]:hover {
-    box-shadow: var(--shadow-medium) !important;
+    box-shadow: var(--shadow-md) !important;
     transform: translateY(-1px);
   }
   
   .card-header,
   [class*="CardHeader"] {
     border-bottom: 1px solid rgb(var(--border-light)) !important;
-    padding-bottom: var(--space-md);
-    margin-bottom: var(--space-md);
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
   }
   
   .card-title,
@@ -32,7 +32,7 @@
     color: rgb(var(--text-primary)) !important;
     font-weight: 700;
     font-size: 1.25rem;
-    margin-bottom: var(--space-sm);
+    margin-bottom: 0.5rem;
   }
   
   .card-description,
@@ -42,7 +42,7 @@
     font-size: 0.875rem;
   }
   
-  /* Button System - Elegant and consistent */
+  /* Button System */
   .btn,
   button {
     font-weight: 600;
@@ -53,41 +53,52 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg);
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
     font-size: 0.875rem;
   }
   
-  /* Primary Button - Elegant blue */
+  /* Primary Button */
   .btn-primary,
   button[class*="bg-blue"],
   button[class*="bg-primary"] {
-    background: linear-gradient(135deg, rgb(var(--blue-primary)), rgb(var(--blue-secondary))) !important;
+    background: linear-gradient(135deg, rgb(var(--primary-500)), rgb(var(--primary-600))) !important;
     color: white !important;
-    box-shadow: var(--shadow-button) !important;
+    box-shadow: var(--shadow-sm) !important;
   }
   
   .btn-primary:hover,
   button[class*="bg-blue"]:hover,
   button[class*="bg-primary"]:hover {
-    background: linear-gradient(135deg, rgb(var(--blue-secondary)), rgb(var(--blue-tertiary))) !important;
-    box-shadow: var(--shadow-button-hover) !important;
+    background: linear-gradient(135deg, rgb(var(--primary-600)), rgb(var(--primary-700))) !important;
+    box-shadow: var(--shadow-md) !important;
     transform: translateY(-1px);
   }
   
-  /* Secondary Button - Clean gray */
+  /* Secondary Button */
   .btn-secondary,
   button[variant="outline"] {
-    background-color: rgb(var(--bg-primary)) !important;
+    background-color: rgb(var(--bg-secondary)) !important;
     color: rgb(var(--text-secondary)) !important;
     border: 2px solid rgb(var(--border-medium)) !important;
   }
   
   .btn-secondary:hover,
   button[variant="outline"]:hover {
-    background-color: rgb(var(--bg-tertiary)) !important;
+    background-color: rgb(var(--hover-bg)) !important;
     border-color: rgb(var(--border-strong)) !important;
     transform: translateY(-1px);
+  }
+  
+  /* Ghost Button */
+  .btn-ghost {
+    background-color: transparent !important;
+    color: rgb(var(--text-secondary)) !important;
+    border: none !important;
+  }
+  
+  .btn-ghost:hover {
+    background-color: rgb(var(--hover-bg)) !important;
   }
   
   /* State Buttons */
@@ -98,7 +109,7 @@
   
   .btn-warning {
     background-color: rgb(var(--warning)) !important;
-    color: rgb(var(--text-primary)) !important;
+    color: white !important;
   }
   
   .btn-error {
@@ -106,15 +117,15 @@
     color: white !important;
   }
   
-  /* Input System - Clean and accessible */
+  /* Input System */
   input,
   textarea,
   select {
-    background-color: rgb(var(--bg-primary)) !important;
+    background-color: rgb(var(--bg-secondary)) !important;
     color: rgb(var(--text-secondary)) !important;
     border: 2px solid rgb(var(--border-medium)) !important;
     border-radius: var(--radius-md) !important;
-    padding: var(--space-md) !important;
+    padding: 0.75rem !important;
     font-weight: 500;
     font-size: 0.875rem;
     transition: all 0.2s ease;
@@ -124,31 +135,16 @@
   textarea:focus,
   select:focus {
     outline: none !important;
-    border-color: rgb(var(--blue-primary)) !important;
-    box-shadow: 0 0 0 3px rgba(var(--blue-primary), 0.1) !important;
+    border-color: rgb(var(--primary-500)) !important;
+    box-shadow: 0 0 0 3px rgba(var(--primary-500), 0.1) !important;
   }
   
-  input::placeholder,
-  textarea::placeholder {
-    color: rgb(var(--text-subtle)) !important;
-    font-weight: 400;
-  }
-  
-  /* Label System */
-  label {
-    color: rgb(var(--text-primary)) !important;
-    font-weight: 600;
-    font-size: 0.875rem;
-    margin-bottom: var(--space-sm);
-    display: block;
-  }
-  
-  /* Alert System - High contrast */
+  /* Alert System */
   .alert {
-    padding: var(--space-lg);
+    padding: 1rem;
     border-radius: var(--radius-lg);
     border: 1px solid;
-    margin: var(--space-md) 0;
+    margin: 1rem 0;
     font-weight: 500;
   }
   
@@ -160,7 +156,7 @@
   
   .alert-info {
     background-color: rgb(var(--info-bg)) !important;
-    border-color: rgb(var(--blue-primary)) !important;
+    border-color: rgb(var(--primary-500)) !important;
     color: rgb(var(--text-primary)) !important;
   }
   
@@ -180,7 +176,7 @@
   .badge {
     display: inline-flex;
     align-items: center;
-    padding: var(--space-xs) var(--space-md);
+    padding: 0.25rem 0.75rem;
     font-size: 0.75rem;
     font-weight: 600;
     border-radius: var(--radius-xl);
@@ -188,13 +184,13 @@
   }
   
   .badge-primary {
-    background-color: rgb(var(--blue-subtle)) !important;
-    color: rgb(var(--blue-tertiary)) !important;
-    border-color: rgb(var(--blue-light)) !important;
+    background-color: rgb(var(--primary-100)) !important;
+    color: rgb(var(--primary-700)) !important;
+    border-color: rgb(var(--primary-300)) !important;
   }
   
   .badge-secondary {
-    background-color: rgb(var(--bg-tertiary)) !important;
+    background-color: rgb(var(--neutral-100)) !important;
     color: rgb(var(--text-secondary)) !important;
     border-color: rgb(var(--border-medium)) !important;
   }
