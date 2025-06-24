@@ -1,6 +1,6 @@
 
 import { memo } from "react";
-import { useProgressData } from "@/hooks/useProgressData";
+import { useProgressData } from "@/features/progress/hooks/useProgressData";
 import StatisticsHeader from "./StatisticsHeader";
 import QuickStats from "./QuickStats";
 import ProgressOverview from "./ProgressOverview";
