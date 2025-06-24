@@ -1,7 +1,8 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Timer, Play, Pause, RotateCcw, Droplets, Heart } from "lucide-react";
+import { Timer, RotateCcw, Droplets, Heart } from "lucide-react";
 import { FastingSession } from "@/hooks/useFasting";
 interface AdvancedFastingTimerProps {
   currentFast: FastingSession | null;
@@ -49,7 +50,6 @@ const AdvancedFastingTimer = ({
         <CardTitle className="flex items-center justify-center gap-2 text-2xl font-bold text-slate-600">
           <Timer className="w-8 h-8 text-blue-600" />
           Jejum {currentFast.type}
-          {isPaused && <Badge variant="secondary" className="ml-2">PAUSADO</Badge>}
         </CardTitle>
         <div className="flex items-center justify-center gap-2 mt-2">
           <Badge className={`${getPhaseColor(getFastingPhase())} text-white`}>
@@ -84,7 +84,7 @@ const AdvancedFastingTimer = ({
                 {formatTime(timeRemaining)}
               </div>
               <div className="text-sm text-gray-600 dark:text-gray-400 text-center">
-                {isActive && !isPaused ? getMotivationalMessage() : 'Jejum pausado'}
+                {isActive ? getMotivationalMessage() : 'Jejum em andamento'}
               </div>
             </div>
           </div>
@@ -130,12 +130,8 @@ const AdvancedFastingTimer = ({
           </div>
         </div>
 
-        {/* Control Buttons */}
-        <div className="flex justify-center gap-4">
-          <Button onClick={onPause} variant="outline" size="lg" className="flex items-center gap-2 bg-white/80 hover:bg-white hover:scale-105 transition-all duration-200">
-            {isActive && !isPaused ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
-            {isActive && !isPaused ? 'Pausar' : 'Continuar'}
-          </Button>
+        {/* Control Button */}
+        <div className="flex justify-center">
           <Button onClick={onStop} variant="destructive" size="lg" className="flex items-center gap-2 hover:scale-105 transition-all duration-200">
             <RotateCcw className="w-5 h-5" />
             Parar Jejum

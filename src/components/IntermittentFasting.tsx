@@ -32,7 +32,6 @@ const IntermittentFasting = () => {
     isActive,
     isPaused,
     startFast,
-    pauseFast,
     stopFast,
     calculateProgress,
     formatTime,
@@ -55,7 +54,7 @@ const IntermittentFasting = () => {
           timeRemaining={timeRemaining}
           isActive={isActive}
           isPaused={isPaused}
-          onPause={pauseFast}
+          onPause={() => {}} // Função vazia já que não usamos mais pausar
           onStop={stopFast}
           formatTime={formatTime}
           calculateProgress={calculateProgress}

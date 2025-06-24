@@ -1,8 +1,9 @@
+
 import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Clock, Play, Pause, Square, Coffee } from 'lucide-react';
+import { Clock, Square, Coffee } from 'lucide-react';
 import { useFasting } from '@/hooks/useFasting';
 import { useLogger } from '@/utils/logger';
 import { useAccessibility } from '@/hooks/useAccessibility';
@@ -25,7 +26,6 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
     timeRemaining,
     isPaused,
     startFast,
-    pauseFast,
     stopFast
   } = useFasting();
 
@@ -77,20 +77,6 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
     });
     onFastingStart?.();
   }, [startFast, onFastingStart, logger, announce]);
-
-  const handlePause = useCallback(() => {
-    if (isPaused) {
-      logger.info('Resuming fasting session');
-      pauseFast();
-      announce('Jejum retomado');
-      enhancedToast.info('Jejum retomado');
-    } else {
-      logger.info('Pausing fasting session');
-      pauseFast();
-      announce('Jejum pausado');
-      enhancedToast.warning('Jejum pausado');
-    }
-  }, [pauseFast, isPaused, logger, announce]);
 
   const handleStop = useCallback(() => {
     logger.info('Stopping fasting session');
@@ -147,7 +133,7 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
                     {displayTime}
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    {currentFast?.type} - {isPaused ? 'Pausado' : 'Ativo'}
+                    {currentFast?.type} - Ativo
                   </p>
                 </div>
 
@@ -173,27 +159,7 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
                   </div>
                 </div>
 
-                <div className="flex gap-2" role="group" aria-label="Controles do jejum">
-                  {isPaused ? (
-                    <AccessibleButton 
-                      onClick={handlePause} 
-                      className="flex-1"
-                      aria-label="Retomar jejum"
-                    >
-                      <Play className="w-4 h-4 mr-2" aria-hidden="true" />
-                      Retomar
-                    </AccessibleButton>
-                  ) : (
-                    <AccessibleButton 
-                      onClick={handlePause} 
-                      variant="outline" 
-                      className="flex-1"
-                      aria-label="Pausar jejum"
-                    >
-                      <Pause className="w-4 h-4 mr-2" aria-hidden="true" />
-                      Pausar
-                    </AccessibleButton>
-                  )}
+                <div className="flex justify-center" role="group" aria-label="Controles do jejum">
                   <AccessibleButton 
                     onClick={handleStop} 
                     variant="destructive" 

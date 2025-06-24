@@ -1,7 +1,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Timer, Pause, Play, Flame, Zap } from "lucide-react";
+import { Timer, RotateCcw, Flame, Zap } from "lucide-react";
 import { FastingSession } from "@/hooks/useFasting";
 
 interface CompactFastingTimerProps {
@@ -10,6 +10,7 @@ interface CompactFastingTimerProps {
   isActive: boolean;
   isPaused: boolean;
   onPause: () => void;
+  onStop: () => void;
   formatTime: (seconds: number) => string;
   calculateProgress: () => number;
   getFastingPhase: () => string;
@@ -21,6 +22,7 @@ const CompactFastingTimer = ({
   isActive,
   isPaused,
   onPause,
+  onStop,
   formatTime,
   calculateProgress,
   getFastingPhase
@@ -62,7 +64,7 @@ const CompactFastingTimer = ({
             <div className="relative">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-primary/10 to-primary/20 flex items-center justify-center">
                 <Timer className="w-5 h-5 text-primary" />
-                {isActive && !isPaused && (
+                {isActive && (
                   <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full animate-pulse shadow-sm" />
                 )}
               </div>
@@ -72,11 +74,6 @@ const CompactFastingTimer = ({
                 <span className="font-semibold text-sm text-slate-800 dark:text-slate-100">
                   Você está em Jejum {currentFast.type}
                 </span>
-                {isPaused && (
-                  <Badge variant="secondary" className="text-xs px-2 py-0.5 bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300 border-0">
-                    PAUSADO
-                  </Badge>
-                )}
               </div>
               <Badge className={`${getBadgeStyle(phase)} text-xs px-2.5 py-1 transition-all duration-200 hover:scale-105 shadow-sm`}>
                 <span className="flex items-center gap-1.5">
@@ -89,16 +86,12 @@ const CompactFastingTimer = ({
             </div>
           </div>
           
-          {/* Botão de pausa/play elegante */}
+          {/* Botão de parar elegante */}
           <button 
-            onClick={onPause} 
-            className="group relative p-3 rounded-full bg-gradient-to-r from-slate-100 to-slate-200 dark:from-slate-700 dark:to-slate-600 hover:from-primary/10 hover:to-primary/20 transition-all duration-300 hover:scale-110 shadow-md hover:shadow-lg active:scale-95 border border-slate-200/50 dark:border-slate-600/50"
+            onClick={onStop} 
+            className="group relative p-3 rounded-full bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 hover:from-red-200 hover:to-red-300 transition-all duration-300 hover:scale-110 shadow-md hover:shadow-lg active:scale-95 border border-red-200/50 dark:border-red-600/50"
           >
-            {isActive && !isPaused ? (
-              <Pause className="w-4 h-4 text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors" />
-            ) : (
-              <Play className="w-4 h-4 ml-0.5 text-slate-700 dark:text-slate-200 group-hover:text-primary transition-colors" />
-            )}
+            <RotateCcw className="w-4 h-4 text-red-600 dark:text-red-400 transition-colors" />
           </button>
         </div>
 
