@@ -6,6 +6,11 @@ import { Progress } from "@/components/ui/progress";
 import { Clock, Play, Pause, Square, Coffee } from 'lucide-react';
 import { useFasting } from '@/hooks/useFasting';
 import { useLogger } from '@/utils/logger';
+import { useAccessibility } from '@/hooks/useAccessibility';
+import { AccessibleButton } from '@/components/ui/accessible-button';
+import { ScreenReaderAnnouncer } from '@/components/ui/screen-reader-announcer';
+import { enhancedToast } from '@/components/ui/enhanced-toast';
+import { SkeletonCard } from '@/components/ui/skeleton-loader';
 import GlobalErrorBoundary from '@/components/error/GlobalErrorBoundary';
 
 interface FastingTimerProps {
@@ -27,6 +32,11 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
 
   const [displayTime, setDisplayTime] = useState('00:00:00');
   const [isLoaded, setIsLoaded] = useState(true);
+  
+  const { containerRef, announce, announcements } = useAccessibility({
+    announceChanges: true,
+    enableKeyboardNavigation: true
+  });
 
   // Memoized time formatting
   const formatTime = useCallback((seconds: number): string => {
@@ -58,23 +68,40 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
     return { percentage: Math.min(100, Math.max(0, percentage)), elapsed, total };
   }, [currentFast, isActive, timeRemaining]);
 
-  // Memoized handlers
+  // Memoized handlers with accessibility announcements
   const handleStart = useCallback((duration: number, type: string) => {
-    logger.info('Starting fasting', { duration, type });
+    logger.info('Starting fasting session', { duration, type });
     startFast(type, duration);
+    announce(`Jejum de ${type} iniciado. Duração: ${Math.floor(duration / 3600)} horas`);
+    enhancedToast.success('Jejum iniciado!', {
+      description: `Jejum de ${type} por ${Math.floor(duration / 3600)} horas`
+    });
     onFastingStart?.();
-  }, [startFast, onFastingStart, logger]);
+  }, [startFast, onFastingStart, logger, announce]);
 
   const handlePause = useCallback(() => {
-    logger.info('Pausing fasting');
-    pauseFast();
-  }, [pauseFast, logger]);
+    if (isPaused) {
+      logger.info('Resuming fasting session');
+      pauseFast();
+      announce('Jejum retomado');
+      enhancedToast.info('Jejum retomado');
+    } else {
+      logger.info('Pausing fasting session');
+      pauseFast();
+      announce('Jejum pausado');
+      enhancedToast.warning('Jejum pausado');
+    }
+  }, [pauseFast, isPaused, logger, announce]);
 
   const handleStop = useCallback(() => {
-    logger.info('Stopping fasting');
+    logger.info('Stopping fasting session');
     stopFast();
+    announce('Jejum finalizado');
+    enhancedToast.success('Jejum finalizado!', {
+      description: 'Parabéns por completar seu jejum'
+    });
     onFastingEnd?.();
-  }, [stopFast, onFastingEnd, logger]);
+  }, [stopFast, onFastingEnd, logger, announce]);
 
   // Memoized quick start options
   const quickStartOptions = useMemo(() => [
@@ -86,95 +113,135 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
   ], []);
 
   if (!isLoaded) {
-    return (
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center justify-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
-        </CardContent>
-      </Card>
-    );
+    return <SkeletonCard />;
   }
 
   return (
     <GlobalErrorBoundary level="component" name="Fasting Timer">
-      <Card className="w-full max-w-md mx-auto">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="w-5 h-5" />
-            Timer de Jejum
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          {isActive ? (
-            <>
-              <div className="text-center">
-                <div className="text-4xl font-mono font-bold text-primary mb-2">
-                  {displayTime}
-                </div>
-                <p className="text-sm text-muted-foreground">
-                  {currentFast?.type} - {isPaused ? 'Pausado' : 'Ativo'}
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Progresso</span>
-                  <span>{progressData.percentage.toFixed(1)}%</span>
-                </div>
-                <Progress value={progressData.percentage} className="h-2" />
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>{formatTime(progressData.elapsed)}</span>
-                  <span>{formatTime(progressData.total)}</span>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                {isPaused ? (
-                  <Button onClick={handlePause} className="flex-1">
-                    <Play className="w-4 h-4 mr-2" />
-                    Retomar
-                  </Button>
-                ) : (
-                  <Button onClick={handlePause} variant="outline" className="flex-1">
-                    <Pause className="w-4 h-4 mr-2" />
-                    Pausar
-                  </Button>
-                )}
-                <Button onClick={handleStop} variant="destructive" className="flex-1">
-                  <Square className="w-4 h-4 mr-2" />
-                  Parar
-                </Button>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="text-center">
-                <Coffee className="w-16 h-16 mx-auto mb-4 text-muted-foreground" />
-                <h3 className="text-lg font-semibold mb-2">Iniciar Jejum</h3>
-                <p className="text-sm text-muted-foreground">
-                  Escolha a duração do seu jejum
-                </p>
-              </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                {quickStartOptions.map((option) => (
-                  <Button
-                    key={option.type}
-                    onClick={() => handleStart(option.duration, option.type)}
-                    variant="outline"
-                    className="h-auto p-3 flex flex-col"
+      <div ref={containerRef}>
+        <ScreenReaderAnnouncer announcements={announcements} />
+        
+        <Card 
+          className="w-full max-w-md mx-auto"
+          role="region"
+          aria-labelledby="fasting-timer-title"
+        >
+          <CardHeader>
+            <CardTitle 
+              id="fasting-timer-title"
+              className="flex items-center gap-2"
+            >
+              <Clock className="w-5 h-5" aria-hidden="true" />
+              Timer de Jejum
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {isActive ? (
+              <>
+                <div className="text-center">
+                  <div 
+                    className="text-4xl font-mono font-bold text-primary mb-2"
+                    role="timer"
+                    aria-live="polite"
+                    aria-label={`Tempo restante: ${displayTime}`}
                   >
-                    <span className="font-semibold">{option.label}</span>
-                    <span className="text-xs text-muted-foreground">{option.type}</span>
-                  </Button>
-                ))}
-              </div>
-            </>
-          )}
-        </CardContent>
-      </Card>
+                    {displayTime}
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {currentFast?.type} - {isPaused ? 'Pausado' : 'Ativo'}
+                  </p>
+                </div>
+
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Progresso</span>
+                    <span aria-label={`${progressData.percentage.toFixed(1)} por cento completo`}>
+                      {progressData.percentage.toFixed(1)}%
+                    </span>
+                  </div>
+                  <Progress 
+                    value={progressData.percentage} 
+                    className="h-2"
+                    aria-label="Progresso do jejum"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground">
+                    <span aria-label={`Tempo decorrido: ${formatTime(progressData.elapsed)}`}>
+                      {formatTime(progressData.elapsed)}
+                    </span>
+                    <span aria-label={`Tempo total: ${formatTime(progressData.total)}`}>
+                      {formatTime(progressData.total)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex gap-2" role="group" aria-label="Controles do jejum">
+                  {isPaused ? (
+                    <AccessibleButton 
+                      onClick={handlePause} 
+                      className="flex-1"
+                      aria-label="Retomar jejum"
+                    >
+                      <Play className="w-4 h-4 mr-2" aria-hidden="true" />
+                      Retomar
+                    </AccessibleButton>
+                  ) : (
+                    <AccessibleButton 
+                      onClick={handlePause} 
+                      variant="outline" 
+                      className="flex-1"
+                      aria-label="Pausar jejum"
+                    >
+                      <Pause className="w-4 h-4 mr-2" aria-hidden="true" />
+                      Pausar
+                    </AccessibleButton>
+                  )}
+                  <AccessibleButton 
+                    onClick={handleStop} 
+                    variant="destructive" 
+                    className="flex-1"
+                    aria-label="Parar jejum"
+                  >
+                    <Square className="w-4 h-4 mr-2" aria-hidden="true" />
+                    Parar
+                  </AccessibleButton>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="text-center">
+                  <Coffee className="w-16 h-16 mx-auto mb-4 text-muted-foreground" aria-hidden="true" />
+                  <h3 className="text-lg font-semibold mb-2">Iniciar Jejum</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Escolha a duração do seu jejum
+                  </p>
+                </div>
+
+                <div 
+                  className="grid grid-cols-2 gap-2"
+                  role="group"
+                  aria-labelledby="fasting-options-title"
+                >
+                  <h4 id="fasting-options-title" className="sr-only">
+                    Opções de jejum disponíveis
+                  </h4>
+                  {quickStartOptions.map((option) => (
+                    <AccessibleButton
+                      key={option.type}
+                      onClick={() => handleStart(option.duration, option.type)}
+                      variant="outline"
+                      className="h-auto p-3 flex flex-col"
+                      aria-label={`Iniciar jejum de ${option.label}, tipo ${option.type}`}
+                    >
+                      <span className="font-semibold">{option.label}</span>
+                      <span className="text-xs text-muted-foreground">{option.type}</span>
+                    </AccessibleButton>
+                  ))}
+                </div>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </GlobalErrorBoundary>
   );
 });

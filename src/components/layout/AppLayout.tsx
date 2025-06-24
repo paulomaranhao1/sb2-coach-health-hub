@@ -2,6 +2,7 @@
 import { ReactNode } from 'react';
 import Header from './Header';
 import MobileMenu from './MobileMenu';
+import { SkipNav } from '@/components/ui/skip-nav';
 
 interface AppLayoutProps {
   children: ReactNode;
@@ -18,8 +19,16 @@ const AppLayout = ({
   activeTab,
   handleTabChange
 }: AppLayoutProps) => {
+  const skipNavLinks = [
+    { href: '#main-content', label: 'Pular para conteúdo principal' },
+    { href: '#navigation', label: 'Pular para navegação' },
+    { href: '#footer', label: 'Pular para rodapé' }
+  ];
+
   return (
     <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+      <SkipNav links={skipNavLinks} />
+      
       <Header 
         showMobileMenu={showMobileMenu}
         setShowMobileMenu={setShowMobileMenu}
@@ -32,7 +41,12 @@ const AppLayout = ({
         handleTabChange={handleTabChange}
       />
 
-      <main className="max-w-6xl mx-auto px-4 py-8">
+      <main 
+        id="main-content"
+        className="max-w-6xl mx-auto px-4 py-8"
+        role="main"
+        aria-label="Conteúdo principal"
+      >
         {children}
       </main>
     </div>
