@@ -46,7 +46,7 @@ const MotivationalGreeting = memo(() => {
     timeRemaining,
     isActive,
     isPaused,
-    pauseFast,
+    stopFast,
     calculateProgress,
     formatTime,
     getFastingPhase
@@ -98,7 +98,8 @@ const MotivationalGreeting = memo(() => {
           timeRemaining={timeRemaining}
           isActive={isActive}
           isPaused={isPaused}
-          onPause={pauseFast}
+          onPause={() => {}} // Empty function since pause is removed
+          onStop={stopFast}
           formatTime={formatTime}
           calculateProgress={calculateProgress}
           getFastingPhase={getFastingPhase}
