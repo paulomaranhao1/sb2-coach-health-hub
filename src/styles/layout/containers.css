@@ -1,24 +1,29 @@
 
-/* Utility Classes */
+/* Utility Classes - Full width layout */
 .container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 0.5rem;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  width: 100% !important;
 }
 
 @media (min-width: 640px) {
   .container {
-    padding: 0 1rem;
+    padding: 0 !important;
+    margin: 0 !important;
   }
 }
 
 .section {
   padding: 2rem 0;
+  margin: 0 !important;
+  width: 100% !important;
 }
 
 @media (min-width: 640px) {
   .section {
     padding: 4rem 0;
+    margin: 0 !important;
   }
 }
 
