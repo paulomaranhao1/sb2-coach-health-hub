@@ -2,9 +2,31 @@
 import { useState, useCallback } from 'react';
 import { logger } from '@/utils/logger';
 
+interface NotificationSettings {
+  weightReminder: boolean;
+  supplementReminder: boolean;
+  streakReminder: boolean;
+  motivationalMessages: boolean;
+}
+
 export const useNotificationService = () => {
   const [permission, setPermission] = useState<NotificationPermission>('default');
   const [isSupported] = useState(() => 'Notification' in window && 'serviceWorker' in navigator);
+  const [settings, setSettings] = useState<NotificationSettings>(() => {
+    const saved = localStorage.getItem('notificationSettings');
+    return saved ? JSON.parse(saved) : {
+      weightReminder: true,
+      supplementReminder: true,
+      streakReminder: true,
+      motivationalMessages: true
+    };
+  });
+
+  const saveSettings = useCallback((newSettings: NotificationSettings) => {
+    setSettings(newSettings);
+    localStorage.setItem('notificationSettings', JSON.stringify(newSettings));
+    logger.info('Notification settings saved', { settings: newSettings });
+  }, []);
 
   const requestPermission = useCallback(async (): Promise<boolean> => {
     if (!isSupported) {
@@ -44,7 +66,6 @@ export const useNotificationService = () => {
           icon: '/favicon.ico',
           badge: '/favicon.ico',
           tag: 'sb2coach-notification',
-          renotify: true,
           ...options,
         });
         logger.info('Notification shown via Service Worker', { title });
@@ -99,10 +120,12 @@ export const useNotificationService = () => {
   return {
     isSupported,
     permission,
+    settings,
     requestPermission,
     showNotification,
     scheduleNotification,
     startNotificationSchedule,
-    clearScheduledNotifications
+    clearScheduledNotifications,
+    saveSettings
   };
 };
