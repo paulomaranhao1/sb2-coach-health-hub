@@ -78,7 +78,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
       label: 'Tutorial & Ajuda',
       icon: BookOpen,
       onClick: handleTutorial,
-      className: 'border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-800 bg-white'
+      className: 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-800 bg-white'
     },
     {
       key: 'contact',
@@ -114,7 +114,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
             onClick={item.onClick}
             size="sm" 
             variant="outline" 
-            className={`w-full justify-start transition-all duration-300 hover:scale-[1.02] hover:shadow-md border-2 ${item.className}`}
+            className={`w-full justify-start transition-all duration-300 hover:scale-[1.02] hover:shadow-sm border-2 ${item.className}`}
           >
             <item.icon className="w-4 h-4 mr-3" />
             {item.label}
@@ -142,15 +142,23 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
         </div>
       </div>
       
-      {/* Botão de Compra Destacado */}
-      <AnimatedButton 
-        onClick={handlePurchase}
-        size="sm" 
-        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white border-0 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02] font-semibold py-3"
-      >
-        <ShoppingCart className="w-4 h-4 mr-3" />
-        <span className="font-bold">Comprar SB2 Turbo</span>
-      </AnimatedButton>
+      {/* Botão de Compra Destacado - Mesmo estilo do botão Novidades */}
+      <div className="space-y-2">
+        <button
+          onClick={handlePurchase}
+          className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg group bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/20 border border-red-400/30 hover:from-red-400 hover:to-red-500"
+        >
+          <div className="p-2 rounded-lg bg-white/20">
+            <ShoppingCart className="w-4 h-4 animate-pulse" />
+          </div>
+          <span className="font-bold">Comprar SB2 Turbo</span>
+          <div className="ml-auto">
+            <span className="text-xs bg-white/30 px-2 py-0.5 rounded-full animate-bounce">
+              OFERTA
+            </span>
+          </div>
+        </button>
+      </div>
       
       {/* Botão de Logout */}
       <Button 

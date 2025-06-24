@@ -51,7 +51,7 @@ const MobileMenu = ({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header moderno */}
-        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 p-4 border-b border-blue-500/30 backdrop-blur-sm">
+        <div className="sticky top-0 bg-gradient-to-r from-red-600 to-red-700 p-4 border-b border-red-500/30 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 rounded-lg overflow-hidden bg-white p-1 shadow-sm">

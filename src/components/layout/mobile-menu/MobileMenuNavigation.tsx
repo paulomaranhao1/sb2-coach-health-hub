@@ -25,9 +25,9 @@ const MobileMenuNavigation = ({ activeTab, handleTabChange }: MobileMenuNavigati
           onClick={() => handleTabChange(item.value)}
           className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group ${
             activeTab === item.value 
-              ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/25 border border-blue-400/30' 
+              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25 border border-red-400/30' 
               : item.featured
-              ? 'bg-gradient-to-r from-indigo-500 to-purple-600 text-white shadow-lg shadow-indigo-500/20 border border-indigo-400/30 hover:from-indigo-400 hover:to-purple-500'
+              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/20 border border-red-400/30 hover:from-red-400 hover:to-red-500'
               : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900 border border-transparent hover:border-slate-200 bg-white/50'
           }`}
         >
