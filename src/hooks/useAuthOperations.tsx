@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -11,7 +12,7 @@ export const useAuthOperations = () => {
     setLoading(true);
     
     try {
-      // URL limpa sem parâmetros
+      // Usar a URL atual da aplicação (seja ela qual for)
       const redirectTo = window.location.origin;
       console.log('useAuthOperations: URL de redirect:', redirectTo);
       
