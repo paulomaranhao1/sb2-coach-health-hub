@@ -1,3 +1,4 @@
+
 import { useProgressData } from "@/features/progress/hooks/useProgressData";
 import ProgressHeader from "@/features/progress/components/ProgressHeader";
 import GoalProgressCard from "@/features/progress/components/GoalProgressCard";
@@ -59,7 +60,7 @@ const ProgressDashboard = () => {
         weightLoss={weightLoss}
         avgWeightLossPerWeek={avgWeightLossPerWeek}
         bestWeekLoss={bestWeekLoss}
-        consistencyScore={consistencyScore}
+        consistencyScore={consistencyScore.toString()}
         onShare={shareProgress}
       />
     </div>
