@@ -8,14 +8,14 @@ interface MobileMenuNewSectionProps {
 
 const MobileMenuNewSection = ({ activeTab, handleNewFeaturesClick }: MobileMenuNewSectionProps) => {
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       <button
         onClick={handleNewFeaturesClick}
-        className={`mobile-menu-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg group bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/20 border border-emerald-400/30 hover:from-emerald-400 hover:to-teal-500 ${
-          activeTab === 'new-features' ? 'ring-2 ring-white/50' : ''
+        className={`mobile-menu-item w-full flex items-center space-x-3 px-3 py-3 rounded-lg text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/20 border border-red-400/30 hover:from-red-400 hover:to-red-500 ${
+          activeTab === 'new-features' ? 'ring-2 ring-red-300' : ''
         }`}
       >
-        <div className="p-2 rounded-lg bg-white/20">
+        <div className="p-1.5 rounded-md bg-white/20">
           <Sparkles className="w-4 h-4 animate-pulse" />
         </div>
         <span className="font-bold">Novidades</span>

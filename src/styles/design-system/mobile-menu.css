@@ -1,42 +1,44 @@
 
-/* Mobile Menu - Dark Theme with High Contrast */
+/* Mobile Menu - Red, White and Light Gray Theme */
 @layer components {
   .mobile-menu {
-    background: rgb(15 23 42) !important; /* slate-900 - solid dark background */
-    color: rgb(248 250 252) !important; /* slate-50 - very light text */
-    border-right: 1px solid rgb(51 65 85) !important; /* slate-700 */
+    background: rgb(248 249 250) !important; /* Very light gray background */
+    color: rgb(55 65 81) !important; /* Dark gray text */
+    border-right: 1px solid rgb(209 213 219) !important; /* Light gray border */
   }
   
   .mobile-menu-header {
-    background: rgb(30 41 59) !important; /* slate-800 - slightly lighter for header */
-    border-bottom: 1px solid rgb(71 85 105) !important; /* slate-600 */
+    background: rgb(220 38 38) !important; /* Red header background */
+    border-bottom: 1px solid rgb(185 28 28) !important; /* Darker red border */
     backdrop-filter: none !important;
   }
   
   .mobile-menu-header * {
-    color: rgb(248 250 252) !important; /* slate-50 - white text */
+    color: white !important; /* White text in header */
   }
   
   .mobile-menu-item {
-    color: rgb(226 232 240) !important; /* slate-200 - light gray text */
-    background: rgba(71, 85, 105, 0.3) !important; /* slate-600 with opacity */
-    border: 1px solid rgba(100, 116, 139, 0.3) !important; /* slate-500 */
-    border-radius: var(--radius-lg) !important;
+    color: rgb(55 65 81) !important; /* Dark gray text */
+    background: white !important; /* White background */
+    border: 1px solid rgb(229 231 235) !important; /* Light gray border */
+    border-radius: var(--radius-md) !important;
     transition: all 0.2s ease;
+    margin-bottom: 0.25rem !important; /* Reduced spacing */
+    padding: 0.75rem !important; /* Reduced padding */
   }
   
   .mobile-menu-item:hover {
-    background: rgba(100, 116, 139, 0.4) !important; /* slate-500 */
-    border-color: rgba(148, 163, 184, 0.5) !important; /* slate-400 */
-    color: rgb(248 250 252) !important; /* slate-50 */
+    background: rgb(254 242 242) !important; /* Very light red background */
+    border-color: rgb(252 165 165) !important; /* Light red border */
+    color: rgb(220 38 38) !important; /* Red text */
     transform: translateY(-1px);
   }
   
   .mobile-menu-item.active {
-    background: linear-gradient(135deg, rgb(59 130 246), rgb(37 99 235)) !important; /* blue gradient */
+    background: linear-gradient(135deg, rgb(220 38 38), rgb(185 28 28)) !important; /* Red gradient */
     color: white !important;
-    border-color: rgba(59, 130, 246, 0.5) !important;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25) !important;
+    border-color: rgb(220 38 38) !important;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25) !important;
   }
   
   .mobile-menu-item.active * {
@@ -44,10 +46,10 @@
   }
   
   .mobile-menu-icon {
-    background: rgba(100, 116, 139, 0.3) !important; /* slate-500 */
-    color: rgb(226 232 240) !important; /* slate-200 */
-    border-radius: var(--radius-md) !important;
-    padding: var(--space-sm);
+    background: rgb(243 244 246) !important; /* Light gray icon background */
+    color: rgb(107 114 128) !important; /* Medium gray icon */
+    border-radius: var(--radius-sm) !important;
+    padding: 0.5rem !important; /* Reduced padding */
   }
   
   .mobile-menu-item.active .mobile-menu-icon {
@@ -55,36 +57,55 @@
     color: white !important;
   }
   
+  .mobile-menu-item:hover .mobile-menu-icon {
+    background: rgb(254 226 226) !important; /* Light red icon background on hover */
+    color: rgb(220 38 38) !important; /* Red icon on hover */
+  }
+  
   .mobile-menu-separator {
-    border-color: rgb(71 85 105) !important; /* slate-600 */
+    border-color: rgb(229 231 235) !important; /* Light gray separator */
+    margin: 0.75rem 0 !important; /* Reduced margin */
   }
   
   .mobile-menu-section-title {
-    color: rgb(148 163 184) !important; /* slate-400 - muted text */
+    color: rgb(107 114 128) !important; /* Medium gray section titles */
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    background: rgb(15 23 42) !important; /* same as menu background */
+    background: rgb(248 249 250) !important; /* Same as menu background */
+    padding: 0.5rem 0 !important; /* Reduced padding */
   }
   
   .mobile-menu-footer {
-    background: rgb(30 41 59) !important; /* slate-800 - solid background */
-    border-top: 1px solid rgb(71 85 105) !important; /* slate-600 */
+    background: rgb(243 244 246) !important; /* Light gray footer */
+    border-top: 1px solid rgb(229 231 235) !important; /* Light gray border */
+    padding: 1rem !important; /* Reduced padding */
   }
   
   .mobile-menu-footer * {
-    color: rgb(148 163 184) !important; /* slate-400 - muted footer text */
+    color: rgb(107 114 128) !important; /* Medium gray footer text */
   }
   
-  /* Ensure close button has proper contrast */
+  /* Close button styling */
   .mobile-menu-header button {
-    color: rgb(248 250 252) !important; /* white */
-    background: rgba(71, 85, 105, 0.3) !important; /* slate-600 */
+    color: white !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: var(--radius-sm) !important;
   }
   
   .mobile-menu-header button:hover {
-    background: rgba(100, 116, 139, 0.4) !important; /* slate-500 */
+    background: rgba(255, 255, 255, 0.2) !important;
     color: white !important;
+  }
+  
+  /* Special styling for featured items */
+  .mobile-menu-item .bg-white\/20 {
+    background: rgb(220 38 38) !important;
+    color: white !important;
+  }
+  
+  .mobile-menu-item:hover .bg-white\/20 {
+    background: rgb(185 28 28) !important;
   }
 }
