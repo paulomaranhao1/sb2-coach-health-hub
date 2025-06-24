@@ -1,14 +1,14 @@
 
 import { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
-import AuthHeader from "./AuthHeader";
-import AuthToggleButtons from "./AuthToggleButtons";
-import EmailPasswordForm from "./EmailPasswordForm";
-import GoogleAuthButton from "./GoogleAuthButton";
-import FormDivider from "./FormDivider";
-import MagicLinkForm from "./MagicLinkForm";
-import ForgotPasswordForm from "./ForgotPasswordForm";
-import EmailVerificationScreen from "./EmailVerificationScreen";
+import AuthHeader from "@/components/auth/AuthHeader";
+import AuthToggleButtons from "@/components/auth/AuthToggleButtons";
+import EmailPasswordForm from "@/components/auth/EmailPasswordForm";
+import GoogleAuthButton from "@/components/auth/GoogleAuthButton";
+import FormDivider from "@/components/auth/FormDivider";
+import MagicLinkForm from "@/components/auth/MagicLinkForm";
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
+import EmailVerificationScreen from "@/components/auth/EmailVerificationScreen";
 
 export type AuthMode = 'signin' | 'signup' | 'magic-link' | 'forgot-password' | 'email-verification';
 

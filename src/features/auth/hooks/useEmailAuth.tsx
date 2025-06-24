@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { showAuthSuccess, showAuthError } from '@/utils/authErrorHandling';
+import { showAuthSuccessToast, showAuthErrorToast } from '@/utils/authErrorHandling';
 
 export const useEmailAuth = () => {
   const [loading, setLoading] = useState(false);
@@ -18,9 +18,9 @@ export const useEmailAuth = () => {
 
       if (error) throw error;
       
-      showAuthSuccess(toast, 'Login realizado com sucesso!');
+      showAuthSuccessToast('Login realizado com sucesso!');
     } catch (error: any) {
-      showAuthError(toast, error, 'Erro no login');
+      showAuthErrorToast(error);
       throw error;
     } finally {
       setLoading(false);
@@ -37,10 +37,10 @@ export const useEmailAuth = () => {
 
       if (error) throw error;
       
-      showAuthSuccess(toast, 'Conta criada! Verifique seu email.');
+      showAuthSuccessToast('Conta criada! Verifique seu email.');
       return { email };
     } catch (error: any) {
-      showAuthError(toast, error, 'Erro ao criar conta');
+      showAuthErrorToast(error);
       throw error;
     } finally {
       setLoading(false);

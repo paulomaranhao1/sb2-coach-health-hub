@@ -1,112 +1,133 @@
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { UserStats } from '@/types';
 
-interface WeightEntry {
+export interface WeightEntry {
   id: string;
   weight: number;
   date: string;
-  notes?: string;
+  created_at: string;
 }
 
-interface ProgressData {
-  weightEntries: WeightEntry[];
-  userStats: UserStats | null;
+export interface UserStats {
+  level: number;
+  points: number;
+  shields: any[];
+  stickers: any[];
+  streak: number;
+}
+
+export interface ProgressData {
+  weightHistory: WeightEntry[];
+  userStats: UserStats;
 }
 
 export const useProgressData = () => {
-  const [data, setData] = useState<ProgressData>({
-    weightEntries: [],
-    userStats: null
-  });
+  const [data, setData] = useState<ProgressData>({ weightHistory: [], userStats: { level: 1, points: 0, shields: [], stickers: [], streak: 0 } });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
-  const loadData = useCallback(async () => {
+  const fetchData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      setLoading(true);
+      
+      // Fetch weight history
+      const { data: weightData, error: weightError } = await supabase
+        .from('weight_entries')
+        .select('*')
+        .order('created_at', { ascending: false });
 
-      const [weightResponse, statsResponse] = await Promise.all([
-        supabase
-          .from('weight_entries')
-          .select('*')
-          .eq('user_id', user.id)
-          .order('created_at', { ascending: true }),
-        supabase
-          .from('user_stats')
-          .select('*')
-          .eq('user_id', user.id)
-          .maybeSingle()
-      ]);
+      if (weightError) throw weightError;
 
-      if (weightResponse.error) throw weightResponse.error;
-      if (statsResponse.error) throw statsResponse.error;
+      // Fetch user stats
+      const { data: statsData, error: statsError } = await supabase
+        .from('user_stats')
+        .select('*')
+        .single();
 
-      setData({
-        weightEntries: weightResponse.data || [],
-        userStats: statsResponse.data
-      });
+      if (statsError && statsError.code !== 'PGRST116') throw statsError;
+
+      const weightHistory = weightData || [];
+      const userStats = statsData || { level: 1, points: 0, shields: [], stickers: [], streak: 0 };
+
+      setData({ weightHistory, userStats });
     } catch (error: any) {
-      console.error('Erro ao carregar dados de progresso:', error);
+      console.error('Error fetching progress data:', error);
       toast({
-        title: "Erro",
-        description: "Não foi possível carregar os dados de progresso",
-        variant: "destructive"
+        title: "Erro ao carregar dados",
+        description: "Não foi possível carregar os dados de progresso.",
+        variant: "destructive",
       });
     } finally {
       setLoading(false);
     }
-  }, [toast]);
+  };
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    fetchData();
+  }, []);
 
-  const calculations = useMemo(() => {
-    const weightHistory = data.weightEntries;
-    const currentWeightValue = weightHistory.length > 0 ? weightHistory[weightHistory.length - 1].weight : 0;
-    const initialWeight = weightHistory.length > 0 ? weightHistory[0].weight : 0;
-    const weightLoss = initialWeight - currentWeightValue;
-    
-    return {
-      currentWeightValue,
-      initialWeight,
-      weightLoss
-    };
-  }, [data.weightEntries]);
-
-  const shareProgress = useCallback(async () => {
+  const shareProgress = async () => {
     try {
       const shareData = {
-        title: 'SB2coach.ai - Meu Progresso',
-        text: `Estou usando o SB2coach.ai! ${calculations.weightLoss > 0 ? `Já perdi ${calculations.weightLoss.toFixed(1)}kg` : `Peso atual: ${calculations.currentWeightValue}kg`} 💪`,
+        title: 'Meu Progresso - SB2coach.ai',
+        text: `Confira meu progresso no SB2coach.ai! Já perdi ${weightLoss.toFixed(1)}kg!`,
         url: window.location.origin
       };
 
-      if (navigator.share && navigator.canShare(shareData)) {
+      if (navigator.share) {
         await navigator.share(shareData);
       } else {
-        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
+        await navigator.clipboard.writeText(shareData.text + ' ' + shareData.url);
         toast({
           title: "Link copiado!",
-          description: "Cole onde quiser compartilhar seu progresso"
+          description: "O link foi copiado para a área de transferência.",
         });
       }
     } catch (error) {
       console.error('Error sharing:', error);
     }
-  }, [calculations.weightLoss, calculations.currentWeightValue, toast]);
+  };
+
+  // Calculate derived values
+  const weightHistory = data.weightHistory;
+  const userStats = data.userStats;
+  const currentWeightValue = weightHistory.length > 0 ? weightHistory[0].weight : 0;
+  const initialWeight = weightHistory.length > 0 ? weightHistory[weightHistory.length - 1].weight : 0;
+  const weightLoss = initialWeight - currentWeightValue;
+  
+  // Calculate average weight loss per week
+  const avgWeightLossPerWeek = weightHistory.length > 1 ? 
+    (weightLoss / Math.max(1, Math.ceil(weightHistory.length / 7))).toFixed(1) : '0.0';
+  
+  // Calculate best week loss
+  let bestWeekLoss = 0;
+  if (weightHistory.length > 1) {
+    for (let i = 0; i < weightHistory.length - 1; i++) {
+      const weekLoss = weightHistory[i + 1].weight - weightHistory[i].weight;
+      if (weekLoss > bestWeekLoss) {
+        bestWeekLoss = weekLoss;
+      }
+    }
+  }
+
+  // Calculate consistency score
+  const consistencyScore = weightHistory.length > 0 ? 
+    Math.min(100, Math.round((weightHistory.length / 30) * 100)) : 0;
 
   return {
+    currentWeightValue,
+    initialWeight,
+    weightLoss,
+    avgWeightLossPerWeek,
+    bestWeekLoss,
+    consistencyScore,
     data,
     loading,
-    refetch: loadData,
-    weightHistory: data.weightEntries,
-    userStats: data.userStats,
-    shareProgress,
-    ...calculations
+    refetch: fetchData,
+    weightHistory,
+    userStats,
+    shareProgress
   };
 };
