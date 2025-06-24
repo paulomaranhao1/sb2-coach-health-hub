@@ -18,6 +18,26 @@
 
 /* Remove conflicting styles */
 @layer base {
+  /* Force full width layout globally */
+  * {
+    box-sizing: border-box;
+  }
+  
+  body {
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
+  }
+  
+  main, section, .container, [class*="container"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+  
   /* Override any remaining yellow/amber references */
   *[class*="yellow"], *[class*="amber"],
   *[style*="yellow"], *[style*="amber"] {
