@@ -61,10 +61,10 @@ export const ProfileLoadingFallback = () => (
 // HOCs para facilitar o uso de lazy loading
 export const withLazyLoading = <P extends object>(
   Component: React.ComponentType<P>,
-  fallback: React.ComponentType = ComponentLoadingFallback
+  FallbackComponent: React.ComponentType = ComponentLoadingFallback
 ) => {
   const LazyComponent: React.FC<P> = (props) => (
-    <Suspense fallback={<fallback />}>
+    <Suspense fallback={<FallbackComponent />}>
       <Component {...props} />
     </Suspense>
   );
