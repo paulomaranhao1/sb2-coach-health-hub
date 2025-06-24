@@ -43,7 +43,7 @@ const AppLayout = ({
 
       <main 
         id="main-content"
-        className="max-w-6xl mx-auto px-4 py-8"
+        className="w-full max-w-6xl mx-auto px-2 sm:px-4 py-4 sm:py-8"
         role="main"
         aria-label="Conteúdo principal"
       >
