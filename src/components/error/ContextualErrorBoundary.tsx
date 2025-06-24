@@ -170,6 +170,7 @@ class ContextualErrorBoundary extends Component<Props, State> {
                   variant="outline"
                   size="sm"
                   className={config.buttonColor}
+                  aria-label={`Tentar novamente - tentativa ${this.state.retryCount + 1} de ${this.maxRetries}`}
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Tentar Novamente
@@ -182,6 +183,7 @@ class ContextualErrorBoundary extends Component<Props, State> {
                   variant="outline"
                   size="sm"
                   className={config.buttonColor}
+                  aria-label="Atualizar dados"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Atualizar
@@ -194,6 +196,7 @@ class ContextualErrorBoundary extends Component<Props, State> {
                   variant="outline"
                   size="sm"
                   className={config.buttonColor}
+                  aria-label="Recarregar página"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Recarregar
@@ -206,6 +209,7 @@ class ContextualErrorBoundary extends Component<Props, State> {
                   variant="outline"
                   size="sm"
                   className={config.buttonColor}
+                  aria-label="Ir para página inicial"
                 >
                   <Home className="w-4 h-4 mr-2" />
                   Início
