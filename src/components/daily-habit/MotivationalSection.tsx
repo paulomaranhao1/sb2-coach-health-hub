@@ -19,7 +19,8 @@ const MotivationalSection = () => {
   useEffect(() => {
     // Usar um seed baseado na data para garantir que a frase seja a mesma durante todo o dia
     const today = new Date();
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+    const startOfYear = new Date(today.getFullYear(), 0, 1);
+    const dayOfYear = Math.floor((today.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     const quoteIndex = dayOfYear % motivationalQuotes.length;
     setDailyQuote(motivationalQuotes[quoteIndex]);
   }, []);

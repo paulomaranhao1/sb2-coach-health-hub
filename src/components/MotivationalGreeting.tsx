@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, memo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useFasting } from '@/hooks/useFasting';
@@ -63,7 +62,8 @@ const MotivationalGreeting = memo(() => {
     
     // Usar seed baseado na data para manter a mesma frase durante todo o dia
     const today = new Date();
-    const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / (1000 * 60 * 60 * 24));
+    const startOfYear = new Date(today.getFullYear(), 0, 1);
+    const dayOfYear = Math.floor((today.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
     const phraseIndex = dayOfYear % motivationalPhrases.length;
     const selectedPhrase = motivationalPhrases[phraseIndex];
     
