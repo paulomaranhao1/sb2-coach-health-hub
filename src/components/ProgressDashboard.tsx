@@ -31,7 +31,7 @@ const ProgressDashboard = () => {
     );
   }
 
-  // Convert consistencyScore to string for components
+  // Convert consistencyScore to string for components that expect string
   const consistencyScoreString = consistencyScore.toString();
 
   return (
