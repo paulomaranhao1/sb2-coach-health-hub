@@ -166,14 +166,16 @@ export const useProgressData = () => {
   }, [calculations.weightLoss, calculations.currentWeightValue, toast]);
 
   // Função para forçar refresh (limpar cache)
-  const forceRefresh = useCallback(() => {
+  const forceRefresh = useCallback(async () => {
     console.log('🔄 Forçando atualização dos dados...');
-    const { data: { user } } = supabase.auth.getUser();
-    user.then(result => {
-      if (result.user) {
-        cacheManager.delete(`progress-${result.user.id}`);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        cacheManager.delete(`progress-${user.id}`);
       }
-    });
+    } catch (error) {
+      console.error('Error getting user for cache cleanup:', error);
+    }
     loadData(false);
   }, [loadData]);
 
