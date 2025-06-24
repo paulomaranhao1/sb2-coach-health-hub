@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
@@ -14,8 +13,12 @@ export const useAppState = () => {
   const cache = useUserCache();
   const logger = useLogger('useAppState');
   
+  // Verificar se o vídeo de boas-vindas já foi assistido
+  const videoWelcomeCompleted = localStorage.getItem('videoWelcomeCompleted') === 'true';
+  
   // Estados básicos otimizados
   const [state, setState] = useState({
+    showVideoWelcome: !videoWelcomeCompleted, // Mostrar vídeo apenas se não foi assistido
     showWelcome: false,
     showOnboarding: false,
     showTutorial: false,
@@ -33,6 +36,13 @@ export const useAppState = () => {
     logger.debug('Updating state', { updates });
     setState(prev => ({ ...prev, ...updates }));
   }, [logger]);
+
+  // Handler para quando o vídeo de boas-vindas terminar
+  const handleVideoWelcomeComplete = useCallback(() => {
+    logger.info('Video welcome completed');
+    localStorage.setItem('videoWelcomeCompleted', 'true');
+    updateState({ showVideoWelcome: false, showWelcome: true });
+  }, [updateState, logger]);
 
   // Verificar tutorial via URL apenas uma vez
   useEffect(() => {
@@ -203,6 +213,7 @@ export const useAppState = () => {
     userStats,
     setUserStats,
     checkUserProfile,
+    handleVideoWelcomeComplete,
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,
@@ -219,6 +230,7 @@ export const useAppState = () => {
     userProfile,
     userStats,
     checkUserProfile,
+    handleVideoWelcomeComplete,
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,

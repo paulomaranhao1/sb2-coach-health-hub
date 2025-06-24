@@ -12,6 +12,8 @@ import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
 const Index = memo(() => {
   const logger = useLogger('Index');
   const {
+    showVideoWelcome,
+    handleVideoWelcomeComplete,
     showWelcome,
     setShowWelcome,
     showOnboarding,
@@ -38,6 +40,7 @@ const Index = memo(() => {
   // Log component mount/unmount
   useEffect(() => {
     logger.mounted({ 
+      showVideoWelcome,
       showWelcome, 
       showOnboarding, 
       showTutorial, 
@@ -47,18 +50,18 @@ const Index = memo(() => {
     return () => {
       logger.unmounted();
     };
-  }, [logger, showWelcome, showOnboarding, showTutorial, userProfile]);
+  }, [logger, showVideoWelcome, showWelcome, showOnboarding, showTutorial, userProfile]);
 
   // Verificar perfil apenas uma vez após montagem
   useEffect(() => {
     logger.debug('Checking if user profile needs to be loaded');
     
     // Verificar se já temos dados ou se está em algum fluxo especial
-    if (!userProfile && !showWelcome && !showOnboarding && !showTutorial && !showNewFeatures && !isLoading) {
+    if (!userProfile && !showVideoWelcome && !showWelcome && !showOnboarding && !showTutorial && !showNewFeatures && !isLoading) {
       logger.info('Loading user profile');
       checkUserProfile();
     }
-  }, [userProfile, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile, logger]);
+  }, [userProfile, showVideoWelcome, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile, logger]);
 
   // Log Service Worker status
   useEffect(() => {
@@ -68,10 +71,11 @@ const Index = memo(() => {
   }, [swSupported, swRegistered, logger]);
 
   // Renderizar telas especiais
-  const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
+  const shouldShowSpecialScreen = showVideoWelcome || showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
 
   logger.debug('Current state', {
     shouldShowSpecialScreen,
+    showVideoWelcome,
     showWelcome,
     showOnboarding,
     showTutorial,
@@ -93,6 +97,8 @@ const Index = memo(() => {
         showDebugInfo={true}
       >
         <AppScreens
+          showVideoWelcome={showVideoWelcome}
+          handleVideoWelcomeComplete={handleVideoWelcomeComplete}
           showWelcome={showWelcome}
           setShowWelcome={setShowWelcome}
           showOnboarding={showOnboarding}
