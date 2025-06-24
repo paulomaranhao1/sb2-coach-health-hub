@@ -25,7 +25,7 @@ export const useUnifiedCache = (): UnifiedCacheHook => {
   const cache = useCacheManager();
   const logger = useLogger('UnifiedCache');
 
-  const get = useCallback(<T,>(key: string): T | null => {
+  const get = useCallback(<T = any>(key: string): T | null => {
     const result = cache.get<T>(key);
     if (result !== null) {
       logger.debug('Cache hit', { key });
@@ -35,7 +35,7 @@ export const useUnifiedCache = (): UnifiedCacheHook => {
     return result;
   }, [cache, logger]);
 
-  const set = useCallback(<T,>(key: string, data: T, options: CacheOptions = {}) => {
+  const set = useCallback(<T = any>(key: string, data: T, options: CacheOptions = {}) => {
     logger.debug('Cache set', { key, options });
     cache.set(key, data, options);
   }, [cache, logger]);
@@ -66,7 +66,7 @@ export const useUnifiedCache = (): UnifiedCacheHook => {
     return count;
   }, [cache, logger]);
 
-  const prefetch = useCallback(<T,>(
+  const prefetch = useCallback(<T = any>(
     key: string, 
     loader: () => Promise<T>, 
     options: CacheOptions = {}
@@ -98,8 +98,8 @@ export const useApiCache = () => {
   const logger = useLogger('ApiCache');
 
   return {
-    get: <T>(endpoint: string): T | null => cache.get(`api:${endpoint}`),
-    set: <T>(endpoint: string, data: T, ttl = 5 * 60 * 1000) => {
+    get: <T = any>(endpoint: string): T | null => cache.get(`api:${endpoint}`),
+    set: <T = any>(endpoint: string, data: T, ttl = 5 * 60 * 1000) => {
       logger.debug('API cache set', { endpoint, ttl });
       cache.set(`api:${endpoint}`, data, { ttl, tags: ['api', 'persist'] });
     },
@@ -113,8 +113,8 @@ export const useUserCache = () => {
   const logger = useLogger('UserCache');
 
   return {
-    get: <T>(key: string): T | null => cache.get(`user:${key}`),
-    set: <T>(key: string, data: T, ttl = 10 * 60 * 1000) => {
+    get: <T = any>(key: string): T | null => cache.get(`user:${key}`),
+    set: <T = any>(key: string, data: T, ttl = 10 * 60 * 1000) => {
       logger.debug('User cache set', { key, ttl });
       cache.set(`user:${key}`, data, { ttl, tags: ['user', 'persist'], priority: 'high' });
     },
