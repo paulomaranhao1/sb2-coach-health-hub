@@ -15,7 +15,7 @@ const DailyPointsCollector = () => {
 
   if (loading) {
     return (
-      <Card className="border-0 shadow-lg bg-gradient-to-br from-yellow-50 to-amber-100">
+      <Card className="border-0 shadow-lg bg-gradient-to-br from-blue-50 to-blue-100">
         <CardContent className="p-4">
           <div className="text-center space-y-3">
             <Skeleton className="h-6 w-32 mx-auto" />
@@ -29,14 +29,14 @@ const DailyPointsCollector = () => {
 
   return (
     <ErrorBoundary>
-      <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-yellow-50 to-amber-100 dark:from-yellow-900/20 dark:to-amber-800/20">
+      <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 bg-gradient-to-br from-blue-50 to-blue-100">
         <CardContent className="p-4">
           <div className="text-center space-y-3">
-            <h3 className="font-bold text-yellow-800 dark:text-yellow-200 flex items-center justify-center gap-2">
+            <h3 className="font-bold text-blue-800 flex items-center justify-center gap-2">
               <Gift className="w-5 h-5" />
               Pontos Diários
             </h3>
-            <p className="text-sm text-yellow-700 dark:text-yellow-300">
+            <p className="text-sm text-blue-700">
               Colete seus pontos diários para subir de nível!
             </p>
             <Button 
@@ -45,7 +45,7 @@ const DailyPointsCollector = () => {
               className={`w-full font-bold ${
                 dailyPointsClaimed 
                   ? 'bg-gray-400 hover:bg-gray-400 cursor-not-allowed' 
-                  : 'bg-yellow-600 hover:bg-yellow-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
+                  : 'bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300'
               }`}
             >
               <Gift className="w-4 h-4 mr-2" />
