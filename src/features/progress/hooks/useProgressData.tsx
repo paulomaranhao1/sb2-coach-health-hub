@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { handleAsyncError, getErrorMessage } from '@/utils/errorHandling';
+import { cacheManager } from '@/utils/cacheManager';
 
 export interface WeightEntry {
   id: string;
@@ -25,10 +26,6 @@ interface ProgressData {
   userStats: UserStats | null;
 }
 
-// Cache para evitar re-fetches desnecessários
-const dataCache = new Map<string, { data: any; timestamp: number }>();
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutos
-
 export const useProgressData = () => {
   const [data, setData] = useState<ProgressData>({
     weightEntries: [],
@@ -36,20 +33,6 @@ export const useProgressData = () => {
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-
-  // Função para verificar cache
-  const getCachedData = useCallback((key: string) => {
-    const cached = dataCache.get(key);
-    if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
-      return cached.data;
-    }
-    return null;
-  }, []);
-
-  // Função para definir cache
-  const setCachedData = useCallback((key: string, data: any) => {
-    dataCache.set(key, { data, timestamp: Date.now() });
-  }, []);
 
   const loadData = useCallback(async (useCache = true) => {
     const result = await handleAsyncError(async () => {
@@ -60,7 +43,7 @@ export const useProgressData = () => {
       
       // Verificar cache primeiro
       if (useCache) {
-        const cachedData = getCachedData(cacheKey);
+        const cachedData = cacheManager.get<ProgressData>(cacheKey);
         if (cachedData) {
           console.log('📦 Usando dados do cache');
           setData(cachedData);
@@ -93,7 +76,7 @@ export const useProgressData = () => {
       };
 
       setData(newData);
-      setCachedData(cacheKey, newData);
+      cacheManager.set(cacheKey, newData);
     }, (error) => {
       console.error('Erro ao carregar dados de progresso:', error);
       toast({
@@ -104,7 +87,7 @@ export const useProgressData = () => {
     });
 
     setLoading(false);
-  }, [toast, getCachedData, setCachedData]);
+  }, [toast]);
 
   useEffect(() => {
     loadData();
@@ -185,6 +168,12 @@ export const useProgressData = () => {
   // Função para forçar refresh (limpar cache)
   const forceRefresh = useCallback(() => {
     console.log('🔄 Forçando atualização dos dados...');
+    const { data: { user } } = supabase.auth.getUser();
+    user.then(result => {
+      if (result.user) {
+        cacheManager.delete(`progress-${result.user.id}`);
+      }
+    });
     loadData(false);
   }, [loadData]);
 

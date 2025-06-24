@@ -7,6 +7,8 @@ import ProgressOverview from "./ProgressOverview";
 import StatusCards from "../home/StatusCards";
 import GamificationCards from "../home/GamificationCards";
 import ProgressDashboard from "../ProgressDashboard";
+import ErrorBoundary from "../error/ErrorBoundary";
+import StatsSkeleton from "../ui/skeletons/StatsSkeleton";
 
 interface StatisticsOverviewProps {
   userProfile: any;
@@ -22,35 +24,52 @@ const StatisticsOverview = memo(({ userProfile, userStats }: StatisticsOverviewP
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
+      <div className="space-y-6">
+        <StatsSkeleton />
+        <StatsSkeleton />
+        <div className="grid gap-6 lg:grid-cols-2">
+          <StatsSkeleton />
+          <StatsSkeleton />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <StatisticsHeader onShare={shareProgress} />
-      
-      <QuickStats 
-        userProfile={userProfile} 
-        userStats={userStats} 
-        weightHistory={weightHistory}
-      />
-      
-      <ProgressOverview userProfile={userProfile} userStats={userStats} />
-      
-      <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-6">
-          <StatusCards userProfile={userProfile} userStats={userStats} />
+    <ErrorBoundary>
+      <div className="space-y-6">
+        <StatisticsHeader onShare={shareProgress} />
+        
+        <ErrorBoundary>
+          <QuickStats 
+            userProfile={userProfile} 
+            userStats={userStats} 
+            weightHistory={weightHistory}
+          />
+        </ErrorBoundary>
+        
+        <ErrorBoundary>
+          <ProgressOverview userProfile={userProfile} userStats={userStats} />
+        </ErrorBoundary>
+        
+        <div className="grid gap-6 lg:grid-cols-2">
+          <div className="space-y-6">
+            <ErrorBoundary>
+              <StatusCards userProfile={userProfile} userStats={userStats} />
+            </ErrorBoundary>
+          </div>
+          <div className="space-y-6">
+            <ErrorBoundary>
+              <GamificationCards userStats={userStats} />
+            </ErrorBoundary>
+          </div>
         </div>
-        <div className="space-y-6">
-          <GamificationCards userStats={userStats} />
-        </div>
+        
+        <ErrorBoundary>
+          <ProgressDashboard />
+        </ErrorBoundary>
       </div>
-      
-      <ProgressDashboard />
-    </div>
+    </ErrorBoundary>
   );
 });
 
