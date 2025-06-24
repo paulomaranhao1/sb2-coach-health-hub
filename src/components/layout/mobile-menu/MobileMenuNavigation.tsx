@@ -18,21 +18,38 @@ const MobileMenuNavigation = ({ activeTab, handleTabChange }: MobileMenuNavigati
   ];
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       {tabItems.map((item) => (
         <button
           key={item.value}
           onClick={() => handleTabChange(item.value)}
-          className={`w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-all duration-200 transform hover:scale-105 ${
+          className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg group ${
             activeTab === item.value 
-              ? 'bg-red-600 text-white shadow-lg' 
+              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25 border border-red-400/30' 
               : item.featured
-              ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
-              : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+              ? 'bg-gradient-to-r from-purple-600/90 to-pink-600/90 text-white shadow-lg shadow-purple-500/20 border border-purple-400/30 hover:from-purple-500 hover:to-pink-500'
+              : 'text-gray-300 hover:bg-slate-700/70 hover:text-white border border-transparent hover:border-slate-600/50'
           }`}
         >
-          <item.icon className={`w-5 h-5 ${item.featured ? 'animate-pulse' : ''}`} />
-          <span className={item.featured ? 'font-bold' : ''}>{item.label}</span>
+          <div className={`p-1.5 rounded-lg ${
+            activeTab === item.value 
+              ? 'bg-white/20' 
+              : item.featured 
+              ? 'bg-white/20' 
+              : 'bg-slate-600/50 group-hover:bg-slate-500/50'
+          }`}>
+            <item.icon className={`w-4 h-4 ${item.featured ? 'animate-pulse' : ''}`} />
+          </div>
+          <span className={`font-medium ${item.featured ? 'font-bold' : ''}`}>
+            {item.label}
+          </span>
+          {item.featured && (
+            <div className="ml-auto">
+              <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">
+                ✨
+              </span>
+            </div>
+          )}
         </button>
       ))}
     </div>

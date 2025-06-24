@@ -25,9 +25,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
     console.log('MobileMenu: Iniciando tutorial...');
     setShowMobileMenu(false);
     
-    // Forçar reload com parâmetro de tutorial de forma mais eficiente
     const url = new URL(window.location.href);
-    // Limpar todos os parâmetros existentes primeiro
     url.search = '';
     url.searchParams.set('showTutorial', 'true');
     
@@ -74,70 +72,94 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
     navigate('/terms-of-service');
   };
 
+  const supportItems = [
+    {
+      key: 'tutorial',
+      label: 'Tutorial & Ajuda',
+      icon: BookOpen,
+      onClick: handleTutorial,
+      className: 'border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:border-blue-400 hover:text-blue-300'
+    },
+    {
+      key: 'contact',
+      label: 'Entrar em Contato',
+      icon: Mail,
+      onClick: handleContact,
+      className: 'border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:text-green-300'
+    }
+  ];
+
+  const legalItems = [
+    {
+      key: 'privacy',
+      label: 'Política de Privacidade',
+      icon: Shield,
+      onClick: handlePrivacyPolicy
+    },
+    {
+      key: 'terms',
+      label: 'Termos de Uso',
+      icon: FileText,
+      onClick: handleTermsOfService
+    }
+  ];
+
   return (
-    <div className="space-y-2">
-      <h3 className="text-gray-400 text-xs uppercase font-semibold px-3">Suporte</h3>
-      
-      <Button 
-        onClick={handleTutorial}
-        size="sm" 
-        variant="outline" 
-        className="w-full justify-start border-blue-500 text-blue-400 hover:bg-blue-500 hover:text-white transition-all duration-200"
-      >
-        <BookOpen className="w-4 h-4 mr-2" />
-        Tutorial & Ajuda
-      </Button>
+    <div className="space-y-4">
+      {/* Botões de Suporte */}
+      <div className="space-y-2">
+        {supportItems.map((item) => (
+          <Button 
+            key={item.key}
+            onClick={item.onClick}
+            size="sm" 
+            variant="outline" 
+            className={`w-full justify-start transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border bg-slate-700/50 backdrop-blur-sm ${item.className}`}
+          >
+            <item.icon className="w-4 h-4 mr-3" />
+            {item.label}
+          </Button>
+        ))}
+      </div>
 
-      <Button 
-        onClick={handleContact}
-        size="sm" 
-        variant="outline" 
-        className="w-full justify-start border-green-500 text-green-400 hover:bg-green-500 hover:text-white transition-all duration-200"
-      >
-        <Mail className="w-4 h-4 mr-2" />
-        Entrar em Contato
-      </Button>
-
-      <div className="border-t border-slate-600 my-2 pt-2">
-        <h4 className="text-gray-400 text-xs uppercase font-semibold px-3 mb-2">Legal</h4>
+      {/* Seção Legal */}
+      <div className="bg-slate-700/30 rounded-xl p-3 border border-slate-600/30">
+        <h4 className="text-gray-400 text-xs uppercase font-semibold mb-3 text-center">Documentos Legais</h4>
         
-        <Button 
-          onClick={handlePrivacyPolicy}
-          size="sm" 
-          variant="outline" 
-          className="w-full justify-start border-slate-500 text-slate-400 hover:bg-slate-500 hover:text-white transition-all duration-200 mb-1"
-        >
-          <Shield className="w-4 h-4 mr-2" />
-          Política de Privacidade
-        </Button>
-
-        <Button 
-          onClick={handleTermsOfService}
-          size="sm" 
-          variant="outline" 
-          className="w-full justify-start border-slate-500 text-slate-400 hover:bg-slate-500 hover:text-white transition-all duration-200"
-        >
-          <FileText className="w-4 h-4 mr-2" />
-          Termos de Uso
-        </Button>
+        <div className="space-y-2">
+          {legalItems.map((item) => (
+            <Button 
+              key={item.key}
+              onClick={item.onClick}
+              size="sm" 
+              variant="outline" 
+              className="w-full justify-start border-slate-500/50 text-slate-400 hover:bg-slate-600/50 hover:text-slate-200 hover:border-slate-400 transition-all duration-300 hover:scale-[1.02] bg-slate-800/30"
+            >
+              <item.icon className="w-4 h-4 mr-3" />
+              {item.label}
+            </Button>
+          ))}
+        </div>
       </div>
       
+      {/* Botão de Compra Destacado */}
       <AnimatedButton 
         onClick={handlePurchase}
         size="sm" 
-        className="w-full bg-green-600 hover:bg-green-700 text-white border-0"
+        className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white border-0 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 hover:scale-[1.02]"
       >
-        <ShoppingCart className="w-4 h-4 mr-2" />
-        Comprar SB2 Turbo
+        <ShoppingCart className="w-4 h-4 mr-3" />
+        <span className="font-semibold">Comprar SB2 Turbo</span>
       </AnimatedButton>
       
+      {/* Botão de Logout */}
       <Button 
         onClick={handleLogout}
         size="sm" 
         variant="outline" 
-        className="w-full justify-start border-red-500 text-red-500 hover:bg-red-500 hover:text-white transition-all duration-200"
+        className="w-full justify-start border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300 hover:border-red-400 transition-all duration-300 hover:scale-[1.02] bg-slate-700/50"
       >
-        <LogOut className="w-4 h-4 mr-2" />
+        <LogOut className="w-4 h-4 mr-3" />
         Sair
       </Button>
     </div>
