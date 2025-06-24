@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -16,7 +17,7 @@ const CalorieCounterTab = () => {
   };
   
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 px-2 sm:px-0">
       {/* Header Section */}
       <CalorieCounterHeader />
 
