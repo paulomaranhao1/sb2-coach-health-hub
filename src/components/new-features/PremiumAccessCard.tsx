@@ -43,7 +43,7 @@ const PremiumAccessCard = ({ onShowOffers }: PremiumAccessCardProps) => {
               Ver Ofertas Exclusivas
             </Button>
 
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-white">
               Oferta especial para usuários do app - Descontos limitados!
             </p>
           </div>
