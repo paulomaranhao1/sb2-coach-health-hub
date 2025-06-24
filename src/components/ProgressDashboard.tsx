@@ -58,8 +58,8 @@ const ProgressDashboard = () => {
         initialWeight={initialWeight}
         currentWeightValue={currentWeightValue}
         weightLoss={weightLoss}
-        avgWeightLossPerWeek={avgWeightLossPerWeek}
-        bestWeekLoss={bestWeekLoss}
+        avgWeightLossPerWeek={parseFloat(avgWeightLossPerWeek)}
+        bestWeekLoss={parseFloat(bestWeekLoss)}
         consistencyScore={consistencyScore.toString()}
         onShare={shareProgress}
       />

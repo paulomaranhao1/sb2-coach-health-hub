@@ -9,12 +9,14 @@ import FormDivider from "@/components/auth/FormDivider";
 import MagicLinkForm from "@/components/auth/MagicLinkForm";
 import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm";
 import EmailVerificationScreen from "@/components/auth/EmailVerificationScreen";
+import { useAuthOperations } from "@/hooks/useAuthOperations";
 
 export type AuthMode = 'signin' | 'signup' | 'magic-link' | 'forgot-password' | 'email-verification';
 
 const AuthForm = () => {
   const [mode, setMode] = useState<AuthMode>('signin');
   const [emailForVerification, setEmailForVerification] = useState<string>('');
+  const { loading, handleGoogleAuth, handleEmailAuth, handleForgotPassword, handleMagicLink } = useAuthOperations();
 
   const handleModeChange = (newMode: AuthMode, email?: string) => {
     setMode(newMode);
@@ -23,11 +25,15 @@ const AuthForm = () => {
     }
   };
 
+  const handleToggleMode = () => {
+    setMode(mode === 'signin' ? 'signup' : 'signin');
+  };
+
   if (mode === 'email-verification') {
     return (
       <EmailVerificationScreen 
         email={emailForVerification}
-        onBack={() => setMode('signin')}
+        onBackToLogin={() => setMode('signin')}
       />
     );
   }
@@ -36,8 +42,12 @@ const AuthForm = () => {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="pt-6">
-          <AuthHeader mode={mode} />
-          <ForgotPasswordForm onBack={() => setMode('signin')} />
+          <AuthHeader isLogin={true} />
+          <ForgotPasswordForm 
+            onSubmit={handleForgotPassword}
+            onBackToLogin={() => setMode('signin')}
+            loading={loading}
+          />
         </CardContent>
       </Card>
     );
@@ -47,10 +57,11 @@ const AuthForm = () => {
     return (
       <Card className="w-full max-w-md mx-auto">
         <CardContent className="pt-6">
-          <AuthHeader mode={mode} />
+          <AuthHeader isLogin={true} />
           <MagicLinkForm 
-            onBack={() => setMode('signin')}
-            onEmailSent={(email) => handleModeChange('email-verification', email)}
+            onSubmit={handleMagicLink}
+            onBackToLogin={() => setMode('signin')}
+            loading={loading}
           />
         </CardContent>
       </Card>
@@ -60,24 +71,23 @@ const AuthForm = () => {
   return (
     <Card className="w-full max-w-md mx-auto">
       <CardContent className="pt-6">
-        <AuthHeader mode={mode} />
+        <AuthHeader isLogin={mode === 'signin'} />
         
         <div className="space-y-4">
-          <AuthToggleButtons mode={mode} onModeChange={setMode} />
+          <AuthToggleButtons 
+            isLogin={mode === 'signin'}
+            onToggleMode={handleToggleMode}
+            onForgotPassword={() => setMode('forgot-password')}
+          />
           
-          <GoogleAuthButton />
+          <GoogleAuthButton onClick={handleGoogleAuth} disabled={loading} />
           
           <FormDivider />
           
           <EmailPasswordForm 
-            mode={mode}
-            onSuccess={(email) => {
-              if (mode === 'signup') {
-                handleModeChange('email-verification', email);
-              }
-            }}
-            onForgotPassword={() => setMode('forgot-password')}
-            onMagicLink={() => setMode('magic-link')}
+            isLogin={mode === 'signin'}
+            onSubmit={handleEmailAuth}
+            loading={loading}
           />
         </div>
       </CardContent>
