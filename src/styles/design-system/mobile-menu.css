@@ -2,15 +2,16 @@
 /* Mobile Menu - Red, White and Light Gray Theme */
 @layer components {
   .mobile-menu {
-    background: rgb(248 249 250) !important; /* Very light gray background */
+    background: rgb(248 249 250) !important; /* Very light gray background - SOLID */
     color: rgb(55 65 81) !important; /* Dark gray text */
     border-right: 1px solid rgb(209 213 219) !important; /* Light gray border */
+    backdrop-filter: none !important; /* Remove any backdrop blur */
   }
   
   .mobile-menu-header {
-    background: rgb(220 38 38) !important; /* Red header background */
+    background: rgb(220 38 38) !important; /* Red header background - SOLID */
     border-bottom: 1px solid rgb(185 28 28) !important; /* Darker red border */
-    backdrop-filter: none !important;
+    backdrop-filter: none !important; /* Remove backdrop blur */
   }
   
   .mobile-menu-header * {
@@ -19,7 +20,7 @@
   
   .mobile-menu-item {
     color: rgb(55 65 81) !important; /* Dark gray text */
-    background: white !important; /* White background */
+    background: white !important; /* White background - SOLID */
     border: 1px solid rgb(229 231 235) !important; /* Light gray border */
     border-radius: var(--radius-md) !important;
     transition: all 0.2s ease;
@@ -28,14 +29,14 @@
   }
   
   .mobile-menu-item:hover {
-    background: rgb(254 242 242) !important; /* Very light red background */
+    background: rgb(254 242 242) !important; /* Very light red background - SOLID */
     border-color: rgb(252 165 165) !important; /* Light red border */
     color: rgb(220 38 38) !important; /* Red text */
     transform: translateY(-1px);
   }
   
   .mobile-menu-item.active {
-    background: linear-gradient(135deg, rgb(220 38 38), rgb(185 28 28)) !important; /* Red gradient */
+    background: rgb(220 38 38) !important; /* Red background - SOLID */
     color: white !important;
     border-color: rgb(220 38 38) !important;
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25) !important;
@@ -46,19 +47,19 @@
   }
   
   .mobile-menu-icon {
-    background: rgb(243 244 246) !important; /* Light gray icon background */
+    background: rgb(243 244 246) !important; /* Light gray icon background - SOLID */
     color: rgb(107 114 128) !important; /* Medium gray icon */
     border-radius: var(--radius-sm) !important;
     padding: 0.5rem !important; /* Reduced padding */
   }
   
   .mobile-menu-item.active .mobile-menu-icon {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: rgba(255, 255, 255, 0.9) !important; /* Almost solid white for active icons */
     color: white !important;
   }
   
   .mobile-menu-item:hover .mobile-menu-icon {
-    background: rgb(254 226 226) !important; /* Light red icon background on hover */
+    background: rgb(254 226 226) !important; /* Light red icon background on hover - SOLID */
     color: rgb(220 38 38) !important; /* Red icon on hover */
   }
   
@@ -73,12 +74,12 @@
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    background: rgb(248 249 250) !important; /* Same as menu background */
+    background: rgb(248 249 250) !important; /* Same as menu background - SOLID */
     padding: 0.5rem 0 !important; /* Reduced padding */
   }
   
   .mobile-menu-footer {
-    background: rgb(243 244 246) !important; /* Light gray footer */
+    background: rgb(243 244 246) !important; /* Light gray footer - SOLID */
     border-top: 1px solid rgb(229 231 235) !important; /* Light gray border */
     padding: 1rem !important; /* Reduced padding */
   }
@@ -90,22 +91,28 @@
   /* Close button styling */
   .mobile-menu-header button {
     color: white !important;
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgb(185 28 28) !important; /* Solid red background instead of transparent */
     border-radius: var(--radius-sm) !important;
   }
   
   .mobile-menu-header button:hover {
-    background: rgba(255, 255, 255, 0.2) !important;
+    background: rgb(153 27 27) !important; /* Darker red on hover - SOLID */
     color: white !important;
   }
   
   /* Special styling for featured items */
   .mobile-menu-item .bg-white\/20 {
-    background: rgb(220 38 38) !important;
+    background: rgb(220 38 38) !important; /* Solid red */
     color: white !important;
   }
   
   .mobile-menu-item:hover .bg-white\/20 {
-    background: rgb(185 28 28) !important;
+    background: rgb(185 28 28) !important; /* Solid darker red */
+  }
+  
+  /* Ensure overlay background is solid */
+  .mobile-menu-overlay {
+    background: rgba(0, 0, 0, 0.6) !important; /* Semi-transparent black overlay */
+    backdrop-filter: blur(4px) !important;
   }
 }

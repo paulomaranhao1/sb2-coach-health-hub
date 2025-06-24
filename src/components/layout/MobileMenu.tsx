@@ -43,15 +43,15 @@ const MobileMenu = ({
 
   return (
     <div 
-      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-fade-in" 
+      className="mobile-menu-overlay fixed inset-0 z-50 animate-fade-in" 
       onClick={() => setShowMobileMenu(false)}
     >
       <div 
         className="mobile-menu w-80 h-full shadow-2xl animate-slide-in-right transition-all duration-300 overflow-y-auto" 
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header with red theme */}
-        <div className="mobile-menu-header sticky top-0 p-3 backdrop-blur-sm">
+        {/* Header with solid red background */}
+        <div className="mobile-menu-header sticky top-0 p-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <div className="w-8 h-8 rounded-lg overflow-hidden bg-white/10 p-1 shadow-sm">
@@ -68,7 +68,7 @@ const MobileMenu = ({
               onClick={() => setShowMobileMenu(false)}
               size="sm"
               variant="ghost"
-              className="text-white hover:bg-white/10 h-8 w-8 p-0 rounded-full"
+              className="text-white hover:bg-red-800 h-8 w-8 p-0 rounded-full bg-red-700"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -87,7 +87,7 @@ const MobileMenu = ({
               <div className="mobile-menu-separator w-full border-t"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="mobile-menu-section-title bg-gray-50 px-2">Perfil</span>
+              <span className="mobile-menu-section-title px-2">Perfil</span>
             </div>
           </div>
 
@@ -107,7 +107,7 @@ const MobileMenu = ({
               <div className="mobile-menu-separator w-full border-t"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="mobile-menu-section-title bg-gray-50 px-2">Novidades</span>
+              <span className="mobile-menu-section-title px-2">Novidades</span>
             </div>
           </div>
 
@@ -125,7 +125,7 @@ const MobileMenu = ({
               <div className="mobile-menu-separator w-full border-t"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="mobile-menu-section-title bg-gray-50 px-2">Suporte</span>
+              <span className="mobile-menu-section-title px-2">Suporte</span>
             </div>
           </div>
 
