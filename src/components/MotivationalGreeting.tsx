@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useFasting } from '@/hooks/useFasting';
 import CompactFastingTimer from './fasting/CompactFastingTimer';
@@ -52,10 +51,15 @@ const MotivationalGreeting = () => {
 
   const [currentPhrase, setCurrentPhrase] = useState('');
 
+  const setRandomPhrase = useCallback(() => {
+    const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
+    setCurrentPhrase(motivationalPhrases[randomIndex]);
+  }, [motivationalPhrases]);
+
   useEffect(() => {
     fetchUserName();
     setRandomPhrase();
-  }, []);
+  }, [setRandomPhrase]);
 
   const fetchUserName = async () => {
     try {
@@ -68,18 +72,13 @@ const MotivationalGreeting = () => {
           .eq('user_id', user.id)
           .maybeSingle();
         
-        if (profile && (profile as any).name) {
-          setUserName((profile as any).name);
+        if (profile && profile.name) {
+          setUserName(profile.name);
         }
       }
     } catch (error) {
       console.error('Erro ao buscar nome do usuário:', error);
     }
-  };
-
-  const setRandomPhrase = () => {
-    const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
-    setCurrentPhrase(motivationalPhrases[randomIndex]);
   };
 
   console.log('MotivationalGreeting - Estado do jejum:', {
