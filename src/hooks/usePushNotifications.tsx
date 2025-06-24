@@ -1,16 +1,27 @@
 
 import { useState } from 'react';
+import { useNotificationService } from './useNotificationService';
+import { logger } from '@/utils/logger';
 
 export const usePushNotifications = () => {
   const [isSubscriptionLoading, setIsSubscriptionLoading] = useState(false);
+  const { 
+    requestPermission, 
+    startNotificationSchedule, 
+    clearScheduledNotifications 
+  } = useNotificationService();
 
   const subscribe = async () => {
     setIsSubscriptionLoading(true);
     try {
-      // Implementação básica de subscribe
-      console.log('Push notifications: Subscribe');
+      logger.info('Push notifications: Starting subscription process');
+      const granted = await requestPermission();
+      if (granted) {
+        await startNotificationSchedule();
+        logger.info('Push notifications: Successfully subscribed');
+      }
     } catch (error) {
-      console.error('Erro ao subscrever notificações:', error);
+      logger.error('Erro ao subscrever notificações', { error });
       throw error;
     } finally {
       setIsSubscriptionLoading(false);
@@ -20,10 +31,11 @@ export const usePushNotifications = () => {
   const unsubscribe = async () => {
     setIsSubscriptionLoading(true);
     try {
-      // Implementação básica de unsubscribe
-      console.log('Push notifications: Unsubscribe');
+      logger.info('Push notifications: Starting unsubscribe process');
+      clearScheduledNotifications();
+      logger.info('Push notifications: Successfully unsubscribed');
     } catch (error) {
-      console.error('Erro ao desinscrever notificações:', error);
+      logger.error('Erro ao desinscrever notificações', { error });
       throw error;
     } finally {
       setIsSubscriptionLoading(false);

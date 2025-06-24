@@ -1,69 +1,58 @@
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
-import { UserStats } from './useUserStats';
+import { toast } from 'sonner';
+import { logger } from '@/utils/logger';
+import type { UserStats } from './useUserStats';
 
-export const usePointsSystem = (userStats: UserStats, setUserStats: (stats: UserStats | ((prev: UserStats) => UserStats)) => void) => {
+export const usePointsSystem = (
+  userStats: UserStats,
+  setUserStats: (stats: UserStats) => void
+) => {
   const [dailyPointsClaimed, setDailyPointsClaimed] = useState(false);
-  const { toast } = useToast();
 
-  const addPoints = async (points: number, reason: string) => {
+  const addPoints = useCallback(async (points: number, message?: string) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      if (dailyPointsClaimed) {
-        toast({
-          title: "Você já coletou seus pontos hoje! 🎯",
-          description: "Volte amanhã para coletar mais pontos e continuar sua jornada!",
-          variant: "default"
-        });
+      if (!user) {
+        logger.warn('No user found for points addition');
         return;
       }
+
+      logger.info('Adding points to user', { userId: user.id, points });
 
       const newPoints = userStats.points + points;
       const newLevel = Math.floor(newPoints / 100) + 1;
       const today = new Date().toISOString().split('T')[0];
 
+      const updatedStats = {
+        ...userStats,
+        points: newPoints,
+        level: Math.max(newLevel, userStats.level),
+        last_activity_date: today
+      };
+
       const { error } = await supabase
         .from('user_stats')
         .upsert({
           user_id: user.id,
-          points: newPoints,
-          level: newLevel,
-          shields: userStats.shields,
-          stickers: userStats.stickers,
-          streak: userStats.streak,
-          last_activity_date: today
+          ...updatedStats
         });
 
-      if (error) {
-        console.error('Error adding points:', error);
-        toast({
-          title: "Você já coletou seus pontos hoje! 🎯",
-          description: "Volte amanhã para coletar mais pontos e continuar sua jornada!",
-          variant: "default"
-        });
-        return;
+      if (error) throw error;
+
+      setUserStats(updatedStats);
+      
+      if (message) {
+        toast.success(message);
       }
 
-      setUserStats(prev => ({ ...prev, points: newPoints, level: newLevel, last_activity_date: today }));
-      setDailyPointsClaimed(true);
-      
-      toast({
-        title: `+${points} pontos! 🎉`,
-        description: reason
-      });
+      logger.info('Points added successfully', { newPoints, newLevel });
     } catch (error) {
-      console.error('Error adding points:', error);
-      toast({
-        title: "Erro ao adicionar pontos",
-        description: "Tente novamente em alguns instantes",
-        variant: "destructive"
-      });
+      logger.error('Error adding points', { error });
+      toast.error('Erro ao adicionar pontos');
     }
-  };
+  }, [userStats, setUserStats]);
 
   return {
     dailyPointsClaimed,

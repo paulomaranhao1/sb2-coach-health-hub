@@ -4,6 +4,8 @@ import { useAppState } from "@/hooks/useAppState";
 import AppScreens from "@/components/screens/AppScreens";
 import AppLayout from "@/components/layout/AppLayout";
 import TabsContentComponent from "@/components/layout/TabsContent";
+import { LoadingPage } from "@/components/ui/loading-states";
+import { logger } from "@/utils/logger";
 
 const Index = memo(() => {
   const {
@@ -29,11 +31,11 @@ const Index = memo(() => {
 
   // Verificar perfil apenas uma vez após montagem
   useEffect(() => {
-    console.log('Index: Verificando se precisa carregar perfil...');
+    logger.debug('Index: Checking if user profile needs to be loaded');
     
     // Verificar se já temos dados ou se está em algum fluxo especial
     if (!userProfile && !showWelcome && !showOnboarding && !showTutorial && !showNewFeatures && !isLoading) {
-      console.log('Index: Carregando perfil do usuário...');
+      logger.info('Index: Loading user profile');
       checkUserProfile();
     }
   }, [userProfile, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile]);
@@ -41,7 +43,7 @@ const Index = memo(() => {
   // Renderizar telas especiais
   const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
 
-  console.log('Index: Estado atual -', {
+  logger.debug('Index: Current state', {
     shouldShowSpecialScreen,
     showWelcome,
     showOnboarding,
@@ -52,6 +54,11 @@ const Index = memo(() => {
   });
 
   if (shouldShowSpecialScreen) {
+    // Use the new loading page for better UX
+    if (isLoading) {
+      return <LoadingPage text="Carregando SB2coach.ai..." />;
+    }
+
     return (
       <AppScreens
         showWelcome={showWelcome}
@@ -69,7 +76,7 @@ const Index = memo(() => {
     );
   }
 
-  console.log('Index: Renderizando app principal');
+  logger.debug('Index: Rendering main app');
 
   // App principal
   return (

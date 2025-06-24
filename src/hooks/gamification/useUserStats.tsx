@@ -1,74 +1,79 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
+import { logger } from '@/utils/logger';
 
 export interface UserStats {
-  points: number;
   level: number;
-  shields: string[];
-  stickers: string[];
+  points: number;
+  shields: any[];
+  stickers: any[];
   streak: number;
   last_activity_date?: string;
 }
 
 export const useUserStats = () => {
   const [userStats, setUserStats] = useState<UserStats>({
-    points: 0,
     level: 1,
+    points: 0,
     shields: [],
     stickers: [],
     streak: 0
   });
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
 
-  const loadUserStats = async () => {
+  const fetchUserStats = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      if (!user) {
+        logger.warn('No user found for stats fetch');
+        setLoading(false);
+        return;
+      }
+
+      logger.debug('Fetching user stats', { userId: user.id });
 
       const { data, error } = await supabase
         .from('user_stats')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
 
       if (error && error.code !== 'PGRST116') {
-        console.error('Error loading user stats:', error);
-        return;
+        throw error;
       }
 
-      if (data) {
-        setUserStats({
-          points: data.points || 0,
-          level: data.level || 1,
-          shields: data.shields || [],
-          stickers: data.stickers || [],
-          streak: data.streak || 0,
-          last_activity_date: data.last_activity_date
-        });
-      }
+      const stats = data || {
+        level: 1,
+        points: 0,
+        shields: [],
+        stickers: [],
+        streak: 0
+      };
+
+      setUserStats(stats);
+      logger.info('User stats loaded successfully', { stats });
     } catch (error) {
-      console.error('Error:', error);
-      toast({
-        title: "Erro ao carregar estatísticas",
-        description: "Tente novamente em alguns instantes",
-        variant: "destructive"
-      });
+      logger.error('Error fetching user stats', { error });
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
-    loadUserStats();
-  }, []);
+    fetchUserStats();
+  }, [fetchUserStats]);
+
+  const refetch = useCallback(() => {
+    logger.info('Refetching user stats');
+    setLoading(true);
+    fetchUserStats();
+  }, [fetchUserStats]);
 
   return {
     userStats,
     loading,
     setUserStats,
-    refetch: loadUserStats
+    refetch
   };
 };

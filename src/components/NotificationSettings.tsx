@@ -3,29 +3,51 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Bell, BellOff, Settings } from "lucide-react";
-import { useNotifications } from "@/hooks/useNotifications";
+import { Bell, BellOff } from "lucide-react";
+import { useNotificationService } from "@/hooks/useNotificationService";
 
 const NotificationSettings = () => {
   const { 
     permission, 
     settings, 
+    isSupported,
     requestPermission, 
     saveSettings, 
     startNotificationSchedule 
-  } = useNotifications();
+  } = useNotificationService();
 
   const handlePermissionRequest = async () => {
     const granted = await requestPermission();
     if (granted) {
-      startNotificationSchedule();
+      await startNotificationSchedule();
     }
   };
 
   const handleSettingChange = (key: keyof typeof settings, value: boolean) => {
     const newSettings = { ...settings, [key]: value };
     saveSettings(newSettings);
+    
+    // Restart schedule if permission is granted
+    if (permission === 'granted') {
+      startNotificationSchedule();
+    }
   };
+
+  if (!isSupported) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <BellOff className="w-5 h-5" />
+            Notificações não suportadas
+          </CardTitle>
+          <CardDescription>
+            Seu navegador não suporta notificações push
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -87,7 +109,7 @@ const NotificationSettings = () => {
             <div className="space-y-0.5">
               <Label htmlFor="supplement-reminder">Lembrete de Suplemento</Label>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-                Lembrete a cada 6 horas para tomar o SB2 Turbo
+                Lembrete nos horários configurados para tomar o SB2 Turbo
               </p>
             </div>
             <Switch

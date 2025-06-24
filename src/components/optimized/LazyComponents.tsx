@@ -1,5 +1,7 @@
 
-import { lazy } from 'react';
+import { lazy, Suspense } from 'react';
+import { LoadingCard, LoadingSection } from '@/components/ui/loading-states';
+import { Card, CardContent } from '@/components/ui/card';
 
 // Lazy loading para componentes pesados
 export const LazyProgressDashboard = lazy(() => import('@/components/ProgressDashboard'));
@@ -8,19 +10,86 @@ export const LazyWeightEvolutionChart = lazy(() => import('@/components/progress
 export const LazySecondaryCharts = lazy(() => import('@/components/progress/SecondaryCharts'));
 export const LazyPhotoAnalyzer = lazy(() => import('@/components/calorie-counter/PhotoAnalyzer'));
 export const LazyAnalysisHistory = lazy(() => import('@/components/calorie-counter/AnalysisHistory'));
+export const LazyAIChat = lazy(() => import('@/components/AIChat'));
+export const LazyUserProfile = lazy(() => import('@/components/UserProfile'));
+export const LazyAppSettings = lazy(() => import('@/components/AppSettings'));
 
-// Componente de fallback para loading
+// Componentes de fallback mais sofisticados
 export const ChartLoadingFallback = () => (
-  <div className="flex items-center justify-center p-8 bg-gray-50 rounded-lg">
-    <div className="flex flex-col items-center space-y-3">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-500"></div>
-      <p className="text-sm text-gray-600">Carregando gráficos...</p>
+  <Card className="animate-pulse">
+    <CardContent className="p-6">
+      <div className="space-y-4">
+        <div className="h-4 bg-gray-200 rounded w-1/3"></div>
+        <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+          <LoadingSection text="Carregando gráfico..." />
+        </div>
+      </div>
+    </CardContent>
+  </Card>
+);
+
+export const ComponentLoadingFallback = () => (
+  <LoadingCard text="Carregando componente..." />
+);
+
+export const DashboardLoadingFallback = () => (
+  <div className="space-y-6">
+    <div className="animate-pulse">
+      <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <LoadingCard key={i} />
+        ))}
+      </div>
     </div>
   </div>
 );
 
-export const ComponentLoadingFallback = () => (
-  <div className="flex items-center justify-center p-8">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+export const ProfileLoadingFallback = () => (
+  <div className="max-w-2xl mx-auto space-y-6">
+    <div className="animate-pulse">
+      <div className="h-8 bg-gray-200 rounded w-1/3 mb-6"></div>
+      <div className="space-y-4">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div key={i} className="h-16 bg-gray-100 rounded"></div>
+        ))}
+      </div>
+    </div>
   </div>
+);
+
+// HOCs para facilitar o uso de lazy loading
+export const withLazyLoading = <P extends object>(
+  Component: React.ComponentType<P>,
+  fallback: React.ComponentType = ComponentLoadingFallback
+) => {
+  const LazyComponent: React.FC<P> = (props) => (
+    <Suspense fallback={<fallback />}>
+      <Component {...props} />
+    </Suspense>
+  );
+  
+  LazyComponent.displayName = `withLazyLoading(${Component.displayName || Component.name})`;
+  return LazyComponent;
+};
+
+// Lazy wrappers prontos para usar
+export const LazyProgressDashboardWithFallback = withLazyLoading(
+  LazyProgressDashboard, 
+  DashboardLoadingFallback
+);
+
+export const LazyStatisticsOverviewWithFallback = withLazyLoading(
+  LazyStatisticsOverview,
+  ComponentLoadingFallback
+);
+
+export const LazyWeightEvolutionChartWithFallback = withLazyLoading(
+  LazyWeightEvolutionChart,
+  ChartLoadingFallback
+);
+
+export const LazyUserProfileWithFallback = withLazyLoading(
+  LazyUserProfile,
+  ProfileLoadingFallback
 );

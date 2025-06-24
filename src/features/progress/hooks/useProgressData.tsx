@@ -1,9 +1,9 @@
-
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { handleAsyncError, getErrorMessage } from '@/utils/errorHandling';
 import { cacheManager } from '@/utils/cacheManager';
+import { logger } from '@/utils/logger';
 
 export interface WeightEntry {
   id: string;
@@ -45,13 +45,13 @@ export const useProgressData = () => {
       if (useCache) {
         const cachedData = cacheManager.get<ProgressData>(cacheKey);
         if (cachedData) {
-          console.log('📦 Usando dados do cache');
+          logger.info('Using cached progress data');
           setData(cachedData);
           return;
         }
       }
 
-      console.log('🔄 Carregando dados do servidor...');
+      logger.info('Loading progress data from server');
 
       // Buscar dados em paralelo para melhor performance
       const [weightResponse, statsResponse] = await Promise.all([
@@ -78,7 +78,7 @@ export const useProgressData = () => {
       setData(newData);
       cacheManager.set(cacheKey, newData);
     }, (error) => {
-      console.error('Erro ao carregar dados de progresso:', error);
+      logger.error('Failed to load progress data', { error });
       toast({
         title: "Erro ao carregar dados",
         description: getErrorMessage(error),
@@ -153,28 +153,30 @@ export const useProgressData = () => {
 
       if (navigator.share && navigator.canShare(shareData)) {
         await navigator.share(shareData);
+        logger.info('Progress shared via native share');
       } else {
         await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
         toast({
           title: "Link copiado!",
           description: "O link foi copiado para a área de transferência."
         });
+        logger.info('Progress shared via clipboard');
       }
     } catch (error) {
-      console.error('Error sharing:', error);
+      logger.error('Error sharing progress', { error });
     }
   }, [calculations.weightLoss, calculations.currentWeightValue, toast]);
 
   // Função para forçar refresh (limpar cache)
   const forceRefresh = useCallback(async () => {
-    console.log('🔄 Forçando atualização dos dados...');
+    logger.info('Forcing data refresh');
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         cacheManager.delete(`progress-${user.id}`);
       }
     } catch (error) {
-      console.error('Error getting user for cache cleanup:', error);
+      logger.error('Error getting user for cache cleanup', { error });
     }
     loadData(false);
   }, [loadData]);
