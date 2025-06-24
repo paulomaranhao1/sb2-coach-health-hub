@@ -1,8 +1,9 @@
+
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { handleAsyncError, getErrorMessage } from '@/utils/errorHandling';
-import { cacheManager } from '@/utils/cacheManager';
+import { useCache } from '@/utils/cacheManager';
 import { logger } from '@/utils/logger';
 
 export interface WeightEntry {
@@ -33,8 +34,19 @@ export const useProgressData = () => {
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const cache = useCache();
+
+  // Logger específico para este hook
+  const componentLogger = {
+    debug: (message: string, context?: any) => logger.debug(message, context, 'useProgressData'),
+    info: (message: string, context?: any) => logger.info(message, context, 'useProgressData'),
+    warn: (message: string, context?: any) => logger.warn(message, context, 'useProgressData'),
+    error: (message: string, context?: any) => logger.error(message, context, 'useProgressData')
+  };
 
   const loadData = useCallback(async (useCache = true) => {
+    const timer = logger.startTimer('loadProgressData');
+    
     const result = await handleAsyncError(async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
@@ -43,15 +55,16 @@ export const useProgressData = () => {
       
       // Verificar cache primeiro
       if (useCache) {
-        const cachedData = cacheManager.get<ProgressData>(cacheKey);
+        const cachedData = cache.get<ProgressData>(cacheKey);
         if (cachedData) {
-          logger.info('Using cached progress data');
+          componentLogger.info('Using cached progress data');
           setData(cachedData);
+          timer();
           return;
         }
       }
 
-      logger.info('Loading progress data from server');
+      componentLogger.info('Loading progress data from server');
 
       // Buscar dados em paralelo para melhor performance
       const [weightResponse, statsResponse] = await Promise.all([
@@ -76,9 +89,21 @@ export const useProgressData = () => {
       };
 
       setData(newData);
-      cacheManager.set(cacheKey, newData);
+      
+      // Salvar no cache por 3 minutos (dados dinâmicos)
+      cache.set(cacheKey, newData, { 
+        ttl: 3 * 60 * 1000, 
+        tags: ['progress', 'user-data'],
+        priority: 'high'
+      });
+
+      componentLogger.info('Progress data loaded and cached successfully', {
+        weightEntries: newData.weightEntries.length,
+        hasStats: !!newData.userStats
+      });
+
     }, (error) => {
-      logger.error('Failed to load progress data', { error });
+      componentLogger.error('Failed to load progress data', { error });
       toast({
         title: "Erro ao carregar dados",
         description: getErrorMessage(error),
@@ -87,7 +112,8 @@ export const useProgressData = () => {
     });
 
     setLoading(false);
-  }, [toast]);
+    timer();
+  }, [toast, cache, componentLogger]);
 
   useEffect(() => {
     loadData();
@@ -95,6 +121,8 @@ export const useProgressData = () => {
 
   // Cálculos memoizados para evitar recálculos desnecessários
   const calculations = useMemo(() => {
+    const timer = logger.startTimer('progressCalculations');
+    
     const weightHistory = data.weightEntries;
     const currentWeightValue = weightHistory.length > 0 ? weightHistory[0].weight : 0;
     const initialWeight = weightHistory.length > 0 ? weightHistory[weightHistory.length - 1].weight : 0;
@@ -133,6 +161,8 @@ export const useProgressData = () => {
       consistencyScore = Math.round((recordedDays / last30Days) * 100);
     }
 
+    timer();
+
     return {
       currentWeightValue,
       initialWeight,
@@ -144,6 +174,8 @@ export const useProgressData = () => {
   }, [data.weightEntries]);
 
   const shareProgress = useCallback(async () => {
+    const timer = logger.startTimer('shareProgress');
+    
     try {
       const shareData = {
         title: 'Meu Progresso - SB2coach.ai',
@@ -153,33 +185,35 @@ export const useProgressData = () => {
 
       if (navigator.share && navigator.canShare(shareData)) {
         await navigator.share(shareData);
-        logger.info('Progress shared via native share');
+        componentLogger.info('Progress shared via native share');
       } else {
         await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
         toast({
           title: "Link copiado!",
           description: "O link foi copiado para a área de transferência."
         });
-        logger.info('Progress shared via clipboard');
+        componentLogger.info('Progress shared via clipboard');
       }
     } catch (error) {
-      logger.error('Error sharing progress', { error });
+      componentLogger.error('Error sharing progress', { error });
+    } finally {
+      timer();
     }
-  }, [calculations.weightLoss, calculations.currentWeightValue, toast]);
+  }, [calculations.weightLoss, calculations.currentWeightValue, toast, componentLogger]);
 
   // Função para forçar refresh (limpar cache)
   const forceRefresh = useCallback(async () => {
-    logger.info('Forcing data refresh');
+    componentLogger.info('Forcing data refresh');
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
-        cacheManager.delete(`progress-${user.id}`);
+        cache.delete(`progress-${user.id}`);
       }
     } catch (error) {
-      logger.error('Error getting user for cache cleanup', { error });
+      componentLogger.error('Error getting user for cache cleanup', { error });
     }
     loadData(false);
-  }, [loadData]);
+  }, [loadData, cache, componentLogger]);
 
   return {
     data,

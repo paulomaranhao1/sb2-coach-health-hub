@@ -1,15 +1,15 @@
 
 import { memo } from "react";
 import { useProgressData } from "@/features/progress/hooks/useProgressData";
+import { useLogger } from "@/utils/logger";
 import StatisticsHeader from "./StatisticsHeader";
 import QuickStats from "./QuickStats";
 import ProgressOverview from "./ProgressOverview";
 import StatusCards from "../home/StatusCards";
 import GamificationCards from "../home/GamificationCards";
 import ProgressDashboard from "../ProgressDashboard";
-import SectionErrorBoundary from "../error/SectionErrorBoundary";
+import GlobalErrorBoundary from "../error/GlobalErrorBoundary";
 import StatsSkeleton from "../ui/skeletons/StatsSkeleton";
-import { logger } from "@/utils/logger";
 
 interface StatisticsOverviewProps {
   userProfile: any;
@@ -17,13 +17,14 @@ interface StatisticsOverviewProps {
 }
 
 const StatisticsOverview = memo(({ userProfile, userStats }: StatisticsOverviewProps) => {
+  const logger = useLogger('StatisticsOverview');
   const {
     loading,
     weightHistory,
     shareProgress
   } = useProgressData();
 
-  logger.debug('StatisticsOverview rendered', { 
+  logger.debug('Rendered', { 
     hasProfile: !!userProfile, 
     hasStats: !!userStats,
     loading 
@@ -43,42 +44,42 @@ const StatisticsOverview = memo(({ userProfile, userStats }: StatisticsOverviewP
   }
 
   return (
-    <SectionErrorBoundary sectionName="Estatísticas">
+    <GlobalErrorBoundary level="section" name="Statistics Overview">
       <div className="space-y-6">
-        <SectionErrorBoundary sectionName="Cabeçalho de Estatísticas">
+        <GlobalErrorBoundary level="component" name="Statistics Header">
           <StatisticsHeader onShare={shareProgress} />
-        </SectionErrorBoundary>
+        </GlobalErrorBoundary>
         
-        <SectionErrorBoundary sectionName="Estatísticas Rápidas">
+        <GlobalErrorBoundary level="component" name="Quick Stats">
           <QuickStats 
             userProfile={userProfile} 
             userStats={userStats} 
             weightHistory={weightHistory}
           />
-        </SectionErrorBoundary>
+        </GlobalErrorBoundary>
         
-        <SectionErrorBoundary sectionName="Visão Geral do Progresso">
+        <GlobalErrorBoundary level="component" name="Progress Overview">
           <ProgressOverview userProfile={userProfile} userStats={userStats} />
-        </SectionErrorBoundary>
+        </GlobalErrorBoundary>
         
         <div className="grid gap-6 lg:grid-cols-2">
           <div className="space-y-6">
-            <SectionErrorBoundary sectionName="Cartões de Status">
+            <GlobalErrorBoundary level="component" name="Status Cards">
               <StatusCards userProfile={userProfile} userStats={userStats} />
-            </SectionErrorBoundary>
+            </GlobalErrorBoundary>
           </div>
           <div className="space-y-6">
-            <SectionErrorBoundary sectionName="Cartões de Gamificação">
+            <GlobalErrorBoundary level="component" name="Gamification Cards">
               <GamificationCards userStats={userStats} />
-            </SectionErrorBoundary>
+            </GlobalErrorBoundary>
           </div>
         </div>
         
-        <SectionErrorBoundary sectionName="Dashboard de Progresso">
+        <GlobalErrorBoundary level="component" name="Progress Dashboard">
           <ProgressDashboard />
-        </SectionErrorBoundary>
+        </GlobalErrorBoundary>
       </div>
-    </SectionErrorBoundary>
+    </GlobalErrorBoundary>
   );
 });
 

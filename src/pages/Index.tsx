@@ -2,14 +2,15 @@
 import { useEffect, memo } from "react";
 import { useAppState } from "@/hooks/useAppState";
 import { useServiceWorker } from "@/hooks/useServiceWorker";
+import { useLogger } from "@/utils/logger";
 import AppScreens from "@/components/screens/AppScreens";
 import AppLayout from "@/components/layout/AppLayout";
 import TabsContentComponent from "@/components/layout/TabsContent";
 import { LoadingPage } from "@/components/ui/loading-states";
-import SectionErrorBoundary from "@/components/error/SectionErrorBoundary";
-import { logger } from "@/utils/logger";
+import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
 
 const Index = memo(() => {
+  const logger = useLogger('Index');
   const {
     showWelcome,
     setShowWelcome,
@@ -34,28 +35,42 @@ const Index = memo(() => {
   // Initialize Service Worker
   const { isSupported: swSupported, isRegistered: swRegistered } = useServiceWorker();
 
+  // Log component mount/unmount
+  useEffect(() => {
+    logger.mounted({ 
+      showWelcome, 
+      showOnboarding, 
+      showTutorial, 
+      hasProfile: !!userProfile 
+    });
+    
+    return () => {
+      logger.unmounted();
+    };
+  }, [logger, showWelcome, showOnboarding, showTutorial, userProfile]);
+
   // Verificar perfil apenas uma vez após montagem
   useEffect(() => {
-    logger.debug('Index: Checking if user profile needs to be loaded');
+    logger.debug('Checking if user profile needs to be loaded');
     
     // Verificar se já temos dados ou se está em algum fluxo especial
     if (!userProfile && !showWelcome && !showOnboarding && !showTutorial && !showNewFeatures && !isLoading) {
-      logger.info('Index: Loading user profile');
+      logger.info('Loading user profile');
       checkUserProfile();
     }
-  }, [userProfile, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile]);
+  }, [userProfile, showWelcome, showOnboarding, showTutorial, showNewFeatures, isLoading, checkUserProfile, logger]);
 
   // Log Service Worker status
   useEffect(() => {
     if (swSupported && swRegistered) {
       logger.info('Service Worker successfully initialized');
     }
-  }, [swSupported, swRegistered]);
+  }, [swSupported, swRegistered, logger]);
 
   // Renderizar telas especiais
   const shouldShowSpecialScreen = showWelcome || showOnboarding || showTutorial || showNewFeatures || isLoading;
 
-  logger.debug('Index: Current state', {
+  logger.debug('Current state', {
     shouldShowSpecialScreen,
     showWelcome,
     showOnboarding,
@@ -72,7 +87,11 @@ const Index = memo(() => {
     }
 
     return (
-      <SectionErrorBoundary sectionName="Telas de Boas-vindas">
+      <GlobalErrorBoundary 
+        level="page" 
+        name="Welcome Screens"
+        showDebugInfo={true}
+      >
         <AppScreens
           showWelcome={showWelcome}
           setShowWelcome={setShowWelcome}
@@ -86,22 +105,30 @@ const Index = memo(() => {
           handleTutorialComplete={handleTutorialComplete}
           handleTutorialSkip={handleTutorialSkip}
         />
-      </SectionErrorBoundary>
+      </GlobalErrorBoundary>
     );
   }
 
-  logger.debug('Index: Rendering main app');
+  logger.debug('Rendering main app');
 
   // App principal
   return (
-    <SectionErrorBoundary sectionName="Aplicação Principal">
+    <GlobalErrorBoundary 
+      level="page" 
+      name="Main Application"
+      showDebugInfo={true}
+    >
       <AppLayout
         showMobileMenu={showMobileMenu}
         setShowMobileMenu={setShowMobileMenu}
         activeTab={activeTab}
         handleTabChange={handleTabChange}
       >
-        <SectionErrorBoundary sectionName="Conteúdo das Abas">
+        <GlobalErrorBoundary 
+          level="section" 
+          name="Tab Content"
+          showDebugInfo={true}
+        >
           <TabsContentComponent
             activeTab={activeTab}
             setActiveTab={handleTabChange}
@@ -109,9 +136,9 @@ const Index = memo(() => {
             userStats={userStats}
             onNavigateToHome={handleNavigateToHome}
           />
-        </SectionErrorBoundary>
+        </GlobalErrorBoundary>
       </AppLayout>
-    </SectionErrorBoundary>
+    </GlobalErrorBoundary>
   );
 });
 
