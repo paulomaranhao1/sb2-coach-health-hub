@@ -1,15 +1,18 @@
 
 import { Button } from "@/components/ui/button";
-import { BookOpen, Mail, ShoppingCart, LogOut } from "lucide-react";
+import { BookOpen, Mail, ShoppingCart, LogOut, Shield, FileText } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 interface MobileMenuSupportSectionProps {
   setShowMobileMenu: (show: boolean) => void;
 }
 
 const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectionProps) => {
+  const navigate = useNavigate();
+
   const handlePurchase = () => {
     const isInBrazil = navigator.language.includes('pt') || 
                       Intl.DateTimeFormat().resolvedOptions().timeZone.includes('America/Sao_Paulo');
@@ -61,6 +64,16 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
     setShowMobileMenu(false);
   };
 
+  const handlePrivacyPolicy = () => {
+    setShowMobileMenu(false);
+    navigate('/privacy-policy');
+  };
+
+  const handleTermsOfService = () => {
+    setShowMobileMenu(false);
+    navigate('/terms-of-service');
+  };
+
   return (
     <div className="space-y-2">
       <h3 className="text-gray-400 text-xs uppercase font-semibold px-3">Suporte</h3>
@@ -84,6 +97,30 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
         <Mail className="w-4 h-4 mr-2" />
         Entrar em Contato
       </Button>
+
+      <div className="border-t border-slate-600 my-2 pt-2">
+        <h4 className="text-gray-400 text-xs uppercase font-semibold px-3 mb-2">Legal</h4>
+        
+        <Button 
+          onClick={handlePrivacyPolicy}
+          size="sm" 
+          variant="outline" 
+          className="w-full justify-start border-slate-500 text-slate-400 hover:bg-slate-500 hover:text-white transition-all duration-200 mb-1"
+        >
+          <Shield className="w-4 h-4 mr-2" />
+          Política de Privacidade
+        </Button>
+
+        <Button 
+          onClick={handleTermsOfService}
+          size="sm" 
+          variant="outline" 
+          className="w-full justify-start border-slate-500 text-slate-400 hover:bg-slate-500 hover:text-white transition-all duration-200"
+        >
+          <FileText className="w-4 h-4 mr-2" />
+          Termos de Uso
+        </Button>
+      </div>
       
       <AnimatedButton 
         onClick={handlePurchase}
@@ -92,7 +129,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
       >
         <ShoppingCart className="w-4 h-4 mr-2" />
         Comprar SB2 Turbo
-      </AnimatedButton>
+      </Button>
       
       <Button 
         onClick={handleLogout}
