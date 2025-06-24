@@ -1,14 +1,12 @@
 
-import { useState, useEffect, useMemo } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { memo } from "react";
+import { useProgressData } from "@/hooks/useProgressData";
 import StatisticsHeader from "./StatisticsHeader";
 import QuickStats from "./QuickStats";
 import ProgressOverview from "./ProgressOverview";
 import StatusCards from "../home/StatusCards";
 import GamificationCards from "../home/GamificationCards";
 import ProgressDashboard from "../ProgressDashboard";
-import { memo } from "react";
 
 interface StatisticsOverviewProps {
   userProfile: any;
@@ -16,81 +14,11 @@ interface StatisticsOverviewProps {
 }
 
 const StatisticsOverview = memo(({ userProfile, userStats }: StatisticsOverviewProps) => {
-  const [weightHistory, setWeightHistory] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
-
-  useEffect(() => {
-    loadWeightHistory();
-  }, []);
-
-  const loadWeightHistory = async () => {
-    try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
-
-      const { data, error } = await supabase
-        .from('weight_entries')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('date', { ascending: true });
-
-      if (error) throw error;
-      setWeightHistory(data || []);
-    } catch (error) {
-      console.error('Error loading weight history:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const shareProgress = async () => {
-    const currentWeight = weightHistory.length > 0 ? 
-      weightHistory[weightHistory.length - 1].weight : userProfile?.weight || 0;
-    const initialWeight = weightHistory.length > 0 ? weightHistory[0].weight : 0;
-    const weightLoss = initialWeight - currentWeight;
-
-    try {
-      const shareData = {
-        title: 'SB2coach.ai - Meu Progresso',
-        text: `Estou usando o SB2coach.ai! ${weightLoss > 0 ? `Já perdi ${weightLoss.toFixed(1)}kg` : `Peso atual: ${currentWeight}kg`} 💪`,
-        url: window.location.origin
-      };
-
-      if (navigator.share && navigator.canShare(shareData)) {
-        await navigator.share(shareData);
-      } else {
-        await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
-        toast({
-          title: "Link copiado!",
-          description: "Cole onde quiser compartilhar seu progresso"
-        });
-      }
-    } catch (error) {
-      console.error('Error sharing:', error);
-    }
-  };
-
-  // Memoizar componentes que dependem dos dados
-  const memoizedQuickStats = useMemo(() => (
-    <QuickStats 
-      userProfile={userProfile} 
-      userStats={userStats} 
-      weightHistory={weightHistory}
-    />
-  ), [userProfile, userStats, weightHistory]);
-
-  const memoizedProgressOverview = useMemo(() => (
-    <ProgressOverview userProfile={userProfile} userStats={userStats} />
-  ), [userProfile, userStats]);
-
-  const memoizedStatusCards = useMemo(() => (
-    <StatusCards userProfile={userProfile} userStats={userStats} />
-  ), [userProfile, userStats]);
-
-  const memoizedGamificationCards = useMemo(() => (
-    <GamificationCards userStats={userStats} />
-  ), [userStats]);
+  const {
+    loading,
+    weightHistory,
+    shareProgress
+  } = useProgressData();
 
   if (loading) {
     return (
@@ -104,16 +32,20 @@ const StatisticsOverview = memo(({ userProfile, userStats }: StatisticsOverviewP
     <div className="space-y-6">
       <StatisticsHeader onShare={shareProgress} />
       
-      {memoizedQuickStats}
+      <QuickStats 
+        userProfile={userProfile} 
+        userStats={userStats} 
+        weightHistory={weightHistory}
+      />
       
-      {memoizedProgressOverview}
+      <ProgressOverview userProfile={userProfile} userStats={userStats} />
       
       <div className="grid gap-6 lg:grid-cols-2">
         <div className="space-y-6">
-          {memoizedStatusCards}
+          <StatusCards userProfile={userProfile} userStats={userStats} />
         </div>
         <div className="space-y-6">
-          {memoizedGamificationCards}
+          <GamificationCards userStats={userStats} />
         </div>
       </div>
       

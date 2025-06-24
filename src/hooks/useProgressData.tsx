@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { UserStats } from '@/types';
+import { handleAsyncError, getErrorMessage } from '@/utils/errorHandling';
 
 interface WeightEntry {
   id: string;
@@ -25,34 +26,43 @@ export const useProgressData = () => {
   const { toast } = useToast();
 
   const loadData = useCallback(async () => {
-    try {
+    const result = await handleAsyncError(async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
       // Buscar dados de peso
-      const { data: weightData } = await supabase
+      const { data: weightData, error: weightError } = await supabase
         .from('weight_entries')
         .select('*')
         .eq('user_id', user.id)
         .order('created_at', { ascending: true });
 
+      if (weightError) throw weightError;
+
       // Buscar estatísticas do usuário
-      const { data: statsData } = await supabase
+      const { data: statsData, error: statsError } = await supabase
         .from('user_stats')
         .select('*')
         .eq('user_id', user.id)
-        .single();
+        .maybeSingle();
+
+      if (statsError) throw statsError;
 
       setData({
         weightEntries: weightData || [],
         userStats: statsData
       });
-    } catch (error) {
+    }, (error) => {
       console.error('Erro ao carregar dados de progresso:', error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+      toast({
+        title: "Erro",
+        description: getErrorMessage(error),
+        variant: "destructive"
+      });
+    });
+
+    setLoading(false);
+  }, [toast]);
 
   useEffect(() => {
     loadData();

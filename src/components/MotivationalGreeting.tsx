@@ -1,10 +1,46 @@
-import { useState, useEffect, useCallback } from 'react';
+
+import { useState, useEffect, useCallback, memo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useFasting } from '@/hooks/useFasting';
 import CompactFastingTimer from './fasting/CompactFastingTimer';
 
-const MotivationalGreeting = () => {
+const motivationalPhrases = [
+  "Cada quilograma perdido é uma vitória conquistada! 🎯",
+  "Você está mais forte e mais leve a cada dia! 💪",
+  "Seus objetivos de peso estão cada vez mais próximos! 🏃‍♀️",
+  "Cada passo na balança conta na sua jornada! ⚖️",
+  "Sua determinação para emagrecer é inspiradora! ✨",
+  "Hoje é o dia perfeito para continuar perdendo peso! 🌟",
+  "Sua evolução física é impressionante! 📈",
+  "Continue assim, você está emagrecendo! 🔥",
+  "Sua dedicação fará toda a diferença na balança! 💯",
+  "Cada quilinho a menos é motivo de orgulho! 🏆",
+  "Você é capaz de alcançar seu peso ideal! 🎪",
+  "Sua transformação corporal está acontecendo! 🦋",
+  "Cada dia é uma nova chance de emagrecer! 🌅",
+  "Você está no caminho certo para seu peso dos sonhos! 🌈",
+  "Sua força de vontade é seu maior aliado! 💎",
+  "A cada pesagem, você está mais próximo do objetivo! 🎯",
+  "Você está esculpindo o corpo que sempre quis! 🏗️",
+  "Cada escolha saudável te leva ao peso ideal! 🥗",
+  "Seu comprometimento com a dieta está dando frutos! 🍎",
+  "A balança não mente: você está no caminho certo! 📊",
+  "Sua jornada de emagrecimento é única e especial! 💫",
+  "Cada treino te aproxima do seu peso ideal! 🏋️‍♀️",
+  "Você está provando que é possível emagrecer! 🎪",
+  "Sua disciplina está transformando seu corpo! 🔄",
+  "O peso que você quer está ao seu alcance! 🎯",
+  "Cada quilograma perdido é um presente para si mesmo! 🎁",
+  "Você está reescrevendo sua história de peso! 📝",
+  "Sua determinação está moldando um novo você! 🆕",
+  "A cada dia, você fica mais perto do seu peso ideal! 📅",
+  "Você é o protagonista da sua transformação! 🌟"
+];
+
+const MotivationalGreeting = memo(() => {
   const [userName, setUserName] = useState<string>('');
+  const [currentPhrase, setCurrentPhrase] = useState('');
+  
   const {
     currentFast,
     timeRemaining,
@@ -15,71 +51,36 @@ const MotivationalGreeting = () => {
     formatTime,
     getFastingPhase
   } = useFasting();
-  
-  const motivationalPhrases = [
-    "Cada quilograma perdido é uma vitória conquistada! 🎯",
-    "Você está mais forte e mais leve a cada dia! 💪",
-    "Seus objetivos de peso estão cada vez mais próximos! 🏃‍♀️",
-    "Cada passo na balança conta na sua jornada! ⚖️",
-    "Sua determinação para emagrecer é inspiradora! ✨",
-    "Hoje é o dia perfeito para continuar perdendo peso! 🌟",
-    "Sua evolução física é impressionante! 📈",
-    "Continue assim, você está emagrecendo! 🔥",
-    "Sua dedicação fará toda a diferença na balança! 💯",
-    "Cada quilinho a menos é motivo de orgulho! 🏆",
-    "Você é capaz de alcançar seu peso ideal! 🎪",
-    "Sua transformação corporal está acontecendo! 🦋",
-    "Cada dia é uma nova chance de emagrecer! 🌅",
-    "Você está no caminho certo para seu peso dos sonhos! 🌈",
-    "Sua força de vontade é seu maior aliado! 💎",
-    "A cada pesagem, você está mais próximo do objetivo! 🎯",
-    "Você está esculpindo o corpo que sempre quis! 🏗️",
-    "Cada escolha saudável te leva ao peso ideal! 🥗",
-    "Seu comprometimento com a dieta está dando frutos! 🍎",
-    "A balança não mente: você está no caminho certo! 📊",
-    "Sua jornada de emagrecimento é única e especial! 💫",
-    "Cada treino te aproxima do seu peso ideal! 🏋️‍♀️",
-    "Você está provando que é possível emagrecer! 🎪",
-    "Sua disciplina está transformando seu corpo! 🔄",
-    "O peso que você quer está ao seu alcance! 🎯",
-    "Cada quilograma perdido é um presente para si mesmo! 🎁",
-    "Você está reescrevendo sua história de peso! 📝",
-    "Sua determinação está moldando um novo você! 🆕",
-    "A cada dia, você fica mais perto do seu peso ideal! 📅",
-    "Você é o protagonista da sua transformação! 🌟"
-  ];
-
-  const [currentPhrase, setCurrentPhrase] = useState('');
 
   const setRandomPhrase = useCallback(() => {
     const randomIndex = Math.floor(Math.random() * motivationalPhrases.length);
     setCurrentPhrase(motivationalPhrases[randomIndex]);
-  }, [motivationalPhrases]);
+  }, []);
 
-  useEffect(() => {
-    fetchUserName();
-    setRandomPhrase();
-  }, [setRandomPhrase]);
-
-  const fetchUserName = async () => {
+  const fetchUserName = useCallback(async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
         const { data: profile } = await supabase
           .from('user_profiles')
-          .select('*')
+          .select('name')
           .eq('user_id', user.id)
           .maybeSingle();
         
-        if (profile && profile.name) {
+        if (profile?.name) {
           setUserName(profile.name);
         }
       }
     } catch (error) {
       console.error('Erro ao buscar nome do usuário:', error);
     }
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchUserName();
+    setRandomPhrase();
+  }, [fetchUserName, setRandomPhrase]);
 
   console.log('MotivationalGreeting - Estado do jejum:', {
     currentFast: !!currentFast,
@@ -118,6 +119,8 @@ const MotivationalGreeting = () => {
       </div>
     </div>
   );
-};
+});
+
+MotivationalGreeting.displayName = 'MotivationalGreeting';
 
 export default MotivationalGreeting;
