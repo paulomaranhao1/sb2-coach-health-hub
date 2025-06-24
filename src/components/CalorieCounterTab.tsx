@@ -17,7 +17,7 @@ const CalorieCounterTab = () => {
   };
   
   return (
-    <div className="space-y-4 px-2 sm:px-0">
+    <div className="space-y-4">
       {/* Header Section */}
       <CalorieCounterHeader />
 
