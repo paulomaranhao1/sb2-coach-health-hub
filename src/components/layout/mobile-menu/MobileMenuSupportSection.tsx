@@ -129,7 +129,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
       >
         <ShoppingCart className="w-4 h-4 mr-2" />
         Comprar SB2 Turbo
-      </Button>
+      </AnimatedButton>
       
       <Button 
         onClick={handleLogout}
