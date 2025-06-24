@@ -29,6 +29,12 @@ const AuthForm = () => {
     setMode(mode === 'signin' ? 'signup' : 'signin');
   };
 
+  const handleEmailFormSubmit = (email: string, password: string, name: string) => {
+    const isLogin = mode === 'signin';
+    const onEmailVerification = () => handleModeChange('email-verification', email);
+    handleEmailAuth(email, password, name, isLogin, onEmailVerification);
+  };
+
   if (mode === 'email-verification') {
     return (
       <EmailVerificationScreen 
@@ -86,7 +92,7 @@ const AuthForm = () => {
           
           <EmailPasswordForm 
             isLogin={mode === 'signin'}
-            onSubmit={handleEmailAuth}
+            onSubmit={handleEmailFormSubmit}
             loading={loading}
           />
         </div>
