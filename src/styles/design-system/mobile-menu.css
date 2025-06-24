@@ -1,0 +1,72 @@
+
+/* Mobile Menu - Dark Theme with High Contrast */
+@layer components {
+  .mobile-menu {
+    background: linear-gradient(135deg, rgb(30 41 59), rgb(15 23 42)) !important; /* slate-800 to slate-900 */
+    color: rgb(248 250 252) !important; /* slate-50 - very light text */
+  }
+  
+  .mobile-menu-header {
+    background: linear-gradient(135deg, rgb(15 23 42), rgb(30 41 59)) !important; /* slate-900 to slate-800 */
+    border-bottom: 1px solid rgb(71 85 105) !important; /* slate-600 */
+  }
+  
+  .mobile-menu-header * {
+    color: rgb(248 250 252) !important; /* slate-50 */
+  }
+  
+  .mobile-menu-item {
+    color: rgb(226 232 240) !important; /* slate-200 */
+    background: rgba(248, 250, 252, 0.05) !important; /* Very subtle white overlay */
+    border: 1px solid rgba(248, 250, 252, 0.1) !important;
+    border-radius: var(--radius-lg) !important;
+    transition: all 0.2s ease;
+  }
+  
+  .mobile-menu-item:hover {
+    background: rgba(248, 250, 252, 0.1) !important;
+    border-color: rgba(248, 250, 252, 0.2) !important;
+    transform: translateY(-1px);
+  }
+  
+  .mobile-menu-item.active {
+    background: linear-gradient(135deg, rgb(var(--blue-primary)), rgb(var(--blue-secondary))) !important;
+    color: white !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  .mobile-menu-item.active * {
+    color: white !important;
+  }
+  
+  .mobile-menu-icon {
+    background: rgba(248, 250, 252, 0.1) !important;
+    border-radius: var(--radius-md) !important;
+    padding: var(--space-sm);
+  }
+  
+  .mobile-menu-item.active .mobile-menu-icon {
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
+  
+  .mobile-menu-separator {
+    border-color: rgb(71 85 105) !important; /* slate-600 */
+  }
+  
+  .mobile-menu-section-title {
+    color: rgb(156 163 175) !important; /* slate-400 */
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .mobile-menu-footer {
+    background: linear-gradient(to top, rgba(15, 23, 42, 0.8), transparent) !important;
+    border-top: 1px solid rgb(71 85 105) !important; /* slate-600 */
+  }
+  
+  .mobile-menu-footer * {
+    color: rgb(156 163 175) !important; /* slate-400 */
+  }
+}

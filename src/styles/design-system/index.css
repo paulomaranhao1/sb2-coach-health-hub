@@ -1,0 +1,80 @@
+
+/* Modern Design System - Main Entry Point */
+
+/* Import all design system modules */
+@import './colors.css';
+@import './components.css';
+@import './mobile-menu.css';
+@import './layout.css';
+
+/* Global Overrides - Ensure perfect contrast everywhere */
+@layer base {
+  
+  /* Force all text to have proper contrast */
+  * {
+    color: inherit;
+  }
+  
+  /* Ensure buttons have proper text color */
+  button * {
+    color: inherit;
+  }
+  
+  /* Ensure cards have proper background and text */
+  [class*="Card"] {
+    background-color: rgb(var(--bg-primary)) !important;
+  }
+  
+  [class*="Card"] * {
+    color: inherit;
+  }
+  
+  /* Ensure proper contrast for gradients */
+  .bg-gradient-to-r *,
+  .bg-gradient-to-br * {
+    color: white !important;
+  }
+  
+  /* Dark backgrounds get white text */
+  .bg-slate-500 *,
+  .bg-slate-600 *,
+  .bg-slate-700 *,
+  .bg-slate-800 *,
+  .bg-slate-900 *,
+  .bg-blue-500 *,
+  .bg-blue-600 *,
+  .bg-blue-700 *,
+  .bg-green-500 *,
+  .bg-green-600 *,
+  .bg-red-500 *,
+  .bg-red-600 * {
+    color: white !important;
+  }
+  
+  /* Light backgrounds get dark text */
+  .bg-white *,
+  .bg-slate-50 *,
+  .bg-slate-100 *,
+  .bg-blue-50 *,
+  .bg-green-50 *,
+  .bg-red-50 * {
+    color: rgb(var(--text-secondary)) !important;
+  }
+  
+  /* Ensure input text is always readable */
+  input,
+  textarea,
+  select {
+    color: rgb(var(--text-secondary)) !important;
+  }
+  
+  /* Remove any yellow/amber colors completely */
+  *[class*="yellow"],
+  *[class*="amber"],
+  *[style*="yellow"],
+  *[style*="amber"] {
+    background-color: rgb(var(--warning)) !important;
+    color: rgb(var(--text-primary)) !important;
+    border-color: rgb(var(--warning)) !important;
+  }
+}

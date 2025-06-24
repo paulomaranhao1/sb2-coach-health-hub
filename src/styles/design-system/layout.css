@@ -1,0 +1,97 @@
+
+/* Layout System - Consistent spacing and structure */
+@layer components {
+  
+  /* Container System */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--space-md);
+  }
+  
+  @media (min-width: 640px) {
+    .container {
+      padding: 0 var(--space-lg);
+    }
+  }
+  
+  /* Section Spacing */
+  .section {
+    padding: var(--space-xl) 0;
+  }
+  
+  @media (min-width: 640px) {
+    .section {
+      padding: var(--space-2xl) 0;
+    }
+  }
+  
+  /* Grid System */
+  .grid-auto {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-lg);
+  }
+  
+  .grid-2 {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-lg);
+  }
+  
+  @media (min-width: 768px) {
+    .grid-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: var(--space-lg);
+  }
+  
+  @media (min-width: 768px) {
+    .grid-3 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .grid-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  /* Flex Utilities */
+  .flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .flex-between {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .flex-start {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+  
+  /* Spacing Utilities */
+  .space-y-xs > * + * { margin-top: var(--space-xs); }
+  .space-y-sm > * + * { margin-top: var(--space-sm); }
+  .space-y-md > * + * { margin-top: var(--space-md); }
+  .space-y-lg > * + * { margin-top: var(--space-lg); }
+  .space-y-xl > * + * { margin-top: var(--space-xl); }
+  
+  .space-x-xs > * + * { margin-left: var(--space-xs); }
+  .space-x-sm > * + * { margin-left: var(--space-sm); }
+  .space-x-md > * + * { margin-left: var(--space-md); }
+  .space-x-lg > * + * { margin-left: var(--space-lg); }
+  .space-x-xl > * + * { margin-left: var(--space-xl); }
+}

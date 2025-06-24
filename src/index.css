@@ -1,23 +1,45 @@
 
-/* SB2 Coach - Modern Light Design System */
-@import './styles/modern-theme.css';
-@import './styles/components-modern.css';
-@import './styles/reset-overrides.css';
-@import './styles/force-no-yellow.css';
-@import './styles/text.css';
-@import './styles/anti-yellow.css';
-@import './styles/debug-yellow.css';
-@import './styles/theme.css';
-@import './styles/cards.css';
-@import './styles/form.css';
-@import './styles/buttons.css';
+/* SB2 Coach - Modern Design System */
+@import './styles/design-system/index.css';
 
-/* New organized imports */
+/* Legacy imports - will be gradually removed */
 @import './styles/base/reset.css';
-@import './styles/base/backgrounds.css';
 @import './styles/base/scrollbar.css';
 @import './styles/base/animations.css';
 @import './styles/layout/containers.css';
 @import './styles/responsive/mobile.css';
 @import './styles/accessibility/media-queries.css';
 @import './styles/overrides/shadow-fixes.css';
+
+/* Remove conflicting styles */
+@layer base {
+  /* Override any remaining yellow/amber references */
+  *[class*="yellow"], *[class*="amber"],
+  *[style*="yellow"], *[style*="amber"] {
+    background-color: rgb(156 163 175) !important; /* gray-400 */
+    color: rgb(17 24 39) !important; /* gray-900 */
+    border-color: rgb(156 163 175) !important;
+  }
+  
+  /* Ensure perfect text contrast everywhere */
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  /* Remove any conflicting box-shadows */
+  * {
+    box-shadow: revert !important;
+  }
+  
+  /* Apply design system shadows */
+  .card, 
+  [class*="Card"],
+  .card-container {
+    box-shadow: var(--shadow-soft) !important;
+  }
+  
+  button:hover,
+  .btn:hover {
+    box-shadow: var(--shadow-medium) !important;
+  }
+}

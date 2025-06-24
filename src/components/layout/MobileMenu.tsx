@@ -47,28 +47,28 @@ const MobileMenu = ({
       onClick={() => setShowMobileMenu(false)}
     >
       <div 
-        className="bg-gradient-to-br from-slate-50 via-white to-slate-100 w-80 h-full shadow-2xl animate-slide-in-right transition-all duration-300 overflow-y-auto border-r border-slate-200" 
+        className="mobile-menu w-80 h-full shadow-2xl animate-slide-in-right transition-all duration-300 overflow-y-auto" 
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header moderno */}
-        <div className="sticky top-0 bg-gradient-to-r from-red-600 to-red-700 p-4 border-b border-red-500/30 backdrop-blur-sm">
+        {/* Header with dark theme */}
+        <div className="mobile-menu-header sticky top-0 p-4 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg overflow-hidden bg-white p-1 shadow-sm">
+              <div className="w-8 h-8 rounded-lg overflow-hidden bg-white/10 p-1 shadow-sm">
                 <img 
                   src="/lovable-uploads/a9ae0ae0-953a-4e4d-afbd-5f6bf88b1dc6.png" 
                   alt="SB2coach.ai" 
                   className="w-full h-full object-contain"
                 />
               </div>
-              <h2 className="text-white font-bold text-lg">Menu</h2>
+              <h2 className="font-bold text-lg">Menu</h2>
             </div>
             
             <Button
               onClick={() => setShowMobileMenu(false)}
               size="sm"
               variant="ghost"
-              className="text-white hover:bg-white/20 h-8 w-8 p-0 rounded-full"
+              className="text-white hover:bg-white/10 h-8 w-8 p-0 rounded-full"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -84,10 +84,10 @@ const MobileMenu = ({
           {/* Separador elegante */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300"></div>
+              <div className="mobile-menu-separator w-full border-t"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-3 text-slate-500 font-medium">Perfil</span>
+              <span className="mobile-menu-section-title bg-slate-800 px-3">Perfil</span>
             </div>
           </div>
 
@@ -104,10 +104,10 @@ const MobileMenu = ({
           {/* Separador elegante */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300"></div>
+              <div className="mobile-menu-separator w-full border-t"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-3 text-slate-500 font-medium">Novidades</span>
+              <span className="mobile-menu-section-title bg-slate-800 px-3">Novidades</span>
             </div>
           </div>
 
@@ -122,10 +122,10 @@ const MobileMenu = ({
           {/* Separador elegante */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-slate-300"></div>
+              <div className="mobile-menu-separator w-full border-t"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-3 text-slate-500 font-medium">Suporte</span>
+              <span className="mobile-menu-section-title bg-slate-800 px-3">Suporte</span>
             </div>
           </div>
 
@@ -136,12 +136,12 @@ const MobileMenu = ({
         </div>
 
         {/* Footer do menu */}
-        <div className="sticky bottom-0 bg-gradient-to-t from-slate-100 to-transparent p-4 mt-auto">
+        <div className="mobile-menu-footer sticky bottom-0 p-4 mt-auto">
           <div className="text-center">
-            <p className="text-xs text-slate-500">
+            <p className="text-xs">
               © 2024 SB2coach.ai
             </p>
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="text-xs mt-1">
               Transformação inteligente
             </p>
           </div>

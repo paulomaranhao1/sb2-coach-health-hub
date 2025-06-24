@@ -23,22 +23,14 @@ const MobileMenuNavigation = ({ activeTab, handleTabChange }: MobileMenuNavigati
         <button
           key={item.value}
           onClick={() => handleTabChange(item.value)}
-          className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group ${
-            activeTab === item.value 
-              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/25 border border-red-400/30' 
-              : item.featured
-              ? 'bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/20 border border-red-400/30 hover:from-red-400 hover:to-red-500'
-              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900 border border-transparent hover:border-slate-200 bg-white/50'
+          className={`mobile-menu-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group ${
+            activeTab === item.value ? 'active' : ''
           }`}
         >
-          <div className={`p-2 rounded-lg ${
-            activeTab === item.value 
-              ? 'bg-white/20' 
-              : item.featured 
-              ? 'bg-white/20' 
-              : 'bg-slate-100 group-hover:bg-slate-200'
+          <div className={`mobile-menu-icon p-2 rounded-lg ${
+            item.featured ? 'animate-pulse' : ''
           }`}>
-            <item.icon className={`w-4 h-4 ${item.featured ? 'animate-pulse' : ''}`} />
+            <item.icon className="w-4 h-4" />
           </div>
           <span className={`font-medium ${item.featured ? 'font-bold' : ''}`}>
             {item.label}
