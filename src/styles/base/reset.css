@@ -1,0 +1,36 @@
+
+/* Global Reset & Foundation */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background-color: rgb(255 255 255);
+  color: rgb(15 23 42);
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Selection Colors */
+::selection {
+  background-color: rgba(59, 130, 246, 0.2);
+  color: rgb(15 23 42);
+}
+
+/* Focus Outline - Consistent */
+:focus-visible {
+  outline: 2px solid rgb(59 130 246);
+  outline-offset: 2px;
+}
+
+/* Remove default focus outline */
+:focus:not(:focus-visible) {
+  outline: none;
+}

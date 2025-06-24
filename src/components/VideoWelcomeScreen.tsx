@@ -1,8 +1,10 @@
 
 import { useEffect, useState, useRef } from 'react';
 import { useAdvancedLogger } from '@/utils/advancedLogger';
-import { Button } from '@/components/ui/button';
-import { SkipForward, Play, Pause } from 'lucide-react';
+import VideoLoadingState from './video-welcome/VideoLoadingState';
+import VideoPlayer from './video-welcome/VideoPlayer';
+import VideoProgress from './video-welcome/VideoProgress';
+import VideoControls from './video-welcome/VideoControls';
 
 interface VideoWelcomeScreenProps {
   onVideoComplete: () => void;
@@ -139,87 +141,30 @@ const VideoWelcomeScreen = ({ onVideoComplete }: VideoWelcomeScreenProps) => {
   return (
     <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
       {/* Loading state */}
-      {!isVideoLoaded && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black">
-          <div className="text-center space-y-4 px-4">
-            <div className="w-12 h-12 border-3 border-white border-t-transparent rounded-full animate-spin mx-auto" />
-            <p className="text-white text-lg font-medium">Carregando experiência...</p>
-          </div>
-        </div>
-      )}
+      {!isVideoLoaded && <VideoLoadingState />}
 
       {/* Video Container - Responsivo */}
       <div className="w-full h-full relative flex items-center justify-center">
-        <video
+        <VideoPlayer
           ref={videoRef}
-          className="w-full h-full max-w-full max-h-full object-contain sm:object-cover"
-          autoPlay
-          muted
-          playsInline
-          preload="auto"
           onLoadedData={handleVideoLoaded}
           onPlay={handleVideoPlay}
           onPause={handleVideoPause}
           onEnded={handleVideoEnded}
           onError={handleVideoError}
-        >
-          <source src="https://sb2coach.ai/sb2coach_splash_screen_final.mp4" type="video/mp4" />
-          Seu navegador não suporta reprodução de vídeo.
-        </video>
+        />
 
         {/* Progress indicator - Mobile optimized */}
-        {isVideoLoaded && (
-          <div className="absolute bottom-0 left-0 right-0">
-            <div className="bg-gradient-to-t from-black/50 to-transparent p-3 sm:p-6">
-              <div className="w-full bg-white/20 rounded-full h-1 mb-2 sm:mb-4">
-                <div 
-                  className="bg-white rounded-full h-1 transition-all duration-300 ease-out"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-              
-              <div className="flex items-center justify-between">
-                <div className="text-white/80 text-sm">
-                  SB2coach.ai está iniciando...
-                </div>
-                <div className="text-white/60 text-xs">
-                  {Math.round(progress)}%
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {isVideoLoaded && <VideoProgress progress={progress} />}
 
         {/* Controls overlay - Mobile optimized */}
         {canPlay && (
-          <div className="absolute top-3 right-3 sm:top-6 sm:right-6 flex items-center space-x-2 sm:space-x-3">
-            {/* Play/Pause button */}
-            <Button
-              onClick={togglePlayPause}
-              variant="outline"
-              size="sm"
-              className="bg-black/30 border-white/30 text-white hover:bg-black/50 backdrop-blur-sm w-8 h-8 sm:w-auto sm:h-auto p-1 sm:p-2"
-            >
-              {isPlaying ? (
-                <Pause className="w-3 h-3 sm:w-4 sm:h-4" />
-              ) : (
-                <Play className="w-3 h-3 sm:w-4 sm:h-4" />
-              )}
-            </Button>
-
-            {/* Skip button */}
-            {showSkipButton && (
-              <Button
-                onClick={handleSkip}
-                variant="outline"
-                size="sm"
-                className="bg-black/30 border-white/30 text-white hover:bg-black/50 backdrop-blur-sm animate-fade-in text-xs sm:text-sm px-2 py-1 sm:px-3 sm:py-2"
-              >
-                <SkipForward className="w-3 h-3 sm:w-4 sm:h-4 mr-1 sm:mr-2" />
-                Pular
-              </Button>
-            )}
-          </div>
+          <VideoControls
+            isPlaying={isPlaying}
+            showSkipButton={showSkipButton}
+            onTogglePlayPause={togglePlayPause}
+            onSkip={handleSkip}
+          />
         )}
       </div>
 

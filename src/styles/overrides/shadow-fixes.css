@@ -1,0 +1,17 @@
+
+/* Force remove any yellow shadows globally */
+* {
+  box-shadow: none !important;
+}
+
+.card, 
+[class*="Card"],
+.card-container,
+.glass-card {
+  box-shadow: 0 1px 3px 0 rgba(148, 163, 184, 0.1), 0 1px 2px 0 rgba(148, 163, 184, 0.06) !important;
+}
+
+button:hover,
+.btn:hover {
+  box-shadow: 0 4px 12px rgba(148, 163, 184, 0.3) !important;
+}
