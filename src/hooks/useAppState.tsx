@@ -49,7 +49,7 @@ export const useAppState = () => {
 
   // Função otimizada para verificar perfil com cache
   const checkUserProfile = useCallback(async () => {
-    const timer = logger.startTimer('checkUserProfile');
+    const startTime = Date.now();
     logger.info('Checking user profile');
     updateState({ isLoading: true });
     
@@ -59,7 +59,8 @@ export const useAppState = () => {
       if (!user) {
         logger.warn('No user found');
         updateState({ showWelcome: true, isLoading: false });
-        timer();
+        const elapsedTime = Date.now() - startTime;
+        logger.debug('Check completed - no user', { elapsedTime });
         return;
       }
 
@@ -97,7 +98,8 @@ export const useAppState = () => {
         
         if (!profileData.onboarding_completed) {
           updateState({ showOnboarding: true, isLoading: false });
-          timer();
+          const elapsedTime = Date.now() - startTime;
+          logger.debug('Check completed - needs onboarding', { elapsedTime });
           return;
         }
         
@@ -143,7 +145,8 @@ export const useAppState = () => {
       });
     } finally {
       updateState({ isLoading: false });
-      timer();
+      const elapsedTime = Date.now() - startTime;
+      logger.debug('Check completed', { elapsedTime });
     }
   }, [toast, updateState, cache, logger]);
 

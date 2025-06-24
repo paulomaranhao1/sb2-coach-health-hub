@@ -28,7 +28,44 @@ interface AchievementSystemProps {
 
 const AchievementSystem = memo(({ userStats, onAchievementUnlock }: AchievementSystemProps) => {
   const logger = useLogger('AchievementSystem');
-  const { achievements, totalPoints, level, checkAchievements } = useAchievements();
+  const { userProgress, loading, checkAchievement, awardPoints } = useAchievements();
+
+  // Mock achievements data for now since useAchievements doesn't provide it
+  const mockAchievements: Achievement[] = useMemo(() => [
+    {
+      id: 'first_weight',
+      name: 'Primeira Pesagem',
+      description: 'Registrou seu primeiro peso',
+      icon: 'trophy',
+      category: 'weight',
+      requirement: 1,
+      points: 10,
+      unlocked: true,
+      progress: 1
+    },
+    {
+      id: 'weight_loss_5kg',
+      name: 'Perdeu 5kg',
+      description: 'Perdeu 5kg do peso inicial',
+      icon: 'target',
+      category: 'weight',
+      requirement: 5,
+      points: 50,
+      unlocked: false,
+      progress: 2
+    },
+    {
+      id: 'fasting_streak_7',
+      name: 'Jejum 7 dias',
+      description: 'Completou jejum por 7 dias seguidos',
+      icon: 'zap',
+      category: 'fasting',
+      requirement: 7,
+      points: 35,
+      unlocked: false,
+      progress: 3
+    }
+  ], []);
 
   // Memoized achievement categories
   const achievementCategories = useMemo(() => {
@@ -42,15 +79,17 @@ const AchievementSystem = memo(({ userStats, onAchievementUnlock }: AchievementS
     return Object.entries(categories).map(([key, category]) => ({
       ...category,
       key,
-      achievements: achievements.filter(a => a.category === key)
+      achievements: mockAchievements.filter(a => a.category === key)
     }));
-  }, [achievements]);
+  }, [mockAchievements]);
 
   // Memoized stats
   const stats = useMemo(() => {
-    const unlockedCount = achievements.filter(a => a.unlocked).length;
-    const totalCount = achievements.length;
+    const unlockedCount = mockAchievements.filter(a => a.unlocked).length;
+    const totalCount = mockAchievements.length;
     const completionRate = totalCount > 0 ? (unlockedCount / totalCount) * 100 : 0;
+    const totalPoints = userProgress?.points || 0;
+    const level = userProgress?.level || 1;
 
     return {
       unlockedCount,
@@ -59,7 +98,7 @@ const AchievementSystem = memo(({ userStats, onAchievementUnlock }: AchievementS
       totalPoints,
       level
     };
-  }, [achievements, totalPoints, level]);
+  }, [mockAchievements, userProgress]);
 
   // Achievement unlock handler
   const handleAchievementClick = useCallback((achievement: Achievement) => {
@@ -148,6 +187,18 @@ const AchievementSystem = memo(({ userStats, onAchievementUnlock }: AchievementS
 
   AchievementCard.displayName = 'AchievementCard';
 
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-center">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <GlobalErrorBoundary level="component" name="Achievement System">
       <div className="space-y-6">
@@ -233,7 +284,7 @@ const AchievementSystem = memo(({ userStats, onAchievementUnlock }: AchievementS
           <Button 
             onClick={() => {
               logger.info('Checking for new achievements');
-              checkAchievements(userStats);
+              checkAchievement('manual_check', true);
             }}
             variant="outline"
           >

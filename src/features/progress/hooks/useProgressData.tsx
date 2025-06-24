@@ -38,7 +38,7 @@ export const useProgressData = () => {
   const logger = useLogger('useProgressData');
 
   const loadData = useCallback(async (useCache = true) => {
-    const timer = logger.startTimer('loadProgressData');
+    const startTime = Date.now();
     
     const result = await handleAsyncError(async () => {
       const { data: { user } } = await supabase.auth.getUser();
@@ -52,7 +52,8 @@ export const useProgressData = () => {
         if (cachedData) {
           logger.info('Using cached progress data');
           setData(cachedData);
-          timer();
+          const elapsedTime = Date.now() - startTime;
+          logger.debug('Load completed from cache', { elapsedTime });
           return;
         }
       }
@@ -90,9 +91,11 @@ export const useProgressData = () => {
         priority: 'high'
       });
 
+      const elapsedTime = Date.now() - startTime;
       logger.info('Progress data loaded and cached successfully', {
         weightEntries: newData.weightEntries.length,
-        hasStats: !!newData.userStats
+        hasStats: !!newData.userStats,
+        elapsedTime
       });
 
     }, (error) => {
@@ -105,7 +108,6 @@ export const useProgressData = () => {
     });
 
     setLoading(false);
-    timer();
   }, [toast, cache, logger]);
 
   useEffect(() => {
@@ -114,7 +116,7 @@ export const useProgressData = () => {
 
   // Cálculos memoizados para evitar recálculos desnecessários
   const calculations = useMemo(() => {
-    const timer = logger.startTimer('progressCalculations');
+    const startTime = Date.now();
     
     const weightHistory = data.weightEntries;
     const currentWeightValue = weightHistory.length > 0 ? weightHistory[0].weight : 0;
@@ -154,7 +156,8 @@ export const useProgressData = () => {
       consistencyScore = Math.round((recordedDays / last30Days) * 100);
     }
 
-    timer();
+    const elapsedTime = Date.now() - startTime;
+    logger.debug('Calculations completed', { elapsedTime });
 
     return {
       currentWeightValue,
@@ -167,7 +170,7 @@ export const useProgressData = () => {
   }, [data.weightEntries, logger]);
 
   const shareProgress = useCallback(async () => {
-    const timer = logger.startTimer('shareProgress');
+    const startTime = Date.now();
     
     try {
       const shareData = {
@@ -190,7 +193,8 @@ export const useProgressData = () => {
     } catch (error) {
       logger.error('Error sharing progress', { error });
     } finally {
-      timer();
+      const elapsedTime = Date.now() - startTime;
+      logger.debug('Share completed', { elapsedTime });
     }
   }, [calculations.weightLoss, calculations.currentWeightValue, toast, logger]);
 

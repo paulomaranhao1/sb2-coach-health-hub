@@ -20,14 +20,14 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
     isActive,
     timeRemaining,
     isPaused,
-    startFasting,
-    pauseFasting,
-    resumeFasting,
-    stopFasting,
-    isLoaded
+    startFast,
+    pauseFast,
+    resumeFast,
+    stopFast
   } = useFasting();
 
   const [displayTime, setDisplayTime] = useState('00:00:00');
+  const [isLoaded, setIsLoaded] = useState(true);
 
   // Memoized time formatting
   const formatTime = useCallback((seconds: number): string => {
@@ -62,25 +62,25 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
   // Memoized handlers
   const handleStart = useCallback((duration: number, type: string) => {
     logger.info('Starting fasting', { duration, type });
-    startFasting(duration, type);
+    startFast(type, duration);
     onFastingStart?.();
-  }, [startFasting, onFastingStart, logger]);
+  }, [startFast, onFastingStart, logger]);
 
   const handlePause = useCallback(() => {
     logger.info('Pausing fasting');
-    pauseFasting();
-  }, [pauseFasting, logger]);
+    pauseFast();
+  }, [pauseFast, logger]);
 
   const handleResume = useCallback(() => {
     logger.info('Resuming fasting');
-    resumeFasting();
-  }, [resumeFasting, logger]);
+    resumeFast();
+  }, [resumeFast, logger]);
 
   const handleStop = useCallback(() => {
     logger.info('Stopping fasting');
-    stopFasting();
+    stopFast();
     onFastingEnd?.();
-  }, [stopFasting, onFastingEnd, logger]);
+  }, [stopFast, onFastingEnd, logger]);
 
   // Memoized quick start options
   const quickStartOptions = useMemo(() => [
@@ -120,7 +120,7 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
                   {displayTime}
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  {currentFast?.type} - {isPaused ? 'Pausado' : 'Ativo'}
+                  {currentFast?.planType} - {isPaused ? 'Pausado' : 'Ativo'}
                 </p>
               </div>
 

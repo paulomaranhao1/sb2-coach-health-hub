@@ -5,10 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Camera, Upload, Loader2, AlertCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-import { analyzeFood } from "@/lib/food/analysis";
-import { saveAnalysisToHistory } from "@/lib/food/history";
+import { analyzeFoodImage, saveFoodAnalysis } from "@/lib/food";
 import { useLogger } from '@/utils/logger';
-import { useOptimizedQuery } from '@/hooks/useOptimizedQuery';
 import GlobalErrorBoundary from '@/components/error/GlobalErrorBoundary';
 import FoodAnalysisResult from "./FoodAnalysisResult";
 
@@ -132,28 +130,38 @@ const PhotoAnalyzer = memo(({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     logger.info('Starting food analysis', { fileName: selectedFile.name });
 
     try {
-      const result = await analyzeFood(selectedFile);
+      // Convert file to base64 for analysis
+      const reader = new FileReader();
+      reader.onload = async () => {
+        const base64Image = reader.result as string;
+        
+        const result = await analyzeFoodImage(base64Image);
+        
+        if (result) {
+          logger.info('Analysis completed successfully', { 
+            foodName: result.name,
+            calories: result.nutrition?.calories 
+          });
+
+          setAnalysisResult(result);
+          
+          // Save to history
+          const saveResult = await saveFoodAnalysis(result, base64Image);
+          
+          if (saveResult.success) {
+            onAnalysisComplete?.({ ...result, id: saveResult.id });
+          }
+
+          toast({
+            title: "Análise concluída!",
+            description: `Identificamos: ${result.name}`,
+          });
+        } else {
+          throw new Error('Análise retornou resultado vazio');
+        }
+      };
       
-      if (result) {
-        logger.info('Analysis completed successfully', { 
-          foodName: result.name,
-          calories: result.nutrition?.calories 
-        });
-
-        setAnalysisResult(result);
-        
-        // Save to history
-        await saveAnalysisToHistory(result);
-        
-        onAnalysisComplete?.(result);
-
-        toast({
-          title: "Análise concluída!",
-          description: `Identificamos: ${result.name}`,
-        });
-      } else {
-        throw new Error('Análise retornou resultado vazio');
-      }
+      reader.readAsDataURL(selectedFile);
 
     } catch (error) {
       logger.error('Analysis failed', { error });
@@ -193,7 +201,7 @@ const PhotoAnalyzer = memo(({ onAnalysisComplete }: PhotoAnalyzerProps) => {
     return (
       <GlobalErrorBoundary level="component" name="Photo Analyzer Results">
         <FoodAnalysisResult 
-          result={analysisResult} 
+          analysis={analysisResult} 
           onReset={handleReset}
         />
       </GlobalErrorBoundary>
