@@ -60,7 +60,7 @@ const ProgressDashboard = () => {
         weightLoss={weightLoss}
         avgWeightLossPerWeek={avgWeightLossPerWeek}
         bestWeekLoss={bestWeekLoss}
-        consistencyScore={typeof consistencyScore === 'string' ? parseInt(consistencyScore) : consistencyScore}
+        consistencyScore={consistencyScore.toString()}
         onShare={shareProgress}
       />
     </div>

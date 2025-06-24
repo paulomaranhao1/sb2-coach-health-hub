@@ -11,7 +11,7 @@ interface WeightStatisticsProps {
   weightLoss: number;
   avgWeightLossPerWeek: string;
   bestWeekLoss: string;
-  consistencyScore: number;
+  consistencyScore: string;
   onShare: () => void;
 }
 
