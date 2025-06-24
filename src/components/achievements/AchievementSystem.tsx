@@ -1,4 +1,3 @@
-
 import React, { useMemo, memo, useCallback } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -35,7 +34,7 @@ const AchievementSystem = memo(({ userStats, onAchievementUnlock }: AchievementS
   const logger = useLogger('AchievementSystem');
   const { userProgress, loading, checkAchievement, awardPoints } = useAchievements();
   
-  const { containerRef, announce, announcements } = useAccessibility({
+  const { containerRef, announce, announcements } = useAccessibility<HTMLDivElement>({
     announceChanges: true,
     enableKeyboardNavigation: true
   });

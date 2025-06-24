@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, memo, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -33,7 +32,7 @@ const FastingTimer = memo(({ onFastingStart, onFastingEnd }: FastingTimerProps) 
   const [displayTime, setDisplayTime] = useState('00:00:00');
   const [isLoaded, setIsLoaded] = useState(true);
   
-  const { containerRef, announce, announcements } = useAccessibility({
+  const { containerRef, announce, announcements } = useAccessibility<HTMLDivElement>({
     announceChanges: true,
     enableKeyboardNavigation: true
   });

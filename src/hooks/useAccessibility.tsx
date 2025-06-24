@@ -1,129 +1,93 @@
 
-import { useEffect, useRef, useState } from 'react';
-import { useLogger } from '@/utils/logger';
+import { useRef, useState, useCallback, useEffect } from 'react';
 
 interface UseAccessibilityOptions {
-  focusOnMount?: boolean;
-  trapFocus?: boolean;
   announceChanges?: boolean;
   enableKeyboardNavigation?: boolean;
+  focusOnMount?: boolean;
 }
 
-export function useAccessibility(options: UseAccessibilityOptions = {}) {
+export const useAccessibility = <T extends HTMLElement = HTMLDivElement>(
+  options: UseAccessibilityOptions = {}
+) => {
   const {
-    focusOnMount = false,
-    trapFocus = false,
     announceChanges = false,
-    enableKeyboardNavigation = true
+    enableKeyboardNavigation = false,
+    focusOnMount = false
   } = options;
 
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef<T>(null);
   const [announcements, setAnnouncements] = useState<string[]>([]);
-  const logger = useLogger('useAccessibility');
 
-  // Focus management
+  const announce = useCallback((message: string) => {
+    if (announceChanges) {
+      setAnnouncements(prev => [...prev.slice(-2), message]); // Keep last 3 announcements
+      
+      // Clear announcements after a delay to prevent accumulation
+      setTimeout(() => {
+        setAnnouncements(prev => prev.slice(1));
+      }, 3000);
+    }
+  }, [announceChanges]);
+
+  const handleKeyNavigation = useCallback((event: KeyboardEvent) => {
+    if (!enableKeyboardNavigation || !containerRef.current) return;
+
+    const focusableElements = containerRef.current.querySelectorAll(
+      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+
+    const focusableArray = Array.from(focusableElements) as HTMLElement[];
+    const currentIndex = focusableArray.indexOf(document.activeElement as HTMLElement);
+
+    switch (event.key) {
+      case 'ArrowDown':
+      case 'ArrowRight':
+        event.preventDefault();
+        const nextIndex = (currentIndex + 1) % focusableArray.length;
+        focusableArray[nextIndex]?.focus();
+        break;
+      case 'ArrowUp':
+      case 'ArrowLeft':
+        event.preventDefault();
+        const prevIndex = currentIndex === 0 ? focusableArray.length - 1 : currentIndex - 1;
+        focusableArray[prevIndex]?.focus();
+        break;
+      case 'Home':
+        event.preventDefault();
+        focusableArray[0]?.focus();
+        break;
+      case 'End':
+        event.preventDefault();
+        focusableArray[focusableArray.length - 1]?.focus();
+        break;
+    }
+  }, [enableKeyboardNavigation]);
+
+  useEffect(() => {
+    if (enableKeyboardNavigation && containerRef.current) {
+      const container = containerRef.current;
+      container.addEventListener('keydown', handleKeyNavigation);
+      
+      return () => {
+        container.removeEventListener('keydown', handleKeyNavigation);
+      };
+    }
+  }, [enableKeyboardNavigation, handleKeyNavigation]);
+
   useEffect(() => {
     if (focusOnMount && containerRef.current) {
       const firstFocusable = containerRef.current.querySelector(
         'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
       ) as HTMLElement;
       
-      if (firstFocusable) {
-        firstFocusable.focus();
-        logger.info('Auto-focused first element on mount');
-      }
+      firstFocusable?.focus();
     }
-  }, [focusOnMount, logger]);
-
-  // Focus trap
-  useEffect(() => {
-    if (!trapFocus || !containerRef.current) return;
-
-    const container = containerRef.current;
-    const focusableElements = container.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    ) as NodeListOf<HTMLElement>;
-
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Tab') {
-        if (e.shiftKey) {
-          if (document.activeElement === firstElement) {
-            e.preventDefault();
-            lastElement?.focus();
-          }
-        } else {
-          if (document.activeElement === lastElement) {
-            e.preventDefault();
-            firstElement?.focus();
-          }
-        }
-      }
-    };
-
-    container.addEventListener('keydown', handleKeyDown);
-    return () => container.removeEventListener('keydown', handleKeyDown);
-  }, [trapFocus]);
-
-  // Keyboard navigation
-  useEffect(() => {
-    if (!enableKeyboardNavigation || !containerRef.current) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      const target = e.target as HTMLElement;
-      
-      // Arrow key navigation for buttons and links
-      if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-        const focusableElements = Array.from(
-          containerRef.current!.querySelectorAll(
-            'button:not([disabled]), [role="button"]:not([aria-disabled="true"]), a[href]'
-          )
-        ) as HTMLElement[];
-
-        const currentIndex = focusableElements.indexOf(target);
-        if (currentIndex === -1) return;
-
-        let nextIndex = currentIndex;
-        
-        switch (e.key) {
-          case 'ArrowUp':
-          case 'ArrowLeft':
-            nextIndex = currentIndex > 0 ? currentIndex - 1 : focusableElements.length - 1;
-            break;
-          case 'ArrowDown':
-          case 'ArrowRight':
-            nextIndex = currentIndex < focusableElements.length - 1 ? currentIndex + 1 : 0;
-            break;
-        }
-
-        e.preventDefault();
-        focusableElements[nextIndex]?.focus();
-        logger.info('Navigated with keyboard', { direction: e.key });
-      }
-    };
-
-    containerRef.current.addEventListener('keydown', handleKeyDown);
-    return () => containerRef.current?.removeEventListener('keydown', handleKeyDown);
-  }, [enableKeyboardNavigation, logger]);
-
-  // Screen reader announcements
-  const announce = (message: string, priority: 'polite' | 'assertive' = 'polite') => {
-    if (!announceChanges) return;
-
-    setAnnouncements(prev => [...prev, message]);
-    logger.info('Screen reader announcement', { message, priority });
-
-    // Clear announcement after it's been read
-    setTimeout(() => {
-      setAnnouncements(prev => prev.filter(ann => ann !== message));
-    }, 1000);
-  };
+  }, [focusOnMount]);
 
   return {
     containerRef,
     announce,
-    announcements
+    announcements: announcements.filter(Boolean)
   };
-}
+};
