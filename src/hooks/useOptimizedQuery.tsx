@@ -166,7 +166,8 @@ export const useOptimizedQuery = <T,>({
       });
 
       // Se os dados estão obsoletos (stale), buscar em background
-      const cacheAge = Date.now() - (cache.get(`${cacheKey}_timestamp`) || 0);
+      const cacheTimestamp = cache.get<number>(`${cacheKey}_timestamp`) || 0;
+      const cacheAge = Date.now() - cacheTimestamp;
       if (cacheAge > staleTime) {
         logger.info(`Cache stale, refetching: ${cacheKey}`);
         fetchData();
@@ -199,7 +200,7 @@ export const useOptimizedQuery = <T,>({
 export const useApiQuery = <T,>(
   endpoint: string,
   queryFn: () => Promise<T>,
-  options: Omit<UseOptimizedQueryOptions<T>, 'cacheKey' | 'tags'> & { 
+  options: Omit<UseOptimizedQueryOptions<T>, 'cacheKey' | 'queryFn' | 'tags'> & { 
     tags?: string[] 
   } = {}
 ) => {
