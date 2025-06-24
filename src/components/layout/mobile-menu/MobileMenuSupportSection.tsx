@@ -78,14 +78,14 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
       label: 'Tutorial & Ajuda',
       icon: BookOpen,
       onClick: handleTutorial,
-      className: 'border-blue-500/50 text-blue-400 hover:bg-blue-500/20 hover:border-blue-400 hover:text-blue-300'
+      className: 'border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-800 bg-white'
     },
     {
       key: 'contact',
       label: 'Entrar em Contato',
       icon: Mail,
       onClick: handleContact,
-      className: 'border-green-500/50 text-green-400 hover:bg-green-500/20 hover:border-green-400 hover:text-green-300'
+      className: 'border-green-200 text-green-700 hover:bg-green-50 hover:border-green-300 hover:text-green-800 bg-white'
     }
   ];
 
@@ -114,7 +114,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
             onClick={item.onClick}
             size="sm" 
             variant="outline" 
-            className={`w-full justify-start transition-all duration-300 hover:scale-[1.02] hover:shadow-lg border bg-slate-700/50 backdrop-blur-sm ${item.className}`}
+            className={`w-full justify-start transition-all duration-300 hover:scale-[1.02] hover:shadow-md border-2 ${item.className}`}
           >
             <item.icon className="w-4 h-4 mr-3" />
             {item.label}
@@ -123,8 +123,8 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
       </div>
 
       {/* Seção Legal */}
-      <div className="bg-slate-700/30 rounded-xl p-3 border border-slate-600/30">
-        <h4 className="text-gray-400 text-xs uppercase font-semibold mb-3 text-center">Documentos Legais</h4>
+      <div className="bg-slate-50 rounded-xl p-3 border border-slate-200">
+        <h4 className="text-slate-600 text-xs uppercase font-semibold mb-3 text-center">Documentos Legais</h4>
         
         <div className="space-y-2">
           {legalItems.map((item) => (
@@ -133,7 +133,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
               onClick={item.onClick}
               size="sm" 
               variant="outline" 
-              className="w-full justify-start border-slate-500/50 text-slate-400 hover:bg-slate-600/50 hover:text-slate-200 hover:border-slate-400 transition-all duration-300 hover:scale-[1.02] bg-slate-800/30"
+              className="w-full justify-start border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-800 hover:border-slate-300 transition-all duration-300 hover:scale-[1.02] bg-white"
             >
               <item.icon className="w-4 h-4 mr-3" />
               {item.label}
@@ -146,10 +146,10 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
       <AnimatedButton 
         onClick={handlePurchase}
         size="sm" 
-        className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-500 hover:to-green-600 text-white border-0 shadow-lg shadow-green-500/25 hover:shadow-green-500/40 transition-all duration-300 hover:scale-[1.02]"
+        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white border-0 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transition-all duration-300 hover:scale-[1.02] font-semibold py-3"
       >
         <ShoppingCart className="w-4 h-4 mr-3" />
-        <span className="font-semibold">Comprar SB2 Turbo</span>
+        <span className="font-bold">Comprar SB2 Turbo</span>
       </AnimatedButton>
       
       {/* Botão de Logout */}
@@ -157,7 +157,7 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
         onClick={handleLogout}
         size="sm" 
         variant="outline" 
-        className="w-full justify-start border-red-500/50 text-red-400 hover:bg-red-500/20 hover:text-red-300 hover:border-red-400 transition-all duration-300 hover:scale-[1.02] bg-slate-700/50"
+        className="w-full justify-start border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 hover:border-red-300 transition-all duration-300 hover:scale-[1.02] bg-white"
       >
         <LogOut className="w-4 h-4 mr-3" />
         Sair

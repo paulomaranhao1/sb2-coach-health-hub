@@ -43,18 +43,18 @@ const MobileMenu = ({
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 z-50 animate-fade-in" 
+      className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-fade-in" 
       onClick={() => setShowMobileMenu(false)}
     >
       <div 
-        className="bg-gradient-to-br from-slate-800 via-slate-850 to-slate-900 w-80 h-full shadow-2xl animate-slide-in-right transition-all duration-300 overflow-y-auto border-r border-slate-600/50" 
+        className="bg-gradient-to-br from-slate-50 via-white to-slate-100 w-80 h-full shadow-2xl animate-slide-in-right transition-all duration-300 overflow-y-auto border-r border-slate-200" 
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header melhorado */}
-        <div className="sticky top-0 bg-gradient-to-r from-red-600 to-red-700 p-4 border-b border-red-500/30 backdrop-blur-sm">
+        {/* Header moderno */}
+        <div className="sticky top-0 bg-gradient-to-r from-blue-600 to-blue-700 p-4 border-b border-blue-500/30 backdrop-blur-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 rounded-lg overflow-hidden bg-white p-1">
+              <div className="w-8 h-8 rounded-lg overflow-hidden bg-white p-1 shadow-sm">
                 <img 
                   src="/lovable-uploads/a9ae0ae0-953a-4e4d-afbd-5f6bf88b1dc6.png" 
                   alt="SB2coach.ai" 
@@ -68,7 +68,7 @@ const MobileMenu = ({
               onClick={() => setShowMobileMenu(false)}
               size="sm"
               variant="ghost"
-              className="text-white hover:bg-white/20 h-8 w-8 p-0"
+              className="text-white hover:bg-white/20 h-8 w-8 p-0 rounded-full"
             >
               <X className="w-4 h-4" />
             </Button>
@@ -84,10 +84,10 @@ const MobileMenu = ({
           {/* Separador elegante */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
+              <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-800 px-2 text-slate-400 font-medium">Perfil</span>
+              <span className="bg-white px-3 text-slate-500 font-medium">Perfil</span>
             </div>
           </div>
 
@@ -104,10 +104,10 @@ const MobileMenu = ({
           {/* Separador elegante */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
+              <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-800 px-2 text-slate-400 font-medium">Novidades</span>
+              <span className="bg-white px-3 text-slate-500 font-medium">Novidades</span>
             </div>
           </div>
 
@@ -122,10 +122,10 @@ const MobileMenu = ({
           {/* Separador elegante */}
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gradient-to-r from-transparent via-slate-600 to-transparent"></div>
+              <div className="w-full border-t border-slate-300"></div>
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-slate-800 px-2 text-slate-400 font-medium">Suporte</span>
+              <span className="bg-white px-3 text-slate-500 font-medium">Suporte</span>
             </div>
           </div>
 
@@ -136,12 +136,12 @@ const MobileMenu = ({
         </div>
 
         {/* Footer do menu */}
-        <div className="sticky bottom-0 bg-gradient-to-t from-slate-900 to-transparent p-4 mt-auto">
+        <div className="sticky bottom-0 bg-gradient-to-t from-slate-100 to-transparent p-4 mt-auto">
           <div className="text-center">
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-500">
               © 2024 SB2coach.ai
             </p>
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-slate-400 mt-1">
               Transformação inteligente
             </p>
           </div>

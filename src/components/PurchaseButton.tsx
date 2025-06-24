@@ -60,7 +60,7 @@ const PurchaseButton = ({
       <Button 
         variant={variant} 
         size={size} 
-        className={className}
+        className={`bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 ${className}`}
         disabled
       >
         <ShoppingCart className="w-4 h-4 mr-2" />
@@ -74,7 +74,7 @@ const PurchaseButton = ({
       onClick={handlePurchase}
       variant={variant} 
       size={size} 
-      className={className}
+      className={`bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300 font-semibold ${className}`}
     >
       <ShoppingCart className="w-4 h-4 mr-2" />
       {children || 'Comprar SB2 Turbo'}
