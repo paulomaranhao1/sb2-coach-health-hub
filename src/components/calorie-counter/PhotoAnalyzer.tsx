@@ -1,314 +1,295 @@
-import { useState, useRef } from 'react';
+
+import React, { useState, useCallback, memo, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, Loader2, RotateCcw, AlertCircle, Wifi, WifiOff } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Camera, Upload, Loader2, AlertCircle } from 'lucide-react';
 import { useToast } from "@/hooks/use-toast";
-import FoodAnalysisResult from './FoodAnalysisResult';
-import { analyzeFoodImage, saveFoodAnalysis, FoodAnalysis } from '@/lib/food';
+import { analyzeFood } from "@/lib/food/analysis";
+import { saveAnalysisToHistory } from "@/lib/food/history";
+import { useLogger } from '@/utils/logger';
+import { useOptimizedQuery } from '@/hooks/useOptimizedQuery';
+import GlobalErrorBoundary from '@/components/error/GlobalErrorBoundary';
+import FoodAnalysisResult from "./FoodAnalysisResult";
 
 interface PhotoAnalyzerProps {
-  onAnalysisComplete?: (analysis: any) => void;
+  onAnalysisComplete?: (result: any) => void;
 }
 
-const PhotoAnalyzer = ({ onAnalysisComplete }: PhotoAnalyzerProps) => {
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [analyzing, setAnalyzing] = useState(false);
-  const [analysis, setAnalysis] = useState<FoodAnalysis | null>(null);
-  const [analysisStatus, setAnalysisStatus] = useState<'idle' | 'real' | 'mock' | 'quota_exceeded'>('idle');
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const cameraInputRef = useRef<HTMLInputElement>(null);
+const PhotoAnalyzer = memo(({ onAnalysisComplete }: PhotoAnalyzerProps) => {
+  const logger = useLogger('PhotoAnalyzer');
   const { toast } = useToast();
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isAnalyzing, setIsAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<any>(null);
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  // Memoized file validation
+  const validateFile = useCallback((file: File): boolean => {
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+    if (!allowedTypes.includes(file.type)) {
+      toast({
+        title: "Formato não suportado",
+        description: "Por favor, selecione uma imagem JPEG, PNG ou WebP",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    if (file.size > maxSize) {
+      toast({
+        title: "Arquivo muito grande",
+        description: "A imagem deve ter no máximo 10MB",
+        variant: "destructive"
+      });
+      return false;
+    }
+
+    return true;
+  }, [toast]);
+
+  // Memoized file handler
+  const handleFileSelect = useCallback((file: File) => {
+    if (!validateFile(file)) return;
+
+    logger.info('File selected for analysis', { 
+      name: file.name, 
+      size: file.size, 
+      type: file.type 
+    });
+
+    setSelectedFile(file);
+    
+    // Create preview URL
+    const url = URL.createObjectURL(file);
+    setPreviewUrl(url);
+
+    // Cleanup previous URL
+    return () => URL.revokeObjectURL(url);
+  }, [validateFile, logger]);
+
+  // File input change handler
+  const handleInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log('📁 Arquivo selecionado:', file.name, 'Tamanho:', file.size);
-      
-      if (file.size > 10 * 1024 * 1024) { // 10MB limit
-        toast({
-          title: "Arquivo muito grande",
-          description: "Por favor, selecione uma imagem menor que 10MB.",
-          variant: "destructive",
-        });
-        return;
-      }
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        console.log('✅ Imagem carregada com sucesso');
-        setSelectedImage(result);
-        setAnalysis(null);
-        setAnalysisStatus('idle');
-      };
-      reader.onerror = (e) => {
-        console.error('❌ Erro ao ler arquivo:', e);
-        toast({
-          title: "Erro ao carregar imagem",
-          description: "Não foi possível carregar a imagem selecionada.",
-          variant: "destructive",
-        });
-      };
-      reader.readAsDataURL(file);
+      handleFileSelect(file);
     }
-  };
+  }, [handleFileSelect]);
 
-  const handleAnalyze = async () => {
-    if (!selectedImage) {
-      console.log('⚠️ Nenhuma imagem selecionada');
+  // Camera capture handler
+  const handleCameraCapture = useCallback(async () => {
+    try {
+      logger.info('Attempting to access camera');
+      
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'environment' } 
+      });
+      
+      // Create video element for camera preview
+      const video = document.createElement('video');
+      video.srcObject = stream;
+      video.play();
+
+      // For now, we'll use file input as fallback
+      // In a real implementation, you'd create a camera interface
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.capture = 'environment';
+      input.onchange = (e) => {
+        const file = (e.target as HTMLInputElement).files?.[0];
+        if (file) {
+          handleFileSelect(file);
+        }
+        stream.getTracks().forEach(track => track.stop());
+      };
+      input.click();
+
+    } catch (error) {
+      logger.error('Camera access failed', { error });
+      toast({
+        title: "Câmera não disponível",
+        description: "Use o botão de upload para selecionar uma imagem",
+        variant: "destructive"
+      });
+    }
+  }, [handleFileSelect, toast, logger]);
+
+  // Analysis handler
+  const handleAnalyze = useCallback(async () => {
+    if (!selectedFile) {
+      toast({
+        title: "Nenhuma imagem selecionada",
+        description: "Por favor, selecione uma imagem para análise",
+        variant: "destructive"
+      });
       return;
     }
 
-    console.log('🔍 Iniciando análise de alimento...');
-    setAnalyzing(true);
-    setAnalysisStatus('idle');
-    
+    setIsAnalyzing(true);
+    logger.info('Starting food analysis', { fileName: selectedFile.name });
+
     try {
-      const result = await analyzeFoodImage(selectedImage);
-      console.log('📊 Análise concluída:', {
-        foods: result.foods?.length || 0,
-        totalCalories: result.totalCalories,
-        analysisType: result.analysisType
-      });
+      const result = await analyzeFood(selectedFile);
       
-      setAnalysis(result);
-      
-      // Determine analysis status for UI feedback
-      if (result.analysisType === 'openai_real' && !result.isAnalysisUnavailable) {
-        setAnalysisStatus('real');
-      } else if (result.quotaExceeded) {
-        setAnalysisStatus('quota_exceeded');
-      } else {
-        setAnalysisStatus('mock');
-      }
-
-      // Auto-save analysis
-      try {
-        const saveResult = await saveFoodAnalysis(result, selectedImage);
-        if (saveResult.success) {
-          console.log('💾 Análise salva automaticamente:', saveResult.id);
-          
-          if (onAnalysisComplete) {
-            onAnalysisComplete({ ...result, id: saveResult.id });
-          }
-
-          // Status-specific toast messages
-          if (analysisStatus === 'real') {
-            toast({
-              title: "✅ Análise IA Concluída!",
-              description: `OpenAI identificou ${result.foods.length} alimentos com ${result.totalCalories} calorias e salvou no histórico.`,
-            });
-          } else if (analysisStatus === 'quota_exceeded') {
-            toast({
-              title: "💳 Quota Excedida - Análise Alternativa",
-              description: "Quota da OpenAI temporariamente excedida. Usando análise alternativa de qualidade.",
-              variant: "destructive"
-            });
-          } else {
-            toast({
-              title: "🎭 Análise Alternativa Salva",
-              description: "Serviço de IA indisponível. Análise alternativa salva no histórico.",
-              variant: "destructive"
-            });
-          }
-        }
-      } catch (saveError: any) {
-        console.error('❌ Erro ao salvar automaticamente:', saveError);
-        
-        toast({
-          title: "⚠️ Erro ao Salvar",
-          description: `Não foi possível salvar: ${saveError.message}`,
-          variant: "destructive"
+      if (result) {
+        logger.info('Analysis completed successfully', { 
+          foodName: result.name,
+          calories: result.nutrition?.calories 
         });
+
+        setAnalysisResult(result);
+        
+        // Save to history
+        await saveAnalysisToHistory(result);
+        
+        onAnalysisComplete?.(result);
+
+        toast({
+          title: "Análise concluída!",
+          description: `Identificamos: ${result.name}`,
+        });
+      } else {
+        throw new Error('Análise retornou resultado vazio');
       }
 
-    } catch (error: any) {
-      console.error('❌ Erro ao analisar imagem:', error);
-      setAnalysisStatus('idle');
+    } catch (error) {
+      logger.error('Analysis failed', { error });
       
       toast({
-        title: "❌ Erro na Análise",
-        description: `Não foi possível analisar a imagem: ${error.message}`,
-        variant: "destructive",
+        title: "Erro na análise",
+        description: "Não foi possível analisar a imagem. Tente novamente.",
+        variant: "destructive"
       });
     } finally {
-      setAnalyzing(false);
+      setIsAnalyzing(false);
     }
-  };
+  }, [selectedFile, onAnalysisComplete, toast, logger]);
 
-  const handleReset = () => {
-    console.log('🔄 Resetando análise');
-    setSelectedImage(null);
-    setAnalysis(null);
-    setAnalysisStatus('idle');
-    if (fileInputRef.current) fileInputRef.current.value = '';
-    if (cameraInputRef.current) cameraInputRef.current.value = '';
-  };
-
-  // Status indicator component
-  const getStatusIndicator = () => {
-    switch (analysisStatus) {
-      case 'real':
-        return (
-          <div className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-            <Wifi className="w-3 h-3" />
-            IA Real
-          </div>
-        );
-      case 'quota_exceeded':
-        return (
-          <div className="flex items-center gap-1 text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
-            <AlertCircle className="w-3 h-3" />
-            Quota Excedida
-          </div>
-        );
-      case 'mock':
-        return (
-          <div className="flex items-center gap-1 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-            <WifiOff className="w-3 h-3" />
-            Alternativa
-          </div>
-        );
-      default:
-        return (
-          <div className="flex items-center gap-1 text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-            <AlertCircle className="w-3 h-3" />
-            OpenAI Vision
-          </div>
-        );
+  // Reset handler
+  const handleReset = useCallback(() => {
+    logger.info('Resetting photo analyzer');
+    
+    setSelectedFile(null);
+    setAnalysisResult(null);
+    
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
     }
-  };
+  }, [previewUrl, logger]);
+
+  // Memoized button states
+  const buttonStates = useMemo(() => ({
+    canAnalyze: selectedFile && !isAnalyzing,
+    showReset: selectedFile || analysisResult,
+    analyzeText: isAnalyzing ? 'Analisando...' : 'Analisar Alimento'
+  }), [selectedFile, isAnalyzing, analysisResult]);
+
+  // Show analysis result if available
+  if (analysisResult) {
+    return (
+      <GlobalErrorBoundary level="component" name="Photo Analyzer Results">
+        <FoodAnalysisResult 
+          result={analysisResult} 
+          onReset={handleReset}
+        />
+      </GlobalErrorBoundary>
+    );
+  }
 
   return (
-    <div className="space-y-6">
-      <Card>
+    <GlobalErrorBoundary level="component" name="Photo Analyzer">
+      <Card className="w-full max-w-md mx-auto">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-slate-600">
-            <Camera className="w-5 h-5 text-blue-600" />
-            Análise IA de Alimentos
-            <div className="ml-auto">
-              {getStatusIndicator()}
-            </div>
+          <CardTitle className="flex items-center gap-2">
+            <Camera className="w-5 h-5" />
+            Análise de Alimentos
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          {!selectedImage ? (
-            <div className="grid gap-4 md:grid-cols-2">
-              <Button
-                onClick={() => cameraInputRef.current?.click()}
-                className="h-32 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
-              >
-                <div className="flex flex-col items-center space-y-2">
-                  <Camera className="w-8 h-8" />
-                  <span className="text-lg font-semibold">Tirar Foto</span>
-                  <span className="text-sm opacity-90">Use a câmera</span>
+          {previewUrl && (
+            <div className="relative">
+              <img
+                src={previewUrl}
+                alt="Preview"
+                className="w-full h-48 object-cover rounded-lg"
+              />
+              {selectedFile && (
+                <div className="absolute bottom-2 left-2 bg-black/70 text-white px-2 py-1 rounded text-xs">
+                  {selectedFile.name}
                 </div>
-              </Button>
-              
-              <Button
-                onClick={() => fileInputRef.current?.click()}
-                variant="outline"
-                className="h-32 border-2 border-dashed border-blue-300 hover:border-blue-500 text-slate-600"
-              >
-                <div className="flex flex-col items-center space-y-2">
-                  <Upload className="w-8 h-8 text-blue-600" />
-                  <span className="text-lg font-semibold text-slate-600">Enviar Foto</span>
-                  <span className="text-sm text-slate-500">Escolher da galeria</span>
-                </div>
-              </Button>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              <div className="relative">
-                <img 
-                  src={selectedImage} 
-                  alt="Foto selecionada" 
-                  className="w-full max-h-96 object-cover rounded-lg shadow-lg"
-                />
-                <Button
-                  onClick={handleReset}
-                  size="sm"
-                  variant="secondary"
-                  className="absolute top-2 right-2"
-                >
-                  <RotateCcw className="w-4 h-4 mr-1" />
-                  Trocar Foto
-                </Button>
-              </div>
-              
-              {!analysis && (
-                <Button
-                  onClick={handleAnalyze}
-                  disabled={analyzing}
-                  className="w-full bg-gradient-to-r from-green-500 to-blue-600 hover:from-green-600 hover:to-blue-700"
-                  size="lg"
-                >
-                  {analyzing ? (
-                    <>
-                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
-                      Analisando com IA...
-                    </>
-                  ) : (
-                    <>
-                      <Camera className="w-5 h-5 mr-2" />
-                      Analisar com IA
-                    </>
-                  )}
-                </Button>
               )}
             </div>
           )}
 
-          {/* Hidden file inputs */}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
-          <input
-            ref={cameraInputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            onChange={handleFileSelect}
-            className="hidden"
-          />
+          <div className="grid grid-cols-2 gap-2">
+            <Button
+              onClick={handleCameraCapture}
+              variant="outline"
+              className="flex items-center gap-2"
+              disabled={isAnalyzing}
+            >
+              <Camera className="w-4 h-4" />
+              Câmera
+            </Button>
+            
+            <label className="cursor-pointer">
+              <Button
+                variant="outline"
+                className="w-full flex items-center gap-2"
+                disabled={isAnalyzing}
+                asChild
+              >
+                <span>
+                  <Upload className="w-4 h-4" />
+                  Upload
+                </span>
+              </Button>
+              <Input
+                type="file"
+                accept="image/*"
+                onChange={handleInputChange}
+                className="hidden"
+                disabled={isAnalyzing}
+              />
+            </label>
+          </div>
+
+          <Button
+            onClick={handleAnalyze}
+            disabled={!buttonStates.canAnalyze}
+            className="w-full"
+          >
+            {isAnalyzing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+            {buttonStates.analyzeText}
+          </Button>
+
+          {buttonStates.showReset && (
+            <Button
+              onClick={handleReset}
+              variant="outline"
+              className="w-full"
+              disabled={isAnalyzing}
+            >
+              Nova Análise
+            </Button>
+          )}
+
+          {!selectedFile && (
+            <div className="text-center text-sm text-muted-foreground">
+              <AlertCircle className="w-4 h-4 mx-auto mb-2" />
+              Tire uma foto ou selecione uma imagem do seu alimento
+            </div>
+          )}
         </CardContent>
       </Card>
-
-      {analysis && (
-        <FoodAnalysisResult 
-          analysis={analysis} 
-          onSave={async (analysisData: FoodAnalysis) => {
-            console.log('💾 Tentando salvar análise manualmente:', analysisData);
-            
-            try {
-              const saveResult = await saveFoodAnalysis(analysisData, selectedImage);
-              if (saveResult.success) {
-                toast({
-                  title: "💾 Análise Salva!",
-                  description: "A análise foi salva no seu histórico com sucesso.",
-                });
-                
-                if (onAnalysisComplete) {
-                  onAnalysisComplete({ ...analysisData, id: saveResult.id });
-                }
-              }
-            } catch (error: any) {
-              console.error('❌ Erro ao salvar análise manualmente:', error);
-              toast({
-                title: "❌ Erro ao Salvar",
-                description: `Erro: ${error.message}`,
-                variant: "destructive",
-              });
-            }
-          }}
-        />
-      )}
-    </div>
+    </GlobalErrorBoundary>
   );
-};
+});
+
+PhotoAnalyzer.displayName = 'PhotoAnalyzer';
 
 export default PhotoAnalyzer;

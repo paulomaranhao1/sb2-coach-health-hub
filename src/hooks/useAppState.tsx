@@ -4,14 +4,15 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from '@/integrations/supabase/client';
 import { UserProfile, UserStats } from '@/types';
-import { logger } from '@/utils/logger';
-import { useCache } from '@/utils/cacheManager';
+import { useLogger } from '@/utils/logger';
+import { useUserCache } from '@/hooks/useUnifiedCache';
 
 export const useAppState = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const cache = useCache();
+  const cache = useUserCache();
+  const logger = useLogger('useAppState');
   
   // Estados básicos otimizados
   const [state, setState] = useState({
@@ -27,61 +28,50 @@ export const useAppState = () => {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [userStats, setUserStats] = useState<UserStats | null>(null);
 
-  // Logger específico para este hook
-  const componentLogger = {
-    debug: (message: string, context?: any) => logger.debug(message, context, 'useAppState'),
-    info: (message: string, context?: any) => logger.info(message, context, 'useAppState'),
-    warn: (message: string, context?: any) => logger.warn(message, context, 'useAppState'),
-    error: (message: string, context?: any) => logger.error(message, context, 'useAppState')
-  };
-
   // Update individual state properties efficiently
   const updateState = useCallback((updates: Partial<typeof state>) => {
-    componentLogger.debug('Updating state', { updates });
+    logger.debug('Updating state', { updates });
     setState(prev => ({ ...prev, ...updates }));
-  }, [componentLogger]);
+  }, [logger]);
 
   // Verificar tutorial via URL apenas uma vez
   useEffect(() => {
     const shouldShowTutorial = searchParams.get('showTutorial');
     if (shouldShowTutorial === 'true') {
-      componentLogger.info('Tutorial requested via URL');
+      logger.info('Tutorial requested via URL');
       updateState({ showTutorial: true });
       // Limpar URL
       const newSearchParams = new URLSearchParams(searchParams);
       newSearchParams.delete('showTutorial');
       setSearchParams(newSearchParams, { replace: true });
     }
-  }, [searchParams, setSearchParams, updateState, componentLogger]);
+  }, [searchParams, setSearchParams, updateState, logger]);
 
   // Função otimizada para verificar perfil com cache
   const checkUserProfile = useCallback(async () => {
     const timer = logger.startTimer('checkUserProfile');
-    componentLogger.info('Checking user profile');
+    logger.info('Checking user profile');
     updateState({ isLoading: true });
     
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (!user) {
-        componentLogger.warn('No user found');
+        logger.warn('No user found');
         updateState({ showWelcome: true, isLoading: false });
         timer();
         return;
       }
 
-      componentLogger.info('User found', { email: user.email });
+      logger.info('User found', { email: user.email });
 
       // Verificar cache primeiro
-      const profileCacheKey = `profile:${user.id}`;
-      const statsCacheKey = `stats:${user.id}`;
-      
-      let profileData = cache.get<UserProfile>(profileCacheKey);
-      let statsData = cache.get<UserStats>(statsCacheKey);
+      let profileData = cache.get<UserProfile>(`profile:${user.id}`);
+      let statsData = cache.get<UserStats>(`stats:${user.id}`);
 
       // Buscar perfil se não estiver em cache
       if (!profileData) {
-        componentLogger.info('Profile not in cache, fetching from database');
+        logger.info('Profile not in cache, fetching from database');
         const { data, error } = await supabase
           .from('user_profiles')
           .select('*')
@@ -95,17 +85,14 @@ export const useAppState = () => {
         profileData = data;
         if (profileData) {
           // Salvar no cache por 10 minutos
-          cache.set(profileCacheKey, profileData, { 
-            ttl: 10 * 60 * 1000, 
-            tags: ['profile', 'persist']
-          });
+          cache.set(`profile:${user.id}`, profileData, 10 * 60 * 1000);
         }
       } else {
-        componentLogger.info('Using cached profile data');
+        logger.info('Using cached profile data');
       }
 
       if (profileData) {
-        componentLogger.info('Profile found', { name: profileData.name });
+        logger.info('Profile found', { name: profileData.name });
         setUserProfile(profileData);
         
         if (!profileData.onboarding_completed) {
@@ -116,7 +103,7 @@ export const useAppState = () => {
         
         // Buscar stats se não estiver em cache
         if (!statsData) {
-          componentLogger.info('Stats not in cache, fetching from database');
+          logger.info('Stats not in cache, fetching from database');
           try {
             const { data: stats, error } = await supabase
               .from('user_stats')
@@ -131,27 +118,24 @@ export const useAppState = () => {
             statsData = stats;
             if (statsData) {
               // Salvar no cache por 5 minutos (dados mais dinâmicos)
-              cache.set(statsCacheKey, statsData, { 
-                ttl: 5 * 60 * 1000, 
-                tags: ['stats', 'persist']
-              });
+              cache.set(`stats:${user.id}`, statsData, 5 * 60 * 1000);
             }
           } catch (error) {
-            componentLogger.error('Error loading user stats', { error });
+            logger.error('Error loading user stats', { error });
           }
         } else {
-          componentLogger.info('Using cached stats data');
+          logger.info('Using cached stats data');
         }
 
         if (statsData) {
           setUserStats(statsData);
         }
       } else {
-        componentLogger.info('Profile not found');
+        logger.info('Profile not found');
         updateState({ showWelcome: true });
       }
     } catch (error) {
-      componentLogger.error('Error checking user profile', { error });
+      logger.error('Error checking user profile', { error });
       toast({
         title: "Erro",
         description: "Erro ao carregar dados do usuário",
@@ -161,38 +145,38 @@ export const useAppState = () => {
       updateState({ isLoading: false });
       timer();
     }
-  }, [toast, updateState, cache, componentLogger]);
+  }, [toast, updateState, cache, logger]);
 
   // Handlers otimizados com useCallback
   const handleOnboardingComplete = useCallback(() => {
-    componentLogger.info('Onboarding completed');
+    logger.info('Onboarding completed');
     // Invalidar cache do perfil
-    cache.invalidateByTag('profile');
+    cache.invalidateAll();
     updateState({ showOnboarding: false, showTutorial: true });
-  }, [updateState, cache, componentLogger]);
+  }, [updateState, cache, logger]);
 
   const handleTutorialComplete = useCallback(() => {
-    componentLogger.info('Tutorial completed');
+    logger.info('Tutorial completed');
     updateState({ showTutorial: false });
-  }, [updateState, componentLogger]);
+  }, [updateState, logger]);
 
   const handleTutorialSkip = useCallback(() => {
-    componentLogger.info('Tutorial skipped');
+    logger.info('Tutorial skipped');
     updateState({ showTutorial: false });
-  }, [updateState, componentLogger]);
+  }, [updateState, logger]);
 
   const handleTabChange = useCallback((tab: string) => {
-    componentLogger.debug('Tab changed', { tab });
+    logger.debug('Tab changed', { tab });
     updateState({ activeTab: tab, showMobileMenu: false });
     setSearchParams({ tab }, { replace: true });
-  }, [setSearchParams, updateState, componentLogger]);
+  }, [setSearchParams, updateState, logger]);
 
   const handleNavigateToHome = useCallback(() => {
-    componentLogger.info('Navigating to home');
+    logger.info('Navigating to home');
     navigate('/', { replace: true });
     updateState({ activeTab: 'home' });
     setSearchParams({}, { replace: true });
-  }, [navigate, setSearchParams, updateState, componentLogger]);
+  }, [navigate, setSearchParams, updateState, logger]);
 
   // Sincronizar tab com URL apenas quando necessário
   useEffect(() => {
@@ -204,10 +188,9 @@ export const useAppState = () => {
 
   // Função para invalidar caches relacionados ao usuário
   const invalidateUserCaches = useCallback(() => {
-    componentLogger.info('Invalidating user caches');
-    cache.invalidateByTag('profile');
-    cache.invalidateByTag('stats');
-  }, [cache, componentLogger]);
+    logger.info('Invalidating user caches');
+    cache.invalidateAll();
+  }, [cache, logger]);
 
   // Memoize return object to prevent unnecessary re-renders
   return useMemo(() => ({

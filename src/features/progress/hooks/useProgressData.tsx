@@ -3,8 +3,8 @@ import { useState, useEffect, useCallback, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { handleAsyncError, getErrorMessage } from '@/utils/errorHandling';
-import { useCache } from '@/utils/cacheManager';
-import { logger } from '@/utils/logger';
+import { useUnifiedCache } from '@/hooks/useUnifiedCache';
+import { useLogger } from '@/utils/logger';
 
 export interface WeightEntry {
   id: string;
@@ -34,15 +34,8 @@ export const useProgressData = () => {
   });
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
-  const cache = useCache();
-
-  // Logger específico para este hook
-  const componentLogger = {
-    debug: (message: string, context?: any) => logger.debug(message, context, 'useProgressData'),
-    info: (message: string, context?: any) => logger.info(message, context, 'useProgressData'),
-    warn: (message: string, context?: any) => logger.warn(message, context, 'useProgressData'),
-    error: (message: string, context?: any) => logger.error(message, context, 'useProgressData')
-  };
+  const cache = useUnifiedCache();
+  const logger = useLogger('useProgressData');
 
   const loadData = useCallback(async (useCache = true) => {
     const timer = logger.startTimer('loadProgressData');
@@ -57,14 +50,14 @@ export const useProgressData = () => {
       if (useCache) {
         const cachedData = cache.get<ProgressData>(cacheKey);
         if (cachedData) {
-          componentLogger.info('Using cached progress data');
+          logger.info('Using cached progress data');
           setData(cachedData);
           timer();
           return;
         }
       }
 
-      componentLogger.info('Loading progress data from server');
+      logger.info('Loading progress data from server');
 
       // Buscar dados em paralelo para melhor performance
       const [weightResponse, statsResponse] = await Promise.all([
@@ -97,13 +90,13 @@ export const useProgressData = () => {
         priority: 'high'
       });
 
-      componentLogger.info('Progress data loaded and cached successfully', {
+      logger.info('Progress data loaded and cached successfully', {
         weightEntries: newData.weightEntries.length,
         hasStats: !!newData.userStats
       });
 
     }, (error) => {
-      componentLogger.error('Failed to load progress data', { error });
+      logger.error('Failed to load progress data', { error });
       toast({
         title: "Erro ao carregar dados",
         description: getErrorMessage(error),
@@ -113,7 +106,7 @@ export const useProgressData = () => {
 
     setLoading(false);
     timer();
-  }, [toast, cache, componentLogger]);
+  }, [toast, cache, logger]);
 
   useEffect(() => {
     loadData();
@@ -171,7 +164,7 @@ export const useProgressData = () => {
       bestWeekLoss,
       consistencyScore
     };
-  }, [data.weightEntries]);
+  }, [data.weightEntries, logger]);
 
   const shareProgress = useCallback(async () => {
     const timer = logger.startTimer('shareProgress');
@@ -185,35 +178,35 @@ export const useProgressData = () => {
 
       if (navigator.share && navigator.canShare(shareData)) {
         await navigator.share(shareData);
-        componentLogger.info('Progress shared via native share');
+        logger.info('Progress shared via native share');
       } else {
         await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
         toast({
           title: "Link copiado!",
           description: "O link foi copiado para a área de transferência."
         });
-        componentLogger.info('Progress shared via clipboard');
+        logger.info('Progress shared via clipboard');
       }
     } catch (error) {
-      componentLogger.error('Error sharing progress', { error });
+      logger.error('Error sharing progress', { error });
     } finally {
       timer();
     }
-  }, [calculations.weightLoss, calculations.currentWeightValue, toast, componentLogger]);
+  }, [calculations.weightLoss, calculations.currentWeightValue, toast, logger]);
 
   // Função para forçar refresh (limpar cache)
   const forceRefresh = useCallback(async () => {
-    componentLogger.info('Forcing data refresh');
+    logger.info('Forcing data refresh');
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
         cache.delete(`progress-${user.id}`);
       }
     } catch (error) {
-      componentLogger.error('Error getting user for cache cleanup', { error });
+      logger.error('Error getting user for cache cleanup', { error });
     }
     loadData(false);
-  }, [loadData, cache, componentLogger]);
+  }, [loadData, cache, logger]);
 
   return {
     data,
