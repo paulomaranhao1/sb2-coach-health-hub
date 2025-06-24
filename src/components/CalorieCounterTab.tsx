@@ -1,12 +1,11 @@
-
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, History, BarChart3 } from "lucide-react";
-import PhotoAnalyzer from './calorie-counter/PhotoAnalyzer';
-import AnalysisHistory from './calorie-counter/AnalysisHistory';
-import CalorieStats from './calorie-counter/CalorieStats';
-import CalorieCounterHeader from './calorie-counter/CalorieCounterHeader';
+import PhotoAnalyzer from "@/features/calorie-counter/components/PhotoAnalyzer";
+import AnalysisHistory from "./calorie-counter/AnalysisHistory";
+import CalorieStats from "./calorie-counter/CalorieStats";
+import CalorieCounterHeader from "./calorie-counter/CalorieCounterHeader";
 
 const CalorieCounterTab = () => {
   const [refreshHistoryTrigger, setRefreshHistoryTrigger] = useState(0);

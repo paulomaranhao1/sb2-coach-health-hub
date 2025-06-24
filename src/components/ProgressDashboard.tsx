@@ -1,7 +1,6 @@
-
-import { useProgressData } from "@/hooks/useProgressData";
-import ProgressHeader from "./progress/ProgressHeader";
-import GoalProgressCard from "./progress/GoalProgressCard";
+import { useProgressData } from "@/features/progress/hooks/useProgressData";
+import ProgressHeader from "@/features/progress/components/ProgressHeader";
+import GoalProgressCard from "@/features/progress/components/GoalProgressCard";
 import UserStatsCards from "./progress/UserStatsCards";
 import WeightEvolutionChart from "./progress/WeightEvolutionChart";
 import WeeklyAdherenceChart from "./progress/WeeklyAdherenceChart";
