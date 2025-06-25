@@ -17,8 +17,7 @@ const ProgressHeader = ({ hasData, onShare }: ProgressHeaderProps) => {
           {hasData && (
             <div className="flex gap-2">
               <Button onClick={onShare} size="sm" variant="outline">
-                <Share2 className="w-4 h-4 mr-1" />
-                Compartilhar
+                <Share2 className="w-4 h-4" />
               </Button>
             </div>
           )}
