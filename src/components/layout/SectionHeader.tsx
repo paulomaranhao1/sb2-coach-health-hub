@@ -16,7 +16,7 @@ const SectionHeader = ({
 }: SectionHeaderProps) => {
   return <div className="mb-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3 px-[24px]">
+        <div className="flex items-center gap-3 px-[12px]">
           <Icon className="w-8 h-8 text-red-600" />
           <h1 className="font-bold py-0 px-0 text-2xl text-slate-950">
             {title}
