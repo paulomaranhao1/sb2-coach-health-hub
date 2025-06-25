@@ -6,7 +6,7 @@ const GamificationCards = ({
   userStats
 }: GamificationCardsProps) => {
   if (!userStats) return null;
-  return <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 py-[10px] px-[10px] bg-slate-200">
+  return <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 py-[10px] px-[10px] bg-slate-200 rounded-2xl">
       <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg flex items-center gap-2 text-slate-800 dark:text-slate-200">
