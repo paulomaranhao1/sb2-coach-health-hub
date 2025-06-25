@@ -1,10 +1,7 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp } from "lucide-react";
-
 const FastingEducationTab = () => {
-  return (
-    <Card>
+  return <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <TrendingUp className="w-5 h-5" />
@@ -23,7 +20,7 @@ const FastingEducationTab = () => {
                   <p className="text-xs text-gray-600">Absorção de nutrientes</p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
+              <div className="flex items-center gap-3 p-3 rounded-lg bg-slate-50">
                 <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
                 <div>
                   <p className="font-medium text-sm">4-12h: Glicogênio</p>
@@ -70,8 +67,6 @@ const FastingEducationTab = () => {
           </div>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default FastingEducationTab;
