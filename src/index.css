@@ -4,174 +4,67 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Garmin-Inspired Design System - SB2coach.ai */
-@import './styles/design-system/garmin-inspired.css';
+/* SB2 Coach - Modern Design System */
+@import './styles/design-system/index.css';
 
+/* Legacy imports - will be gradually removed */
+@import './styles/base/reset.css';
+@import './styles/base/scrollbar.css';
+@import './styles/base/animations.css';
+@import './styles/layout/containers.css';
+@import './styles/responsive/mobile.css';
+@import './styles/accessibility/media-queries.css';
+@import './styles/overrides/shadow-fixes.css';
+
+/* Remove conflicting styles */
 @layer base {
-  /* Global Reset & Garmin Foundation */
+  /* Force full width layout globally */
   * {
     box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
-  
-  html, body, #root {
-    height: 100%;
-    width: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
   }
   
   body {
-    background-color: rgb(18, 18, 18) !important;
-    color: rgb(255, 255, 255) !important;
-    line-height: 1.5;
-    font-weight: 400;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    padding: 0 !important;
+    margin: 0 !important;
+    width: 100% !important;
   }
   
-  /* Dark Theme Typography */
-  h1, h2, h3, h4, h5, h6 {
-    color: rgb(255, 255, 255) !important;
-    font-weight: 700;
-    letter-spacing: -0.025em;
-    line-height: 1.2;
+  main, section, .container, [class*="container"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    max-width: none !important;
+    width: 100% !important;
   }
   
-  h1 { font-size: 2.25rem; }
-  h2 { font-size: 1.875rem; }
-  h3 { font-size: 1.5rem; }
-  h4 { font-size: 1.25rem; }
-  
-  p, span, div {
-    color: rgb(174, 174, 178) !important;
-    font-weight: 500;
-    line-height: 1.6;
+  /* Override any remaining yellow/amber references */
+  *[class*="yellow"], *[class*="amber"],
+  *[style*="yellow"], *[style*="amber"] {
+    background-color: rgb(156 163 175) !important; /* gray-400 */
+    color: rgb(17 24 39) !important; /* gray-900 */
+    border-color: rgb(156 163 175) !important;
   }
   
-  .text-primary {
-    color: rgb(255, 255, 255) !important;
+  /* Ensure perfect text contrast everywhere */
+  .text-balance {
+    text-wrap: balance;
   }
   
-  .text-secondary {
-    color: rgb(174, 174, 178) !important;
+  /* Remove any conflicting box-shadows */
+  * {
+    box-shadow: revert !important;
   }
   
-  .text-muted {
-    color: rgb(124, 124, 128) !important;
+  /* Apply design system shadows */
+  .card, 
+  [class*="Card"],
+  .card-container {
+    box-shadow: var(--shadow-soft) !important;
   }
   
-  /* Dark Theme Links */
-  a {
-    color: rgb(0, 122, 255) !important;
-    font-weight: 600;
-    text-decoration: none;
-    transition: opacity 0.2s ease;
-  }
-  
-  a:hover {
-    opacity: 0.8;
-  }
-  
-  /* Dark Form Elements */
-  input, textarea, select {
-    background-color: rgb(28, 28, 30) !important;
-    color: rgb(255, 255, 255) !important;
-    border: 2px solid rgb(58, 58, 60) !important;
-    border-radius: 12px !important;
-    padding: 0.75rem !important;
-    font-weight: 500;
-    transition: all 0.2s ease;
-  }
-  
-  input:focus, textarea:focus, select:focus {
-    outline: none !important;
-    border-color: rgb(0, 122, 255) !important;
-    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1) !important;
-  }
-  
-  input::placeholder, textarea::placeholder {
-    color: rgb(124, 124, 128) !important;
-    font-weight: 400;
-  }
-  
-  label {
-    color: rgb(255, 255, 255) !important;
-    font-weight: 600;
-    font-size: 0.875rem;
-  }
-  
-  /* Smooth Scrolling */
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  /* Dark Selection Colors */
-  ::selection {
-    background-color: rgba(0, 122, 255, 0.3);
-    color: rgb(255, 255, 255);
-  }
-  
-  /* Focus Outline */
-  :focus-visible {
-    outline: 2px solid rgb(0, 122, 255);
-    outline-offset: 2px;
-  }
-  
-  :focus:not(:focus-visible) {
-    outline: none;
-  }
-}
-
-@layer components {
-  /* Dark Theme Utilities */
-  .container {
-    max-width: 100%;
-    margin: 0 auto;
-    padding: 0;
-  }
-  
-  .glassmorphism {
-    background: rgba(28, 28, 30, 0.8);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(58, 58, 60, 0.3);
-  }
-  
-  .gradient-text {
-    background: linear-gradient(135deg, rgb(0, 122, 255), rgb(175, 82, 222));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  
-  .shadow-dark {
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  }
-  
-  .shadow-dark-md {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  }
-  
-  .shadow-dark-lg {
-    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
-  }
-  
-  /* Animation Utilities */
-  .animate-fade-in {
-    animation: fadeIn 0.3s ease-out;
-  }
-  
-  .animate-slide-up {
-    animation: slideUp 0.3s ease-out;
-  }
-  
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+  button:hover,
+  .btn:hover {
+    box-shadow: var(--shadow-medium) !important;
   }
 }

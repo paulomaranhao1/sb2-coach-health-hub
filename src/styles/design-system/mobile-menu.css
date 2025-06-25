@@ -1,127 +1,108 @@
 
-/* Mobile Menu - Modern Dark Theme */
+/* Mobile Menu - Professional Blue & Gray Theme */
 @layer components {
   .mobile-menu {
-    background: rgb(17 24 39) !important; /* Dark gray-900 background */
-    color: rgb(243 244 246) !important; /* Light gray-100 text */
-    border-right: 1px solid rgb(55 65 81) !important; /* Gray-700 border */
+    background: rgb(255 255 255) !important; /* Pure white background */
+    color: rgb(51 65 85) !important; /* Slate-700 text */
+    border-right: 1px solid rgb(226 232 240) !important; /* Light border */
     backdrop-filter: none !important;
   }
   
   .mobile-menu-header {
-    background: rgb(17 24 39) !important; /* Same dark background */
-    border-bottom: 1px solid rgb(55 65 81) !important; /* Gray-700 border */
+    background: rgb(59 130 246) !important; /* Professional blue header */
+    border-bottom: 1px solid rgb(37 99 235) !important; /* Darker blue border */
     backdrop-filter: none !important;
-    padding: 1.5rem 1rem !important;
   }
   
   .mobile-menu-header * {
-    color: rgb(243 244 246) !important; /* Light text */
+    color: white !important;
   }
   
   .mobile-menu-item {
-    color: rgb(209 213 219) !important; /* Gray-300 text */
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0.5rem !important;
+    color: rgb(51 65 85) !important; /* Slate-700 text */
+    background: rgb(248 250 252) !important; /* Very light gray background */
+    border: 1px solid rgb(226 232 240) !important; /* Light border */
+    border-radius: 0.75rem !important;
     transition: all 0.2s ease;
-    margin-bottom: 0.125rem !important;
-    padding: 0.875rem 1rem !important;
-    font-weight: 500 !important;
+    margin-bottom: 0.25rem !important;
+    padding: 0.75rem !important;
   }
   
   .mobile-menu-item:hover {
-    background: rgb(31 41 55) !important; /* Gray-800 background */
-    color: rgb(243 244 246) !important; /* Light text */
-    transform: none;
+    background: rgb(239 246 255) !important; /* Light blue background */
+    border-color: rgb(191 219 254) !important; /* Blue border */
+    color: rgb(29 78 216) !important; /* Blue text */
+    transform: translateY(-1px);
   }
   
   .mobile-menu-item.active {
-    background: rgb(31 41 55) !important; /* Gray-800 background */
-    color: rgb(243 244 246) !important; /* Light text */
-    border: none !important;
-    box-shadow: none !important;
+    background: rgb(59 130 246) !important; /* Blue background */
+    color: white !important;
+    border-color: rgb(59 130 246) !important;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25) !important;
   }
   
   .mobile-menu-item.active * {
-    color: rgb(243 244 246) !important;
+    color: white !important;
   }
   
   .mobile-menu-icon {
-    background: rgb(55 65 81) !important; /* Gray-700 icon background */
-    color: rgb(156 163 175) !important; /* Gray-400 icon */
-    border-radius: 0.375rem !important;
+    background: rgb(241 245 249) !important; /* Light gray icon background */
+    color: rgb(100 116 139) !important; /* Medium gray icon */
+    border-radius: 0.5rem !important;
     padding: 0.5rem !important;
   }
   
   .mobile-menu-item.active .mobile-menu-icon {
-    background: rgb(59 130 246) !important; /* Blue-500 for active */
+    background: rgba(255, 255, 255, 0.2) !important;
     color: white !important;
   }
   
   .mobile-menu-item:hover .mobile-menu-icon {
-    background: rgb(75 85 99) !important; /* Gray-600 on hover */
-    color: rgb(209 213 219) !important; /* Gray-300 icon */
+    background: rgb(219 234 254) !important; /* Light blue icon background */
+    color: rgb(29 78 216) !important; /* Blue icon */
   }
   
   .mobile-menu-separator {
-    border-color: rgb(55 65 81) !important; /* Gray-700 */
-    margin: 1rem 0 !important;
+    border-color: rgb(226 232 240) !important;
+    margin: 0.75rem 0 !important;
   }
   
   .mobile-menu-section-title {
-    color: rgb(107 114 128) !important; /* Gray-500 */
+    color: rgb(100 116 139) !important;
     font-weight: 600;
     font-size: 0.75rem;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    background: rgb(17 24 39) !important;
-    padding: 0.75rem 0 0.5rem 0 !important;
-    margin-bottom: 0.5rem !important;
+    background: rgb(255 255 255) !important;
+    padding: 0.5rem 0 !important;
   }
   
   .mobile-menu-footer {
-    background: rgb(17 24 39) !important;
-    border-top: 1px solid rgb(55 65 81) !important;
+    background: rgb(248 250 252) !important;
+    border-top: 1px solid rgb(226 232 240) !important;
     padding: 1rem !important;
   }
   
   .mobile-menu-footer * {
-    color: rgb(107 114 128) !important; /* Gray-500 */
+    color: rgb(100 116 139) !important;
   }
   
   /* Close button styling */
   .mobile-menu-header button {
-    color: rgb(156 163 175) !important; /* Gray-400 */
-    background: rgb(55 65 81) !important; /* Gray-700 */
-    border-radius: 0.375rem !important;
-    padding: 0.5rem !important;
+    color: white !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-radius: 0.5rem !important;
   }
   
   .mobile-menu-header button:hover {
-    background: rgb(75 85 99) !important; /* Gray-600 */
-    color: rgb(209 213 219) !important; /* Gray-300 */
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: white !important;
   }
   
   /* Overlay */
   .mobile-menu-overlay {
-    background: rgba(0, 0, 0, 0.75) !important;
-    backdrop-filter: blur(8px) !important;
-  }
-  
-  /* Special styling for featured items */
-  .mobile-menu-featured {
-    background: linear-gradient(135deg, rgb(59 130 246), rgb(37 99 235)) !important;
-    color: white !important;
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3) !important;
-  }
-  
-  .mobile-menu-featured * {
-    color: white !important;
-  }
-  
-  .mobile-menu-featured .mobile-menu-icon {
-    background: rgba(255, 255, 255, 0.2) !important;
-    color: white !important;
+    background: rgba(0, 0, 0, 0.5) !important;
+    backdrop-filter: blur(4px) !important;
   }
 }

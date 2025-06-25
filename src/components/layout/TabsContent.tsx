@@ -1,13 +1,17 @@
 
 import { Tabs, TabsContent } from "@/components/ui/tabs";
-import ModernHomeScreen from "@/components/modern/ModernHomeScreen";
+import WeightTracker from "@/components/WeightTracker";
 import SupplementReminder from "@/components/SupplementReminder";
 import AIChat from "@/components/AIChat";
 import ProgressDashboard from "@/components/ProgressDashboard";
 import UserProfile from "@/components/UserProfile";
 import AppSettings from "@/components/AppSettings";
+import DailyHabit from "@/components/DailyHabit";
 import GamificationSystem from "@/components/GamificationSystem";
 import IntermittentFasting from "@/components/IntermittentFasting";
+import TabNavigation from "@/components/layout/TabNavigation";
+import MotivationalGreeting from "@/components/MotivationalGreeting";
+import ComingSoonFeatures from "@/components/ComingSoonFeatures";
 import StatisticsOverview from "@/components/statistics/StatisticsOverview";
 import CalorieCounterTab from "@/components/CalorieCounterTab";
 import NewFeaturesScreen from "@/components/NewFeaturesScreen";
@@ -30,47 +34,51 @@ const TabsContentComponent = ({
 }: TabsContentProps) => {
   return (
     <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabsContent value="home" className="mt-0">
-        <ModernHomeScreen />
+      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+
+      <TabsContent value="home" className="space-y-6">
+        <MotivationalGreeting />
+        <DailyHabit />
+        <ComingSoonFeatures />
       </TabsContent>
 
-      <TabsContent value="chat" className="mt-0">
+      <TabsContent value="chat">
         <AIChat />
       </TabsContent>
 
-      <TabsContent value="calorie-counter" className="mt-0">
+      <TabsContent value="calorie-counter" className="space-y-6">
         <CalorieCounterTab />
       </TabsContent>
 
-      <TabsContent value="intermittent-fasting" className="mt-0">
+      <TabsContent value="intermittent-fasting" className="space-y-6">
         <IntermittentFasting />
       </TabsContent>
 
-      <TabsContent value="gamification" className="mt-0">
+      <TabsContent value="gamification">
         <GamificationSystem />
       </TabsContent>
 
-      <TabsContent value="supplement" className="mt-0">
+      <TabsContent value="supplement">
         <SupplementReminder />
       </TabsContent>
 
-      <TabsContent value="roadmap" className="mt-0">
+      <TabsContent value="roadmap">
         <Roadmap />
       </TabsContent>
 
-      <TabsContent value="statistics" className="mt-0">
+      <TabsContent value="statistics" className="space-y-6">
         <StatisticsOverview userProfile={userProfile} userStats={userStats} />
       </TabsContent>
 
-      <TabsContent value="profile" className="mt-0">
+      <TabsContent value="profile">
         <UserProfile onNavigateToHome={onNavigateToHome} />
       </TabsContent>
 
-      <TabsContent value="settings" className="mt-0">
+      <TabsContent value="settings">
         <AppSettings />
       </TabsContent>
 
-      <TabsContent value="new-features" className="mt-0">
+      <TabsContent value="new-features">
         <NewFeaturesScreen onBack={() => setActiveTab('home')} />
       </TabsContent>
     </Tabs>
