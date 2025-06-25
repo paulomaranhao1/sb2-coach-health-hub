@@ -13,7 +13,7 @@ const TabNavigation = ({ activeTab, setActiveTab }: TabNavigationProps) => {
     { value: "chat", label: "AI Coach", icon: Brain },
     { value: "calorie-counter", label: "Foto Caloria", icon: Camera },
     { value: "intermittent-fasting", label: "Jejum Intermitente", icon: Clock },
-    { value: "supplement", label: "Minha Suplementação", icon: Pill },
+    { value: "supplement", label: "Meu SB2 Turbo", icon: Pill },
     { value: "statistics", label: "Estatísticas", icon: BarChart3 },
     { value: "gamification", label: "Conquistas", icon: Trophy }
   ];
