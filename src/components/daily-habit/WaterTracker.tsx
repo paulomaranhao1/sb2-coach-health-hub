@@ -20,7 +20,7 @@ const WaterTracker = () => {
   return <Card className="border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden bg-gradient-to-br from-blue-50 to-cyan-50">
       <CardContent className="p-5 bg-slate-600">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
-          <Button onClick={addGlass} variant="outline" className="h-16 border-2 border-blue-400 text-blue-700 hover:bg-blue-50 bg-white transition-all duration-300 flex flex-col items-center justify-center gap-1">
+          <Button onClick={addGlass} variant="outline" className="h-16 border-2 border-blue-400 text-blue-700 hover:bg-blue-50 bg-white transition-all duration-300 flex flex-col items-center justify-center gap-1 rounded-xl">
             <Droplets className="w-5 h-5 flex-shrink-0" />
             <div className="text-center leading-tight">
               <div className="font-semibold text-sm">COPO</div>
@@ -28,7 +28,7 @@ const WaterTracker = () => {
             </div>
           </Button>
 
-          <Button onClick={addBottle} variant="outline" className="h-16 border-2 border-cyan-400 text-cyan-700 hover:bg-cyan-50 bg-white transition-all duration-300 flex flex-col items-center justify-center gap-1">
+          <Button onClick={addBottle} variant="outline" className="h-16 border-2 border-cyan-400 text-cyan-700 hover:bg-cyan-50 bg-white transition-all duration-300 flex flex-col items-center justify-center gap-1 rounded-xl">
             <Droplets className="w-5 h-5 flex-shrink-0" />
             <div className="text-center leading-tight">
               <div className="font-semibold text-sm">GARRAFA</div>
@@ -40,15 +40,15 @@ const WaterTracker = () => {
         {/* Informações detalhadas da água */}
         <div className="space-y-3">
           <div className="flex justify-between items-center text-sm">
-            <span className="font-semibold text-slate-950">Consumido hoje:</span>
-            <span className="text-base font-semibold text-left text-slate-950">
+            <span className="font-semibold text-slate-300">Consumido hoje:</span>
+            <span className="text-base font-semibold text-left text-slate-300">
               {waterConsumedMl}ml ({waterCount} copos + {bottleCount} garrafas)
             </span>
           </div>
           
           <div className="flex justify-between items-center text-sm">
             <span className="text-slate-600">Meta diária:</span>
-            <span className="font-semibold text-gray-800">
+            <span className="font-semibold text-slate-300">
               {recommendedWaterMl}ml
             </span>
           </div>
