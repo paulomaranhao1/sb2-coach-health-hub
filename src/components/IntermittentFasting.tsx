@@ -43,10 +43,7 @@ const IntermittentFasting = () => {
 
   return (
     <div className="space-y-6">
-      <FastingHeader 
-        title="⏰ Jejum Intermitente Avançado" 
-        description="Transforme sua saúde com o poder do jejum intermitente científico" 
-      />
+      <FastingHeader />
 
       {currentFast ? (
         <AdvancedFastingTimer

@@ -1,115 +1,204 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bell, Lightbulb, MessageCircle } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Clock, CheckCircle, AlertCircle, Settings } from "lucide-react";
+import { toast } from "sonner";
 import SupplementTimeConfig from "./daily-habit/SupplementTimeConfig";
-import ReminderSettings from "./ReminderSettings";
+import SupplementHeader from "./daily-habit/SupplementHeader";
 
 const SupplementReminder = () => {
-  const importantTips = [
-    {
-      icon: "🤖",
-      title: "Chat IA Personalizado",
-      description: "Ative o recurso de Chat IA para receber recomendações personalizadas baseadas no seu perfil e objetivos",
-      color: "bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-700"
-    },
-    {
-      icon: "💧",
-      title: "Hidratação Essencial",
-      description: "Tome sempre com água e mantenha-se hidratado - mínimo 2 litros por dia",
-      color: "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-700"
-    },
-    {
-      icon: "🥗",
-      title: "Alimentação Balanceada",
-      description: "Combine com uma dieta equilibrada rica em proteínas, fibras e nutrientes para potencializar os resultados",
-      color: "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-700"
-    },
-    {
-      icon: "🏃‍♀️",
-      title: "Atividade Física Regular",
-      description: "Pratique exercícios pelo menos 3x por semana - combine cardio e musculação para melhores resultados",
-      color: "bg-orange-50 dark:bg-orange-900/20 border-orange-200 dark:border-orange-700"
-    },
-    {
-      icon: "😴",
-      title: "Sono de Qualidade",
-      description: "Durma de 7-9 horas por noite - o sono adequado é fundamental para a recuperação e metabolismo",
-      color: "bg-indigo-50 dark:bg-indigo-900/20 border-indigo-200 dark:border-indigo-700"
-    },
-    {
-      icon: "📊",
-      title: "Monitore seu Progresso",
-      description: "Registre seu peso regularmente e acompanhe suas métricas no app para manter a motivação",
-      color: "bg-pink-50 dark:bg-pink-900/20 border-pink-200 dark:border-pink-700"
+  const [morningTaken, setMorningTaken] = useState(false);
+  const [eveningTaken, setEveningTaken] = useState(false);
+  const [showConfig, setShowConfig] = useState(false);
+  const [currentTime, setCurrentTime] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 60000);
+
+    // Load today's supplement status
+    const today = new Date().toDateString();
+    const savedStatus = localStorage.getItem(`supplement_status_${today}`);
+    if (savedStatus) {
+      const status = JSON.parse(savedStatus);
+      setMorningTaken(status.morning || false);
+      setEveningTaken(status.evening || false);
     }
-  ];
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const markAsTaken = (period: 'morning' | 'evening') => {
+    const today = new Date().toDateString();
+    const currentStatus = {
+      morning: morningTaken,
+      evening: eveningTaken,
+      [period]: true
+    };
+    
+    localStorage.setItem(`supplement_status_${today}`, JSON.stringify(currentStatus));
+    
+    if (period === 'morning') {
+      setMorningTaken(true);
+      toast.success("💊 SB2 TURBO da manhã registrado!");
+    } else {
+      setEveningTaken(true);
+      toast.success("💊 SB2 TURBO da noite registrado!");
+    }
+  };
+
+  const getSupplementTimes = () => {
+    const saved = localStorage.getItem('sb2_supplement_times');
+    return saved ? JSON.parse(saved) : { morning: '08:00', evening: '20:00' };
+  };
+
+  const times = getSupplementTimes();
+  const currentHour = currentTime.getHours();
+  const currentMinute = currentTime.getMinutes();
+  const currentTimeString = `${currentHour.toString().padStart(2, '0')}:${currentMinute.toString().padStart(2, '0')}`;
+
+  const isTimeForMorning = currentTimeString >= times.morning && !morningTaken;
+  const isTimeForEvening = currentTimeString >= times.evening && !eveningTaken;
 
   return (
     <div className="space-y-6">
-      {/* Configuração de Horários */}
-      <SupplementTimeConfig />
+      <SupplementHeader />
 
-      <Card className="bg-gradient-to-r from-red-500 to-red-600 text-white">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-white">
-            <Bell className="w-5 h-5" />
-            SB2 Turbo - Rotina Diária
-          </CardTitle>
-          <CardDescription className="text-white/90">
-            2 cápsulas por dia conforme orientação - lembretes automáticos
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div className="bg-white/20 rounded-lg p-4">
-              <h4 className="font-semibold mb-2 text-white">Manhã</h4>
-              <p className="text-sm text-white/90">1 cápsula antes do café</p>
-              <p className="text-xs text-white/80 mt-1">Lembrete automático no horário configurado</p>
-            </div>
-            <div className="bg-white/20 rounded-lg p-4">
-              <h4 className="font-semibold mb-2 text-white">Noite</h4>
-              <p className="text-sm text-white/90">1 cápsula antes do jantar</p>
-              <p className="text-xs text-white/80 mt-1">Lembrete automático no horário configurado</p>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5 text-yellow-500" />
-            Dicas Importantes para Melhores Resultados
-          </CardTitle>
-          <CardDescription>
-            Siga essas orientações para maximizar os benefícios do SB2 TURBO
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {importantTips.map((tip, index) => (
-            <div key={index} className={`flex items-start gap-3 p-4 rounded-lg border ${tip.color}`}>
-              <div className="text-2xl flex-shrink-0">{tip.icon}</div>
-              <div className="flex-1">
-                <p className="font-semibold text-slate-900 dark:text-slate-100 mb-1">{tip.title}</p>
-                <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">{tip.description}</p>
+      <div className="grid gap-6">
+        {/* Status Cards */}
+        <div className="grid md:grid-cols-2 gap-4">
+          <Card className={`border-2 ${morningTaken ? 'border-green-200 bg-green-50' : isTimeForMorning ? 'border-orange-200 bg-orange-50' : 'border-gray-200'}`}>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  Manhã ({times.morning})
+                </CardTitle>
+                {morningTaken ? (
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <CheckCircle className="w-4 h-4 mr-1" />
+                    Tomado
+                  </Badge>
+                ) : isTimeForMorning ? (
+                  <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+                    <AlertCircle className="w-4 h-4 mr-1" />
+                    Hora de tomar!
+                  </Badge>
+                ) : (
+                  <Badge variant="outline">Pendente</Badge>
+                )}
               </div>
-            </div>
-          ))}
-          
-          <div className="mt-6 p-4 bg-gradient-to-r from-purple-100 to-indigo-100 dark:from-purple-900/30 dark:to-indigo-900/30 rounded-lg border border-purple-200 dark:border-purple-700">
-            <div className="flex items-center gap-3">
-              <MessageCircle className="w-6 h-6 text-purple-600 dark:text-purple-400 flex-shrink-0" />
-              <div>
-                <p className="font-semibold text-purple-800 dark:text-purple-200 mb-1">💡 Dica Especial</p>
-                <p className="text-sm text-purple-700 dark:text-purple-300">
-                  Use o Chat IA regularmente para receber orientações personalizadas sobre dieta, exercícios e otimização dos seus resultados com SB2 TURBO!
+            </CardHeader>
+            <CardContent>
+              {!morningTaken && (
+                <Button 
+                  onClick={() => markAsTaken('morning')}
+                  className="w-full"
+                  variant={isTimeForMorning ? "default" : "outline"}
+                >
+                  Marcar como tomado
+                </Button>
+              )}
+              {morningTaken && (
+                <p className="text-green-600 font-medium text-center">
+                  ✅ SB2 TURBO da manhã já foi tomado hoje!
                 </p>
+              )}
+            </CardContent>
+          </Card>
+
+          <Card className={`border-2 ${eveningTaken ? 'border-green-200 bg-green-50' : isTimeForEvening ? 'border-orange-200 bg-orange-50' : 'border-gray-200'}`}>
+            <CardHeader className="pb-3">
+              <div className="flex items-center justify-between">
+                <CardTitle className="text-lg flex items-center gap-2">
+                  <Clock className="w-5 h-5" />
+                  Noite ({times.evening})
+                </CardTitle>
+                {eveningTaken ? (
+                  <Badge variant="secondary" className="bg-green-100 text-green-800">
+                    <CheckCircle className="w-4 h-4 mr-1" />
+                    Tomado
+                  </Badge>
+                ) : isTimeForEvening ? (
+                  <Badge variant="secondary" className="bg-orange-100 text-orange-800">
+                    <AlertCircle className="w-4 h-4 mr-1" />
+                    Hora de tomar!
+                  </Badge>
+                ) : (
+                  <Badge variant="outline">Pendente</Badge>
+                )}
+              </div>
+            </CardHeader>
+            <CardContent>
+              {!eveningTaken && (
+                <Button 
+                  onClick={() => markAsTaken('evening')}
+                  className="w-full"
+                  variant={isTimeForEvening ? "default" : "outline"}
+                >
+                  Marcar como tomado
+                </Button>
+              )}
+              {eveningTaken && (
+                <p className="text-green-600 font-medium text-center">
+                  ✅ SB2 TURBO da noite já foi tomado hoje!
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Configuration */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="flex items-center gap-2">
+                <Settings className="w-5 h-5" />
+                Configurações
+              </CardTitle>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowConfig(!showConfig)}
+              >
+                {showConfig ? 'Ocultar' : 'Configurar Horários'}
+              </Button>
+            </div>
+          </CardHeader>
+          {showConfig && (
+            <CardContent>
+              <SupplementTimeConfig />
+            </CardContent>
+          )}
+        </Card>
+
+        {/* Instructions */}
+        <Card className="border-blue-200 bg-blue-50">
+          <CardHeader>
+            <CardTitle className="text-blue-800">💡 Como usar o SB2 TURBO</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid gap-3">
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">🌅</span>
+                <div>
+                  <h4 className="font-semibold text-blue-800">Manhã</h4>
+                  <p className="text-blue-600 text-sm">Tome 1 cápsula antes do café da manhã com água</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <span className="text-2xl">🌙</span>
+                <div>
+                  <h4 className="font-semibold text-blue-800">Noite</h4>
+                  <p className="text-blue-600 text-sm">Tome 1 cápsula antes do jantar com água</p>
+                </div>
               </div>
             </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      <ReminderSettings />
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
