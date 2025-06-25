@@ -1,14 +1,13 @@
-
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-
 interface StatusCardsProps {
   userProfile: any;
   userStats: any;
 }
-
-const StatusCards = ({ userProfile, userStats }: StatusCardsProps) => {
-  return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+const StatusCards = ({
+  userProfile,
+  userStats
+}: StatusCardsProps) => {
+  return <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 bg-inherit">
       <Card className="glass border-0 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
         <CardHeader className="pb-3">
           <CardTitle className="text-lg bg-gradient-to-r from-red-600 to-red-700 dark:from-red-400 dark:to-red-500 bg-clip-text text-transparent">
@@ -42,10 +41,7 @@ const StatusCards = ({ userProfile, userStats }: StatusCardsProps) => {
             {userProfile?.goal_weight ? `${userProfile.goal_weight} kg` : '--'}
           </div>
           <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">
-            {userProfile?.weight && userProfile?.goal_weight 
-              ? `Faltam ${(userProfile.weight - userProfile.goal_weight).toFixed(1)}kg` 
-              : 'Defina sua meta'
-            }
+            {userProfile?.weight && userProfile?.goal_weight ? `Faltam ${(userProfile.weight - userProfile.goal_weight).toFixed(1)}kg` : 'Defina sua meta'}
           </p>
         </CardContent>
       </Card>
@@ -66,8 +62,6 @@ const StatusCards = ({ userProfile, userStats }: StatusCardsProps) => {
           <p className="text-sm text-slate-700 dark:text-slate-300 mt-1">Usando SB2FIT</p>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default StatusCards;
