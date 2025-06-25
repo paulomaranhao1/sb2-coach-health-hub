@@ -1,24 +1,15 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Shield, Eye, Database, Phone, Mail, Lock, Users, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
       <header className="border-b border-slate-200/60 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40 bg-white/95">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600"
-            >
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600">
               <ArrowLeft className="w-4 h-4" />
               Voltar
             </Button>
@@ -44,10 +35,10 @@ const PrivacyPolicy = () => {
             </p>
           </CardHeader>
           
-          <CardContent className="p-8 space-y-10">
+          <CardContent className="p-8 space-y-10 px-0 py-0">
             {/* Introdução */}
             <section className="text-center">
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 px-0 py-[20px]">
                 <AlertCircle className="w-8 h-8 text-blue-600 mx-auto mb-3" />
                 <p className="text-slate-700 text-lg leading-relaxed">
                   Esta Política de Privacidade descreve como o <strong>SB2coach.ai</strong> coleta, 
@@ -148,7 +139,7 @@ const PrivacyPolicy = () => {
                 </h2>
               </div>
               
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6">
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 px-[4px]">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="font-semibold text-lg text-slate-800 mb-3">
@@ -184,12 +175,10 @@ const PrivacyPolicy = () => {
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Shield className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">
-                  3. Compartilhamento de Dados
-                </h2>
+                <h2 className="text-2xl font-bold text-slate-800">3. Seus Dados</h2>
               </div>
               
-              <div className="bg-green-50 border border-green-200 rounded-lg p-6">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-6 px-[4px]">
                 <p className="text-xl font-semibold text-green-800">
                   NÃO VENDEMOS SEUS DADOS PESSOAIS
                 </p>
@@ -222,7 +211,7 @@ const PrivacyPolicy = () => {
                 </h2>
               </div>
               
-              <div className="bg-purple-50 rounded-lg p-6">
+              <div className="bg-purple-50 rounded-lg p-6 px-[4px]">
                 <p className="text-slate-700 mb-6 text-lg">
                   Conforme a Lei Geral de Proteção de Dados (LGPD), você possui os seguintes direitos:
                 </p>
@@ -312,7 +301,7 @@ const PrivacyPolicy = () => {
                 </h2>
               </div>
               
-              <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-lg p-6">
+              <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-lg p-6 px-0">
                 <p className="text-slate-700 mb-4 text-lg">
                   Para exercer seus direitos ou esclarecer dúvidas sobre esta política:
                 </p>
@@ -335,7 +324,7 @@ const PrivacyPolicy = () => {
 
             {/* Footer da Política */}
             <section className="text-center">
-              <div className="bg-slate-100 rounded-lg p-6">
+              <div className="bg-slate-100 rounded-lg p-6 px-[4px]">
                 <h3 className="text-lg font-semibold text-slate-800 mb-3">
                   Alterações nesta Política
                 </h3>
@@ -349,8 +338,6 @@ const PrivacyPolicy = () => {
           </CardContent>
         </Card>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default PrivacyPolicy;
