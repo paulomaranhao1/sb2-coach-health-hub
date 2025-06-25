@@ -3,7 +3,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle2, Circle, Clock, Sparkles, Camera, Brain, Target, Trophy, Heart, Zap, Users, BookOpen, Calendar, ShoppingCart, Bell, BarChart3 } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
+import { toast } from "sonner";
+
 interface RoadmapItem {
   id: string;
   title: string;
@@ -14,10 +15,8 @@ interface RoadmapItem {
   progress?: number;
   estimatedDate?: string;
 }
+
 const RoadmapSection = () => {
-  const {
-    toast
-  } = useToast();
   const roadmapItems: RoadmapItem[] = [
   // Funcionalidades Concluídas
   {
@@ -190,10 +189,9 @@ const RoadmapSection = () => {
     }
   };
   const handleVoteFeature = (featureId: string, featureName: string) => {
-    toast({
-      title: "🗳️ Voto Registrado!",
+    toast.success("🗳️ Voto Registrado!", {
       description: `Seu interesse em "${featureName}" foi registrado. Obrigado pelo feedback!`,
-      duration: 3000
+      duration: 4000,
     });
   };
   const completedCount = roadmapItems.filter(item => item.status === 'completed').length;
@@ -290,11 +288,10 @@ const RoadmapSection = () => {
           <p className="text-gray-700 dark:text-gray-300 mb-4">
             Tem alguma ideia para o SB2coach.ai? Sua opinião é muito importante!
           </p>
-          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white" onClick={() => toast({
-          title: "💡 Feedback Registrado!",
-          description: "Obrigado por contribuir com o desenvolvimento do SB2coach.ai!",
-          duration: 3000
-        })}>
+          <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white" onClick={() => toast.success("💡 Feedback Registrado!", {
+            description: "Obrigado por contribuir com o desenvolvimento do SB2coach.ai!",
+            duration: 4000,
+          })}>
             <Sparkles className="w-4 h-4 mr-2" />
             Enviar Sugestão
           </Button>
