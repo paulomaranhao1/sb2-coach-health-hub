@@ -1,10 +1,9 @@
-
 import { useEffect, memo } from "react";
 import { useAppState } from "@/hooks/useAppState";
 import { useServiceWorker } from "@/hooks/useServiceWorker";
 import { useLogger } from "@/utils/logger";
 import AppScreens from "@/components/screens/AppScreens";
-import AppLayout from "@/components/layout/AppLayout";
+import ModernLayout from "@/components/layout/ModernLayout";
 import TabsContentComponent from "@/components/layout/TabsContent";
 import { LoadingPage } from "@/components/ui/loading-states";
 import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
@@ -115,7 +114,7 @@ const Index = memo(() => {
   );
 });
 
-// Componente separado para a aplicação autenticada
+// Componente separado para a aplicação autenticada - NOVO DESIGN
 const AuthenticatedApp = memo(({
   showWelcome,
   setShowWelcome,
@@ -124,8 +123,6 @@ const AuthenticatedApp = memo(({
   showNewFeatures,
   setShowNewFeatures,
   activeTab,
-  setShowMobileMenu,
-  showMobileMenu,
   userProfile,
   userStats,
   isLoading,
@@ -193,20 +190,18 @@ const AuthenticatedApp = memo(({
     );
   }
 
-  logger.debug('Rendering main app');
+  logger.debug('Rendering main app with new modern layout');
 
-  // App principal
+  // App principal com NOVO LAYOUT MODERNO
   return (
     <GlobalErrorBoundary 
       level="page" 
       name="Main Application"
       showDebugInfo={true}
     >
-      <AppLayout
-        showMobileMenu={showMobileMenu}
-        setShowMobileMenu={setShowMobileMenu}
+      <ModernLayout
         activeTab={activeTab}
-        handleTabChange={handleTabChange}
+        onTabChange={handleTabChange}
       >
         <GlobalErrorBoundary 
           level="section" 
@@ -221,7 +216,7 @@ const AuthenticatedApp = memo(({
             onNavigateToHome={handleNavigateToHome}
           />
         </GlobalErrorBoundary>
-      </AppLayout>
+      </ModernLayout>
     </GlobalErrorBoundary>
   );
 });
