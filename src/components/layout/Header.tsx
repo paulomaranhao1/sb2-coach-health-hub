@@ -90,7 +90,7 @@ const Header = ({
                 <img alt="SB2coach.ai Logo" className="w-full h-full object-contain" src="/lovable-uploads/2b0f09d9-e801-44ed-9f19-bc2d97afb15b.png" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent">
+                <h1 className="font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent text-xl text-left">
                   SB2coach.ai
                 </h1>
                 <p className="text-sm text-slate-600 font-medium flex items-center gap-1 text-left">
