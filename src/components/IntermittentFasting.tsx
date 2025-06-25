@@ -74,8 +74,8 @@ const IntermittentFasting = () => {
             value="overview" 
             className="w-full flex items-center justify-center gap-3 rounded-xl px-8 font-bold text-lg transition-all duration-500 ease-out 
               data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-blue-500/30 data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1 data-[state=active]:opacity-100
-              data-[state=inactive]:opacity-30 data-[state=inactive]:scale-95 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-400 data-[state=inactive]:border-transparent
-              hover:data-[state=inactive]:opacity-60 hover:data-[state=inactive]:scale-100 hover:data-[state=inactive]:bg-blue-50/50
+              data-[state=inactive]:opacity-100 data-[state=inactive]:scale-100 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-600 data-[state=inactive]:border-transparent
+              hover:data-[state=inactive]:opacity-80 hover:data-[state=inactive]:bg-blue-50/50
               border-2 border-transparent group relative overflow-hidden py-[15px]"
           >
             <Eye className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
@@ -86,8 +86,8 @@ const IntermittentFasting = () => {
             value="analytics" 
             className="w-full flex items-center justify-center gap-3 rounded-xl px-8 font-bold text-lg transition-all duration-500 ease-out 
               data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-emerald-500/30 data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1 data-[state=active]:opacity-100
-              data-[state=inactive]:opacity-30 data-[state=inactive]:scale-95 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-400 data-[state=inactive]:border-transparent
-              hover:data-[state=inactive]:opacity-60 hover:data-[state=inactive]:scale-100 hover:data-[state=inactive]:bg-emerald-50/50
+              data-[state=inactive]:opacity-100 data-[state=inactive]:scale-100 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-600 data-[state=inactive]:border-transparent
+              hover:data-[state=inactive]:opacity-80 hover:data-[state=inactive]:bg-emerald-50/50
               border-2 border-transparent group relative overflow-hidden py-[15px]"
           >
             <BarChart3 className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
@@ -98,8 +98,8 @@ const IntermittentFasting = () => {
             value="goals" 
             className="w-full flex items-center justify-center gap-3 rounded-xl px-8 font-bold text-lg transition-all duration-500 ease-out 
               data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-purple-500/30 data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1 data-[state=active]:opacity-100
-              data-[state=inactive]:opacity-30 data-[state=inactive]:scale-95 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-400 data-[state=inactive]:border-transparent
-              hover:data-[state=inactive]:opacity-60 hover:data-[state=inactive]:scale-100 hover:data-[state=inactive]:bg-purple-50/50
+              data-[state=inactive]:opacity-100 data-[state=inactive]:scale-100 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-600 data-[state=inactive]:border-transparent
+              hover:data-[state=inactive]:opacity-80 hover:data-[state=inactive]:bg-purple-50/50
               border-2 border-transparent group relative overflow-hidden py-[15px]"
           >
             <Target className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
@@ -110,8 +110,8 @@ const IntermittentFasting = () => {
             value="education" 
             className="w-full flex items-center justify-center gap-3 rounded-xl px-8 font-bold text-lg transition-all duration-500 ease-out 
               data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-orange-500/30 data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1 data-[state=active]:opacity-100
-              data-[state=inactive]:opacity-30 data-[state=inactive]:scale-95 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-400 data-[state=inactive]:border-transparent
-              hover:data-[state=inactive]:opacity-60 hover:data-[state=inactive]:scale-100 hover:data-[state=inactive]:bg-orange-50/50
+              data-[state=inactive]:opacity-100 data-[state=inactive]:scale-100 data-[state=inactive]:bg-transparent data-[state=inactive]:text-slate-600 data-[state=inactive]:border-transparent
+              hover:data-[state=inactive]:opacity-80 hover:data-[state=inactive]:bg-orange-50/50
               border-2 border-transparent group relative overflow-hidden py-[15px]"
           >
             <BookOpen className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
