@@ -190,12 +190,9 @@ const PrivacyPolicy = () => {
               </div>
               
               <div className="bg-green-50 border border-green-200 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <Shield className="w-8 h-8 text-green-600" />
-                  <p className="text-xl font-semibold text-green-800">
-                    NÃO VENDEMOS SEUS DADOS PESSOAIS
-                  </p>
-                </div>
+                <p className="text-xl font-semibold text-green-800">
+                  NÃO VENDEMOS SEUS DADOS PESSOAIS
+                </p>
                 <p className="text-slate-700 mb-4">
                   Seus dados podem ser compartilhados apenas nas seguintes situações:
                 </p>
