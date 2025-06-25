@@ -18,28 +18,24 @@ const MobileMenuNavigation = ({ activeTab, handleTabChange }: MobileMenuNavigati
   ];
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       {tabItems.map((item) => (
         <button
           key={item.value}
           onClick={() => handleTabChange(item.value)}
-          className={`mobile-menu-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group ${
+          className={`mobile-menu-item w-full flex items-center space-x-3 text-left transition-all duration-200 ${
             activeTab === item.value ? 'active' : ''
-          }`}
+          } ${item.featured ? 'mobile-menu-featured' : ''}`}
         >
-          <div className={`mobile-menu-icon p-2 rounded-lg ${
-            item.featured ? 'animate-pulse' : ''
-          }`}>
+          <div className="mobile-menu-icon">
             <item.icon className="w-4 h-4" />
           </div>
-          <span className={`font-medium ${item.featured ? 'font-bold' : ''}`}>
+          <span className="flex-1">
             {item.label}
           </span>
           {item.featured && (
-            <div className="ml-auto">
-              <span className="text-xs bg-white/20 px-2 py-0.5 rounded-full">
-                ✨
-              </span>
+            <div className="text-xs bg-white/20 px-2 py-0.5 rounded-full">
+              ✨
             </div>
           )}
         </button>

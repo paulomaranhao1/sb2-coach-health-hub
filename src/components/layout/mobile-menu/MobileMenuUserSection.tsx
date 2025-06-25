@@ -21,19 +21,19 @@ const MobileMenuUserSection = ({
   ];
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       {userItems.map((item) => (
         <button
           key={item.key}
           onClick={item.onClick}
-          className={`mobile-menu-item w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-md group ${
+          className={`mobile-menu-item w-full flex items-center space-x-3 text-left transition-all duration-200 ${
             activeTab === item.key ? 'active' : ''
           }`}
         >
-          <div className="mobile-menu-icon p-2 rounded-lg">
+          <div className="mobile-menu-icon">
             <item.icon className="w-4 h-4" />
           </div>
-          <span className="font-medium">{item.label}</span>
+          <span className="flex-1">{item.label}</span>
         </button>
       ))}
     </div>
