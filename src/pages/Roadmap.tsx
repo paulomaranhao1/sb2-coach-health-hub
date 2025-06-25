@@ -1,14 +1,7 @@
-
-
 import RoadmapSection from "@/components/RoadmapSection";
-
 const Roadmap = () => {
-  return (
-    <div className="max-w-6xl mx-auto py-8 px-0">
+  return <div className="max-w-6xl mx-auto px-0 py-[4px]">
       <RoadmapSection />
-    </div>
-  );
+    </div>;
 };
-
 export default Roadmap;
-
