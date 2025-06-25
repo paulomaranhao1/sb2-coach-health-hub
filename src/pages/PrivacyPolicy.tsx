@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
             <section className="text-center">
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 px-0 py-[20px]">
                 <AlertCircle className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                <p className="text-slate-700 text-lg leading-relaxed text-left">
+                <p className="text-slate-700 text-lg leading-relaxed text-center">
                   Esta Política de Privacidade descreve como o <strong>SB2coach.ai</strong> coleta, 
                   usa e protege suas informações pessoais. Leia atentamente para entender 
                   nossos compromissos com sua privacidade.
