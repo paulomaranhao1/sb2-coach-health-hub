@@ -67,7 +67,7 @@ const WaterTracker = () => {
             </Badge>
           </div>
           
-          <div className="text-xs text-center text-slate-500 mt-2">
+          <div className="text-xs text-center text-slate-400 mt-2">
             Recomendação: 35ml por kg de peso corporal (média de 2,5L/dia)
           </div>
         </div>
