@@ -5,7 +5,6 @@ import { User, Home, Bell } from "lucide-react";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { Loading } from "@/components/ui/loading";
 import ProfileForm from "./profile/ProfileForm";
-import ShieldsDisplay from "./profile/ShieldsDisplay";
 import NotificationSettings from "./NotificationSettings";
 import PasswordChangeForm from "./profile/PasswordChangeForm";
 
@@ -52,9 +51,6 @@ const UserProfile = ({ onNavigateToHome }: UserProfileProps) => {
 
       {/* Configurações de Notificação */}
       <NotificationSettings />
-
-      {/* Escudos Conquistados */}
-      <ShieldsDisplay userStats={userStats} />
 
       {/* Botão Voltar */}
       <div className="flex justify-center">
