@@ -24,7 +24,7 @@ export const enhancedToast = {
         onClick: options.action.onClick
       } : undefined,
       duration: options?.duration || 4000,
-      className: "bg-green-50 border-green-200 text-green-900 dark:bg-green-900/20 dark:border-green-800 dark:text-green-100",
+      className: "bg-green-50 border-green-200 text-green-900 dark:bg-green-900 dark:border-green-800 dark:text-green-100 !bg-opacity-100 !backdrop-blur-none",
     });
   },
 
@@ -33,7 +33,7 @@ export const enhancedToast = {
       icon: <XCircle className="w-4 h-4" />,
       description: options?.description,
       duration: options?.duration || 6000,
-      className: "bg-red-50 border-red-200 text-red-900 dark:bg-red-900/20 dark:border-red-800 dark:text-red-100",
+      className: "bg-red-50 border-red-200 text-red-900 dark:bg-red-900 dark:border-red-800 dark:text-red-100 !bg-opacity-100 !backdrop-blur-none",
     });
   },
 
@@ -42,7 +42,7 @@ export const enhancedToast = {
       icon: <AlertCircle className="w-4 h-4" />,
       description: options?.description,
       duration: options?.duration || 5000,
-      className: "bg-orange-50 border-orange-200 text-orange-900 dark:bg-orange-900/20 dark:border-orange-800 dark:text-orange-100",
+      className: "bg-orange-50 border-orange-200 text-orange-900 dark:bg-orange-900 dark:border-orange-800 dark:text-orange-100 !bg-opacity-100 !backdrop-blur-none",
     });
   },
 
@@ -51,7 +51,7 @@ export const enhancedToast = {
       icon: <Info className="w-4 h-4" />,
       description: options?.description,
       duration: options?.duration || 4000,
-      className: "bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-900/20 dark:border-blue-800 dark:text-blue-100",
+      className: "bg-blue-50 border-blue-200 text-blue-900 dark:bg-blue-900 dark:border-blue-800 dark:text-blue-100 !bg-opacity-100 !backdrop-blur-none",
     });
   },
 
@@ -59,7 +59,7 @@ export const enhancedToast = {
     return sonnerToast.loading(message, {
       icon: <Loader2 className="w-4 h-4 animate-spin" />,
       description: options?.description,
-      className: "bg-gray-50 border-gray-200 text-gray-900 dark:bg-gray-900/20 dark:border-gray-800 dark:text-gray-100",
+      className: "bg-gray-50 border-gray-200 text-gray-900 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-100 !bg-opacity-100 !backdrop-blur-none",
     });
   },
 
