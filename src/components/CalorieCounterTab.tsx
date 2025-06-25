@@ -6,41 +6,28 @@ import PhotoAnalyzer from "@/features/calorie-counter/components/PhotoAnalyzer";
 import AnalysisHistory from "./calorie-counter/AnalysisHistory";
 import CalorieStats from "./calorie-counter/CalorieStats";
 import CalorieCounterHeader from "./calorie-counter/CalorieCounterHeader";
-
 const CalorieCounterTab = () => {
   const [refreshHistoryTrigger, setRefreshHistoryTrigger] = useState(0);
-
   const handleAnalysisComplete = (analysis: any) => {
     // Atualizar histórico quando uma nova análise for concluída
     setRefreshHistoryTrigger(prev => prev + 1);
   };
-
-  return (
-    <div className="space-y-4">
+  return <div className="space-y-4">
       {/* Header Section */}
       <CalorieCounterHeader />
 
       {/* Abas principais */}
       <Tabs defaultValue="analyze" className="w-full">
         <TabsList className="grid w-full grid-cols-3 bg-gradient-to-r from-slate-50 to-gray-100 border border-gray-200 rounded-xl p-1.5 shadow-sm">
-          <TabsTrigger 
-            value="analyze" 
-            className="flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 hover:bg-white/80 text-slate-600"
-          >
+          <TabsTrigger value="analyze" className="flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 hover:bg-white/80 text-slate-600">
             <Camera className="w-4 h-4" />
             Analisar Foto
           </TabsTrigger>
-          <TabsTrigger 
-            value="history" 
-            className="flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-green-500 data-[state=active]:to-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 hover:bg-white/80 text-slate-600"
-          >
+          <TabsTrigger value="history" className="flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 hover:bg-white/80 text-slate-600">
             <History className="w-4 h-4" />
             Histórico
           </TabsTrigger>
-          <TabsTrigger 
-            value="stats" 
-            className="flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 hover:bg-white/80 text-slate-600"
-          >
+          <TabsTrigger value="stats" className="flex items-center gap-2 rounded-lg px-4 py-3 font-semibold text-sm transition-all duration-300 data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-purple-600 data-[state=active]:text-white data-[state=active]:shadow-lg data-[state=active]:scale-105 hover:bg-white/80 text-slate-600">
             <BarChart3 className="w-4 h-4" />
             Estatísticas
           </TabsTrigger>
@@ -98,8 +85,6 @@ const CalorieCounterTab = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default CalorieCounterTab;
