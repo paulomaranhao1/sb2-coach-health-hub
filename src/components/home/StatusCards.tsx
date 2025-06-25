@@ -6,23 +6,27 @@ import { Scale, Camera, Clock, TrendingUp, Plus, ChevronRight } from "lucide-rea
 import EmptyStateCard from "./EmptyStateCard";
 
 interface StatusCardsProps {
-  weightEntries: any[];
-  lastFastingSession: any;
-  recentFoodAnalysis: any;
-  onAddWeight: () => void;
-  onStartFasting: () => void;
-  onAnalyzeFood: () => void;
-  onViewProgress: () => void;
+  userProfile?: any;
+  userStats?: any;
+  weightEntries?: any[];
+  lastFastingSession?: any;
+  recentFoodAnalysis?: any;
+  onAddWeight?: () => void;
+  onStartFasting?: () => void;
+  onAnalyzeFood?: () => void;
+  onViewProgress?: () => void;
 }
 
 const StatusCards = ({
-  weightEntries,
+  userProfile,
+  userStats,
+  weightEntries = [],
   lastFastingSession,
   recentFoodAnalysis,
-  onAddWeight,
-  onStartFasting,
-  onAnalyzeFood,
-  onViewProgress
+  onAddWeight = () => {},
+  onStartFasting = () => {},
+  onAnalyzeFood = () => {},
+  onViewProgress = () => {}
 }: StatusCardsProps) => {
   const hasData = weightEntries.length > 0 || lastFastingSession || recentFoodAnalysis;
 

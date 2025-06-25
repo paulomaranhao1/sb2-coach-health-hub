@@ -1,6 +1,7 @@
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Loading } from "@/components/ui/loading";
 
 export const GamificationCardsSkeleton = () => (
   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4 py-[10px] px-[10px] bg-slate-200 rounded-2xl">
@@ -45,3 +46,29 @@ export const ProgressChartSkeleton = () => (
     </CardContent>
   </Card>
 );
+
+export const LoadingCard = ({ text = "Carregando dados..." }: { text?: string }) => {
+  return (
+    <div className="w-full h-32 bg-card/50 backdrop-blur-sm rounded-lg border border-dashed border-muted-foreground/25 flex items-center justify-center animate-pulse">
+      <Loading text={text} variant="zap" />
+    </div>
+  );
+};
+
+export const LoadingSection = ({ text = "Carregando..." }: { text?: string }) => {
+  return (
+    <div className="flex items-center justify-center py-8">
+      <Loading text={text} variant="heart" />
+    </div>
+  );
+};
+
+export const LoadingPage = ({ text = "Carregando..." }: { text?: string }) => {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="text-center space-y-4">
+        <Loading size="lg" text={text} variant="heart" />
+      </div>
+    </div>
+  );
+};
