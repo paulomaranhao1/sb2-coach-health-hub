@@ -59,12 +59,7 @@ const IntermittentFasting = () => {
             <span className="font-bold">Metas</span>
           </TabsTrigger>
 
-          <TabsTrigger value="education" className="w-full flex items-center justify-center gap-3 rounded-xl px-8 py-6 font-bold text-lg transition-all duration-300 ease-out
-              data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 
-              data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-orange-500/30 
-              data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1
-              hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:scale-102 hover:shadow-lg
-              text-slate-700 border-2 border-transparent group relative overflow-hidden">
+          <TabsTrigger value="education" className="w-full flex items-center justify-center gap-3 rounded-xl px-8 font-bold text-lg transition-all duration-300 ease-out data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:to-orange-600 data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-orange-500/30 data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1 hover:bg-gradient-to-r hover:from-orange-50 hover:to-orange-100 hover:scale-102 hover:shadow-lg text-slate-700 border-2 border-transparent group relative overflow-hidden py-[15px]">
             <BookOpen className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
             <span className="font-bold">Educação</span>
           </TabsTrigger>
