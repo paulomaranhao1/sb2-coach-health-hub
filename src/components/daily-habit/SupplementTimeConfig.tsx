@@ -35,7 +35,7 @@ const SupplementTimeConfig = () => {
   };
   return <Card className="border-0 shadow-lg">
       <CardHeader className="">
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-left py-0 px-[16px]">
           <Clock className="w-5 h-5" />
           Configurar Horários SB2 TURBO
         </CardTitle>
