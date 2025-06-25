@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,23 +6,19 @@ import PhotoAnalyzer from "@/features/calorie-counter/components/PhotoAnalyzer";
 import AnalysisHistory from "./calorie-counter/AnalysisHistory";
 import CalorieStats from "./calorie-counter/CalorieStats";
 import CalorieCounterHeader from "./calorie-counter/CalorieCounterHeader";
-
 const CalorieCounterTab = () => {
   const [refreshHistoryTrigger, setRefreshHistoryTrigger] = useState(0);
-  
   const handleAnalysisComplete = (analysis: any) => {
     // Atualizar histórico quando uma nova análise for concluída
     setRefreshHistoryTrigger(prev => prev + 1);
   };
-  
-  return (
-    <div className="space-y-4">
+  return <div className="space-y-4">
       {/* Header Section */}
       <CalorieCounterHeader />
 
       {/* Abas principais */}
       <Tabs defaultValue="analyze" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-3 bg-inherit">
           <TabsTrigger value="analyze" className="flex items-center gap-2">
             <Camera className="w-4 h-4" />
             Analisar Foto
@@ -90,8 +85,6 @@ const CalorieCounterTab = () => {
           </div>
         </CardContent>
       </Card>
-    </div>
-  );
+    </div>;
 };
-
 export default CalorieCounterTab;
