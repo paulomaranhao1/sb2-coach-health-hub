@@ -1,24 +1,15 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, FileText, AlertTriangle, Crown, Scale, Shield, Users, Zap, HelpCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 const TermsOfService = () => {
   const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
       <header className="border-b border-slate-200/60 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40 bg-white/95">
-        <div className="max-w-4xl mx-auto px-4 py-4">
+        <div className="max-w-4xl mx-auto py-[13px] px-0">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(-1)}
-              className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600"
-            >
+            <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="flex items-center gap-2 hover:bg-red-50 hover:text-red-600">
               <ArrowLeft className="w-4 h-4" />
               Voltar
             </Button>
@@ -30,7 +21,7 @@ const TermsOfService = () => {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-4 py-8">
+      <main className="max-w-4xl mx-auto py-0 px-0">
         <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader className="text-center bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-t-lg">
             <CardTitle className="text-3xl font-bold mb-2">
@@ -44,10 +35,10 @@ const TermsOfService = () => {
             </p>
           </CardHeader>
           
-          <CardContent className="p-8 space-y-10">
+          <CardContent className="p-8 space-y-10 py-0 px-0">
             {/* Introdução */}
             <section className="text-center">
-              <div className="bg-amber-50 border border-amber-200 rounded-lg p-6">
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 px-0">
                 <AlertTriangle className="w-8 h-8 text-amber-600 mx-auto mb-3" />
                 <p className="text-slate-700 text-lg leading-relaxed">
                   Ao usar o <strong>SB2coach.ai</strong>, você concorda com estes Termos de Uso. 
@@ -64,13 +55,13 @@ const TermsOfService = () => {
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <FileText className="w-6 h-6 text-blue-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">
+                <h2 className="text-2xl font-bold text-slate-800 text-center">
                   1. Aceitação dos Termos
                 </h2>
               </div>
               
-              <div className="bg-blue-50 rounded-lg p-6">
-                <p className="text-slate-700 text-lg leading-relaxed">
+              <div className="bg-blue-50 rounded-lg p-6 py-[23px] px-0">
+                <p className="text-slate-700 text-lg leading-relaxed px-[4px]">
                   Ao acessar e usar o SB2coach.ai, você automaticamente concorda em cumprir 
                   estes Termos de Uso e nossa Política de Privacidade. Se não concordar com 
                   qualquer parte destes termos, você não deve usar nosso serviço.
@@ -93,7 +84,7 @@ const TermsOfService = () => {
               
               <div className="grid md:grid-cols-2 gap-6">
                 <Card className="border border-slate-200 hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 px-[4px]">
                     <h3 className="font-semibold text-lg text-slate-800 mb-3">
                       Recursos Principais
                     </h3>
@@ -107,7 +98,7 @@ const TermsOfService = () => {
                 </Card>
 
                 <Card className="border border-slate-200 hover:shadow-md transition-shadow">
-                  <CardContent className="p-6">
+                  <CardContent className="p-6 px-[4px]">
                     <h3 className="font-semibold text-lg text-slate-800 mb-3">
                       Funcionalidades Avançadas
                     </h3>
@@ -135,8 +126,8 @@ const TermsOfService = () => {
                 </h2>
               </div>
               
-              <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
+              <div className="bg-red-50 border-2 border-red-200 rounded-lg p-6 px-[4px]">
+                <div className="flex items-center gap-3 mb-4 px-[20px]">
                   <AlertTriangle className="w-8 h-8 text-red-600" />
                   <p className="text-xl font-bold text-red-800">
                     AVISO MÉDICO IMPORTANTE
@@ -182,7 +173,7 @@ const TermsOfService = () => {
                 </h2>
               </div>
               
-              <div className="bg-purple-50 rounded-lg p-6">
+              <div className="bg-purple-50 rounded-lg p-6 px-[4px]">
                 <h3 className="font-semibold text-lg text-slate-800 mb-4">
                   Requisitos e Responsabilidades:
                 </h3>
@@ -224,7 +215,7 @@ const TermsOfService = () => {
                 </h2>
               </div>
               
-              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-6">
+              <div className="bg-gradient-to-r from-yellow-50 to-orange-50 rounded-lg p-6 px-[4px]">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2">
@@ -271,7 +262,7 @@ const TermsOfService = () => {
                 </h2>
               </div>
               
-              <div className="bg-indigo-50 rounded-lg p-6">
+              <div className="bg-indigo-50 rounded-lg p-6 px-[4px]">
                 <p className="text-slate-700 text-lg mb-4">
                   Para manter um ambiente seguro e respeitoso, você concorda em <strong>NÃO:</strong>
                 </p>
@@ -311,7 +302,7 @@ const TermsOfService = () => {
                 </h2>
               </div>
               
-              <div className="bg-green-50 rounded-lg p-6">
+              <div className="bg-green-50 rounded-lg p-6 px-[4px]">
                 <div className="flex items-center gap-3 mb-4">
                   <Scale className="w-8 h-8 text-green-600" />
                   <div>
@@ -344,7 +335,7 @@ const TermsOfService = () => {
                 </h2>
               </div>
               
-              <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-lg p-6">
+              <div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-lg p-6 px-[4px]">
                 <p className="text-slate-700 mb-4 text-lg">
                   Precisa de ajuda ou tem dúvidas sobre estes termos?
                 </p>
@@ -373,7 +364,7 @@ const TermsOfService = () => {
 
             {/* Footer dos Termos */}
             <section className="text-center">
-              <div className="bg-slate-100 rounded-lg p-6">
+              <div className="bg-slate-100 rounded-lg p-6 px-[4px]">
                 <h3 className="text-lg font-semibold text-slate-800 mb-3">
                   Alterações nos Termos
                 </h3>
@@ -392,8 +383,6 @@ const TermsOfService = () => {
           </CardContent>
         </Card>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default TermsOfService;
