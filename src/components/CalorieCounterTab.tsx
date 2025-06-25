@@ -23,59 +23,44 @@ const CalorieCounterTab = () => {
 
       {/* Abas principais - Layout vertical */}
       <Tabs defaultValue="analyze" className="w-full">
-        <TabsList className="flex flex-col h-auto w-full max-w-md mx-auto bg-white/95 backdrop-blur-sm border-2 border-slate-200/60 rounded-2xl p-3 shadow-xl space-y-2">
+        <TabsList className="flex flex-col h-auto w-full max-w-sm mx-auto bg-white/95 backdrop-blur-sm border-2 border-slate-200/50 rounded-2xl p-4 shadow-xl space-y-3">
           <TabsTrigger 
             value="analyze" 
-            className="w-full flex items-center justify-start gap-4 rounded-xl px-6 py-5 font-bold text-base transition-all duration-300 ease-out
-              data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:via-blue-600 data-[state=active]:to-indigo-600 
-              data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-blue-500/40 
+            className="w-full flex items-center justify-center gap-3 rounded-xl px-8 py-6 font-bold text-lg transition-all duration-300 ease-out
+              data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-blue-600 
+              data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-blue-500/30 
               data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1
-              hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 hover:scale-102 hover:shadow-lg
-              text-slate-700 border-2 border-transparent group relative overflow-hidden min-h-[60px]"
+              hover:bg-gradient-to-r hover:from-blue-50 hover:to-blue-100 hover:scale-102 hover:shadow-lg
+              text-slate-700 border-2 border-transparent group relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/0 via-blue-400/20 to-blue-400/0 
-                          opacity-0 group-data-[state=active]:opacity-100 transition-opacity duration-300"></div>
-            <Camera className="w-6 h-6 flex-shrink-0 relative z-10 group-data-[state=active]:drop-shadow-sm" />
-            <div className="flex flex-col items-start relative z-10">
-              <span className="font-bold text-lg">Analisar Foto</span>
-              <span className="text-sm opacity-75 font-normal">Tire uma foto e descubra as calorias</span>
-            </div>
+            <Camera className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
+            <span className="font-bold">Analisar Foto</span>
           </TabsTrigger>
           
           <TabsTrigger 
             value="history" 
-            className="w-full flex items-center justify-start gap-4 rounded-xl px-6 py-5 font-bold text-base transition-all duration-300 ease-out
-              data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:via-green-600 data-[state=active]:to-teal-600 
-              data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-emerald-500/40 
+            className="w-full flex items-center justify-center gap-3 rounded-xl px-8 py-6 font-bold text-lg transition-all duration-300 ease-out
+              data-[state=active]:bg-gradient-to-r data-[state=active]:from-emerald-500 data-[state=active]:to-emerald-600 
+              data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-emerald-500/30 
               data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1
-              hover:bg-gradient-to-r hover:from-emerald-50 hover:to-teal-50 hover:scale-102 hover:shadow-lg
-              text-slate-700 border-2 border-transparent group relative overflow-hidden min-h-[60px]"
+              hover:bg-gradient-to-r hover:from-emerald-50 hover:to-emerald-100 hover:scale-102 hover:shadow-lg
+              text-slate-700 border-2 border-transparent group relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-emerald-400/0 via-emerald-400/20 to-emerald-400/0 
-                          opacity-0 group-data-[state=active]:opacity-100 transition-opacity duration-300"></div>
-            <History className="w-6 h-6 flex-shrink-0 relative z-10 group-data-[state=active]:drop-shadow-sm" />
-            <div className="flex flex-col items-start relative z-10">
-              <span className="font-bold text-lg">Histórico</span>
-              <span className="text-sm opacity-75 font-normal">Veja suas análises anteriores</span>
-            </div>
+            <History className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
+            <span className="font-bold">Histórico</span>
           </TabsTrigger>
           
           <TabsTrigger 
             value="stats" 
-            className="w-full flex items-center justify-start gap-4 rounded-xl px-6 py-5 font-bold text-base transition-all duration-300 ease-out
-              data-[state=active]:bg-gradient-to-r data-[state=active]:from-orange-500 data-[state=active]:via-red-500 data-[state=active]:to-pink-600 
-              data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-orange-500/40 
+            className="w-full flex items-center justify-center gap-3 rounded-xl px-8 py-6 font-bold text-lg transition-all duration-300 ease-out
+              data-[state=active]:bg-gradient-to-r data-[state=active]:from-purple-500 data-[state=active]:to-purple-600 
+              data-[state=active]:text-white data-[state=active]:shadow-2xl data-[state=active]:shadow-purple-500/30 
               data-[state=active]:scale-105 data-[state=active]:border-0 data-[state=active]:-translate-y-1
-              hover:bg-gradient-to-r hover:from-orange-50 hover:to-pink-50 hover:scale-102 hover:shadow-lg
-              text-slate-700 border-2 border-transparent group relative overflow-hidden min-h-[60px]"
+              hover:bg-gradient-to-r hover:from-purple-50 hover:to-purple-100 hover:scale-102 hover:shadow-lg
+              text-slate-700 border-2 border-transparent group relative overflow-hidden"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-orange-400/0 via-orange-400/20 to-orange-400/0 
-                          opacity-0 group-data-[state=active]:opacity-100 transition-opacity duration-300"></div>
-            <BarChart3 className="w-6 h-6 flex-shrink-0 relative z-10 group-data-[state=active]:drop-shadow-sm" />
-            <div className="flex flex-col items-start relative z-10">
-              <span className="font-bold text-lg">Estatísticas</span>
-              <span className="text-sm opacity-75 font-normal">Acompanhe seu progresso</span>
-            </div>
+            <BarChart3 className="w-7 h-7 flex-shrink-0 group-data-[state=active]:drop-shadow-sm" />
+            <span className="font-bold">Estatísticas</span>
           </TabsTrigger>
         </TabsList>
 
