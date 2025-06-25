@@ -1,15 +1,11 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Shield, Eye, Database, Phone, Mail, Lock, Users, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
       <header className="border-b border-slate-200/60 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40 bg-white/95">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
@@ -28,13 +24,13 @@ const PrivacyPolicy = () => {
       <main className="max-w-4xl mx-auto px-4 py-8">
         <Card className="shadow-xl border-0 bg-white/80 backdrop-blur-sm">
           <CardHeader className="text-center bg-gradient-to-r from-red-500 to-red-600 text-white rounded-t-lg">
-            <CardTitle className="text-3xl font-bold mb-2">
+            <CardTitle className="text-3xl font-bold mb-2 text-left">
               Política de Privacidade
             </CardTitle>
-            <p className="text-red-100 text-lg">
+            <p className="text-red-100 text-lg text-left">
               SB2coach.ai - Sua privacidade é nossa prioridade
             </p>
-            <p className="text-red-200 text-sm mt-2">
+            <p className="text-red-200 text-sm mt-2 text-left">
               Última atualização: {new Date().toLocaleDateString('pt-BR')}
             </p>
           </CardHeader>
@@ -44,7 +40,7 @@ const PrivacyPolicy = () => {
             <section className="text-center">
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 px-0 py-[20px]">
                 <AlertCircle className="w-8 h-8 text-blue-600 mx-auto mb-3" />
-                <p className="text-slate-700 text-lg leading-relaxed">
+                <p className="text-slate-700 text-lg leading-relaxed text-left">
                   Esta Política de Privacidade descreve como o <strong>SB2coach.ai</strong> coleta, 
                   usa e protege suas informações pessoais. Leia atentamente para entender 
                   nossos compromissos com sua privacidade.
@@ -60,7 +56,7 @@ const PrivacyPolicy = () => {
                 <div className="p-2 bg-red-100 rounded-lg">
                   <Eye className="w-6 h-6 text-red-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">
+                <h2 className="text-2xl font-bold text-slate-800 text-left">
                   1. Informações que Coletamos
                 </h2>
               </div>
@@ -68,7 +64,7 @@ const PrivacyPolicy = () => {
               <div className="grid md:grid-cols-2 gap-6">
                 <Card className="border border-slate-200 hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2 text-left">
                       <Users className="w-5 h-5 text-blue-600" />
                       Dados Pessoais
                     </h3>
@@ -84,7 +80,7 @@ const PrivacyPolicy = () => {
 
                 <Card className="border border-slate-200 hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2 text-left">
                       <Database className="w-5 h-5 text-green-600" />
                       Dados de Saúde
                     </h3>
@@ -100,7 +96,7 @@ const PrivacyPolicy = () => {
 
                 <Card className="border border-slate-200 hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2 text-left">
                       <Phone className="w-5 h-5 text-purple-600" />
                       Dados de Uso
                     </h3>
@@ -115,7 +111,7 @@ const PrivacyPolicy = () => {
 
                 <Card className="border border-slate-200 hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
-                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2">
+                    <h3 className="font-semibold text-lg text-slate-800 mb-3 flex items-center gap-2 text-left">
                       <Lock className="w-5 h-5 text-orange-600" />
                       Dados Técnicos
                     </h3>
@@ -138,7 +134,7 @@ const PrivacyPolicy = () => {
                 <div className="p-2 bg-blue-100 rounded-lg">
                   <Database className="w-6 h-6 text-blue-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">
+                <h2 className="text-2xl font-bold text-slate-800 text-left">
                   2. Como Usamos suas Informações
                 </h2>
               </div>
@@ -146,7 +142,7 @@ const PrivacyPolicy = () => {
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg p-6 px-[4px]">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <h3 className="font-semibold text-lg text-slate-800 mb-3">
+                    <h3 className="font-semibold text-lg text-slate-800 mb-3 text-center">
                       Personalização do Serviço
                     </h3>
                     <ul className="space-y-2 text-slate-700">
@@ -179,7 +175,7 @@ const PrivacyPolicy = () => {
                 <div className="p-2 bg-green-100 rounded-lg">
                   <Shield className="w-6 h-6 text-green-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">3. Seus Dados</h2>
+                <h2 className="text-2xl font-bold text-slate-800 text-left">3. Seus Dados</h2>
               </div>
               
               <div className="bg-green-50 border border-green-200 rounded-lg p-6 px-[4px]">
@@ -210,12 +206,12 @@ const PrivacyPolicy = () => {
                 <div className="p-2 bg-purple-100 rounded-lg">
                   <Users className="w-6 h-6 text-purple-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">
+                <h2 className="text-2xl font-bold text-slate-800 text-left">
                   4. Seus Direitos pela LGPD
                 </h2>
               </div>
               
-              <div className="bg-purple-50 rounded-lg p-6 px-[4px]">
+              <div className="bg-purple-50 rounded-lg p-6 px-[10px]">
                 <p className="text-slate-700 mb-6 text-lg">
                   Conforme a Lei Geral de Proteção de Dados (LGPD), você possui os seguintes direitos:
                 </p>
@@ -260,7 +256,7 @@ const PrivacyPolicy = () => {
                 <div className="p-2 bg-orange-100 rounded-lg">
                   <Lock className="w-6 h-6 text-orange-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">
+                <h2 className="text-2xl font-bold text-slate-800 text-left">
                   5. Segurança e Proteção
                 </h2>
               </div>
@@ -300,7 +296,7 @@ const PrivacyPolicy = () => {
                 <div className="p-2 bg-red-100 rounded-lg">
                   <Mail className="w-6 h-6 text-red-600" />
                 </div>
-                <h2 className="text-2xl font-bold text-slate-800">
+                <h2 className="text-2xl font-bold text-slate-800 text-left">
                   6. Entre em Contato
                 </h2>
               </div>
@@ -342,8 +338,6 @@ const PrivacyPolicy = () => {
           </CardContent>
         </Card>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default PrivacyPolicy;
