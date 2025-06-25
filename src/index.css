@@ -4,11 +4,11 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Modern Design System - SB2coach.ai */
-@import './styles/design-system/modern-colors.css';
+/* Garmin-Inspired Design System - SB2coach.ai */
+@import './styles/design-system/garmin-inspired.css';
 
 @layer base {
-  /* Global Reset & Modern Foundation */
+  /* Global Reset & Garmin Foundation */
   * {
     box-sizing: border-box;
     margin: 0;
@@ -18,21 +18,21 @@
   html, body, #root {
     height: 100%;
     width: 100%;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
   }
   
   body {
-    background-color: rgb(var(--bg-secondary)) !important;
-    color: rgb(var(--text-secondary)) !important;
-    line-height: 1.6;
+    background-color: rgb(18, 18, 18) !important;
+    color: rgb(255, 255, 255) !important;
+    line-height: 1.5;
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   
-  /* Modern Typography */
+  /* Dark Theme Typography */
   h1, h2, h3, h4, h5, h6 {
-    color: rgb(var(--text-primary)) !important;
+    color: rgb(255, 255, 255) !important;
     font-weight: 700;
     letter-spacing: -0.025em;
     line-height: 1.2;
@@ -44,19 +44,26 @@
   h4 { font-size: 1.25rem; }
   
   p, span, div {
-    color: rgb(var(--text-secondary)) !important;
+    color: rgb(174, 174, 178) !important;
     font-weight: 500;
     line-height: 1.6;
   }
   
-  .text-muted-foreground {
-    color: rgb(var(--text-muted)) !important;
-    font-weight: 500;
+  .text-primary {
+    color: rgb(255, 255, 255) !important;
   }
   
-  /* Modern Links */
+  .text-secondary {
+    color: rgb(174, 174, 178) !important;
+  }
+  
+  .text-muted {
+    color: rgb(124, 124, 128) !important;
+  }
+  
+  /* Dark Theme Links */
   a {
-    color: rgb(var(--primary)) !important;
+    color: rgb(0, 122, 255) !important;
     font-weight: 600;
     text-decoration: none;
     transition: opacity 0.2s ease;
@@ -66,12 +73,12 @@
     opacity: 0.8;
   }
   
-  /* Form Elements */
+  /* Dark Form Elements */
   input, textarea, select {
-    background-color: rgb(var(--bg-primary)) !important;
-    color: rgb(var(--text-secondary)) !important;
-    border: 2px solid rgb(var(--neutral-200)) !important;
-    border-radius: var(--radius-lg) !important;
+    background-color: rgb(28, 28, 30) !important;
+    color: rgb(255, 255, 255) !important;
+    border: 2px solid rgb(58, 58, 60) !important;
+    border-radius: 12px !important;
     padding: 0.75rem !important;
     font-weight: 500;
     transition: all 0.2s ease;
@@ -79,17 +86,17 @@
   
   input:focus, textarea:focus, select:focus {
     outline: none !important;
-    border-color: rgb(var(--primary)) !important;
-    box-shadow: 0 0 0 3px rgba(var(--primary), 0.1) !important;
+    border-color: rgb(0, 122, 255) !important;
+    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1) !important;
   }
   
   input::placeholder, textarea::placeholder {
-    color: rgb(var(--text-muted)) !important;
+    color: rgb(124, 124, 128) !important;
     font-weight: 400;
   }
   
   label {
-    color: rgb(var(--text-primary)) !important;
+    color: rgb(255, 255, 255) !important;
     font-weight: 600;
     font-size: 0.875rem;
   }
@@ -99,15 +106,15 @@
     scroll-behavior: smooth;
   }
   
-  /* Selection Colors */
+  /* Dark Selection Colors */
   ::selection {
-    background-color: rgba(var(--primary), 0.2);
-    color: rgb(var(--text-primary));
+    background-color: rgba(0, 122, 255, 0.3);
+    color: rgb(255, 255, 255);
   }
   
   /* Focus Outline */
   :focus-visible {
-    outline: 2px solid rgb(var(--primary));
+    outline: 2px solid rgb(0, 122, 255);
     outline-offset: 2px;
   }
   
@@ -117,36 +124,36 @@
 }
 
 @layer components {
-  /* Modern Utilities */
+  /* Dark Theme Utilities */
   .container {
     max-width: 100%;
     margin: 0 auto;
     padding: 0;
   }
   
-  .glass-effect {
-    background: rgba(255, 255, 255, 0.8);
+  .glassmorphism {
+    background: rgba(28, 28, 30, 0.8);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(58, 58, 60, 0.3);
   }
   
   .gradient-text {
-    background: linear-gradient(135deg, rgb(var(--primary)), rgb(var(--secondary)));
+    background: linear-gradient(135deg, rgb(0, 122, 255), rgb(175, 82, 222));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   
-  .shadow-soft {
-    box-shadow: var(--shadow);
+  .shadow-dark {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   }
   
-  .shadow-medium {
-    box-shadow: var(--shadow-md);
+  .shadow-dark-md {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
   }
   
-  .shadow-large {
-    box-shadow: var(--shadow-lg);
+  .shadow-dark-lg {
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
   }
   
   /* Animation Utilities */

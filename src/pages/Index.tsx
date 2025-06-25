@@ -1,13 +1,18 @@
+
 import { useEffect, memo } from "react";
 import { useAppState } from "@/hooks/useAppState";
 import { useServiceWorker } from "@/hooks/useServiceWorker";
 import { useLogger } from "@/utils/logger";
 import AppScreens from "@/components/screens/AppScreens";
-import ModernLayout from "@/components/layout/ModernLayout";
-import TabsContentComponent from "@/components/layout/TabsContent";
+import GarminLayout from "@/components/layout/GarminLayout";
 import { LoadingPage } from "@/components/ui/loading-states";
 import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
 import AuthWrapper from "@/components/AuthWrapper";
+import GarminHomeScreen from "@/components/garmin/GarminHomeScreen";
+import GarminChallenges from "@/components/garmin/GarminChallenges";
+import GarminCalendar from "@/components/garmin/GarminCalendar";
+import GarminFeed from "@/components/garmin/GarminFeed";
+import TabsContentComponent from "@/components/layout/TabsContent";
 
 const Index = memo(() => {
   const logger = useLogger('Index');
@@ -21,8 +26,6 @@ const Index = memo(() => {
     showNewFeatures,
     setShowNewFeatures,
     activeTab,
-    setShowMobileMenu,
-    showMobileMenu,
     userProfile,
     userStats,
     isLoading,
@@ -98,8 +101,6 @@ const Index = memo(() => {
         showNewFeatures={showNewFeatures}
         setShowNewFeatures={setShowNewFeatures}
         activeTab={activeTab}
-        setShowMobileMenu={setShowMobileMenu}
-        showMobileMenu={showMobileMenu}
         userProfile={userProfile}
         userStats={userStats}
         isLoading={isLoading}
@@ -114,7 +115,7 @@ const Index = memo(() => {
   );
 });
 
-// Componente separado para a aplicação autenticada - NOVO DESIGN
+// Componente separado para a aplicação autenticada - GARMIN DESIGN
 const AuthenticatedApp = memo(({
   showWelcome,
   setShowWelcome,
@@ -190,16 +191,40 @@ const AuthenticatedApp = memo(({
     );
   }
 
-  logger.debug('Rendering main app with new modern layout');
+  logger.debug('Rendering main app with Garmin-inspired layout');
 
-  // App principal com NOVO LAYOUT MODERNO
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'home':
+        return <GarminHomeScreen />;
+      case 'challenges':
+        return <GarminChallenges />;
+      case 'calendar':
+        return <GarminCalendar />;
+      case 'feed':
+        return <GarminFeed />;
+      default:
+        // For other tabs, use the existing TabsContent component
+        return (
+          <TabsContentComponent
+            activeTab={activeTab}
+            setActiveTab={handleTabChange}
+            userProfile={userProfile}
+            userStats={userStats}
+            onNavigateToHome={handleNavigateToHome}
+          />
+        );
+    }
+  };
+
+  // App principal com NOVO LAYOUT GARMIN
   return (
     <GlobalErrorBoundary 
       level="page" 
       name="Main Application"
       showDebugInfo={true}
     >
-      <ModernLayout
+      <GarminLayout
         activeTab={activeTab}
         onTabChange={handleTabChange}
       >
@@ -208,15 +233,9 @@ const AuthenticatedApp = memo(({
           name="Tab Content"
           showDebugInfo={true}
         >
-          <TabsContentComponent
-            activeTab={activeTab}
-            setActiveTab={handleTabChange}
-            userProfile={userProfile}
-            userStats={userStats}
-            onNavigateToHome={handleNavigateToHome}
-          />
+          {renderTabContent()}
         </GlobalErrorBoundary>
-      </ModernLayout>
+      </GarminLayout>
     </GlobalErrorBoundary>
   );
 });
