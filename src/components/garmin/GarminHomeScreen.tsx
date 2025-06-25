@@ -175,7 +175,7 @@ const GarminHomeScreen = () => {
                 <div className="font-semibold text-primary">{challenge.name}</div>
                 <div className="text-sm text-secondary">{challenge.period}</div>
               </div>
-              <ModernButton variant="outline" size="sm">
+              <ModernButton variant="secondary" size="sm">
                 Participar
               </ModernButton>
             </div>
