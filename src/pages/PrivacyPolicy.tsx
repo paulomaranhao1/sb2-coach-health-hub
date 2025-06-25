@@ -1,11 +1,15 @@
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Shield, Eye, Database, Phone, Mail, Lock, Users, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
 const PrivacyPolicy = () => {
   const navigate = useNavigate();
-  return <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-white">
       <header className="border-b border-slate-200/60 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40 bg-white/95">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
@@ -306,12 +310,12 @@ const PrivacyPolicy = () => {
                   Para exercer seus direitos ou esclarecer dúvidas sobre esta política:
                 </p>
                 <div className="bg-white rounded-lg p-4 shadow-sm">
-                  <div className="flex items-center gap-3 mb-2">
+                  <div className="mb-2">
                     <Mail className="w-5 h-5 text-red-600" />
                     <p className="font-semibold text-slate-800">Email:</p>
                     <p className="text-slate-700">contato@sb2coach.ai</p>
                   </div>
-                  <div className="flex items-center gap-3">
+                  <div>
                     <Shield className="w-5 h-5 text-red-600" />
                     <p className="font-semibold text-slate-800">Responsável:</p>
                     <p className="text-slate-700">Equipe de Proteção de Dados SB2coach.ai</p>
@@ -338,6 +342,8 @@ const PrivacyPolicy = () => {
           </CardContent>
         </Card>
       </main>
-    </div>;
+    </div>
+  );
 };
+
 export default PrivacyPolicy;
