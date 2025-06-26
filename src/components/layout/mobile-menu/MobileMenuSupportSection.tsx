@@ -1,6 +1,5 @@
-
 import { Button } from "@/components/ui/button";
-import { BookOpen, Mail, ShoppingCart, LogOut, Shield, FileText } from "lucide-react";
+import { BookOpen, Mail, LogOut, Shield, FileText } from "lucide-react";
 import { AnimatedButton } from "@/components/ui/animated-button";
 import { toastFeedback } from "@/components/ui/toast-feedback";
 import { supabase } from "@/integrations/supabase/client";
@@ -142,14 +141,18 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
         </div>
       </div>
       
-      {/* Botão de Compra Destacado - Mesmo estilo do botão Novidades */}
+      {/* Botão de Compra Destacado - Com logomarca SB2 */}
       <div className="space-y-2">
         <button
           onClick={handlePurchase}
           className="w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-left transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg group bg-gradient-to-r from-red-500 to-red-600 text-white shadow-lg shadow-red-500/20 border border-red-400/30 hover:from-red-400 hover:to-red-500"
         >
           <div className="p-2 rounded-lg bg-white/20">
-            <ShoppingCart className="w-4 h-4 animate-pulse" />
+            <img 
+              src="/lovable-uploads/14136417-1259-434b-aa6a-01fed5a9a6a3.png" 
+              alt="SB2 Turbo Logo" 
+              className="w-4 h-4 animate-pulse"
+            />
           </div>
           <span className="font-bold">Comprar SB2 Turbo</span>
           <div className="ml-auto">
