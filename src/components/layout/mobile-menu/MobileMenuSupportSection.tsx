@@ -35,30 +35,10 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
 
   const handleLogout = async () => {
     try {
-      console.log('MobileMenu: Iniciando logout...');
-      setShowMobileMenu(false);
-      
-      // Clear local storage data
-      localStorage.clear();
-      
-      // Sign out from Supabase
-      const { error } = await supabase.auth.signOut();
-      
-      if (error) {
-        console.error('Erro no logout:', error);
-        toastFeedback.error('Erro ao fazer logout. Tente novamente.');
-        return;
-      }
-      
-      console.log('MobileMenu: Logout realizado com sucesso');
+      await supabase.auth.signOut();
       toastFeedback.success('Logout realizado com sucesso!');
-      
-      // Force page reload to reset all state
-      window.location.reload();
-      
     } catch (error) {
-      console.error('Erro inesperado no logout:', error);
-      toastFeedback.error('Erro inesperado ao fazer logout');
+      toastFeedback.error('Erro ao fazer logout');
     }
   };
 
