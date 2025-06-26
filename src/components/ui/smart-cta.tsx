@@ -1,15 +1,16 @@
-
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Plus, TrendingUp, Target } from "lucide-react";
-
 interface SmartCTAProps {
   userStats: any;
   weightEntries: any[];
   onAction: (action: string) => void;
 }
-
-const SmartCTA = ({ userStats, weightEntries, onAction }: SmartCTAProps) => {
+const SmartCTA = ({
+  userStats,
+  weightEntries,
+  onAction
+}: SmartCTAProps) => {
   // Determine the best next action based on user data
   const getSmartSuggestion = () => {
     if (!userStats || userStats.points === 0) {
@@ -22,7 +23,6 @@ const SmartCTA = ({ userStats, weightEntries, onAction }: SmartCTAProps) => {
         color: "bg-gradient-to-r from-blue-500 to-cyan-500"
       };
     }
-
     if (weightEntries.length === 0 || !weightEntries) {
       return {
         title: "Que tal registrar seu peso?",
@@ -33,7 +33,6 @@ const SmartCTA = ({ userStats, weightEntries, onAction }: SmartCTAProps) => {
         color: "bg-gradient-to-r from-green-500 to-emerald-500"
       };
     }
-
     if (userStats.streak === 0 || !userStats.streak) {
       return {
         title: "Comece um streak!",
@@ -44,7 +43,6 @@ const SmartCTA = ({ userStats, weightEntries, onAction }: SmartCTAProps) => {
         color: "bg-gradient-to-r from-purple-500 to-pink-500"
       };
     }
-
     if (userStats.total_photos_analyzed === 0 || !userStats.total_photos_analyzed) {
       return {
         title: "Analise sua primeira refeição!",
@@ -66,11 +64,8 @@ const SmartCTA = ({ userStats, weightEntries, onAction }: SmartCTAProps) => {
       color: "bg-gradient-to-r from-indigo-500 to-purple-500"
     };
   };
-
   const suggestion = getSmartSuggestion();
-
-  return (
-    <Card className={`${suggestion.color} text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group`}>
+  return <Card className={`${suggestion.color} text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer group`}>
       <CardContent className="p-6">
         <div className="flex items-center justify-between">
           <div className="flex-1">
@@ -80,13 +75,9 @@ const SmartCTA = ({ userStats, weightEntries, onAction }: SmartCTAProps) => {
             <p className="text-white/80 text-sm mb-4 group-hover:text-white/70 transition-colors">
               {suggestion.description}
             </p>
-            <Button 
-              onClick={() => onAction(suggestion.action)}
-              className="bg-white/20 hover:bg-white/30 text-white border-white/30 hover:border-white/50 transition-all duration-200"
-              size="sm"
-            >
+            <Button onClick={() => onAction(suggestion.action)} size="sm" className="bg-white/20 hover:bg-white/30 text-white border-white/30 hover:border-white/50 transition-all duration-200 py-[29px] rounded-xl">
               {suggestion.icon}
-              <span className="ml-2">{suggestion.actionText}</span>
+              <span className="ml-2 px-[28px] py-0">{suggestion.actionText}</span>
             </Button>
           </div>
           <div className="hidden md:block opacity-20 group-hover:opacity-30 transition-opacity">
@@ -94,8 +85,6 @@ const SmartCTA = ({ userStats, weightEntries, onAction }: SmartCTAProps) => {
           </div>
         </div>
       </CardContent>
-    </Card>
-  );
+    </Card>;
 };
-
 export default SmartCTA;
