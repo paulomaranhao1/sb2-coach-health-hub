@@ -9,6 +9,7 @@ import IntermittentFasting from "@/components/IntermittentFasting";
 import DailyHabit from "@/components/daily-habit/DailyHabit";
 import UserProfile from "@/components/UserProfile";
 import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
+import HomeOnlyLayout from "./HomeOnlyLayout";
 
 interface TabsContentComponentProps {
   activeTab: string;
@@ -66,10 +67,10 @@ const TabsContentComponent = memo(({
             weightEntries={weightEntries}
             lastFastingSession={lastFastingSession}
             recentFoodAnalysis={recentFoodAnalysis}
-            onAddWeight={handleAddWeight}
-            onStartFasting={handleStartFasting}
-            onAnalyzeFood={handleAnalyzeFood}
-            onViewProgress={handleViewProgress}
+            onAddWeight={() => setActiveTab('habit')}
+            onStartFasting={() => setActiveTab('fasting')}
+            onAnalyzeFood={() => setActiveTab('calorie')}
+            onViewProgress={() => setActiveTab('progress')}
           />
         );
       
@@ -103,25 +104,35 @@ const TabsContentComponent = memo(({
             weightEntries={weightEntries}
             lastFastingSession={lastFastingSession}
             recentFoodAnalysis={recentFoodAnalysis}
-            onAddWeight={handleAddWeight}
-            onStartFasting={handleStartFasting}
-            onAnalyzeFood={handleAnalyzeFood}
-            onViewProgress={handleViewProgress}
+            onAddWeight={() => setActiveTab('habit')}
+            onStartFasting={() => setActiveTab('fasting')}
+            onAnalyzeFood={() => setActiveTab('calorie')}
+            onViewProgress={() => setActiveTab('progress')}
           />
         );
     }
   };
 
-  return (
+  const content = (
     <GlobalErrorBoundary 
       level="section" 
       name={`Tab Content - ${activeTab}`}
       showDebugInfo={false}
     >
-      <div className="container mx-auto px-4 py-6">
-        {renderTabContent()}
-      </div>
+      {renderTabContent()}
     </GlobalErrorBoundary>
+  );
+
+  // Use layout limpo apenas para a home
+  if (activeTab === 'home') {
+    return <HomeOnlyLayout>{content}</HomeOnlyLayout>;
+  }
+
+  // Layout normal para outras abas
+  return (
+    <div className="container mx-auto px-4 py-6">
+      {content}
+    </div>
   );
 });
 
