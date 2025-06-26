@@ -1,23 +1,16 @@
 
-import { Tabs, TabsContent } from "@/components/ui/tabs";
-import WeightTracker from "@/components/WeightTracker";
-import SupplementReminder from "@/components/SupplementReminder";
-import AIChat from "@/components/AIChat";
+import { memo } from "react";
+import { useOptimizedData } from "@/hooks/useOptimizedData";
+import { LoadingSection } from "@/components/ui/loading-states";
+import HomeContent from "@/components/home/HomeContent";
 import ProgressDashboard from "@/components/ProgressDashboard";
-import UserProfile from "@/components/UserProfile";
-import AppSettings from "@/components/AppSettings";
-import DailyHabit from "@/components/DailyHabit";
-import GamificationSystem from "@/components/GamificationSystem";
-import IntermittentFasting from "@/components/IntermittentFasting";
-import TabNavigation from "@/components/layout/TabNavigation";
-import MotivationalGreeting from "@/components/MotivationalGreeting";
-import ComingSoonFeatures from "@/components/ComingSoonFeatures";
-import StatisticsOverview from "@/components/statistics/StatisticsOverview";
 import CalorieCounterTab from "@/components/CalorieCounterTab";
-import NewFeaturesScreen from "@/components/NewFeaturesScreen";
-import Roadmap from "../../pages/Roadmap";
+import IntermittentFasting from "@/components/IntermittentFasting";
+import DailyHabit from "@/components/daily-habit/DailyHabit";
+import UserProfile from "@/components/UserProfile";
+import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
 
-interface TabsContentProps {
+interface TabsContentComponentProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   userProfile: any;
@@ -25,64 +18,111 @@ interface TabsContentProps {
   onNavigateToHome: () => void;
 }
 
-const TabsContentComponent = ({
+const TabsContentComponent = memo(({
   activeTab,
   setActiveTab,
   userProfile,
   userStats,
   onNavigateToHome
-}: TabsContentProps) => {
+}: TabsContentComponentProps) => {
+  const {
+    weightEntries,
+    lastFastingSession,
+    recentFoodAnalysis,
+    isLoading
+  } = useOptimizedData(userProfile?.user_id);
+
+  const handleAddWeight = () => {
+    setActiveTab('habit');
+  };
+
+  const handleStartFasting = () => {
+    setActiveTab('fasting');
+  };
+
+  const handleAnalyzeFood = () => {
+    setActiveTab('calorie');
+  };
+
+  const handleViewProgress = () => {
+    setActiveTab('progress');
+  };
+
+  if (isLoading) {
+    return <LoadingSection text="Carregando dados..." />;
+  }
+
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case 'home':
+        return (
+          <HomeContent
+            userProfile={userProfile}
+            userStats={userStats}
+            weightEntries={weightEntries}
+            lastFastingSession={lastFastingSession}
+            recentFoodAnalysis={recentFoodAnalysis}
+            onAddWeight={handleAddWeight}
+            onStartFasting={handleStartFasting}
+            onAnalyzeFood={handleAnalyzeFood}
+            onViewProgress={handleViewProgress}
+          />
+        );
+      
+      case 'progress':
+        return (
+          <ProgressDashboard 
+            userProfile={userProfile}
+            userStats={userStats}
+          />
+        );
+      
+      case 'calorie':
+        return <CalorieCounterTab />;
+      
+      case 'fasting':
+        return <IntermittentFasting />;
+      
+      case 'habit':
+        return <DailyHabit />;
+      
+      case 'profile':
+        return (
+          <UserProfile 
+            onNavigateToHome={onNavigateToHome}
+          />
+        );
+      
+      default:
+        return (
+          <HomeContent
+            userProfile={userProfile}
+            userStats={userStats}
+            weightEntries={weightEntries}
+            lastFastingSession={lastFastingSession}
+            recentFoodAnalysis={recentFoodAnalysis}
+            onAddWeight={handleAddWeight}
+            onStartFasting={handleStartFasting}
+            onAnalyzeFood={handleAnalyzeFood}
+            onViewProgress={handleViewProgress}
+          />
+        );
+    }
+  };
+
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-
-      <TabsContent value="home" className="space-y-6">
-        <MotivationalGreeting />
-        <DailyHabit />
-        <ComingSoonFeatures />
-      </TabsContent>
-
-      <TabsContent value="chat">
-        <AIChat />
-      </TabsContent>
-
-      <TabsContent value="calorie-counter" className="space-y-6">
-        <CalorieCounterTab />
-      </TabsContent>
-
-      <TabsContent value="intermittent-fasting" className="space-y-6">
-        <IntermittentFasting />
-      </TabsContent>
-
-      <TabsContent value="gamification">
-        <GamificationSystem />
-      </TabsContent>
-
-      <TabsContent value="supplement">
-        <SupplementReminder />
-      </TabsContent>
-
-      <TabsContent value="roadmap">
-        <Roadmap />
-      </TabsContent>
-
-      <TabsContent value="statistics" className="space-y-6">
-        <StatisticsOverview userProfile={userProfile} userStats={userStats} />
-      </TabsContent>
-
-      <TabsContent value="profile">
-        <UserProfile onNavigateToHome={onNavigateToHome} />
-      </TabsContent>
-
-      <TabsContent value="settings">
-        <AppSettings />
-      </TabsContent>
-
-      <TabsContent value="new-features">
-        <NewFeaturesScreen onBack={() => setActiveTab('home')} />
-      </TabsContent>
-    </Tabs>
+    <GlobalErrorBoundary 
+      level="section" 
+      name={`Tab Content - ${activeTab}`}
+      showDebugInfo={false}
+    >
+      <div className="container mx-auto px-4 py-6">
+        {renderTabContent()}
+      </div>
+    </GlobalErrorBoundary>
   );
-};
+});
+
+TabsContentComponent.displayName = 'TabsContentComponent';
 
 export default TabsContentComponent;
