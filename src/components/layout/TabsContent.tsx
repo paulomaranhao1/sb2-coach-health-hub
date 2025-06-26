@@ -1,6 +1,6 @@
 
 import { memo } from "react";
-import { useOptimizedData } from "@/hooks/useOptimizedData";
+import { useHomeData } from "@/hooks/useHomeData";
 import { LoadingSection } from "@/components/ui/loading-states";
 import HomeContent from "@/components/home/HomeContent";
 import ProgressDashboard from "@/components/ProgressDashboard";
@@ -30,7 +30,7 @@ const TabsContentComponent = memo(({
     lastFastingSession,
     recentFoodAnalysis,
     isLoading
-  } = useOptimizedData(userProfile?.user_id);
+  } = useHomeData(userProfile?.user_id);
 
   const handleAddWeight = () => {
     setActiveTab('habit');
@@ -71,10 +71,7 @@ const TabsContentComponent = memo(({
       
       case 'progress':
         return (
-          <ProgressDashboard 
-            userProfile={userProfile}
-            userStats={userStats}
-          />
+          <ProgressDashboard />
         );
       
       case 'calorie':
