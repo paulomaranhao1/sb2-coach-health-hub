@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useLogger } from '@/utils/logger';
 
@@ -10,27 +10,20 @@ interface HomeData {
 }
 
 export const useHomeData = (userId?: string) => {
-  const [data, setData] = useState<HomeData>({
-    weightEntries: [],
-    lastFastingSession: undefined,
-    recentFoodAnalysis: undefined
-  });
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
-
   const logger = useLogger('useHomeData');
 
-  useEffect(() => {
-    const fetchHomeData = async () => {
+  const { data, isLoading, error } = useQuery({
+    queryKey: ['homeData', userId],
+    queryFn: async (): Promise<HomeData> => {
       if (!userId) {
-        setIsLoading(false);
-        return;
+        return {
+          weightEntries: [],
+          lastFastingSession: undefined,
+          recentFoodAnalysis: undefined
+        };
       }
 
       try {
-        setIsLoading(true);
-        setError(null);
-
         // Fetch weight entries
         const { data: weightEntries, error: weightError } = await supabase
           .from('weight_entries')
@@ -61,11 +54,11 @@ export const useHomeData = (userId?: string) => {
 
         if (foodError) throw foodError;
 
-        setData({
+        const result = {
           weightEntries: weightEntries || [],
           lastFastingSession: fastingSessions?.[0],
           recentFoodAnalysis: foodAnalyses?.[0]
-        });
+        };
 
         logger.info('Home data fetched successfully', {
           weightEntries: weightEntries?.length || 0,
@@ -73,20 +66,22 @@ export const useHomeData = (userId?: string) => {
           hasFoodAnalysis: !!foodAnalyses?.[0]
         });
 
+        return result;
       } catch (err) {
         const error = err instanceof Error ? err : new Error('Unknown error');
-        setError(error);
         logger.error('Error fetching home data', { error });
-      } finally {
-        setIsLoading(false);
+        throw error;
       }
-    };
-
-    fetchHomeData();
-  }, [userId, logger]);
+    },
+    enabled: !!userId,
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchOnWindowFocus: false
+  });
 
   return {
-    ...data,
+    weightEntries: data?.weightEntries || [],
+    lastFastingSession: data?.lastFastingSession,
+    recentFoodAnalysis: data?.recentFoodAnalysis,
     isLoading,
     error
   };

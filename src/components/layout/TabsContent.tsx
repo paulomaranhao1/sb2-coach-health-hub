@@ -29,8 +29,13 @@ const TabsContentComponent = memo(({
     weightEntries,
     lastFastingSession,
     recentFoodAnalysis,
-    isLoading
+    isLoading,
+    error
   } = useHomeData(userProfile?.user_id);
+
+  if (error) {
+    console.error('Error loading home data:', error);
+  }
 
   const handleAddWeight = () => {
     setActiveTab('habit');
@@ -48,13 +53,12 @@ const TabsContentComponent = memo(({
     setActiveTab('progress');
   };
 
-  if (isLoading) {
-    return <LoadingSection text="Carregando dados..." />;
-  }
-
   const renderTabContent = () => {
     switch (activeTab) {
       case 'home':
+        if (isLoading) {
+          return <LoadingSection text="Carregando dados..." />;
+        }
         return (
           <HomeContent
             userProfile={userProfile}
@@ -70,9 +74,7 @@ const TabsContentComponent = memo(({
         );
       
       case 'progress':
-        return (
-          <ProgressDashboard />
-        );
+        return <ProgressDashboard />;
       
       case 'calorie':
         return <CalorieCounterTab />;
@@ -91,6 +93,9 @@ const TabsContentComponent = memo(({
         );
       
       default:
+        if (isLoading) {
+          return <LoadingSection text="Carregando dados..." />;
+        }
         return (
           <HomeContent
             userProfile={userProfile}
