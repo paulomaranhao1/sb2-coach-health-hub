@@ -3,12 +3,12 @@ import React, { memo, useCallback } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Gift } from "lucide-react";
-import { useOptimizedGamification } from "@/hooks/useOptimizedGamification";
+import { useGamificationData } from "@/hooks/useGamificationData";
 import ErrorBoundary from "../error/ErrorBoundary";
 import { Skeleton } from "../ui/skeleton";
 
 const OptimizedDailyPointsCollector = memo(() => {
-  const { addPoints, dailyPointsClaimed, loading } = useOptimizedGamification();
+  const { addPoints, dailyPointsClaimed, loading } = useGamificationData();
 
   const handleCollectPoints = useCallback(() => {
     addPoints(10, "Pontos diários coletados!");

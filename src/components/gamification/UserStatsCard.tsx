@@ -1,9 +1,9 @@
 
 import OptimizedUserStatsCard from '../optimized/OptimizedUserStatsCard';
-import { useOptimizedGamification } from '@/hooks/useOptimizedGamification';
+import { useGamificationData } from '@/hooks/useGamificationData';
 
 const UserStatsCard = () => {
-  const { userStats, loading } = useOptimizedGamification();
+  const { userStats, loading } = useGamificationData();
   
   return <OptimizedUserStatsCard userStats={userStats} loading={loading} />;
 };
