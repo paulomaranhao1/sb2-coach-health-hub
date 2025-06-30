@@ -1,9 +1,7 @@
 
-import WelcomeScreen from "@/components/WelcomeScreen";
 import OnboardingScreen from "@/components/OnboardingScreen";
 import TutorialScreen from "@/components/TutorialScreen";
 import NewFeaturesScreen from "@/components/NewFeaturesScreen";
-import VideoWelcomeScreen from "@/components/VideoWelcomeScreen";
 import { Loading } from "@/components/ui/loading";
 
 interface AppScreensProps {
@@ -23,10 +21,6 @@ interface AppScreensProps {
 }
 
 const AppScreens = ({
-  showVideoWelcome,
-  handleVideoWelcomeComplete,
-  showWelcome,
-  setShowWelcome,
   showOnboarding,
   showTutorial,
   showNewFeatures,
@@ -37,15 +31,7 @@ const AppScreens = ({
   handleTutorialComplete,
   handleTutorialSkip
 }: AppScreensProps) => {
-  // Prioridade: Video Welcome > Welcome > Onboarding > Tutorial > New Features > Loading
-  if (showVideoWelcome) {
-    return <VideoWelcomeScreen onVideoComplete={handleVideoWelcomeComplete} />;
-  }
-
-  if (showWelcome) {
-    return <WelcomeScreen onContinue={() => setShowWelcome(false)} />;
-  }
-
+  // Prioridade: Onboarding > Tutorial > New Features > Loading
   if (showOnboarding) {
     return <OnboardingScreen onComplete={handleOnboardingComplete} />;
   }

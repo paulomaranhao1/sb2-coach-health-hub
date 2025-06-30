@@ -8,21 +8,16 @@ import { LoadingPage } from '@/components/ui/loading-states';
 
 const SimpleIndex = () => {
   const {
-    showVideoWelcome,
-    showWelcome,
     showOnboarding,
     showTutorial,
     showNewFeatures,
     isLoading,
     userProfile,
     userStats,
-    handleVideoWelcomeComplete,
-    handleWelcomeComplete,
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,
     handleNewFeaturesComplete,
-    setShowWelcome,
     setShowNewFeatures
   } = useSimpleAppState();
 
@@ -31,14 +26,14 @@ const SimpleIndex = () => {
     return <LoadingPage text="Carregando SB2coach.ai..." />;
   }
 
-  // Mostrar telas de fluxo se necessário
-  if (showVideoWelcome || showWelcome || showOnboarding || showTutorial || showNewFeatures) {
+  // Mostrar telas de fluxo se necessário - removendo video e welcome
+  if (showOnboarding || showTutorial || showNewFeatures) {
     return (
       <AppScreens
-        showVideoWelcome={showVideoWelcome}
-        handleVideoWelcomeComplete={handleVideoWelcomeComplete}
-        showWelcome={showWelcome}
-        setShowWelcome={setShowWelcome}
+        showVideoWelcome={false}
+        handleVideoWelcomeComplete={() => {}}
+        showWelcome={false}
+        setShowWelcome={() => {}}
         showOnboarding={showOnboarding}
         showTutorial={showTutorial}
         showNewFeatures={showNewFeatures}

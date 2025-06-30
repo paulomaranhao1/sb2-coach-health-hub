@@ -3,15 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { mockUserProfile, mockUserStats, mockSubscription } from '@/mocks/userData';
 
 export const useSimpleAppState = () => {
-  // Estados simples com localStorage
-  const [showVideoWelcome, setShowVideoWelcome] = useState(() => 
-    !localStorage.getItem('sb2_video_welcome_shown')
-  );
-  
-  const [showWelcome, setShowWelcome] = useState(() => 
-    !localStorage.getItem('sb2_welcome_completed')
-  );
-  
+  // Estados simples com localStorage - removendo video e welcome
   const [showOnboarding, setShowOnboarding] = useState(() => 
     !localStorage.getItem('sb2_onboarding_completed')
   );
@@ -32,19 +24,7 @@ export const useSimpleAppState = () => {
   const subscription = mockSubscription;
   const isAuthenticated = true; // Para simplificar, sempre autenticado
 
-  // Handlers simples
-  const handleVideoWelcomeComplete = useCallback(() => {
-    localStorage.setItem('sb2_video_welcome_shown', 'true');
-    setShowVideoWelcome(false);
-    setShowWelcome(true);
-  }, []);
-
-  const handleWelcomeComplete = useCallback(() => {
-    localStorage.setItem('sb2_welcome_completed', 'true');
-    setShowWelcome(false);
-    setShowOnboarding(true);
-  }, []);
-
+  // Handlers simples - removendo video e welcome handlers
   const handleOnboardingComplete = useCallback(() => {
     localStorage.setItem('sb2_onboarding_completed', 'true');
     setShowOnboarding(false);
@@ -69,9 +49,7 @@ export const useSimpleAppState = () => {
   }, []);
 
   return {
-    // Estados
-    showVideoWelcome,
-    showWelcome,
+    // Estados - removendo showVideoWelcome e showWelcome
     showOnboarding,
     showTutorial,
     showNewFeatures,
@@ -83,16 +61,13 @@ export const useSimpleAppState = () => {
     userStats,
     subscription,
     
-    // Handlers
-    handleVideoWelcomeComplete,
-    handleWelcomeComplete,
+    // Handlers - removendo handlers de video e welcome
     handleOnboardingComplete,
     handleTutorialComplete,
     handleTutorialSkip,
     handleNewFeaturesComplete,
     
     // Funções de controle simples
-    setShowWelcome,
     setShowNewFeatures
   };
 };
