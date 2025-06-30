@@ -16,11 +16,9 @@ interface OptimizedMainAppProps {
 const OptimizedMainApp = memo(({ userProfile, userStats }: OptimizedMainAppProps) => {
   const logger = useLogger('OptimizedMainApp');
   const [activeTab, setActiveTab] = useState('home');
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const handleTabChange = useCallback((tab: string) => {
     setActiveTab(tab);
-    setShowMobileMenu(false); // Close mobile menu on tab change
     logger.debug('Tab changed', { tab });
   }, [logger]);
 
@@ -30,12 +28,7 @@ const OptimizedMainApp = memo(({ userProfile, userStats }: OptimizedMainAppProps
   }, [logger]);
 
   return (
-    <AppLayout
-      showMobileMenu={showMobileMenu}
-      setShowMobileMenu={setShowMobileMenu}
-      activeTab={activeTab}
-      handleTabChange={handleTabChange}
-    >
+    <AppLayout>
       <GlobalErrorBoundary level="section" name="Tab Content">
         <Suspense fallback={<LoadingSection text="Carregando conteúdo..." />}>
           <LazyTabsContent
