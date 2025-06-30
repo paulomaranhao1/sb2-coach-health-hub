@@ -36,41 +36,41 @@ const TabsContentComponent = ({
         <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
 
         <div className="w-full">
-          <TabsContent value="home" className="w-full p-4 space-y-4">
+          <TabsContent value="home" className="w-full p-4 space-y-4 m-0">
             <MotivationalGreeting />
             <DailyHabit />
             <ComingSoonFeatures />
           </TabsContent>
 
-          <TabsContent value="chat" className="w-full p-4">
+          <TabsContent value="chat" className="w-full p-4 m-0">
             <AIChat />
           </TabsContent>
 
-          <TabsContent value="calorie-counter" className="w-full p-4">
+          <TabsContent value="calorie-counter" className="w-full p-4 m-0">
             <CalorieCounterTab />
           </TabsContent>
 
-          <TabsContent value="intermittent-fasting" className="w-full p-4">
+          <TabsContent value="intermittent-fasting" className="w-full p-4 m-0">
             <IntermittentFasting />
           </TabsContent>
 
-          <TabsContent value="gamification" className="w-full p-4">
+          <TabsContent value="gamification" className="w-full p-4 m-0">
             <GamificationSystem />
           </TabsContent>
 
-          <TabsContent value="supplement" className="w-full p-4">
+          <TabsContent value="supplement" className="w-full p-4 m-0">
             <SupplementReminder />
           </TabsContent>
 
-          <TabsContent value="statistics" className="w-full p-4">
+          <TabsContent value="statistics" className="w-full p-4 m-0">
             <StatisticsOverview userProfile={userProfile} userStats={userStats} />
           </TabsContent>
 
-          <TabsContent value="profile" className="w-full p-4">
+          <TabsContent value="profile" className="w-full p-4 m-0">
             <UserProfile onNavigateToHome={onNavigateToHome} />
           </TabsContent>
 
-          <TabsContent value="settings" className="w-full p-4">
+          <TabsContent value="settings" className="w-full p-4 m-0">
             <AppSettings />
           </TabsContent>
         </div>
