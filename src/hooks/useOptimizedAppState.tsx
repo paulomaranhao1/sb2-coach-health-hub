@@ -2,6 +2,7 @@
 import { useCallback, useMemo } from 'react';
 import { useConsolidatedAppData } from './useConsolidatedAppData';
 import { useLogger } from '@/utils/logger';
+import { supabase } from '@/integrations/supabase/client';
 
 export const useOptimizedAppState = () => {
   const { data, loading, updateAppFlow, updateProfileData, invalidateCache } = useConsolidatedAppData();
@@ -33,16 +34,42 @@ export const useOptimizedAppState = () => {
     logger.info('Welcome completed');
   }, [updateAppFlow, logger]);
 
-  const handleOnboardingComplete = useCallback(() => {
-    // Update app flow
-    localStorage.setItem('sb2_onboarding_completed', 'true');
-    updateAppFlow({ 
-      showOnboarding: false, 
-      showTutorial: true 
-    });
+  const handleOnboardingComplete = useCallback(async () => {
+    try {
+      // Update the user profile to mark onboarding as completed
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user && data.profile) {
+        const { error } = await supabase
+          .from('user_profiles')
+          .update({ onboarding_completed: true })
+          .eq('user_id', user.id);
 
-    logger.info('Onboarding completed');
-  }, [updateAppFlow, logger]);
+        if (error) {
+          logger.error('Error updating onboarding status', { error });
+        } else {
+          // Update local state
+          updateProfileData({ onboarding_completed: true });
+        }
+      }
+
+      // Update app flow
+      localStorage.setItem('sb2_onboarding_completed', 'true');
+      updateAppFlow({ 
+        showOnboarding: false, 
+        showTutorial: true 
+      });
+
+      logger.info('Onboarding completed');
+    } catch (error) {
+      logger.error('Error completing onboarding', { error });
+      // Still update the flow even if database update fails
+      localStorage.setItem('sb2_onboarding_completed', 'true');
+      updateAppFlow({ 
+        showOnboarding: false, 
+        showTutorial: true 
+      });
+    }
+  }, [updateAppFlow, updateProfileData, data.profile, logger]);
 
   const handleTutorialComplete = useCallback(() => {
     localStorage.setItem('sb2_tutorial_completed', 'true');
