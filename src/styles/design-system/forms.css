@@ -1,0 +1,39 @@
+
+/* Input System - No shadows */
+@layer components {
+  input,
+  textarea,
+  select {
+    background-color: rgb(var(--bg-primary)) !important;
+    color: rgb(var(--text-secondary)) !important;
+    border: 2px solid rgb(var(--border-medium)) !important;
+    border-radius: var(--radius-md) !important;
+    padding: var(--space-md) !important;
+    font-weight: 500;
+    font-size: 0.875rem;
+    transition: all 0.2s ease;
+  }
+  
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none !important;
+    border-color: rgb(var(--blue-primary)) !important;
+    box-shadow: none !important;
+  }
+  
+  input::placeholder,
+  textarea::placeholder {
+    color: rgb(var(--text-subtle)) !important;
+    font-weight: 400;
+  }
+  
+  /* Label System */
+  label {
+    color: rgb(var(--text-primary)) !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: var(--space-sm);
+    display: block;
+  }
+}

@@ -1,0 +1,35 @@
+
+/* Alert System - No shadows */
+@layer components {
+  .alert {
+    padding: var(--space-lg);
+    border-radius: var(--radius-lg);
+    border: 1px solid;
+    margin: var(--space-md) 0;
+    font-weight: 500;
+  }
+  
+  .alert-success {
+    background-color: rgb(var(--success-bg)) !important;
+    border-color: rgb(var(--success)) !important;
+    color: rgb(var(--text-primary)) !important;
+  }
+  
+  .alert-info {
+    background-color: rgb(var(--info-bg)) !important;
+    border-color: rgb(var(--blue-primary)) !important;
+    color: rgb(var(--text-primary)) !important;
+  }
+  
+  .alert-warning {
+    background-color: rgb(var(--warning-bg)) !important;
+    border-color: rgb(var(--warning)) !important;
+    color: rgb(var(--text-primary)) !important;
+  }
+  
+  .alert-error {
+    background-color: rgb(var(--error-bg)) !important;
+    border-color: rgb(var(--error)) !important;
+    color: rgb(var(--text-primary)) !important;
+  }
+}

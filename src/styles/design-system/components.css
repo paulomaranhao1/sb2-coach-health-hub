@@ -1,201 +1,31 @@
 
-/* Modern Component System - No shadows */
+/* Modern Component System - Main Entry Point */
+
+/* Import all component modules */
+@import './cards.css';
+@import './buttons.css';
+@import './forms.css';
+@import './alerts.css';
+@import './badges.css';
+
+/* Global Component Overrides */
 @layer components {
+  /* Force all text to have proper contrast */
+  * {
+    color: inherit;
+  }
   
-  /* Card System - Clean without shadows */
-  .card,
-  [class*="Card"],
-  .card-container {
+  /* Ensure buttons have proper text color */
+  button * {
+    color: inherit;
+  }
+  
+  /* Ensure cards have proper background and text */
+  [class*="Card"] {
     background-color: rgb(var(--bg-primary)) !important;
-    border: 1px solid rgb(var(--border-medium)) !important;
-    border-radius: var(--radius-lg) !important;
-    box-shadow: none !important;
-    transition: all 0.2s ease;
-    padding: var(--space-lg);
   }
   
-  .card:hover,
-  [class*="Card"]:hover {
-    box-shadow: none !important;
-    transform: translateY(-1px);
-  }
-  
-  .card-header,
-  [class*="CardHeader"] {
-    border-bottom: 1px solid rgb(var(--border-light)) !important;
-    padding-bottom: var(--space-md);
-    margin-bottom: var(--space-md);
-  }
-  
-  .card-title,
-  [class*="CardTitle"] {
-    color: rgb(var(--text-primary)) !important;
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin-bottom: var(--space-sm);
-  }
-  
-  .card-description,
-  [class*="CardDescription"] {
-    color: rgb(var(--text-tertiary)) !important;
-    font-weight: 500;
-    font-size: 0.875rem;
-  }
-  
-  /* Button System - No shadows */
-  .btn,
-  button {
-    font-weight: 600;
-    border-radius: var(--radius-md) !important;
-    transition: all 0.2s ease;
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: var(--space-sm);
-    padding: var(--space-md) var(--space-lg);
-    font-size: 0.875rem;
-  }
-  
-  /* Primary Button - No shadows */
-  .btn-primary,
-  button[class*="bg-blue"],
-  button[class*="bg-primary"] {
-    background: linear-gradient(135deg, rgb(var(--blue-primary)), rgb(var(--blue-secondary))) !important;
-    color: white !important;
-    box-shadow: none !important;
-  }
-  
-  .btn-primary:hover,
-  button[class*="bg-blue"]:hover,
-  button[class*="bg-primary"]:hover {
-    background: linear-gradient(135deg, rgb(var(--blue-secondary)), rgb(var(--blue-tertiary))) !important;
-    box-shadow: none !important;
-    transform: translateY(-1px);
-  }
-  
-  /* Secondary Button - No shadows */
-  .btn-secondary,
-  button[variant="outline"] {
-    background-color: rgb(var(--bg-primary)) !important;
-    color: rgb(var(--text-secondary)) !important;
-    border: 2px solid rgb(var(--border-medium)) !important;
-  }
-  
-  .btn-secondary:hover,
-  button[variant="outline"]:hover {
-    background-color: rgb(var(--bg-tertiary)) !important;
-    border-color: rgb(var(--border-strong)) !important;
-    transform: translateY(-1px);
-  }
-  
-  /* State Buttons - No shadows */
-  .btn-success {
-    background-color: rgb(var(--success)) !important;
-    color: white !important;
-  }
-  
-  .btn-warning {
-    background-color: rgb(var(--warning)) !important;
-    color: rgb(var(--text-primary)) !important;
-  }
-  
-  .btn-error {
-    background-color: rgb(var(--error)) !important;
-    color: white !important;
-  }
-  
-  /* Input System - No shadows */
-  input,
-  textarea,
-  select {
-    background-color: rgb(var(--bg-primary)) !important;
-    color: rgb(var(--text-secondary)) !important;
-    border: 2px solid rgb(var(--border-medium)) !important;
-    border-radius: var(--radius-md) !important;
-    padding: var(--space-md) !important;
-    font-weight: 500;
-    font-size: 0.875rem;
-    transition: all 0.2s ease;
-  }
-  
-  input:focus,
-  textarea:focus,
-  select:focus {
-    outline: none !important;
-    border-color: rgb(var(--blue-primary)) !important;
-    box-shadow: none !important;
-  }
-  
-  input::placeholder,
-  textarea::placeholder {
-    color: rgb(var(--text-subtle)) !important;
-    font-weight: 400;
-  }
-  
-  /* Label System */
-  label {
-    color: rgb(var(--text-primary)) !important;
-    font-weight: 600;
-    font-size: 0.875rem;
-    margin-bottom: var(--space-sm);
-    display: block;
-  }
-  
-  /* Alert System - No shadows */
-  .alert {
-    padding: var(--space-lg);
-    border-radius: var(--radius-lg);
-    border: 1px solid;
-    margin: var(--space-md) 0;
-    font-weight: 500;
-  }
-  
-  .alert-success {
-    background-color: rgb(var(--success-bg)) !important;
-    border-color: rgb(var(--success)) !important;
-    color: rgb(var(--text-primary)) !important;
-  }
-  
-  .alert-info {
-    background-color: rgb(var(--info-bg)) !important;
-    border-color: rgb(var(--blue-primary)) !important;
-    color: rgb(var(--text-primary)) !important;
-  }
-  
-  .alert-warning {
-    background-color: rgb(var(--warning-bg)) !important;
-    border-color: rgb(var(--warning)) !important;
-    color: rgb(var(--text-primary)) !important;
-  }
-  
-  .alert-error {
-    background-color: rgb(var(--error-bg)) !important;
-    border-color: rgb(var(--error)) !important;
-    color: rgb(var(--text-primary)) !important;
-  }
-  
-  /* Badge System - No shadows */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: var(--space-xs) var(--space-md);
-    font-size: 0.75rem;
-    font-weight: 600;
-    border-radius: var(--radius-xl);
-    border: 1px solid;
-  }
-  
-  .badge-primary {
-    background-color: rgb(var(--blue-subtle)) !important;
-    color: rgb(var(--blue-tertiary)) !important;
-    border-color: rgb(var(--blue-light)) !important;
-  }
-  
-  .badge-secondary {
-    background-color: rgb(var(--bg-tertiary)) !important;
-    color: rgb(var(--text-secondary)) !important;
-    border-color: rgb(var(--border-medium)) !important;
+  [class*="Card"] * {
+    color: inherit;
   }
 }

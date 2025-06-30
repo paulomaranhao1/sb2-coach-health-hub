@@ -1,0 +1,42 @@
+
+/* Card System - Clean without shadows */
+@layer components {
+  .card,
+  [class*="Card"],
+  .card-container {
+    background-color: rgb(var(--bg-primary)) !important;
+    border: 1px solid rgb(var(--border-medium)) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: none !important;
+    transition: all 0.2s ease;
+    padding: var(--space-lg);
+  }
+  
+  .card:hover,
+  [class*="Card"]:hover {
+    box-shadow: none !important;
+    transform: translateY(-1px);
+  }
+  
+  .card-header,
+  [class*="CardHeader"] {
+    border-bottom: 1px solid rgb(var(--border-light)) !important;
+    padding-bottom: var(--space-md);
+    margin-bottom: var(--space-md);
+  }
+  
+  .card-title,
+  [class*="CardTitle"] {
+    color: rgb(var(--text-primary)) !important;
+    font-weight: 700;
+    font-size: 1.25rem;
+    margin-bottom: var(--space-sm);
+  }
+  
+  .card-description,
+  [class*="CardDescription"] {
+    color: rgb(var(--text-tertiary)) !important;
+    font-weight: 500;
+    font-size: 0.875rem;
+  }
+}

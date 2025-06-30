@@ -1,0 +1,66 @@
+
+/* Button System - No shadows */
+@layer components {
+  .btn,
+  button {
+    font-weight: 600;
+    border-radius: var(--radius-md) !important;
+    transition: all 0.2s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-md) var(--space-lg);
+    font-size: 0.875rem;
+  }
+  
+  /* Primary Button - No shadows */
+  .btn-primary,
+  button[class*="bg-blue"],
+  button[class*="bg-primary"] {
+    background: linear-gradient(135deg, rgb(var(--blue-primary)), rgb(var(--blue-secondary))) !important;
+    color: white !important;
+    box-shadow: none !important;
+  }
+  
+  .btn-primary:hover,
+  button[class*="bg-blue"]:hover,
+  button[class*="bg-primary"]:hover {
+    background: linear-gradient(135deg, rgb(var(--blue-secondary)), rgb(var(--blue-tertiary))) !important;
+    box-shadow: none !important;
+    transform: translateY(-1px);
+  }
+  
+  /* Secondary Button - No shadows */
+  .btn-secondary,
+  button[variant="outline"] {
+    background-color: rgb(var(--bg-primary)) !important;
+    color: rgb(var(--text-secondary)) !important;
+    border: 2px solid rgb(var(--border-medium)) !important;
+  }
+  
+  .btn-secondary:hover,
+  button[variant="outline"]:hover {
+    background-color: rgb(var(--bg-tertiary)) !important;
+    border-color: rgb(var(--border-strong)) !important;
+    transform: translateY(-1px);
+  }
+  
+  /* State Buttons - No shadows */
+  .btn-success {
+    background-color: rgb(var(--success)) !important;
+    color: white !important;
+  }
+  
+  .btn-warning {
+    background-color: rgb(var(--warning)) !important;
+    color: rgb(var(--text-primary)) !important;
+  }
+  
+  .btn-error {
+    background-color: rgb(var(--error)) !important;
+    color: white !important;
+  }
+}

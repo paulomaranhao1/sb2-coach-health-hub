@@ -1,0 +1,25 @@
+
+/* Badge System - No shadows */
+@layer components {
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-xs) var(--space-md);
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: var(--radius-xl);
+    border: 1px solid;
+  }
+  
+  .badge-primary {
+    background-color: rgb(var(--blue-subtle)) !important;
+    color: rgb(var(--blue-tertiary)) !important;
+    border-color: rgb(var(--blue-light)) !important;
+  }
+  
+  .badge-secondary {
+    background-color: rgb(var(--bg-tertiary)) !important;
+    color: rgb(var(--text-secondary)) !important;
+    border-color: rgb(var(--border-medium)) !important;
+  }
+}
