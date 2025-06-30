@@ -131,10 +131,17 @@ export const useOptimizedUserData = () => {
       // Calcular estatísticas de progresso
       const progressStats = calculateProgressStats(weightEntries);
 
+      // Mapear subscription para o formato correto
+      const subscription = subscriptionResponse.data ? {
+        subscription_type: subscriptionResponse.data.subscription_type,
+        subscription_active: subscriptionResponse.data.is_active,
+        subscription_expires_at: subscriptionResponse.data.expires_at || ''
+      } : null;
+
       const newData: OptimizedUserData = {
         profile: profileResponse.data,
         stats: statsResponse.data,
-        subscription: subscriptionResponse.data,
+        subscription,
         weightEntries,
         progressStats
       };
