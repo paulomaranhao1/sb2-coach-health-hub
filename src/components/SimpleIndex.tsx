@@ -3,7 +3,7 @@ import React from 'react';
 import { useSimpleAppState } from '@/hooks/useSimpleAppState';
 import AppScreens from '@/components/screens/AppScreens';
 import OptimizedMainApp from '@/components/optimized/OptimizedMainApp';
-import AuthWrapper from '@/components/AuthWrapper';
+import AuthScreen from '@/components/AuthScreen';
 import { LoadingPage } from '@/components/ui/loading-states';
 
 const SimpleIndex = () => {
@@ -12,6 +12,7 @@ const SimpleIndex = () => {
     showTutorial,
     showNewFeatures,
     isLoading,
+    isAuthenticated,
     userProfile,
     userStats,
     handleOnboardingComplete,
@@ -26,7 +27,12 @@ const SimpleIndex = () => {
     return <LoadingPage text="Carregando SB2coach.ai..." />;
   }
 
-  // Mostrar telas de fluxo se necessário - removendo video e welcome
+  // Se não está autenticado, mostrar tela de login
+  if (!isAuthenticated) {
+    return <AuthScreen />;
+  }
+
+  // Mostrar telas de fluxo se necessário
   if (showOnboarding || showTutorial || showNewFeatures) {
     return (
       <AppScreens
@@ -49,12 +55,10 @@ const SimpleIndex = () => {
 
   // Mostrar app principal
   return (
-    <AuthWrapper>
-      <OptimizedMainApp 
-        userProfile={userProfile}
-        userStats={userStats}
-      />
-    </AuthWrapper>
+    <OptimizedMainApp 
+      userProfile={userProfile}
+      userStats={userStats}
+    />
   );
 };
 
