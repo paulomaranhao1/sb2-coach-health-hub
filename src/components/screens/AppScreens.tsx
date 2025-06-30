@@ -17,7 +17,7 @@ interface AppScreensProps {
   setShowNewFeatures: (show: boolean) => void;
   isLoading: boolean;
   subscriptionLoading: boolean;
-  handleOnboardingComplete: (profileData: any) => void;
+  handleOnboardingComplete: () => void;
   handleTutorialComplete: () => void;
   handleTutorialSkip: () => void;
 }
