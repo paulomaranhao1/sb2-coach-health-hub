@@ -1,22 +1,22 @@
 
-/* Modern Component System - Elegant and Consistent */
+/* Modern Component System - No shadows */
 @layer components {
   
-  /* Card System - Clean and modern */
+  /* Card System - Clean without shadows */
   .card,
   [class*="Card"],
   .card-container {
     background-color: rgb(var(--bg-primary)) !important;
     border: 1px solid rgb(var(--border-medium)) !important;
     border-radius: var(--radius-lg) !important;
-    box-shadow: var(--shadow-soft) !important;
+    box-shadow: none !important;
     transition: all 0.2s ease;
     padding: var(--space-lg);
   }
   
   .card:hover,
   [class*="Card"]:hover {
-    box-shadow: var(--shadow-medium) !important;
+    box-shadow: none !important;
     transform: translateY(-1px);
   }
   
@@ -42,7 +42,7 @@
     font-size: 0.875rem;
   }
   
-  /* Button System - Elegant and consistent */
+  /* Button System - No shadows */
   .btn,
   button {
     font-weight: 600;
@@ -58,24 +58,24 @@
     font-size: 0.875rem;
   }
   
-  /* Primary Button - Elegant blue */
+  /* Primary Button - No shadows */
   .btn-primary,
   button[class*="bg-blue"],
   button[class*="bg-primary"] {
     background: linear-gradient(135deg, rgb(var(--blue-primary)), rgb(var(--blue-secondary))) !important;
     color: white !important;
-    box-shadow: var(--shadow-button) !important;
+    box-shadow: none !important;
   }
   
   .btn-primary:hover,
   button[class*="bg-blue"]:hover,
   button[class*="bg-primary"]:hover {
     background: linear-gradient(135deg, rgb(var(--blue-secondary)), rgb(var(--blue-tertiary))) !important;
-    box-shadow: var(--shadow-button-hover) !important;
+    box-shadow: none !important;
     transform: translateY(-1px);
   }
   
-  /* Secondary Button - Clean gray */
+  /* Secondary Button - No shadows */
   .btn-secondary,
   button[variant="outline"] {
     background-color: rgb(var(--bg-primary)) !important;
@@ -90,7 +90,7 @@
     transform: translateY(-1px);
   }
   
-  /* State Buttons */
+  /* State Buttons - No shadows */
   .btn-success {
     background-color: rgb(var(--success)) !important;
     color: white !important;
@@ -106,7 +106,7 @@
     color: white !important;
   }
   
-  /* Input System - Clean and accessible */
+  /* Input System - No shadows */
   input,
   textarea,
   select {
@@ -125,7 +125,7 @@
   select:focus {
     outline: none !important;
     border-color: rgb(var(--blue-primary)) !important;
-    box-shadow: 0 0 0 3px rgba(var(--blue-primary), 0.1) !important;
+    box-shadow: none !important;
   }
   
   input::placeholder,
@@ -143,7 +143,7 @@
     display: block;
   }
   
-  /* Alert System - High contrast */
+  /* Alert System - No shadows */
   .alert {
     padding: var(--space-lg);
     border-radius: var(--radius-lg);
@@ -176,7 +176,7 @@
     color: rgb(var(--text-primary)) !important;
   }
   
-  /* Badge System */
+  /* Badge System - No shadows */
   .badge {
     display: inline-flex;
     align-items: center;
