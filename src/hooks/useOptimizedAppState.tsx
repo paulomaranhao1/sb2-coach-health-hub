@@ -33,24 +33,16 @@ export const useOptimizedAppState = () => {
     logger.info('Welcome completed');
   }, [updateAppFlow, logger]);
 
-  const handleOnboardingComplete = useCallback(async (profileData: any) => {
-    try {
-      // Update profile with onboarding data
-      const updatedProfile = { ...profileData, onboarding_completed: true };
-      updateProfileData(updatedProfile);
-      
-      // Update app flow
-      localStorage.setItem('sb2_onboarding_completed', 'true');
-      updateAppFlow({ 
-        showOnboarding: false, 
-        showTutorial: true 
-      });
+  const handleOnboardingComplete = useCallback(() => {
+    // Update app flow
+    localStorage.setItem('sb2_onboarding_completed', 'true');
+    updateAppFlow({ 
+      showOnboarding: false, 
+      showTutorial: true 
+    });
 
-      logger.info('Onboarding completed');
-    } catch (error) {
-      logger.error('Error completing onboarding', { error });
-    }
-  }, [updateProfileData, updateAppFlow, logger]);
+    logger.info('Onboarding completed');
+  }, [updateAppFlow, logger]);
 
   const handleTutorialComplete = useCallback(() => {
     localStorage.setItem('sb2_tutorial_completed', 'true');
