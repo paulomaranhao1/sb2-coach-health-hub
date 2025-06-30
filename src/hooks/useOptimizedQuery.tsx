@@ -89,7 +89,7 @@ export function useOptimizedQuery<T>({
       cache.set(cacheKey, { data: result, timestamp: Date.now() }, {
         ttl: cacheTime,
         tags: ['query-cache'],
-        priority: 'normal'
+        priority: 'medium'
       });
 
       performanceMonitor.markEnd(queryId);
@@ -134,7 +134,7 @@ export function useOptimizedQuery<T>({
       cache.set(cacheKey, { data: newData, timestamp: Date.now() }, {
         ttl: cacheTime,
         tags: ['query-cache'],
-        priority: 'normal'
+        priority: 'medium'
       });
     }
   }, [optimisticUpdates, cache, cacheKey, cacheTime]);
