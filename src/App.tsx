@@ -4,29 +4,19 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { preloadCriticalResources } from "@/utils/optimizedPerformance";
-
-// Lazy load pages for better performance
 import { lazy, Suspense, useEffect } from "react";
 import { LoadingPage } from "@/components/ui/loading-states";
 
 const LazyIndex = lazy(() => import("./pages/Index"));
-const LazyNotFound = lazy(() => import("./pages/NotFound"));
-const LazyPrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
-const LazyTermsOfService = lazy(() => import("./pages/TermsOfService"));
-const LazyRoadmap = lazy(() => import("./pages/Roadmap"));
 
 // Optimized QueryClient configuration
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 2 * 60 * 1000, // 2 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes (renamed from cacheTime)
+      staleTime: 2 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
-      retry: 1,
-      retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000)
-    },
-    mutations: {
       retry: 1
     }
   }
@@ -34,53 +24,36 @@ const queryClient = new QueryClient({
 
 function App() {
   useEffect(() => {
-    // Preload critical resources on app start
     preloadCriticalResources();
+    
+    // Force light theme
+    document.documentElement.classList.remove('dark');
+    document.documentElement.setAttribute('data-theme', 'light');
   }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Sonner />
-        <Router>
-          <Suspense fallback={<LoadingPage text="Carregando SB2coach.ai..." />}>
-            <Routes>
-              <Route path="/" element={<LazyIndex />} />
-              <Route 
-                path="/privacy-policy" 
-                element={
-                  <Suspense fallback={<LoadingPage text="Carregando..." />}>
-                    <LazyPrivacyPolicy />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/terms-of-service" 
-                element={
-                  <Suspense fallback={<LoadingPage text="Carregando..." />}>
-                    <LazyTermsOfService />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="/roadmap" 
-                element={
-                  <Suspense fallback={<LoadingPage text="Carregando..." />}>
-                    <LazyRoadmap />
-                  </Suspense>
-                } 
-              />
-              <Route 
-                path="*" 
-                element={
-                  <Suspense fallback={<LoadingPage text="Carregando..." />}>
-                    <LazyNotFound />
-                  </Suspense>
-                } 
-              />
-            </Routes>
-          </Suspense>
-        </Router>
+        <div className="w-full min-h-screen bg-slate-50">
+          <Sonner 
+            position="top-center"
+            toastOptions={{
+              style: {
+                background: 'white',
+                color: 'rgb(51 65 85)',
+                border: '1px solid rgb(226 232 240)'
+              }
+            }}
+          />
+          <Router>
+            <Suspense fallback={<LoadingPage text="Carregando SB2coach.ai..." />}>
+              <Routes>
+                <Route path="/" element={<LazyIndex />} />
+                <Route path="*" element={<LazyIndex />} />
+              </Routes>
+            </Suspense>
+          </Router>
+        </div>
       </TooltipProvider>
     </QueryClientProvider>
   );

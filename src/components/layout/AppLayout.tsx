@@ -1,45 +1,20 @@
 
 import { ReactNode } from 'react';
-import Header from './Header';
-import MobileMenu from './MobileMenu';
 import { SkipNav } from '@/components/ui/skip-nav';
 
 interface AppLayoutProps {
   children: ReactNode;
-  showMobileMenu: boolean;
-  setShowMobileMenu: (show: boolean) => void;
-  activeTab: string;
-  handleTabChange: (value: string) => void;
 }
 
-const AppLayout = ({
-  children,
-  showMobileMenu,
-  setShowMobileMenu,
-  activeTab,
-  handleTabChange
-}: AppLayoutProps) => {
+const AppLayout = ({ children }: AppLayoutProps) => {
   const skipNavLinks = [
     { href: '#main-content', label: 'Pular para conteúdo principal' },
-    { href: '#navigation', label: 'Pular para navegação' },
-    { href: '#footer', label: 'Pular para rodapé' }
+    { href: '#navigation', label: 'Pular para navegação' }
   ];
 
   return (
-    <div className="min-h-screen w-full bg-background text-foreground transition-colors duration-500">
+    <div className="min-h-screen w-full bg-slate-50 text-slate-700">
       <SkipNav links={skipNavLinks} />
-      
-      <Header 
-        showMobileMenu={showMobileMenu}
-        setShowMobileMenu={setShowMobileMenu}
-      />
-
-      <MobileMenu 
-        showMobileMenu={showMobileMenu}
-        setShowMobileMenu={setShowMobileMenu}
-        activeTab={activeTab}
-        handleTabChange={handleTabChange}
-      />
 
       <main 
         id="main-content"
