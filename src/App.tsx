@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -9,7 +8,7 @@ import { preloadCriticalResources } from "@/utils/optimizedPerformance";
 import { lazy, Suspense, useEffect } from "react";
 import { LoadingPage } from "@/components/ui/loading-states";
 
-const LazyIndex = lazy(() => import("@/components/optimized/OptimizedIndex"));
+const LazyIndex = lazy(() => import("./pages/Index"));
 const LazyNotFound = lazy(() => import("./pages/NotFound"));
 const LazyPrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const LazyTermsOfService = lazy(() => import("./pages/TermsOfService"));

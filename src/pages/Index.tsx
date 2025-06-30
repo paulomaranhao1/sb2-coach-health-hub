@@ -1,9 +1,9 @@
 
-import OptimizedIndex from '@/components/optimized/OptimizedIndex';
+import SimpleIndex from '@/components/SimpleIndex';
 
-// Simple re-export of the optimized version
+// Re-export do componente simplificado
 const Index = () => {
-  return <OptimizedIndex />;
+  return <SimpleIndex />;
 };
 
 export default Index;
