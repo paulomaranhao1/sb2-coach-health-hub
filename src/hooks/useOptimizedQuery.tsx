@@ -1,213 +1,173 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { useCache } from '@/utils/cacheManager';
-import { logger } from '@/utils/logger';
+import { useUnifiedCache } from './useUnifiedCache';
+import { useLogger } from '@/utils/logger';
+import { performanceMonitor } from '@/utils/optimizedPerformance';
 
-interface UseOptimizedQueryOptions<T> {
-  cacheKey: string;
+interface OptimizedQueryOptions<T> {
+  queryKey: string[];
   queryFn: () => Promise<T>;
   enabled?: boolean;
-  staleTime?: number;
   cacheTime?: number;
-  retryCount?: number;
+  staleTime?: number;
+  retry?: number;
   retryDelay?: number;
-  onSuccess?: (data: T) => void;
-  onError?: (error: Error) => void;
-  tags?: string[];
+  refetchOnWindowFocus?: boolean;
+  optimisticUpdates?: boolean;
 }
 
-interface QueryState<T> {
-  data: T | null;
-  isLoading: boolean;
-  error: Error | null;
-  isSuccess: boolean;
-  isError: boolean;
-  isFetching: boolean;
-  lastUpdated: number | null;
-}
-
-export const useOptimizedQuery = <T,>({
-  cacheKey,
+export function useOptimizedQuery<T>({
+  queryKey,
   queryFn,
   enabled = true,
-  staleTime = 5 * 60 * 1000, // 5 minutos
-  cacheTime = 10 * 60 * 1000, // 10 minutos
-  retryCount = 3,
+  cacheTime = 5 * 60 * 1000, // 5 minutes
+  staleTime = 2 * 60 * 1000, // 2 minutes
+  retry = 1,
   retryDelay = 1000,
-  onSuccess,
-  onError,
-  tags = []
-}: UseOptimizedQueryOptions<T>) => {
-  const cache = useCache();
-  const [state, setState] = useState<QueryState<T>>({
-    data: null,
-    isLoading: false,
-    error: null,
-    isSuccess: false,
-    isError: false,
-    isFetching: false,
-    lastUpdated: null
-  });
+  refetchOnWindowFocus = false,
+  optimisticUpdates = false
+}: OptimizedQueryOptions<T>) {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  
+  const cache = useUnifiedCache();
+  const logger = useLogger(`useOptimizedQuery:${queryKey.join(':')}`);
+  const retryCountRef = useRef(0);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  
+  const cacheKey = queryKey.join(':');
 
-  const retryTimeoutRef = useRef<NodeJS.Timeout>();
-  const abortControllerRef = useRef<AbortController>();
-
-  // Função para atualizar estado
-  const updateState = useCallback((updates: Partial<QueryState<T>>) => {
-    setState(prev => ({ ...prev, ...updates }));
-  }, []);
-
-  // Função para buscar dados
-  const fetchData = useCallback(async (retries = 0): Promise<void> => {
-    // Cancelar requisição anterior se existir
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-    }
-
-    // Criar novo AbortController
-    abortControllerRef.current = new AbortController();
-
-    try {
-      updateState({ isFetching: true, error: null });
-
-      const startTime = performance.now();
-      logger.info(`Starting query: ${cacheKey}`, { retries });
-
-      const data = await queryFn();
-      
-      const duration = performance.now() - startTime;
-      logger.info(`Query completed: ${cacheKey}`, { duration: `${duration.toFixed(2)}ms` });
-
-      // Salvar no cache
-      cache.set(cacheKey, data, { 
-        ttl: cacheTime, 
-        tags: ['query', ...tags],
-        priority: 'medium'
-      });
-
-      // Atualizar estado
-      updateState({
-        data,
-        isLoading: false,
-        isFetching: false,
-        isSuccess: true,
-        isError: false,
-        error: null,
-        lastUpdated: Date.now()
-      });
-
-      // Callback de sucesso
-      if (onSuccess) {
-        onSuccess(data);
-      }
-
-    } catch (error) {
-      if (error instanceof Error && error.name === 'AbortError') {
-        logger.info(`Query aborted: ${cacheKey}`);
-        return;
-      }
-
-      logger.error(`Query error: ${cacheKey}`, { error, retries });
-
-      // Tentar novamente se houver tentativas restantes
-      if (retries < retryCount) {
-        const delay = retryDelay * Math.pow(2, retries); // Exponential backoff
-        
-        retryTimeoutRef.current = setTimeout(() => {
-          fetchData(retries + 1);
-        }, delay);
-
-        return;
-      }
-
-      // Atualizar estado com erro
-      updateState({
-        error: error as Error,
-        isLoading: false,
-        isFetching: false,
-        isSuccess: false,
-        isError: true
-      });
-
-      // Callback de erro
-      if (onError) {
-        onError(error as Error);
-      }
-    }
-  }, [cacheKey, queryFn, cacheTime, tags, retryCount, retryDelay, onSuccess, onError, cache, updateState]);
-
-  // Função para revalidar dados
-  const refetch = useCallback(() => {
-    fetchData();
-  }, [fetchData]);
-
-  // Função para invalidar cache e refetch
-  const invalidateAndRefetch = useCallback(() => {
-    cache.delete(cacheKey);
-    fetchData();
-  }, [cache, cacheKey, fetchData]);
-
-  // Efeito principal
-  useEffect(() => {
+  const fetchData = useCallback(async (force = false) => {
     if (!enabled) return;
 
-    // Verificar cache primeiro
-    const cachedData = cache.get<T>(cacheKey);
-    
-    if (cachedData) {
-      logger.info(`Using cached data: ${cacheKey}`);
-      updateState({
-        data: cachedData,
-        isLoading: false,
-        isSuccess: true,
-        isError: false,
-        error: null,
-        lastUpdated: Date.now()
+    // Cancel any ongoing request
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = new AbortController();
+
+    const queryId = `query-${cacheKey}-${Date.now()}`;
+    performanceMonitor.markStart(queryId);
+
+    try {
+      // Check cache first
+      if (!force) {
+        const cached = cache.get<{ data: T; timestamp: number }>(cacheKey);
+        if (cached) {
+          const age = Date.now() - cached.timestamp;
+          if (age < staleTime) {
+            setData(cached.data);
+            setLoading(false);
+            setError(null);
+            logger.debug('Serving fresh cached data', { age });
+            return;
+          }
+          
+          if (age < cacheTime) {
+            // Serve stale data while fetching fresh
+            setData(cached.data);
+            setLoading(false);
+            logger.debug('Serving stale data while fetching fresh', { age });
+          }
+        }
+      }
+
+      setLoading(true);
+      setError(null);
+
+      const result = await queryFn();
+      
+      // Check if request was aborted
+      if (abortControllerRef.current?.signal.aborted) {
+        return;
+      }
+
+      setData(result);
+      setError(null);
+      retryCountRef.current = 0;
+
+      // Cache the result
+      cache.set(cacheKey, { data: result, timestamp: Date.now() }, {
+        ttl: cacheTime,
+        tags: ['query-cache'],
+        priority: 'normal'
       });
 
-      // Se os dados estão obsoletos (stale), buscar em background
-      const cacheTimestamp = cache.get<number>(`${cacheKey}_timestamp`) || 0;
-      const cacheAge = Date.now() - cacheTimestamp;
-      if (cacheAge > staleTime) {
-        logger.info(`Cache stale, refetching: ${cacheKey}`);
+      performanceMonitor.markEnd(queryId);
+      logger.info('Query completed successfully');
+
+    } catch (err) {
+      if (abortControllerRef.current?.signal.aborted) {
+        return;
+      }
+
+      const error = err instanceof Error ? err : new Error('Unknown error');
+      logger.error('Query failed', { error, retryCount: retryCountRef.current });
+
+      if (retryCountRef.current < retry) {
+        retryCountRef.current++;
+        const delay = retryDelay * Math.pow(2, retryCountRef.current - 1);
+        
+        setTimeout(() => {
+          if (!abortControllerRef.current?.signal.aborted) {
+            fetchData(force);
+          }
+        }, delay);
+        
+        return;
+      }
+
+      setError(error);
+      performanceMonitor.markEnd(queryId);
+    } finally {
+      setLoading(false);
+    }
+  }, [enabled, queryFn, cacheKey, cache, staleTime, cacheTime, retry, retryDelay, logger]);
+
+  const invalidate = useCallback(() => {
+    cache.delete(cacheKey);
+    fetchData(true);
+  }, [cache, cacheKey, fetchData]);
+
+  const mutate = useCallback((newData: T) => {
+    if (optimisticUpdates) {
+      setData(newData);
+      cache.set(cacheKey, { data: newData, timestamp: Date.now() }, {
+        ttl: cacheTime,
+        tags: ['query-cache'],
+        priority: 'normal'
+      });
+    }
+  }, [optimisticUpdates, cache, cacheKey, cacheTime]);
+
+  useEffect(() => {
+    fetchData();
+
+    // Cleanup on unmount
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, [fetchData]);
+
+  // Handle window focus refetch
+  useEffect(() => {
+    if (!refetchOnWindowFocus) return;
+
+    const handleFocus = () => {
+      if (!document.hidden) {
         fetchData();
       }
-    } else {
-      // Dados não estão em cache, buscar
-      updateState({ isLoading: true });
-      fetchData();
-    }
-
-    // Cleanup
-    return () => {
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      if (retryTimeoutRef.current) {
-        clearTimeout(retryTimeoutRef.current);
-      }
     };
-  }, [enabled, cacheKey, staleTime, cache, fetchData, updateState]);
+
+    window.addEventListener('focus', handleFocus);
+    return () => window.removeEventListener('focus', handleFocus);
+  }, [fetchData, refetchOnWindowFocus]);
 
   return {
-    ...state,
-    refetch,
-    invalidateAndRefetch
+    data,
+    loading,
+    error,
+    refetch: fetchData,
+    invalidate,
+    mutate
   };
-};
-
-// Hook especializado para queries de API
-export const useApiQuery = <T,>(
-  endpoint: string,
-  queryFn: () => Promise<T>,
-  options: Omit<UseOptimizedQueryOptions<T>, 'cacheKey' | 'queryFn' | 'tags'> & { 
-    tags?: string[] 
-  } = {}
-) => {
-  return useOptimizedQuery({
-    ...options,
-    cacheKey: `api:${endpoint}`,
-    queryFn,
-    tags: ['api', ...(options.tags || [])]
-  });
-};
+}
