@@ -1,3 +1,4 @@
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -13,8 +14,6 @@ const LazyNotFound = lazy(() => import("./pages/NotFound"));
 const LazyPrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const LazyTermsOfService = lazy(() => import("./pages/TermsOfService"));
 const LazyRoadmap = lazy(() => import("./pages/Roadmap"));
-
-import "./App.css";
 
 // Optimized QueryClient configuration
 const queryClient = new QueryClient({

@@ -26,7 +26,7 @@ const AppLayout = ({
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground transition-colors duration-500">
+    <div className="min-h-screen w-full bg-background text-foreground transition-colors duration-500">
       <SkipNav links={skipNavLinks} />
       
       <Header 
@@ -43,7 +43,7 @@ const AppLayout = ({
 
       <main 
         id="main-content"
-        className="w-full px-0 py-0"
+        className="w-full min-h-screen"
         role="main"
         aria-label="Conteúdo principal"
       >
