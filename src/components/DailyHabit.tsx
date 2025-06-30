@@ -1,11 +1,14 @@
 
-import { memo } from "react";
-import DailyHabitComponent from "./daily-habit/DailyHabit";
+import OptimizedDailyPointsCollector from "@/components/optimized/OptimizedDailyPointsCollector";
+import DailyHabit from "./daily-habit/DailyHabit";
 
-const DailyHabit = memo(() => {
-  return <DailyHabitComponent />;
-});
+const DailyHabitWrapper = () => {
+  return (
+    <div className="space-y-4">
+      <OptimizedDailyPointsCollector />
+      <DailyHabit />
+    </div>
+  );
+};
 
-DailyHabit.displayName = 'DailyHabit';
-
-export default DailyHabit;
+export default DailyHabitWrapper;
