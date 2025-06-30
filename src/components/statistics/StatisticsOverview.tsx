@@ -70,7 +70,7 @@ const StatisticsOverview = memo(({ userProfile, userStats }: StatisticsOverviewP
           </div>
           <div className="space-y-6">
             <GlobalErrorBoundary level="component" name="Gamification Cards">
-              <GamificationCards userStats={userStats} />
+              <GamificationCards />
             </GlobalErrorBoundary>
           </div>
         </div>
