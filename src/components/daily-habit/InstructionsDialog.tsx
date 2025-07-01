@@ -1,4 +1,3 @@
-
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Droplets, Pill, Heart, Gift } from "lucide-react";
@@ -25,12 +24,12 @@ const InstructionsDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[95vw] sm:max-w-md mx-auto border border-gray-200 bg-white" aria-describedby="instructions-description">
+      <DialogContent className="max-w-[95vw] sm:max-w-md mx-auto border border-gray-200 bg-white">
         <DialogHeader>
           <DialogTitle className="text-center text-lg sm:text-xl font-bold text-slate-700 mb-2 sm:mb-4">
             🎯 Como usar sua Rotina Diária
           </DialogTitle>
-          <DialogDescription id="instructions-description" className="sr-only">
+          <DialogDescription className="text-center text-sm text-slate-600">
             Instruções sobre como usar a rotina diária do aplicativo SB2 Coach
           </DialogDescription>
         </DialogHeader>

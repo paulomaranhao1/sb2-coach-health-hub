@@ -19,9 +19,11 @@ export const useEmailAuth = () => {
       if (error) throw error;
       
       showAuthSuccessToast('Login realizado com sucesso!');
+      return { error: null };
     } catch (error: any) {
+      console.error('Login error:', error);
       showAuthErrorToast(error);
-      throw error;
+      return { error };
     } finally {
       setLoading(false);
     }
@@ -33,15 +35,19 @@ export const useEmailAuth = () => {
       const { error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`
+        }
       });
 
       if (error) throw error;
       
       showAuthSuccessToast('Conta criada! Verifique seu email.');
-      return { email };
+      return { email, error: null };
     } catch (error: any) {
+      console.error('Signup error:', error);
       showAuthErrorToast(error);
-      throw error;
+      return { error };
     } finally {
       setLoading(false);
     }

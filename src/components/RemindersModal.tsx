@@ -90,13 +90,13 @@ const RemindersModal = ({ open, onOpenChange, onNavigateToSupplements }: Reminde
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-md" aria-describedby="reminders-description">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-red-500" />
             Lembretes SB2 TURBO
           </DialogTitle>
-          <DialogDescription id="reminders-description">
+          <DialogDescription>
             Você tem {reminders.length} lembrete{reminders.length > 1 ? 's' : ''} pendente{reminders.length > 1 ? 's' : ''} para tomar seus suplementos.
           </DialogDescription>
         </DialogHeader>

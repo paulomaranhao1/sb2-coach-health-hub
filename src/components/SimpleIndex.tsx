@@ -28,17 +28,18 @@ const SimpleIndex = () => {
         if (session?.user) {
           setUser(session.user);
           
+          // Use maybeSingle() to avoid errors when no data is found
           const { data: profileData } = await supabase
             .from('user_profiles')
             .select('*')
             .eq('user_id', session.user.id)
-            .single();
+            .maybeSingle();
           
           const { data: statsData } = await supabase
             .from('user_stats')
             .select('*')
             .eq('user_id', session.user.id)
-            .single();
+            .maybeSingle();
           
           if (profileData) {
             setProfile(profileData);
@@ -61,7 +62,7 @@ const SimpleIndex = () => {
           }
         }
       } catch (error) {
-        // Silently handle auth errors
+        console.error('Auth check error:', error);
       } finally {
         setLoading(false);
         performanceMonitor.markEnd('auth-check');
@@ -74,17 +75,18 @@ const SimpleIndex = () => {
       if (event === 'SIGNED_IN' && session?.user) {
         setUser(session.user);
         
+        // Use maybeSingle() to avoid errors when no data is found
         const { data: profileData } = await supabase
           .from('user_profiles')
           .select('*')
           .eq('user_id', session.user.id)
-          .single();
+          .maybeSingle();
         
         const { data: statsData } = await supabase
           .from('user_stats')
           .select('*')
           .eq('user_id', session.user.id)
-          .single();
+          .maybeSingle();
         
         if (profileData) {
           setProfile(profileData);
