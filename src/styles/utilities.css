@@ -19,23 +19,6 @@
     margin-top: 1.5rem;
   }
   
-  /* Interactive States */
-  .hover-lift {
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .hover-lift:hover {
-    transform: translateY(-2px);
-  }
-  
-  .hover-scale {
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .hover-scale:hover {
-    transform: scale(1.02);
-  }
-  
   /* Loading States */
   .loading {
     opacity: 0.7;
