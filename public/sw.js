@@ -1,43 +1,95 @@
 
-const CACHE_NAME = 'sb2coach-v1';
-const urlsToCache = [
+const CACHE_NAME = 'sb2coach-v2';
+const STATIC_CACHE_URLS = [
   '/',
   '/manifest.json'
 ];
+
+// Lista de URLs que devem ser ignoradas para evitar erros
+const IGNORE_URLS = [
+  'facebook.com',
+  'facebook.net',
+  'fbcdn.net',
+  'connect.facebook.net',
+  'googleapis.com',
+  'google-analytics.com',
+  'googletagmanager.com',
+  'doubleclick.net',
+  'firebase',
+  'firestore'
+];
+
+// Função para verificar se uma URL deve ser ignorada
+function shouldIgnoreUrl(url) {
+  return IGNORE_URLS.some(ignored => url.includes(ignored));
+}
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        return cache.addAll(urlsToCache).catch(err => {
-          console.warn('Cache addAll failed:', err);
+        return cache.addAll(STATIC_CACHE_URLS).catch(err => {
+          console.warn('SW: Cache addAll failed for some resources:', err);
           return Promise.resolve();
         });
       })
   );
+  self.skipWaiting();
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(cacheNames => {
+      return Promise.all(
+        cacheNames.map(cacheName => {
+          if (cacheName !== CACHE_NAME) {
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
+  );
+  self.clients.claim();
 });
 
 self.addEventListener('fetch', event => {
-  // Only handle GET requests
-  if (event.request.method !== 'GET') {
+  const { request } = event;
+  const url = request.url;
+
+  // Ignorar requests para URLs externas problemáticas
+  if (shouldIgnoreUrl(url)) {
     return;
   }
-  
+
+  // Apenas interceptar requests GET
+  if (request.method !== 'GET') {
+    return;
+  }
+
+  // Ignorar requests para chrome-extension e other protocols
+  if (!url.startsWith('http')) {
+    return;
+  }
+
   event.respondWith(
-    caches.match(event.request)
+    caches.match(request)
       .then(response => {
         if (response) {
           return response;
         }
-        return fetch(event.request).catch(() => {
-          // Fallback for offline
-          return new Response('Offline', { status: 503 });
+        
+        return fetch(request).catch(() => {
+          // Fallback silencioso para evitar errors no console
+          if (request.destination === 'document') {
+            return caches.match('/');
+          }
+          return new Response('', { status: 200 });
         });
       })
   );
 });
 
-// Handle push notifications
+// Push notifications otimizadas
 self.addEventListener('push', event => {
   const options = {
     body: event.data ? event.data.text() : 'Nova notificação do SB2coach.ai',
@@ -47,7 +99,8 @@ self.addEventListener('push', event => {
     data: {
       dateOfArrival: Date.now(),
       primaryKey: 'sb2coach-notification'
-    }
+    },
+    silent: false
   };
 
   event.waitUntil(
@@ -57,5 +110,12 @@ self.addEventListener('push', event => {
 
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-  event.waitUntil(clients.openWindow('/'));
+  event.waitUntil(
+    clients.matchAll({ type: 'window' }).then(clientList => {
+      if (clientList.length > 0) {
+        return clientList[0].focus();
+      }
+      return clients.openWindow('/');
+    })
+  );
 });

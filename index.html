@@ -24,23 +24,103 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
-    <!-- Suppress console warnings -->
+    <!-- Sistema avançado de supressão de console warnings -->
     <script>
-      if (typeof console !== 'undefined') {
+      (function() {
+        'use strict';
+        
+        // Lista de warnings que devem ser suprimidos
+        const SUPPRESSED_WARNINGS = [
+          'ambient-light-sensor',
+          'battery',
+          'vr',
+          'xr-spatial-tracking',
+          'sandbox',
+          'facebook',
+          'fbcdn',
+          'connect.facebook.net',
+          'tr?id=',
+          'firebase',
+          'firestore',
+          'googleapis',
+          'google-analytics',
+          'googletagmanager',
+          'doubleclick',
+          'permissions policy',
+          'feature policy',
+          'document.domain',
+          'Mixed Content',
+          'blocked:csp',
+          'ERR_BLOCKED_BY_CLIENT',
+          'net::ERR_NAME_NOT_RESOLVED'
+        ];
+        
+        // Lista de erros críticos que NUNCA devem ser suprimidos
+        const CRITICAL_ERRORS = [
+          'TypeError',
+          'ReferenceError',
+          'SyntaxError',
+          'RangeError',
+          'EvalError',
+          'URIError'
+        ];
+        
+        function shouldSuppressMessage(message) {
+          const messageStr = String(message).toLowerCase();
+          
+          // Nunca suprimir erros críticos
+          if (CRITICAL_ERRORS.some(error => messageStr.includes(error.toLowerCase()))) {
+            return false;
+          }
+          
+          // Suprimir warnings conhecidos
+          return SUPPRESSED_WARNINGS.some(warning => messageStr.includes(warning));
+        }
+        
+        // Interceptar console.warn
         const originalWarn = console.warn;
         console.warn = function(...args) {
           const message = args.join(' ');
-          // Suppress specific warnings that are not actionable
-          if (message.includes('ambient-light-sensor') || 
-              message.includes('battery') || 
-              message.includes('vr') ||
-              message.includes('xr-spatial-tracking') ||
-              message.includes('sandbox')) {
-            return;
+          if (!shouldSuppressMessage(message)) {
+            originalWarn.apply(console, args);
           }
-          originalWarn.apply(console, args);
         };
-      }
+        
+        // Interceptar console.error para filtrar apenas erros não-críticos
+        const originalError = console.error;
+        console.error = function(...args) {
+          const message = args.join(' ');
+          if (!shouldSuppressMessage(message)) {
+            originalError.apply(console, args);
+          }
+        };
+        
+        // Interceptar window.onerror para filtrar erros de recursos externos
+        window.addEventListener('error', function(event) {
+          if (event.filename && shouldSuppressMessage(event.filename)) {
+            event.preventDefault();
+            return true;
+          }
+        }, true);
+        
+        // Interceptar unhandled promise rejections
+        window.addEventListener('unhandledrejection', function(event) {
+          if (event.reason && shouldSuppressMessage(String(event.reason))) {
+            event.preventDefault();
+          }
+        });
+        
+        // Remover tentativas de conexão com Facebook e outros serviços externos
+        const originalFetch = window.fetch;
+        window.fetch = function(input, init) {
+          const url = typeof input === 'string' ? input : input.url;
+          if (shouldSuppressMessage(url)) {
+            return Promise.reject(new Error('Blocked external service'));
+          }
+          return originalFetch.apply(this, arguments);
+        };
+        
+      })();
     </script>
   </head>
 

@@ -5,6 +5,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense, useEffect } from "react";
 import { LoadingPage } from "@/components/ui/loading-states";
+import { useServiceWorker } from "@/hooks/useServiceWorker";
+import "@/utils/errorMonitoring"; // Inicializar monitoramento de erros
 
 const LazyIndex = lazy(() => import("./pages/Index"));
 
@@ -15,16 +17,33 @@ const queryClient = new QueryClient({
       gcTime: 10 * 60 * 1000,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
-      retry: 1
+      retry: (failureCount, error) => {
+        // Não fazer retry para erros de network conhecidos
+        const errorMessage = String(error).toLowerCase();
+        if (errorMessage.includes('facebook') || 
+            errorMessage.includes('firebase') || 
+            errorMessage.includes('blocked')) {
+          return false;
+        }
+        return failureCount < 1;
+      }
     }
   }
 });
 
 function App() {
+  const { isSupported } = useServiceWorker();
+
   useEffect(() => {
+    // Garantir tema light
     document.documentElement.classList.remove('dark');
     document.documentElement.setAttribute('data-theme', 'light');
-  }, []);
+    
+    // Log do status do Service Worker apenas em desenvolvimento
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🔧 Service Worker supported:', isSupported);
+    }
+  }, [isSupported]);
 
   return (
     <QueryClientProvider client={queryClient}>
