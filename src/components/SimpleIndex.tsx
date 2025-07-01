@@ -7,7 +7,6 @@ import OnboardingScreen from '@/components/OnboardingScreen';
 import VideoWelcomeScreen from '@/components/VideoWelcomeScreen';
 import TutorialScreen from '@/components/TutorialScreen';
 import WelcomeScreen from '@/components/WelcomeScreen';
-import { performanceMonitor } from '@/utils/optimizedPerformance';
 
 const SimpleIndex = () => {
   const [user, setUser] = useState(null);
@@ -19,8 +18,6 @@ const SimpleIndex = () => {
   const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
-    performanceMonitor.markStart('auth-check');
-    
     const checkAuth = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -28,7 +25,6 @@ const SimpleIndex = () => {
         if (session?.user) {
           setUser(session.user);
           
-          // Use maybeSingle() to avoid errors when no data is found
           const { data: profileData } = await supabase
             .from('user_profiles')
             .select('*')
@@ -45,7 +41,6 @@ const SimpleIndex = () => {
             setProfile(profileData);
             setUserStats(statsData || { points: 0, level: 1, shields: [], stickers: [], streak: 0 });
             
-            // Check for first-time user flow
             const hasSeenVideo = localStorage.getItem('sb2_video_watched') === 'true';
             const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed') === 'true';
             const hasSeenWelcome = localStorage.getItem('sb2_welcome_shown') === 'true';
@@ -65,7 +60,6 @@ const SimpleIndex = () => {
         console.error('Auth check error:', error);
       } finally {
         setLoading(false);
-        performanceMonitor.markEnd('auth-check');
       }
     };
 
@@ -75,7 +69,6 @@ const SimpleIndex = () => {
       if (event === 'SIGNED_IN' && session?.user) {
         setUser(session.user);
         
-        // Use maybeSingle() to avoid errors when no data is found
         const { data: profileData } = await supabase
           .from('user_profiles')
           .select('*')
@@ -103,7 +96,6 @@ const SimpleIndex = () => {
   }, []);
 
   const handleOnboardingComplete = () => {
-    // Refresh profile data after onboarding
     window.location.reload();
   };
 

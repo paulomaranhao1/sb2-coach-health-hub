@@ -8,7 +8,6 @@ import { LoadingPage } from "@/components/ui/loading-states";
 
 const LazyIndex = lazy(() => import("./pages/Index"));
 
-// Configuração simples do QueryClient
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -23,7 +22,6 @@ const queryClient = new QueryClient({
 
 function App() {
   useEffect(() => {
-    // Apenas força o tema light
     document.documentElement.classList.remove('dark');
     document.documentElement.setAttribute('data-theme', 'light');
   }, []);
