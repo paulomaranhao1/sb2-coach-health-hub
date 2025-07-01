@@ -1,23 +1,20 @@
 
 import { debounce, throttle } from './performanceUtils';
 
-// Performance monitoring
+// Performance monitoring - simplified
 export const performanceMonitor = {
   markStart: (name: string) => {
+    // Simplified - no console logging
     if (typeof performance !== 'undefined') {
       performance.mark(`${name}-start`);
     }
   },
   
   markEnd: (name: string) => {
+    // Simplified - no console logging
     if (typeof performance !== 'undefined') {
       performance.mark(`${name}-end`);
       performance.measure(name, `${name}-start`, `${name}-end`);
-      
-      const measurement = performance.getEntriesByName(name, 'measure')[0];
-      if (measurement) {
-        console.log(`⚡ ${name}: ${measurement.duration.toFixed(2)}ms`);
-      }
     }
   }
 };
@@ -32,17 +29,10 @@ export const createOptimizedSearchHandler = (callback: (query: string) => void) 
   return debounce(callback, 300);
 };
 
-// Memory usage monitor
+// Memory usage monitor - simplified
 export const memoryMonitor = {
   log: () => {
-    if ('memory' in performance) {
-      const memory = (performance as any).memory;
-      console.log('🧠 Memory Usage:', {
-        used: `${(memory.usedJSHeapSize / 1024 / 1024).toFixed(2)}MB`,
-        total: `${(memory.totalJSHeapSize / 1024 / 1024).toFixed(2)}MB`,
-        limit: `${(memory.jsHeapSizeLimit / 1024 / 1024).toFixed(2)}MB`
-      });
-    }
+    // Disabled to reduce console noise
   }
 };
 
@@ -60,7 +50,6 @@ export const prefetchResources = (urls: string[]) => {
 export const preloadCriticalResources = () => {
   const criticalResources = [
     '/favicon.ico',
-    // Add other critical resources
   ];
   
   criticalResources.forEach(url => {

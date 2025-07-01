@@ -17,7 +17,6 @@ const MotivationalSection = () => {
   ];
 
   useEffect(() => {
-    // Usar um seed baseado na data para garantir que a frase seja a mesma durante todo o dia
     const today = new Date();
     const startOfYear = new Date(today.getFullYear(), 0, 1);
     const dayOfYear = Math.floor((today.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
@@ -26,7 +25,7 @@ const MotivationalSection = () => {
   }, []);
 
   return (
-    <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-0 shadow-lg overflow-hidden">
+    <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-0 overflow-hidden">
       <CardContent className="p-5">
         <div className="flex items-center justify-center">
           <Quote className="w-5 h-5 text-blue-600 mr-3 flex-shrink-0" />

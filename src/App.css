@@ -11,6 +11,18 @@
 
 * {
   box-sizing: border-box;
+  /* Remove all visual effects */
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+
+*:hover,
+*:focus,
+*:active {
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 body {

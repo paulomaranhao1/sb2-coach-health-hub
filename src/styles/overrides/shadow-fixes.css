@@ -1,17 +1,34 @@
 
-/* Remove all shadows globally */
+/* Remove all shadows and visual effects globally */
 * {
   box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
 }
 
-.card, 
-[class*="Card"],
-.card-container,
-.glass-card {
+/* Remove hover effects */
+*:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+/* Remove focus effects that use shadows */
+*:focus {
   box-shadow: none !important;
 }
 
-button:hover,
-.btn:hover {
-  box-shadow: none !important;
+/* Remove active effects */
+*:active {
+  transform: none !important;
+}
+
+/* Remove all animation classes */
+.animate-fade-in,
+.animate-slide-in,
+.animate-scale-in,
+.animate-pulse,
+.animate-spin,
+.animate-bounce {
+  animation: none !important;
 }

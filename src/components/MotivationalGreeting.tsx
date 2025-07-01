@@ -1,10 +1,8 @@
+
 import { useState, useEffect, useCallback, memo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useFasting } from '@/hooks/useFasting';
 import CompactFastingTimer from './fasting/CompactFastingTimer';
-import { useAdvancedLogger } from '@/utils/advancedLogger';
-import { useIntelligentCache } from '@/utils/intelligentCache';
-import { EnhancedSkeleton } from '@/components/ui/enhanced-skeleton';
 
 const motivationalPhrases = [
   "Cada quilograma perdido é uma vitória conquistada! 🎯",
@@ -40,8 +38,6 @@ const motivationalPhrases = [
 ];
 
 const MotivationalGreeting = memo(() => {
-  const logger = useAdvancedLogger('MotivationalGreeting');
-  const cache = useIntelligentCache();
   const [userName, setUserName] = useState<string>('');
   const [currentPhrase, setCurrentPhrase] = useState('');
   const [isLoading, setIsLoading] = useState(true);
@@ -58,9 +54,6 @@ const MotivationalGreeting = memo(() => {
   } = useFasting();
 
   const setDailyPhrase = useCallback(() => {
-    const timer = logger.startTimer('Generate daily phrase');
-    
-    // Usar seed baseado na data para manter a mesma frase durante todo o dia
     const today = new Date();
     const startOfYear = new Date(today.getFullYear(), 0, 1);
     const dayOfYear = Math.floor((today.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24)) + 1;
@@ -68,25 +61,10 @@ const MotivationalGreeting = memo(() => {
     const selectedPhrase = motivationalPhrases[phraseIndex];
     
     setCurrentPhrase(selectedPhrase);
-    
-    timer();
-    logger.info('Daily phrase set', { phrase: selectedPhrase, dayOfYear });
-  }, [logger]);
+  }, []);
 
   const fetchUserName = useCallback(async () => {
-    const timer = logger.startTimer('Fetch user name');
-    
     try {
-      // Verificar cache primeiro
-      const cachedName = cache.get<string>('user:name');
-      if (cachedName) {
-        logger.debug('Using cached user name', { name: cachedName });
-        setUserName(cachedName);
-        setIsLoading(false);
-        timer();
-        return;
-      }
-
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
@@ -98,27 +76,16 @@ const MotivationalGreeting = memo(() => {
         
         if (profile?.name) {
           setUserName(profile.name);
-          // Cache com prioridade alta por 1 hora
-          cache.set('user:name', profile.name, { 
-            ttl: 60 * 60 * 1000, 
-            priority: 'high',
-            tags: ['user', 'persist']
-          });
-          logger.info('User name fetched and cached', { name: profile.name });
         }
       }
     } catch (error) {
-      logger.error('Failed to fetch user name', { error });
+      console.error('Failed to fetch user name:', error);
     } finally {
       setIsLoading(false);
-      timer();
     }
-  }, [cache, logger]);
+  }, []);
 
   useEffect(() => {
-    const timer = logger.startTimer('MotivationalGreeting mount');
-    logger.info('MotivationalGreeting mounted');
-    
     Promise.all([
       fetchUserName(),
       new Promise(resolve => {
@@ -126,21 +93,7 @@ const MotivationalGreeting = memo(() => {
         resolve(true);
       })
     ]);
-    
-    return () => {
-      timer();
-      logger.info('MotivationalGreeting unmounted');
-    };
-  }, [fetchUserName, setDailyPhrase, logger]);
-
-  logger.debug('MotivationalGreeting render state', {
-    currentFast: !!currentFast,
-    isActive,
-    timeRemaining,
-    fastType: currentFast?.type,
-    isLoading,
-    userName: !!userName
-  });
+  }, [fetchUserName, setDailyPhrase]);
 
   // Se há jejum ativo, mostrar apenas o timer compacto
   if (currentFast && timeRemaining > 0 && !currentFast.completed) {
@@ -165,8 +118,9 @@ const MotivationalGreeting = memo(() => {
   if (isLoading) {
     return (
       <div className="mb-6">
-        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-3 border-0 shadow-lg">
-          <EnhancedSkeleton variant="text" lines={2} className="h-4" />
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-3 border-0">
+          <div className="h-4 bg-blue-200 rounded w-3/4 mb-2"></div>
+          <div className="h-4 bg-blue-200 rounded w-1/2"></div>
         </div>
       </div>
     );
@@ -176,7 +130,7 @@ const MotivationalGreeting = memo(() => {
   if (!userName) return null;
 
   return (
-    <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-3 mb-6 border-0 shadow-lg animate-fade-in">
+    <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-3 mb-6 border-0">
       <div className="text-left">
         <span className="text-xs text-blue-800 font-medium leading-tight">
           Olá, {userName}! 👋 {currentPhrase}
