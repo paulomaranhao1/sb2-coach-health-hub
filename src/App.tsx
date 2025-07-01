@@ -3,14 +3,12 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { preloadCriticalResources } from "@/utils/optimizedPerformance";
-import { cleanupUnusedScripts, cleanupUnusedPreloads, optimizeConsoleOutput } from "@/utils/cleanupScripts";
 import { lazy, Suspense, useEffect } from "react";
 import { LoadingPage } from "@/components/ui/loading-states";
 
 const LazyIndex = lazy(() => import("./pages/Index"));
 
-// Optimized QueryClient configuration
+// Configuração simples do QueryClient
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -25,17 +23,7 @@ const queryClient = new QueryClient({
 
 function App() {
   useEffect(() => {
-    // Otimizar console output primeiro
-    optimizeConsoleOutput();
-    
-    // Preload apenas recursos críticos
-    preloadCriticalResources();
-    
-    // Limpar scripts e elementos não utilizados
-    cleanupUnusedScripts();
-    cleanupUnusedPreloads();
-    
-    // Force light theme
+    // Apenas força o tema light
     document.documentElement.classList.remove('dark');
     document.documentElement.setAttribute('data-theme', 'light');
   }, []);

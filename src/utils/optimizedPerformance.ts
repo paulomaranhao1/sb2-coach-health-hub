@@ -1,20 +1,20 @@
 
 import { debounce, throttle } from './performanceUtils';
 
-// Performance monitoring - completely disabled in production
+// Performance monitoring - desabilitado para evitar problemas
 export const performanceMonitor = {
   markStart: (name: string) => {
-    // Disabled to reduce console noise
+    // Desabilitado
   },
   
   markEnd: (name: string) => {
-    // Disabled to reduce console noise
+    // Desabilitado
   }
 };
 
 // Optimized scroll handler
 export const createOptimizedScrollHandler = (callback: () => void) => {
-  return throttle(callback, 16); // ~60fps
+  return throttle(callback, 16);
 };
 
 // Optimized search handler
@@ -22,25 +22,19 @@ export const createOptimizedSearchHandler = (callback: (query: string) => void) 
   return debounce(callback, 300);
 };
 
-// Memory usage monitor - completely disabled
+// Memory usage monitor - desabilitado
 export const memoryMonitor = {
   log: () => {
-    // Disabled to reduce console noise
+    // Desabilitado
   }
 };
 
-// Resource prefetching - apenas para recursos essenciais
+// Resource prefetching - removido para evitar problemas
 export const prefetchResources = (urls: string[]) => {
-  urls.forEach(url => {
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = url;
-    document.head.appendChild(link);
-  });
+  // Desabilitado para evitar console warnings
 };
 
-// Critical resource preloading - removido favicon para evitar warnings
+// Critical resource preloading - removido
 export const preloadCriticalResources = () => {
-  // Removido preload do favicon para evitar console warnings
-  // O favicon será carregado naturalmente pelo navegador
+  // Desabilitado para evitar problemas de carregamento
 };
