@@ -16,6 +16,13 @@
   transform: none !important;
   transition: none !important;
   animation: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-transform: none !important;
+  -webkit-transition: none !important;
+  -webkit-animation: none !important;
+  -webkit-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 *:hover,
@@ -23,6 +30,11 @@
 *:active {
   box-shadow: none !important;
   transform: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  -webkit-transform: none !important;
+  -webkit-filter: none !important;
+  -webkit-backdrop-filter: none !important;
 }
 
 body {
@@ -66,4 +78,22 @@ button {
 
 input, select, textarea {
   min-height: 44px;
+}
+
+/* Remove all classes that cause CSS errors */
+.shadow-sm, .shadow, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl,
+.hover\:shadow-sm:hover, .hover\:shadow:hover, .hover\:shadow-md:hover,
+.hover\:shadow-lg:hover, .hover\:shadow-xl:hover, .hover\:shadow-2xl:hover,
+.animate-fade-in, .animate-slide-in, .animate-scale-in, .animate-pulse,
+.animate-spin, .animate-bounce, .animate-ping,
+.hover\:scale-105:hover, .hover\:scale-110:hover, .hover\:scale-95:hover,
+.transition-all, .transition-colors, .transition-transform, .transition-opacity,
+.duration-200, .duration-300, .duration-500,
+.ease-in-out, .ease-in, .ease-out {
+  box-shadow: none !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
 }

@@ -79,7 +79,7 @@ const MotivationalGreeting = memo(() => {
         }
       }
     } catch (error) {
-      console.error('Failed to fetch user name:', error);
+      // Silently handle error to reduce console noise
     } finally {
       setIsLoading(false);
     }

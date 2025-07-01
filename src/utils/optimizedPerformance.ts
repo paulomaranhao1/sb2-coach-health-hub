@@ -1,21 +1,14 @@
 
 import { debounce, throttle } from './performanceUtils';
 
-// Performance monitoring - simplified
+// Performance monitoring - completely disabled in production
 export const performanceMonitor = {
   markStart: (name: string) => {
-    // Simplified - no console logging
-    if (typeof performance !== 'undefined') {
-      performance.mark(`${name}-start`);
-    }
+    // Disabled to reduce console noise
   },
   
   markEnd: (name: string) => {
-    // Simplified - no console logging
-    if (typeof performance !== 'undefined') {
-      performance.mark(`${name}-end`);
-      performance.measure(name, `${name}-start`, `${name}-end`);
-    }
+    // Disabled to reduce console noise
   }
 };
 
@@ -29,7 +22,7 @@ export const createOptimizedSearchHandler = (callback: (query: string) => void) 
   return debounce(callback, 300);
 };
 
-// Memory usage monitor - simplified
+// Memory usage monitor - completely disabled
 export const memoryMonitor = {
   log: () => {
     // Disabled to reduce console noise
