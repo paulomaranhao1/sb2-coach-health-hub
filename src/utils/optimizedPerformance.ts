@@ -29,7 +29,7 @@ export const memoryMonitor = {
   }
 };
 
-// Resource prefetching
+// Resource prefetching - apenas para recursos essenciais
 export const prefetchResources = (urls: string[]) => {
   urls.forEach(url => {
     const link = document.createElement('link');
@@ -39,17 +39,8 @@ export const prefetchResources = (urls: string[]) => {
   });
 };
 
-// Critical resource preloading
+// Critical resource preloading - removido favicon para evitar warnings
 export const preloadCriticalResources = () => {
-  const criticalResources = [
-    '/favicon.ico',
-  ];
-  
-  criticalResources.forEach(url => {
-    const link = document.createElement('link');
-    link.rel = 'preload';
-    link.href = url;
-    link.as = 'image';
-    document.head.appendChild(link);
-  });
+  // Removido preload do favicon para evitar console warnings
+  // O favicon será carregado naturalmente pelo navegador
 };
