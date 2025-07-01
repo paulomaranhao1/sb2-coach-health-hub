@@ -12,6 +12,7 @@ import { performanceMonitor } from '@/utils/optimizedPerformance';
 const SimpleIndex = () => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
+  const [userStats, setUserStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [showVideoWelcome, setShowVideoWelcome] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
@@ -33,8 +34,15 @@ const SimpleIndex = () => {
             .eq('user_id', session.user.id)
             .single();
           
+          const { data: statsData } = await supabase
+            .from('user_stats')
+            .select('*')
+            .eq('user_id', session.user.id)
+            .single();
+          
           if (profileData) {
             setProfile(profileData);
+            setUserStats(statsData || { points: 0, level: 1, shields: [], stickers: [], streak: 0 });
             
             // Check for first-time user flow
             const hasSeenVideo = localStorage.getItem('sb2_video_watched') === 'true';
@@ -72,17 +80,30 @@ const SimpleIndex = () => {
           .eq('user_id', session.user.id)
           .single();
         
+        const { data: statsData } = await supabase
+          .from('user_stats')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .single();
+        
         if (profileData) {
           setProfile(profileData);
+          setUserStats(statsData || { points: 0, level: 1, shields: [], stickers: [], streak: 0 });
         }
       } else if (event === 'SIGNED_OUT') {
         setUser(null);
         setProfile(null);
+        setUserStats(null);
       }
     });
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const handleOnboardingComplete = () => {
+    // Refresh profile data after onboarding
+    window.location.reload();
+  };
 
   if (loading) {
     return (
@@ -97,13 +118,13 @@ const SimpleIndex = () => {
   }
 
   if (!profile?.onboarding_completed) {
-    return <OnboardingScreen />;
+    return <OnboardingScreen onComplete={handleOnboardingComplete} />;
   }
 
   if (showVideoWelcome) {
     return (
       <VideoWelcomeScreen
-        onComplete={() => {
+        onVideoComplete={() => {
           localStorage.setItem('sb2_video_watched', 'true');
           setShowVideoWelcome(false);
           setShowTutorial(true);
@@ -120,6 +141,11 @@ const SimpleIndex = () => {
           setShowTutorial(false);
           setShowWelcome(true);
         }}
+        onSkip={() => {
+          localStorage.setItem('sb2_tutorial_completed', 'true');
+          setShowTutorial(false);
+          setShowWelcome(true);
+        }}
       />
     );
   }
@@ -127,7 +153,7 @@ const SimpleIndex = () => {
   if (showWelcome) {
     return (
       <WelcomeScreen
-        onComplete={() => {
+        onContinue={() => {
           localStorage.setItem('sb2_welcome_shown', 'true');
           setShowWelcome(false);
         }}
@@ -135,7 +161,7 @@ const SimpleIndex = () => {
     );
   }
 
-  return <OptimizedMainApp />;
+  return <OptimizedMainApp userProfile={profile} userStats={userStats} />;
 };
 
 export default SimpleIndex;
