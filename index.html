@@ -19,10 +19,29 @@
     <!-- Favicon -->
     <link rel="icon" href="/lovable-uploads/a9ae0ae0-953a-4e4d-afbd-5f6bf88b1dc6.png" type="image/png">
     
-    <!-- Fontes -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Suppress console warnings -->
+    <script>
+      if (typeof console !== 'undefined') {
+        const originalWarn = console.warn;
+        console.warn = function(...args) {
+          const message = args.join(' ');
+          // Suppress specific warnings that are not actionable
+          if (message.includes('ambient-light-sensor') || 
+              message.includes('battery') || 
+              message.includes('vr') ||
+              message.includes('xr-spatial-tracking') ||
+              message.includes('sandbox')) {
+            return;
+          }
+          originalWarn.apply(console, args);
+        };
+      }
+    </script>
   </head>
 
   <body>

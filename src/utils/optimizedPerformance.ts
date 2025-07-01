@@ -1,14 +1,20 @@
 
 import { debounce, throttle } from './performanceUtils';
 
-// Performance monitoring - desabilitado para evitar problemas
+// Simplified performance monitoring
 export const performanceMonitor = {
   markStart: (name: string) => {
-    // Desabilitado
+    // Simple console log for development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Performance: ${name} started`);
+    }
   },
   
   markEnd: (name: string) => {
-    // Desabilitado
+    // Simple console log for development
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`Performance: ${name} ended`);
+    }
   }
 };
 
@@ -22,19 +28,21 @@ export const createOptimizedSearchHandler = (callback: (query: string) => void) 
   return debounce(callback, 300);
 };
 
-// Memory usage monitor - desabilitado
+// Simplified memory monitoring
 export const memoryMonitor = {
   log: () => {
-    // Desabilitado
+    if (process.env.NODE_ENV === 'development' && 'memory' in performance) {
+      console.log('Memory usage:', (performance as any).memory);
+    }
   }
 };
 
-// Resource prefetching - removido para evitar problemas
+// Disabled resource prefetching to avoid console warnings
 export const prefetchResources = (urls: string[]) => {
-  // Desabilitado para evitar console warnings
+  // Disabled to prevent console warnings
 };
 
-// Critical resource preloading - removido
+// Disabled critical resource preloading
 export const preloadCriticalResources = () => {
-  // Desabilitado para evitar problemas de carregamento
+  // Disabled to prevent console warnings
 };

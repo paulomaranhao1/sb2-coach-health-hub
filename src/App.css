@@ -1,40 +1,16 @@
 
-/* SB2 Coach - Mobile-first App Styles */
+/* SB2 Coach - Simplified Mobile App Styles */
 #root {
   width: 100vw;
   min-height: 100vh;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
-  background-color: rgb(248 250 252); /* Slate 50 */
+  background-color: rgb(248 250 252);
 }
 
 * {
   box-sizing: border-box;
-  /* Remove all visual effects */
-  box-shadow: none !important;
-  transform: none !important;
-  transition: none !important;
-  animation: none !important;
-  filter: none !important;
-  backdrop-filter: none !important;
-  -webkit-transform: none !important;
-  -webkit-transition: none !important;
-  -webkit-animation: none !important;
-  -webkit-filter: none !important;
-  -webkit-backdrop-filter: none !important;
-}
-
-*:hover,
-*:focus,
-*:active {
-  box-shadow: none !important;
-  transform: none !important;
-  filter: none !important;
-  backdrop-filter: none !important;
-  -webkit-transform: none !important;
-  -webkit-filter: none !important;
-  -webkit-backdrop-filter: none !important;
 }
 
 body {
@@ -46,6 +22,16 @@ body {
   font-family: Inter, system-ui, sans-serif;
   background-color: rgb(248 250 252);
   color: rgb(51 65 85);
+}
+
+/* Ensure touch-friendly elements */
+button {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+input, select, textarea {
+  min-height: 44px;
 }
 
 /* Force full width for all containers */
@@ -68,32 +54,4 @@ body {
 .mx-auto, .mx-1, .mx-2, .mx-3, .mx-4, .mx-5, .mx-6, .mx-7, .mx-8 {
   margin-left: 0 !important;
   margin-right: 0 !important;
-}
-
-/* Ensure touch-friendly elements */
-button {
-  min-height: 44px;
-  min-width: 44px;
-}
-
-input, select, textarea {
-  min-height: 44px;
-}
-
-/* Remove all classes that cause CSS errors */
-.shadow-sm, .shadow, .shadow-md, .shadow-lg, .shadow-xl, .shadow-2xl,
-.hover\:shadow-sm:hover, .hover\:shadow:hover, .hover\:shadow-md:hover,
-.hover\:shadow-lg:hover, .hover\:shadow-xl:hover, .hover\:shadow-2xl:hover,
-.animate-fade-in, .animate-slide-in, .animate-scale-in, .animate-pulse,
-.animate-spin, .animate-bounce, .animate-ping,
-.hover\:scale-105:hover, .hover\:scale-110:hover, .hover\:scale-95:hover,
-.transition-all, .transition-colors, .transition-transform, .transition-opacity,
-.duration-200, .duration-300, .duration-500,
-.ease-in-out, .ease-in, .ease-out {
-  box-shadow: none !important;
-  transform: none !important;
-  transition: none !important;
-  animation: none !important;
-  filter: none !important;
-  backdrop-filter: none !important;
 }

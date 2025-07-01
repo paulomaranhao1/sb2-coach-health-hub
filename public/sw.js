@@ -2,29 +2,38 @@
 const CACHE_NAME = 'sb2coach-v1';
 const urlsToCache = [
   '/',
-  '/static/js/bundle.js',
-  '/static/css/main.css',
   '/manifest.json'
 ];
 
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+      .then(cache => {
+        return cache.addAll(urlsToCache).catch(err => {
+          console.warn('Cache addAll failed:', err);
+          return Promise.resolve();
+        });
+      })
   );
 });
 
 self.addEventListener('fetch', event => {
+  // Only handle GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+  
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache hit - return response
         if (response) {
           return response;
         }
-        return fetch(event.request);
-      }
-    )
+        return fetch(event.request).catch(() => {
+          // Fallback for offline
+          return new Response('Offline', { status: 503 });
+        });
+      })
   );
 });
 
@@ -32,25 +41,13 @@ self.addEventListener('fetch', event => {
 self.addEventListener('push', event => {
   const options = {
     body: event.data ? event.data.text() : 'Nova notificação do SB2coach.ai',
-    icon: '/favicon.ico',
-    badge: '/favicon.ico',
+    icon: '/lovable-uploads/a9ae0ae0-953a-4e4d-afbd-5f6bf88b1dc6.png',
+    badge: '/lovable-uploads/a9ae0ae0-953a-4e4d-afbd-5f6bf88b1dc6.png',
     vibrate: [100, 50, 100],
     data: {
       dateOfArrival: Date.now(),
       primaryKey: 'sb2coach-notification'
-    },
-    actions: [
-      {
-        action: 'explore', 
-        title: 'Abrir App',
-        icon: '/favicon.ico'
-      },
-      {
-        action: 'close', 
-        title: 'Fechar',
-        icon: '/favicon.ico'
-      }
-    ]
+    }
   };
 
   event.waitUntil(
@@ -60,8 +57,5 @@ self.addEventListener('push', event => {
 
 self.addEventListener('notificationclick', event => {
   event.notification.close();
-
-  if (event.action === 'explore') {
-    event.waitUntil(clients.openWindow('/'));
-  }
+  event.waitUntil(clients.openWindow('/'));
 });

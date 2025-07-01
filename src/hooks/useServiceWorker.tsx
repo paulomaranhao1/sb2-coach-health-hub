@@ -7,7 +7,7 @@ export const useServiceWorker = () => {
   const [isRegistered, setIsRegistered] = useState(false);
 
   useEffect(() => {
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
       setIsSupported(true);
       
       navigator.serviceWorker
@@ -22,7 +22,10 @@ export const useServiceWorker = () => {
           logger.error('Service Worker registration failed', { error });
         });
     } else {
-      logger.warn('Service Worker not supported in this browser');
+      // Only log in development
+      if (process.env.NODE_ENV === 'development') {
+        logger.info('Service Worker not enabled in development mode');
+      }
     }
   }, []);
 
