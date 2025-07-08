@@ -49,13 +49,7 @@ export default defineConfig(({ mode }) => ({
       }
     },
     target: 'es2020',
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: mode === 'production',
-        drop_debugger: mode === 'production'
-      }
-    }
+    minify: 'esbuild'
   },
   define: {
     __SUPPRESS_CONSOLE_WARNINGS__: mode === 'production',
