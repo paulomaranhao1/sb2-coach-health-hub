@@ -4,8 +4,7 @@ import { LoadingCard, LoadingSection } from '@/components/ui/loading-states';
 import { Card, CardContent } from '@/components/ui/card';
 
 // Lazy loading para componentes pesados
-export const LazyProgressDashboard = lazy(() => import('@/components/ProgressDashboard'));
-export const LazyStatisticsOverview = lazy(() => import('@/components/statistics/StatisticsOverview'));
+export const LazyDashboardOverview = lazy(() => import('@/features/dashboard/components/DashboardOverview'));
 export const LazyWeightEvolutionChart = lazy(() => import('@/components/progress/WeightEvolutionChart'));
 export const LazySecondaryCharts = lazy(() => import('@/components/progress/SecondaryCharts'));
 export const LazyPhotoAnalyzer = lazy(() => import('@/components/calorie-counter/PhotoAnalyzer'));
@@ -74,14 +73,9 @@ export const withLazyLoading = <P extends object>(
 };
 
 // Lazy wrappers prontos para usar
-export const LazyProgressDashboardWithFallback = withLazyLoading(
-  LazyProgressDashboard, 
+export const LazyDashboardOverviewWithFallback = withLazyLoading(
+  LazyDashboardOverview, 
   DashboardLoadingFallback
-);
-
-export const LazyStatisticsOverviewWithFallback = withLazyLoading(
-  LazyStatisticsOverview,
-  ComponentLoadingFallback
 );
 
 export const LazyWeightEvolutionChartWithFallback = withLazyLoading(

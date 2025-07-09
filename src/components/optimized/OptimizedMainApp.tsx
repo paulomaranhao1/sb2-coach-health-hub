@@ -6,14 +6,13 @@ import GlobalErrorBoundary from '@/components/error/GlobalErrorBoundary';
 import { LoadingSection } from '@/components/ui/loading-states';
 
 // Lazy load tab content
-const LazyTabsContent = React.lazy(() => import('@/components/layout/TabsContent'));
+const LazyAppTabsContent = React.lazy(() => import('@/features/navigation/components/AppTabsContent'));
 
 interface OptimizedMainAppProps {
-  userProfile: any;
-  userStats: any;
+  // Props removed - data fetching moved to hook inside components
 }
 
-const OptimizedMainApp = memo(({ userProfile, userStats }: OptimizedMainAppProps) => {
+const OptimizedMainApp = memo(() => {
   const logger = useLogger('OptimizedMainApp');
   const [activeTab, setActiveTab] = useState('home');
 
@@ -31,11 +30,9 @@ const OptimizedMainApp = memo(({ userProfile, userStats }: OptimizedMainAppProps
     <AppLayout>
       <GlobalErrorBoundary level="section" name="Tab Content">
         <Suspense fallback={<LoadingSection text="Carregando conteúdo..." />}>
-          <LazyTabsContent
+          <LazyAppTabsContent
             activeTab={activeTab}
             setActiveTab={handleTabChange}
-            userProfile={userProfile}
-            userStats={userStats}
             onNavigateToHome={handleNavigateToHome}
           />
         </Suspense>

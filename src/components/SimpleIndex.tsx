@@ -155,7 +155,7 @@ const SimpleIndex = () => {
     );
   }
 
-  return <OptimizedMainApp userProfile={profile} userStats={userStats} />;
+  return <OptimizedMainApp />;
 };
 
 export default SimpleIndex;
