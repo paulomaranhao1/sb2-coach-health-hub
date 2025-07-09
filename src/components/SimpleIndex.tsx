@@ -4,18 +4,16 @@ import { supabase } from '@/integrations/supabase/client';
 import OptimizedMainApp from '@/components/optimized/OptimizedMainApp';
 import AuthScreen from '@/components/AuthScreen';
 import OnboardingScreen from '@/components/OnboardingScreen';
-import VideoWelcomeScreen from '@/components/VideoWelcomeScreen';
 import TutorialScreen from '@/components/TutorialScreen';
-import WelcomeScreen from '@/components/WelcomeScreen';
+import ModernWelcomeScreen from '@/components/welcome/ModernWelcomeScreen';
 
 const SimpleIndex = () => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [userStats, setUserStats] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showVideoWelcome, setShowVideoWelcome] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -41,18 +39,15 @@ const SimpleIndex = () => {
             setProfile(profileData);
             setUserStats(statsData || { points: 0, level: 1, shields: [], stickers: [], streak: 0 });
             
-            const hasSeenVideo = localStorage.getItem('sb2_video_watched') === 'true';
-            const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed') === 'true';
             const hasSeenWelcome = localStorage.getItem('sb2_welcome_shown') === 'true';
+            const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed') === 'true';
             
             if (!profileData.onboarding_completed) {
               // User needs onboarding first
-            } else if (!hasSeenVideo) {
-              setShowVideoWelcome(true);
-            } else if (!hasSeenTutorial) {
-              setShowTutorial(true);
             } else if (!hasSeenWelcome) {
               setShowWelcome(true);
+            } else if (!hasSeenTutorial) {
+              setShowTutorial(true);
             }
           }
         }
@@ -115,12 +110,12 @@ const SimpleIndex = () => {
     return <OnboardingScreen onComplete={handleOnboardingComplete} />;
   }
 
-  if (showVideoWelcome) {
+  if (showWelcome) {
     return (
-      <VideoWelcomeScreen
-        onVideoComplete={() => {
-          localStorage.setItem('sb2_video_watched', 'true');
-          setShowVideoWelcome(false);
+      <ModernWelcomeScreen
+        onContinue={() => {
+          localStorage.setItem('sb2_welcome_shown', 'true');
+          setShowWelcome(false);
           setShowTutorial(true);
         }}
       />
@@ -133,23 +128,10 @@ const SimpleIndex = () => {
         onComplete={() => {
           localStorage.setItem('sb2_tutorial_completed', 'true');
           setShowTutorial(false);
-          setShowWelcome(true);
         }}
         onSkip={() => {
           localStorage.setItem('sb2_tutorial_completed', 'true');
           setShowTutorial(false);
-          setShowWelcome(true);
-        }}
-      />
-    );
-  }
-
-  if (showWelcome) {
-    return (
-      <WelcomeScreen
-        onContinue={() => {
-          localStorage.setItem('sb2_welcome_shown', 'true');
-          setShowWelcome(false);
         }}
       />
     );
