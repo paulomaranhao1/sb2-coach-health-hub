@@ -5,10 +5,6 @@ import NewFeaturesScreen from "@/components/NewFeaturesScreen";
 import { Loading } from "@/components/ui/loading";
 
 interface AppScreensProps {
-  showVideoWelcome: boolean;
-  handleVideoWelcomeComplete: () => void;
-  showWelcome: boolean;
-  setShowWelcome: (show: boolean) => void;
   showOnboarding: boolean;
   showTutorial: boolean;
   showNewFeatures: boolean;

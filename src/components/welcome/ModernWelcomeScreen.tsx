@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Play, SkipForward, ChevronRight } from "lucide-react";
+import { SkipForward, ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface ModernWelcomeScreenProps {
@@ -10,7 +10,6 @@ interface ModernWelcomeScreenProps {
 const ModernWelcomeScreen = ({ onContinue }: ModernWelcomeScreenProps) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
-  const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsLoaded(true), 100);
@@ -48,9 +47,6 @@ const ModernWelcomeScreen = ({ onContinue }: ModernWelcomeScreenProps) => {
     }
   };
 
-  const handleVideoToggle = () => {
-    setShowVideo(!showVideo);
-  };
 
   return (
     <div className="min-h-screen flex flex-col relative overflow-hidden">
@@ -121,17 +117,6 @@ const ModernWelcomeScreen = ({ onContinue }: ModernWelcomeScreenProps) => {
               </p>
             </div>
 
-            {/* Video option (only on first step) */}
-            {currentStep === 0 && (
-              <Button
-                variant="outline"
-                onClick={handleVideoToggle}
-                className="w-full sm:w-auto bg-background/80 backdrop-blur-sm border-primary/20"
-              >
-                <Play className="w-4 h-4 mr-2" />
-                {showVideo ? "Ocultar" : "Ver"} vídeo de apresentação
-              </Button>
-            )}
           </div>
         </div>
 
@@ -166,24 +151,6 @@ const ModernWelcomeScreen = ({ onContinue }: ModernWelcomeScreenProps) => {
           )}
         </div>
 
-        {/* Simple video modal */}
-        {showVideo && (
-          <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-            <div className="bg-background rounded-xl p-6 max-w-md w-full space-y-4">
-              <h3 className="text-xl font-semibold">Vídeo de apresentação</h3>
-              <div className="aspect-video bg-muted rounded-lg flex items-center justify-center">
-                <p className="text-muted-foreground">Vídeo em breve...</p>
-              </div>
-              <Button 
-                onClick={handleVideoToggle}
-                className="w-full"
-                variant="outline"
-              >
-                Fechar
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
