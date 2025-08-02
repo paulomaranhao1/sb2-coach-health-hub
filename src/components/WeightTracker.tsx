@@ -1,5 +1,5 @@
 
-import IntermittentFasting from "./IntermittentFasting";
+import IntermittentFasting from "@/features/fasting/components/IntermittentFasting";
 
 const WeightTracker = () => {
   return <IntermittentFasting />;

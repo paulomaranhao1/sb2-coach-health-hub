@@ -1,27 +1,23 @@
-
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Camera, History, BarChart3 } from "lucide-react";
-import PhotoAnalyzer from "@/features/calorie-counter/components/PhotoAnalyzer";
-import AnalysisHistory from "./calorie-counter/AnalysisHistory";
-import CalorieStats from "./calorie-counter/CalorieStats";
-import CalorieCounterHeader from "./calorie-counter/CalorieCounterHeader";
+import PhotoAnalyzer from "./PhotoAnalyzer";
+import AnalysisHistory from "./AnalysisHistory";
+import CalorieStats from "./CalorieStats";
+import CalorieCounterHeader from "./CalorieCounterHeader";
 
 const CalorieCounterTab = () => {
   const [refreshHistoryTrigger, setRefreshHistoryTrigger] = useState(0);
 
   const handleAnalysisComplete = (analysis: any) => {
-    // Atualizar histórico quando uma nova análise for concluída
     setRefreshHistoryTrigger(prev => prev + 1);
   };
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
       <CalorieCounterHeader />
 
-      {/* Abas principais - Layout vertical */}
       <Tabs defaultValue="analyze" className="w-full">
         <TabsList className="flex flex-col h-auto w-full max-w-sm mx-auto bg-white/95 backdrop-blur-sm border-2 border-slate-200/50 rounded-2xl p-4 shadow-xl space-y-3">
           <TabsTrigger 
@@ -77,7 +73,6 @@ const CalorieCounterTab = () => {
         </TabsContent>
       </Tabs>
 
-      {/* Como Funciona */}
       <Card>
         <CardHeader>
           <CardTitle className="text-center text-slate-600">Como Funciona</CardTitle>

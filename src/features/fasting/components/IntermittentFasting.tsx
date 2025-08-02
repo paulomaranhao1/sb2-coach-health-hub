@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useFasting, FastingStats } from "@/hooks/useFasting";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import AdvancedFastingTimer from "./fasting/AdvancedFastingTimer";
-import FastingAnalytics from "./fasting/FastingAnalytics";
-import FastingGoals from "./fasting/FastingGoals";
-import FastingHeader from "./fasting/FastingHeader";
-import FastingOverviewTab from "./fasting/FastingOverviewTab";
-import FastingEducationTab from "./fasting/FastingEducationTab";
-import FastingPlanCard from "./fasting/FastingPlanCard";
+import AdvancedFastingTimer from "./AdvancedFastingTimer";
+import FastingAnalytics from "./FastingAnalytics";
+import FastingGoals from "./FastingGoals";
+import FastingHeader from "./FastingHeader";
+import FastingOverviewTab from "./FastingOverviewTab";
+import FastingEducationTab from "./FastingEducationTab";
+import FastingPlanCard from "./FastingPlanCard";
 import { Eye, BarChart3, Target, BookOpen } from "lucide-react";
 
 interface FastingGoal {
@@ -67,7 +67,7 @@ const IntermittentFasting = () => {
           timeRemaining={timeRemaining}
           isActive={isActive}
           isPaused={isPaused}
-          onPause={() => {}} // Função vazia já que não usamos mais pausar
+          onPause={() => {}}
           onStop={stopFast}
           formatTime={formatTime}
           calculateProgress={calculateProgress}

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback, memo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useFasting } from '@/hooks/useFasting';
-import CompactFastingTimer from './fasting/CompactFastingTimer';
+import CompactFastingTimer from '@/features/fasting/components/CompactFastingTimer';
 
 const motivationalPhrases = [
   "Cada quilograma perdido é uma vitória conquistada! 🎯",

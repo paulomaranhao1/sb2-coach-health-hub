@@ -12,8 +12,8 @@ import GlobalErrorBoundary from "@/components/error/GlobalErrorBoundary";
 const LazyDailyHabit = React.lazy(() => import("@/components/DailyHabit"));
 const LazyDashboardOverview = React.lazy(() => import("@/features/dashboard/components/DashboardOverview"));
 const LazyAIChat = React.lazy(() => import("@/components/AIChat"));
-const LazyCalorieCounterTab = React.lazy(() => import("@/components/CalorieCounterTab"));
-const LazyIntermittentFasting = React.lazy(() => import("@/components/IntermittentFasting"));
+const LazyCalorieCounterTab = React.lazy(() => import("@/features/calorie-counter/components/CalorieCounterTab"));
+const LazyIntermittentFasting = React.lazy(() => import("@/features/fasting/components/IntermittentFasting"));
 const LazyGamificationSystem = React.lazy(() => import("@/components/GamificationSystem"));
 const LazyUserProfile = React.lazy(() => import("@/components/UserProfile"));
 

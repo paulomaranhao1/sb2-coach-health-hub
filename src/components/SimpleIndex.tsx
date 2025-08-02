@@ -1,94 +1,21 @@
 
-import { useEffect, useState } from 'react';
-import { supabase } from '@/integrations/supabase/client';
 import OptimizedMainApp from '@/components/optimized/OptimizedMainApp';
 import AuthScreen from '@/components/AuthScreen';
 import OnboardingScreen from '@/components/OnboardingScreen';
 import TutorialScreen from '@/components/TutorialScreen';
 import ModernWelcomeScreen from '@/components/welcome/ModernWelcomeScreen';
+import { useAuthenticatedAppState } from '@/hooks/app/useAuthenticatedAppState';
 
 const SimpleIndex = () => {
-  const [user, setUser] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [userStats, setUserStats] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
-
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const { data: { session } } = await supabase.auth.getSession();
-        
-        if (session?.user) {
-          setUser(session.user);
-          
-          const { data: profileData } = await supabase
-            .from('user_profiles')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .maybeSingle();
-          
-          const { data: statsData } = await supabase
-            .from('user_stats')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .maybeSingle();
-          
-          if (profileData) {
-            setProfile(profileData);
-            setUserStats(statsData || { points: 0, level: 1, shields: [], stickers: [], streak: 0 });
-            
-            const hasSeenWelcome = localStorage.getItem('sb2_welcome_shown') === 'true';
-            const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed') === 'true';
-            
-            if (!profileData.onboarding_completed) {
-              // User needs onboarding first
-            } else if (!hasSeenWelcome) {
-              setShowWelcome(true);
-            } else if (!hasSeenTutorial) {
-              setShowTutorial(true);
-            }
-          }
-        }
-      } catch (error) {
-        console.error('Auth check error:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    checkAuth();
-
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) {
-        setUser(session.user);
-        
-        const { data: profileData } = await supabase
-          .from('user_profiles')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
-        
-        const { data: statsData } = await supabase
-          .from('user_stats')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
-        
-        if (profileData) {
-          setProfile(profileData);
-          setUserStats(statsData || { points: 0, level: 1, shields: [], stickers: [], streak: 0 });
-        }
-      } else if (event === 'SIGNED_OUT') {
-        setUser(null);
-        setProfile(null);
-        setUserStats(null);
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
+  const {
+    user,
+    profile,
+    loading,
+    showWelcome,
+    showTutorial,
+    setShowWelcome,
+    setShowTutorial
+  } = useAuthenticatedAppState();
 
   const handleOnboardingComplete = () => {
     window.location.reload();
