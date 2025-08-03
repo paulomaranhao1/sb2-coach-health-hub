@@ -5,20 +5,19 @@ import AppLayout from '@/components/layout/AppLayout';
 import GlobalErrorBoundary from '@/components/error/GlobalErrorBoundary';
 import { LoadingSection } from '@/components/ui/loading-states';
 
-// Lazy load tab content
-const LazyAppTabsContent = React.lazy(() => import('@/features/navigation/components/AppTabsContent'));
-
-interface OptimizedMainAppProps {
-  // Props removed - data fetching moved to hook inside components
-}
+// Usar a versão otimizada
+const LazyOptimizedAppTabsContent = React.lazy(() => import('@/features/navigation/components/OptimizedAppTabsContent'));
 
 const OptimizedMainApp = memo(() => {
   const logger = useLogger('OptimizedMainApp');
   const [activeTab, setActiveTab] = useState('home');
 
   const handleTabChange = useCallback((tab: string) => {
-    setActiveTab(tab);
-    logger.debug('Tab changed', { tab });
+    // Transition suave
+    requestAnimationFrame(() => {
+      setActiveTab(tab);
+      logger.debug('Tab changed', { tab });
+    });
   }, [logger]);
 
   const handleNavigateToHome = useCallback(() => {
@@ -29,8 +28,8 @@ const OptimizedMainApp = memo(() => {
   return (
     <AppLayout>
       <GlobalErrorBoundary level="section" name="Tab Content">
-        <Suspense fallback={<LoadingSection text="Carregando conteúdo..." />}>
-          <LazyAppTabsContent
+        <Suspense fallback={<LoadingSection text="Carregando aplicativo..." />}>
+          <LazyOptimizedAppTabsContent
             activeTab={activeTab}
             setActiveTab={handleTabChange}
             onNavigateToHome={handleNavigateToHome}
