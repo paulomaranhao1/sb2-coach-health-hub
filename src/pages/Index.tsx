@@ -1,8 +1,8 @@
 
-import SimpleIndex from '@/components/SimpleIndex';
+import SimpleIndexOptimized from "@/components/SimpleIndexOptimized";
 
 const Index = () => {
-  return <SimpleIndex />;
+  return <SimpleIndexOptimized />;
 };
 
 export default Index;

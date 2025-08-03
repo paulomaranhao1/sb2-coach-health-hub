@@ -1,15 +1,19 @@
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ResponsiveContainer, BarChart, Bar, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import { Calendar, Activity } from "lucide-react";
+import LightweightChart from "@/components/charts/LightweightChart";
+
 interface WeightEntry {
   id: string;
   weight: number;
   date: string;
   notes?: string;
 }
+
 interface SecondaryChartsProps {
   weightHistory: WeightEntry[];
 }
+
 const SecondaryCharts = ({
   weightHistory
 }: SecondaryChartsProps) => {
@@ -30,11 +34,10 @@ const SecondaryCharts = ({
     acc[month].weights.push(entry.weight);
     return acc;
   }, {} as any);
+
   const monthlyChartData = Object.values(monthlyData).map((item: any) => ({
-    month: item.month,
-    avgWeight: (item.weights.reduce((sum: number, w: number) => sum + w, 0) / item.weights.length).toFixed(1),
-    minWeight: Math.min(...item.weights),
-    maxWeight: Math.max(...item.weights)
+    label: item.month,
+    value: parseFloat((item.weights.reduce((sum: number, w: number) => sum + w, 0) / item.weights.length).toFixed(1))
   }));
 
   // Dados para gráfico de consistência (últimos 30 dias)
@@ -45,16 +48,17 @@ const SecondaryCharts = ({
     date.setDate(date.getDate() - (29 - i));
     return date.toISOString().split('T')[0];
   });
-  const consistencyData = last30Days.map(date => ({
-    date: new Date(date).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: '2-digit'
-    }),
-    recorded: weightHistory.some(entry => entry.date === date) ? 1 : 0
+
+  const consistencyData = last30Days.slice(-7).map((date, index) => ({
+    label: `${index + 1}`,
+    value: weightHistory.some(entry => entry.date === date) ? 1 : 0
   }));
-  return <div className="grid gap-6 md:grid-cols-2">
+
+  return (
+    <div className="grid gap-6 md:grid-cols-2">
       {/* Gráfico de Progresso Mensal */}
-      {monthlyChartData.length > 1 && <Card>
+      {monthlyChartData.length > 1 && (
+        <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="w-5 h-5" />
@@ -66,25 +70,22 @@ const SecondaryCharts = ({
           </CardHeader>
           <CardContent>
             <div className="h-64">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={monthlyChartData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="month" />
-                  <YAxis />
-                  <Tooltip formatter={value => [`${value} kg`, 'Peso Médio']} />
-                  <Bar dataKey="avgWeight" fill="#dc2626" radius={[4, 4, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              <LightweightChart 
+                data={monthlyChartData}
+                height={256}
+                color="#dc2626"
+              />
             </div>
           </CardContent>
-        </Card>}
+        </Card>
+      )}
 
       {/* Gráfico de Consistência */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Activity className="w-5 h-5" />
-            Consistência (30 dias)
+            Consistência (7 dias)
           </CardTitle>
           <CardDescription>
             Dias com registro de peso
@@ -92,18 +93,16 @@ const SecondaryCharts = ({
         </CardHeader>
         <CardContent className="px-0">
           <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={consistencyData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis domain={[0, 1]} />
-                <Tooltip formatter={value => [value ? 'Registrado' : 'Não registrado', 'Status']} />
-                <Bar dataKey="recorded" fill="#10b981" radius={[2, 2, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            <LightweightChart 
+              data={consistencyData}
+              height={256}
+              color="#10b981"
+            />
           </div>
         </CardContent>
       </Card>
-    </div>;
+    </div>
+  );
 };
+
 export default SecondaryCharts;

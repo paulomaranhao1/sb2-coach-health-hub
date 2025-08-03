@@ -6,27 +6,21 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { lazy, Suspense, useEffect } from "react";
 import { LoadingPage } from "@/components/ui/loading-states";
 import { useServiceWorker } from "@/hooks/useServiceWorker";
-import "@/utils/errorMonitoring"; // Inicializar monitoramento de erros
 
+// Lazy load apenas a página principal
 const LazyIndex = lazy(() => import("./pages/Index"));
 
+// QueryClient otimizado com configurações mais agressivas
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 2 * 60 * 1000,
-      gcTime: 10 * 60 * 1000,
+      staleTime: 5 * 60 * 1000, // 5 minutos
+      gcTime: 15 * 60 * 1000, // 15 minutos
       refetchOnWindowFocus: false,
       refetchOnMount: false,
-      retry: (failureCount, error) => {
-        // Não fazer retry para erros de network conhecidos
-        const errorMessage = String(error).toLowerCase();
-        if (errorMessage.includes('facebook') || 
-            errorMessage.includes('firebase') || 
-            errorMessage.includes('blocked')) {
-          return false;
-        }
-        return failureCount < 1;
-      }
+      refetchOnReconnect: false,
+      retry: 1, // Reduzido para startup mais rápido
+      networkMode: 'offlineFirst'
     }
   }
 });
@@ -35,15 +29,17 @@ function App() {
   const { isSupported } = useServiceWorker();
 
   useEffect(() => {
-    // Garantir tema light
+    // Configurações mínimas para startup
     document.documentElement.classList.remove('dark');
     document.documentElement.setAttribute('data-theme', 'light');
     
-    // Log do status do Service Worker apenas em desenvolvimento
-    if (process.env.NODE_ENV === 'development') {
-      console.log('🔧 Service Worker supported:', isSupported);
-    }
-  }, [isSupported]);
+    // Preload crítico apenas
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.as = 'script';
+    link.href = '/src/components/SimpleIndex.tsx';
+    document.head.appendChild(link);
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -60,7 +56,7 @@ function App() {
             }}
           />
           <Router>
-            <Suspense fallback={<LoadingPage text="Carregando SB2coach.ai..." />}>
+            <Suspense fallback={<LoadingPage text="Iniciando SB2coach.ai..." />}>
               <Routes>
                 <Route path="/" element={<LazyIndex />} />
                 <Route path="*" element={<LazyIndex />} />

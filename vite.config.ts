@@ -26,22 +26,44 @@ export default defineConfig(({ mode }) => ({
     rollupOptions: {
       output: {
         manualChunks: {
+          // Core essencial
           vendor: ['react', 'react-dom'],
-          ui: ['@radix-ui/react-dialog', '@radix-ui/react-tabs'],
+          router: ['react-router-dom'],
+          
+          // UI básico (crítico)
+          ui_core: ['@radix-ui/react-slot', '@radix-ui/react-toast'],
+          
+          // UI avançado (lazy)
+          ui_advanced: [
+            '@radix-ui/react-dialog', 
+            '@radix-ui/react-tabs',
+            '@radix-ui/react-popover',
+            '@radix-ui/react-dropdown-menu'
+          ],
+          
+          // Utilitários
           utils: ['date-fns', 'clsx', 'tailwind-merge'],
-          supabase: ['@supabase/supabase-js']
+          
+          // Supabase
+          supabase: ['@supabase/supabase-js'],
+          
+          // Query
+          query: ['@tanstack/react-query'],
+          
+          // Icons (lazy)
+          icons: ['lucide-react']
         }
       },
       onwarn(warning, warn) {
-        // Suprimir warnings específicos durante o build
+        // Suprimir warnings de dependências removidas
         if (
           warning.code === 'MODULE_LEVEL_DIRECTIVE' ||
           warning.code === 'UNUSED_EXTERNAL_IMPORT' ||
-          warning.message.includes('ambient-light-sensor') ||
-          warning.message.includes('battery') ||
-          warning.message.includes('vr') ||
-          warning.message.includes('facebook') ||
-          warning.message.includes('firebase')
+          warning.message.includes('recharts') ||
+          warning.message.includes('embla-carousel') ||
+          warning.message.includes('react-day-picker') ||
+          warning.message.includes('cmdk') ||
+          warning.message.includes('vaul')
         ) {
           return;
         }
@@ -49,7 +71,8 @@ export default defineConfig(({ mode }) => ({
       }
     },
     target: 'es2020',
-    minify: 'esbuild'
+    minify: 'esbuild',
+    cssMinify: 'esbuild'
   },
   define: {
     __SUPPRESS_CONSOLE_WARNINGS__: mode === 'production',
@@ -59,18 +82,23 @@ export default defineConfig(({ mode }) => ({
     include: [
       'react',
       'react-dom',
-      '@supabase/supabase-js'
+      'react-router-dom',
+      '@supabase/supabase-js',
+      '@tanstack/react-query'
     ],
     exclude: [
-      // Excluir pacotes que podem causar warnings
-      'firebase',
-      '@firebase/app',
-      '@firebase/firestore'
+      // Excluir dependências removidas
+      'recharts',
+      'embla-carousel-react',
+      'react-day-picker',
+      'cmdk',
+      'vaul'
     ]
   },
   esbuild: {
     logOverride: {
       'this-is-undefined-in-esm': 'silent'
-    }
+    },
+    drop: mode === 'production' ? ['console', 'debugger'] : []
   }
 }));
