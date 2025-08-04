@@ -37,7 +37,7 @@ function App() {
     const link = document.createElement('link');
     link.rel = 'prefetch';
     link.as = 'script';
-    link.href = '/src/components/SimpleIndex.tsx';
+    link.href = '/src/components/SimpleIndexOptimized.tsx';
     document.head.appendChild(link);
   }, []);
 
