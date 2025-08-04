@@ -23,7 +23,6 @@ export interface UserStats {
   shields: string[];
   stickers: string[];
   streak: number;
-  tutorial_completed?: boolean;
   created_at?: string;
   updated_at?: string;
 }

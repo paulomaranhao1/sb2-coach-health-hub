@@ -40,7 +40,7 @@ const AppSettings = () => {
 
   const clearCache = () => {
     // Limpar dados em cache (exceto configurações essenciais)
-    const keysToKeep = ['sb2_notifications_enabled', 'sb2_sounds_enabled', 'sb2_auto_save', 'sb2_tutorial_completed'];
+    const keysToKeep = ['sb2_notifications_enabled', 'sb2_sounds_enabled', 'sb2_auto_save'];
     const allKeys = Object.keys(localStorage);
     allKeys.forEach(key => {
       if (key.startsWith('sb2_') && !keysToKeep.includes(key)) {

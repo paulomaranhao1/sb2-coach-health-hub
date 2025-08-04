@@ -1,24 +1,16 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Session } from '@supabase/supabase-js';
 
 interface OptimizedAuthState {
   user: any;
   profile: any;
   loading: boolean;
-  showWelcome: boolean;
-  showTutorial: boolean;
-  setShowWelcome: (show: boolean) => void;
-  setShowTutorial: (show: boolean) => void;
 }
 
 export const useOptimizedAuth = (): OptimizedAuthState => {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [showTutorial, setShowTutorial] = useState(false);
 
   // Cache no localStorage para dados críticos
   const getCachedProfile = useCallback((userId: string) => {
@@ -54,16 +46,6 @@ export const useOptimizedAuth = (): OptimizedAuthState => {
       setProfile(cachedProfile);
       setLoading(false);
       
-      // Verificar flags de UI
-      const hasSeenWelcome = localStorage.getItem('sb2_welcome_shown') === 'true';
-      const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed') === 'true';
-      
-      if (cachedProfile.onboarding_completed && !hasSeenWelcome) {
-        setShowWelcome(true);
-      } else if (cachedProfile.onboarding_completed && !hasSeenTutorial) {
-        setShowTutorial(true);
-      }
-      
       // Atualizar em background
       loadProfileFromDB(userId);
       return;
@@ -84,15 +66,6 @@ export const useOptimizedAuth = (): OptimizedAuthState => {
       if (profileData) {
         setProfile(profileData);
         setCachedProfile(userId, profileData);
-        
-        const hasSeenWelcome = localStorage.getItem('sb2_welcome_shown') === 'true';
-        const hasSeenTutorial = localStorage.getItem('sb2_tutorial_completed') === 'true';
-        
-        if (profileData.onboarding_completed && !hasSeenWelcome) {
-          setShowWelcome(true);
-        } else if (profileData.onboarding_completed && !hasSeenTutorial) {
-          setShowTutorial(true);
-        }
       }
     } catch (error) {
       console.error('Error loading profile:', error);
@@ -150,10 +123,6 @@ export const useOptimizedAuth = (): OptimizedAuthState => {
   return {
     user,
     profile,
-    loading,
-    showWelcome,
-    showTutorial,
-    setShowWelcome,
-    setShowTutorial
+    loading
   };
 };

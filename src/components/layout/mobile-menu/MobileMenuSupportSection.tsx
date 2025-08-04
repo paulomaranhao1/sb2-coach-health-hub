@@ -21,16 +21,9 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
     toastFeedback.info('Redirecionando para a loja...');
   };
 
-  const handleTutorial = () => {
-    console.log('MobileMenu: Iniciando tutorial...');
+  const handleHelp = () => {
+    console.log('MobileMenu: Abrindo seção de ajuda...');
     setShowMobileMenu(false);
-    
-    const url = new URL(window.location.href);
-    url.search = '';
-    url.searchParams.set('showTutorial', 'true');
-    
-    console.log('MobileMenu: Redirecionando para:', url.toString());
-    window.location.href = url.toString();
   };
 
   const handleLogout = async () => {
@@ -74,10 +67,10 @@ const MobileMenuSupportSection = ({ setShowMobileMenu }: MobileMenuSupportSectio
 
   const supportItems = [
     {
-      key: 'tutorial',
-      label: 'Tutorial & Ajuda',
+      key: 'help',
+      label: 'Ajuda & Suporte',
       icon: BookOpen,
-      onClick: handleTutorial,
+      onClick: handleHelp,
       className: 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300 hover:text-slate-800 bg-white'
     },
     {

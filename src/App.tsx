@@ -33,12 +33,9 @@ function App() {
     document.documentElement.classList.remove('dark');
     document.documentElement.setAttribute('data-theme', 'light');
     
-    // Preload crítico apenas
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.as = 'script';
-    link.href = '/src/components/SimpleIndexOptimized.tsx';
-    document.head.appendChild(link);
+    // Limpar localStorage de welcome/tutorial para garantir acesso direto
+    localStorage.removeItem('sb2_welcome_shown');
+    localStorage.removeItem('sb2_tutorial_completed');
   }, []);
 
   return (
