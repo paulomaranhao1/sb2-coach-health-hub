@@ -85,19 +85,19 @@ const Header = ({
       <header className="glass border-b border-slate-200/60 backdrop-blur-xl transition-all duration-300 sticky top-0 z-40">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="w-12 h-12 rounded-xl overflow-hidden shadow-card bg-white p-1 flex-shrink-0 hover-scale">
+            <div className="flex items-center space-x-5">
+              <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-xl bg-gradient-to-br from-white via-red-50/50 to-orange-50/30 p-2 flex-shrink-0 hover:scale-110 transition-all duration-300 cursor-pointer">
                 <img alt="SB2coach.ai Logo" className="w-full h-full object-contain" src="/lovable-uploads/2b0f09d9-e801-44ed-9f19-bc2d97afb15b.png" />
               </div>
-              <div>
-                <h1 className="font-bold bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent text-xl text-left">
+              <div className="space-y-1">
+                <h1 className="font-bold bg-gradient-to-r from-red-600 via-red-700 to-orange-600 bg-clip-text text-transparent text-2xl text-left tracking-tight">
                   SB2coach.ai
                 </h1>
-                <p className="text-sm text-slate-600 font-medium flex items-center gap-1 text-left">
+                <p className="text-sm text-slate-600 font-semibold flex items-center gap-2 text-left">
                   {hasPremiumAccess ? <>
-                      <Crown className="w-3 h-3 text-yellow-500" />
-                      Premium Ativo
-                    </> : "Transformação inteligente"}
+                      <Crown className="w-4 h-4 text-amber-500 drop-shadow-sm" />
+                      <span className="text-amber-700">Premium Ativo</span>
+                    </> : <span>Transformação inteligente</span>}
                 </p>
               </div>
             </div>

@@ -53,11 +53,11 @@ const AuthForm = () => {
         </CardContent>
       </Card>;
   }
-  return <Card className="w-full max-w-md mx-auto">
-      <CardContent className="pt-6 py-[17px]">
+  return <Card className="w-full max-w-md mx-auto backdrop-blur-xl bg-white/95 border-0 shadow-2xl shadow-blue-500/10">
+      <CardContent className="pt-8 pb-8 px-8">
         <AuthHeader isLogin={mode === 'signin'} />
         
-        <div className="space-y-4">
+        <div className="space-y-6 animate-fade-in">
           <AuthToggleButtons isLogin={mode === 'signin'} onToggleMode={handleToggleMode} onForgotPassword={() => setMode('forgot-password')} />
           
           <GoogleAuthButton onClick={handleGoogleAuth} disabled={loading} />

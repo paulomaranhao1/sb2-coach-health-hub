@@ -4,6 +4,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("./styles/design-system/enhanced-animations.css");
+
 /* Force Light Theme - No Dark Mode */
 @layer base {
   :root {
